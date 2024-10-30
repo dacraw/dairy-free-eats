@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "../components/Home";
 
-const AppRouter = () => {
+const AppRoute = () => {
   return (
     <Router>
       <Routes>
@@ -12,4 +12,4 @@ const AppRouter = () => {
   );
 };
 
-export default AppRouter;
+export default AppRoute;
