@@ -38,5 +38,8 @@ module DairyFreeFood
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # for this project, the test key is going to be used in prod as well
+    config.stripe.secret_key = Rails.application.credentials.stripe[:secret_key]
   end
 end
