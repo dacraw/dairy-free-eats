@@ -46,4 +46,29 @@ In order to use the CLI, you must authenticate with: `stripe login` (note: this 
 
 ### Setup Stripe API Keys
 
-The Stripe test API key will be stored in Rails credentials and used for both development and production environments, for the purpose of demo'ing the project. The key is set within `config/application.rb`
+The Stripe test API key will be stored in Rails credentials and used for both development and production environments, for the purpose of demo'ing the project. The key is set within `config/application.rb`. You will need the master key to decrypt credentials.
+
+### Setup ngrok for local endpoint testing
+
+In order to test the local endpoint, set up `ngrok` for a unique url that can be added to the Stripe Dashboard Event Destination endpoint in order to test webhooks locally.
+
+#### Install `ngrok`
+
+##### Linux
+
+Instructions taken from [ngrok Linux setup](https://dashboard.ngrok.com/get-started/setup/linux)
+
+1. Install via `apt`:
+
+```
+curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+	| sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+	&& echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
+	| sudo tee /etc/apt/sources.list.d/ngrok.list \
+	&& sudo apt update \
+	&& sudo apt install ngrok
+```
+
+2. Add auth token to `ngrok.yml` file: `ngrok config add-authtoken AUTH_TOKEN`
+
+3. Run the following command to start the forwarding: `ngrok http --url=glad-promoted-falcon.ngrok-free.app 3000`
