@@ -6,6 +6,8 @@
     "strict": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "jsx": "react"
+    "jsx": "react",
+    "lib": ["ES6", "DOM"]
+    // "target": "ES5"
   }
 }
