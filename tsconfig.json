@@ -8,6 +8,5 @@
     "skipLibCheck": true,
     "jsx": "react",
     "lib": ["ES6", "DOM"]
-    // "target": "ES5"
   }
 }
