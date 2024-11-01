@@ -72,3 +72,10 @@ curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
 2. Add auth token to `ngrok.yml` file: `ngrok config add-authtoken AUTH_TOKEN`
 
 3. Run the following command to start the forwarding: `ngrok http --url=glad-promoted-falcon.ngrok-free.app 3000`. Please note that this needs to be running in order to test whether Stripe is sending events when triggering the API.
+
+### Testing Stripe Webhooks
+
+With an `ngrok` tunnel setup to `localhost`, and `stripe-cli` installed locally, run the command `ngrok http --url=glad-promoted-falcon.ngrok-free.app 3000` and then `stripe trigger payment_intent.succeeded` to test the Stripe Event Destination endpoint. Other useful `stripe` commands:
+
+- `stripe listen` (monitor webhook events sent to the endpoint)
+- `stripe logs tail` (monitor network responses to the Stripe endpoint)
