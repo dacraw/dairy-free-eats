@@ -13,7 +13,7 @@ class Stripe::EventsController < ApplicationController
             begin
                 event = Stripe::Webhook.construct_event(payload, signature, endpoint_secret)
             rescue Stripe::SignatureVerificationError => e
-                puts "Stripe webhook signature verification failed: #{e.message}"
+                puts "Stripe webhook signature verification failed. #{e.message}"
                 status 400
             end
         end
