@@ -11,4 +11,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "homepage#index"
+
+  get "order", to: "order#index"
 end
