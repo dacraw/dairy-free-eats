@@ -46,6 +46,5 @@ module DairyFreeFood
     config.stripe.secret_key = Rails.application.credentials.stripe[:secret_key]
 
     config.endpoint_secret = Rails.application.credentials.stripe[:endpoint_secret]
-    
   end
 end

@@ -1,5 +1,5 @@
 class Stripe::EventsController < ApplicationController
-    protect_from_forgery except: [:create]
+    protect_from_forgery except: [ :create ]
 
     def create
         payload = request.body.read
@@ -7,9 +7,9 @@ class Stripe::EventsController < ApplicationController
         endpoint_secret = Rails.application.credentials.stripe[:endpoint_secret]
 
         if endpoint_secret
-            signature = request.env['HTTP_STRIPE_SIGNATURE']
-            
-            
+            signature = request.env["HTTP_STRIPE_SIGNATURE"]
+
+
             begin
                 event = Stripe::Webhook.construct_event(payload, signature, endpoint_secret)
             rescue Stripe::SignatureVerificationError => e
@@ -17,7 +17,7 @@ class Stripe::EventsController < ApplicationController
                 status 400
             end
         end
-        
-        render json: {message: "success"}, status: 200
+
+        render json: { message: "success" }, status: 200
     end
 end
