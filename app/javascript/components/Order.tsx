@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 
 type StripeProduct = {
   id: string;
@@ -29,6 +30,15 @@ type StripeProductList = {
 };
 
 const Order = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = (data) => console.log(data);
+
   const [products, setProducts] = useState<StripeProductList | null>(null);
 
   useEffect(() => {
@@ -54,11 +64,24 @@ const Order = () => {
   return (
     <>
       <p>Welcome to the order page!</p>
-      <ul>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
         {products.data.map((product) => {
-          return <li key={product.id}>{product.name}</li>;
+          return (
+            <div key={product.id} className="text-red-700">
+              <label htmlFor={product.id}>{product.name}</label>
+              <input
+                type="number"
+                key={product.id}
+                id={product.id}
+                {...register(product.id)}
+              />
+            </div>
+          );
         })}
-      </ul>
+
+        <input type="submit" />
+      </form>
     </>
   );
 };
