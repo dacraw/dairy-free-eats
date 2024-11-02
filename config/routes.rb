@@ -11,4 +11,12 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "homepage#index"
+
+  get "order", to: "order#index"
+
+  namespace :api do
+    namespace :v1 do
+      get "stripe/products"
+    end
+  end
 end
