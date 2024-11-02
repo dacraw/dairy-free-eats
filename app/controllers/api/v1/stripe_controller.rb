@@ -7,9 +7,9 @@ PRICES = {
 class Api::V1::StripeController < ApplicationController
     def products
         products = Stripe::Product.list
-        
+
         if products.blank?
-            render json: {message: "No products could be fetched"}, status: 400
+            render json: { message: "No products could be fetched" }, status: 400
         end
 
         render json: products, status: 200
@@ -38,10 +38,10 @@ class Api::V1::StripeController < ApplicationController
                 mode: "payment"
             })
         rescue Stripe::InvalidRequestError => e
-            return render json: {message: "failed", error: e.message}
+            return render json: { message: "failed", error: e.message }
         end
 
-        render json: {message: "success", checkout_url: checkout_session["url"]}, status: 200
+        render json: { message: "success", checkout_url: checkout_session["url"] }, status: 200
     end
 
     def checkout_params
