@@ -66,21 +66,32 @@ const Order = () => {
       <p>Welcome to the order page!</p>
 
       <form onSubmit={handleSubmit(onSubmit)}>
-        {products.data.map((product) => {
-          return (
-            <div key={product.id} className="text-red-700">
-              <label htmlFor={product.id}>{product.name}</label>
-              <input
-                type="number"
-                key={product.id}
-                id={product.id}
-                {...register(product.id)}
-              />
+        <div className="grid place-content-center h-48 md:border-2 md:m-2">
+          <div>
+            <h5 className="mb-6">
+              Enter the number of each item you would like to order and then
+              click "Submit"
+            </h5>
+            <div className="grid grid-cols-[1fr_50px] gap-2">
+              {products.data.map((product) => {
+                return (
+                  <React.Fragment key={product.id}>
+                    <label htmlFor={product.id}>{product.name}</label>
+                    <input
+                      className="border-2 self-center text-center"
+                      type="number"
+                      placeholder="0"
+                      key={product.id}
+                      id={product.id}
+                      {...register(product.id)}
+                    />
+                  </React.Fragment>
+                );
+              })}
+              <input type="submit" className="col-span-2 border-2" />
             </div>
-          );
-        })}
-
-        <input type="submit" />
+          </div>
+        </div>
       </form>
     </>
   );
