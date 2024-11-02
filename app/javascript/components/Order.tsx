@@ -30,17 +30,15 @@ type StripeProductList = {
 };
 
 const Order = () => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data: { [key: string]: string }) => {
     const csrfToken = document
       .querySelector('meta[name="csrf-token"]')
-      .getAttribute("content");
+      ?.getAttribute("content");
+
+    if (!csrfToken) return null;
+
     const url = "/api/v1/stripe/create_checkout_session";
     const response = await fetch(url, {
       method: "POST",
