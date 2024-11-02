@@ -13,10 +13,12 @@ Rails.application.routes.draw do
   root "homepage#index"
 
   get "order", to: "order#index"
+  get "success", to: "order#success"
 
   namespace :api do
     namespace :v1 do
       get "stripe/products"
+      post "stripe/create_checkout_session"
     end
   end
 end

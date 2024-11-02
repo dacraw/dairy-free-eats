@@ -37,7 +37,23 @@ const Order = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const csrfToken = document
+      .querySelector('meta[name="csrf-token"]')
+      .getAttribute("content");
+    const url = "/api/v1/stripe/create_checkout_session";
+    const response = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify({ stripe: data }),
+      headers: {
+        "X-CSRF-Token": csrfToken,
+        "Content-Type": "application/json",
+      },
+    });
+    const responseData = await response.json();
+
+    window.location.href = responseData.checkout_url;
+  };
 
   const [products, setProducts] = useState<StripeProductList | null>(null);
 
