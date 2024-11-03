@@ -1,9 +1,3 @@
-PRICES = {
-    "prod_R8KkVOibvpRPlc" => "price_1QG44XElA4InVgv8dOnqfhyu",
-    "prod_R8KiBa0tljS7SV" => "price_1QG432ElA4InVgv8Zy7PaGPY"
-}
-
-
 class Api::V1::StripeController < ApplicationController
     def products
         products = Stripe::Product.list
@@ -18,14 +12,16 @@ class Api::V1::StripeController < ApplicationController
     def create_checkout_session
         line_items = []
 
-        checkout_params.to_hash.entries.each do |prod_id, quantity|
+        prices = params[:stripe].keys
+
+        prices.each do |price_id|
+            quantity = params[:stripe][price_id]
+
             next if quantity.blank?
 
-            price = PRICES[prod_id]
-
             line_item = {
-                price: price,
-                quantity: quantity.to_i
+                price: price_id,
+                quantity: quantity
             }
 
             line_items << line_item
@@ -34,6 +30,7 @@ class Api::V1::StripeController < ApplicationController
         begin
             checkout_session = Stripe::Checkout::Session.create({
                 success_url: "https://glad-promoted-falcon.ngrok-free.app/success",
+                cancel_url: "https://glad-promoted-falcon.ngrok-free.app/order",
                 line_items: line_items,
                 mode: "payment"
             })
@@ -45,6 +42,6 @@ class Api::V1::StripeController < ApplicationController
     end
 
     def checkout_params
-        params.require(:stripe).permit(*PRICES.keys)
+        params.require(:stripe).permit(*PRODUCTS)
     end
 end
