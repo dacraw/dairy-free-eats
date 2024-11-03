@@ -19,8 +19,8 @@ gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-# stripe ruby gem
-gem "stripe"
+# stripe ruby gem (using version 11 to be compatible with stripe-ruby-mock)
+gem "stripe", "~> 11"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
@@ -36,8 +36,6 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
-
-
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
@@ -65,5 +63,5 @@ group :development do
 end
 
 group :test do
-  # gem 'stripe-ruby-mock', :require => 'stripe_mock'
+  gem 'stripe-ruby-mock', "~> 4", :require => 'stripe_mock'
 end
