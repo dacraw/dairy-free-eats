@@ -36,9 +36,7 @@ const Order = () => {
     const csrfToken = document
       .querySelector('meta[name="csrf-token"]')
       ?.getAttribute("content");
-
     if (!csrfToken) return null;
-
     const url = "/api/v1/stripe/create_checkout_session";
     const response = await fetch(url, {
       method: "POST",
@@ -97,7 +95,7 @@ const Order = () => {
                       placeholder="0"
                       key={product.id}
                       id={product.id}
-                      {...register(product.id)}
+                      {...register(product.default_price)}
                     />
                   </React.Fragment>
                 );
