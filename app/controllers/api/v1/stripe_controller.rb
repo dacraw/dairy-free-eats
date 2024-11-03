@@ -42,8 +42,4 @@ class Api::V1::StripeController < ApplicationController
 
         render json: { message: "success", checkout_url: checkout_session["url"] }, status: 200
     end
-
-    def checkout_params
-        params.require(:stripe).permit(*PRODUCTS)
-    end
 end
