@@ -20,7 +20,7 @@ gem "cssbundling-rails"
 gem "jbuilder"
 
 # stripe ruby gem (using version 11 to be compatible with stripe-ruby-mock)
-gem "stripe", "~> 11"
+gem "stripe"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
@@ -60,8 +60,4 @@ group :development do
   
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
   gem "error_highlight", ">= 0.6.0", platforms: [ :ruby ]
-end
-
-group :test do
-  gem 'stripe-ruby-mock', "~> 4", :require => 'stripe_mock'
 end
