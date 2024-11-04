@@ -21,4 +21,8 @@ Rails.application.routes.draw do
       post "stripe/create_checkout_session"
     end
   end
+
+  namespace :stripe do
+    resources :events, only: [ :create ]
+  end
 end
