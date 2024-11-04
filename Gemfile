@@ -19,7 +19,7 @@ gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-# stripe ruby gem 
+# stripe ruby gem
 gem "stripe"
 
 # Use Redis adapter to run Action Cable in production
