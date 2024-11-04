@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users, only: [:create]
+
   namespace :stripe do
     resources :events, only: [ :create ]
   end
