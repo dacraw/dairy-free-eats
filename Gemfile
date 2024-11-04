@@ -19,8 +19,8 @@ gem "cssbundling-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
-# Install `stripe-rails`
-gem "stripe-rails"
+# stripe ruby gem
+gem "stripe"
 
 # Use Redis adapter to run Action Cable in production
 # gem "redis", ">= 4.0.1"
@@ -49,6 +49,9 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  # rspec for backend tests
+  gem "rspec-rails", "~> 7.0.0"
 end
 
 group :development do

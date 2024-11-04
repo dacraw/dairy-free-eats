@@ -2,31 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type StripeProduct = {
-  id: string;
-  object: string;
-  active: boolean;
-  attributes: string[];
-  created: number;
   default_price: string;
   description: string;
-  images: string[];
-  livemode: boolean;
-  marketing_features: string[];
-  metadata: { [key: string]: string };
   name: string;
-  package_dimensions: string;
-  shippable: string;
-  statement_descriptor: string;
-  tax_code: string;
-  type: string;
-  unit_label: string;
-  updated: number;
-  url: string;
-};
-
-type StripeProductList = {
-  object: string;
-  data: StripeProduct[];
 };
 
 const Order = () => {
@@ -51,7 +29,7 @@ const Order = () => {
     window.location.href = responseData.checkout_url;
   };
 
-  const [products, setProducts] = useState<StripeProductList | null>(null);
+  const [products, setProducts] = useState<StripeProduct[] | null>(null);
 
   useEffect(() => {
     const url = "/api/v1/stripe/products";
@@ -85,16 +63,18 @@ const Order = () => {
               click "Submit"
             </h5>
             <div className="grid grid-cols-[1fr_50px] gap-2">
-              {products.data.map((product) => {
+              {products.map((product) => {
                 return (
-                  <React.Fragment key={product.id}>
-                    <label htmlFor={product.id}>{product.name}</label>
+                  <React.Fragment key={product.default_price}>
+                    <label htmlFor={product.default_price}>
+                      {product.name}
+                    </label>
                     <input
                       className="border-2 self-center text-center"
                       type="number"
                       placeholder="0"
-                      key={product.id}
-                      id={product.id}
+                      key={product.default_price}
+                      id={product.default_price}
                       {...register(product.default_price)}
                     />
                   </React.Fragment>
