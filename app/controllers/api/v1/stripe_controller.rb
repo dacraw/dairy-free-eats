@@ -42,7 +42,10 @@ class Api::V1::StripeController < ApplicationController
                 success_url: "https://glad-promoted-falcon.ngrok-free.app/success",
                 cancel_url: "https://glad-promoted-falcon.ngrok-free.app/order",
                 line_items: line_items,
-                mode: "payment"
+                mode: "payment",
+                phone_number_collection: {
+                    enabled: true
+                },
             })
         rescue Stripe::InvalidRequestError => e
             return render json: { message: "failed", error: e.message }, status: 400
