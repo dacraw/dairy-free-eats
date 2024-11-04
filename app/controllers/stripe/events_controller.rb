@@ -4,7 +4,7 @@ class Stripe::EventsController < ApplicationController
     def create
         payload = request.body.read
 
-        endpoint_secret = Rails.application.credentials.stripe[:endpoint_secret]
+        endpoint_secret = Rails.application.credentials.dig(:stripe, :endpoint_secret)
 
         if endpoint_secret
             signature = request.env["HTTP_STRIPE_SIGNATURE"]
