@@ -24,7 +24,7 @@ Rails.application.routes.draw do
 
   resource :session, only: [ :new, :create, :destroy ]
 
-  get "/check_current_user", to: "sessions#check_current_user"
+  post "/check_current_user", to: "sessions#check_current_user"
 
   get "/login", to: "sessions#new"
   get "/signup", to: "users#new"

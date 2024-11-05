@@ -14,6 +14,7 @@ const HeaderNav = () => {
     const fetchCurrentUser = async () => {
       const url = "/check_current_user";
       const response = await fetch(url, {
+        method: "POST",
         headers: {
           "X-CSRF-Token": csrfToken,
           "Content-Type": "application/json",
