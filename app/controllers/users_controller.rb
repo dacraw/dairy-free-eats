@@ -6,7 +6,9 @@ class UsersController < ApplicationController
         user = User.new user_params
 
         if user.save
-            render json: {message: "user created", user: user.as_json, only: [:id, :email]}, status: 200
+            token = encode_token(user.as_json(only: [:id]))
+            
+            render json: {message: "user created", token: token}, status: 200
         else
             render json: {message: "user was not created", errors: user.errors.full_messages}, status: 400
         end

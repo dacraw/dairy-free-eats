@@ -33,6 +33,8 @@ const Signup = () => {
       return;
     }
 
+    localStorage.setItem("jwt-token", responseData.token);
+
     navigate("/order");
   };
 
