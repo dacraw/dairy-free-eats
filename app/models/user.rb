@@ -6,7 +6,7 @@ class User < ApplicationRecord
     validates_length_of :password, minimum: 8
     validates :session_token, { uniqueness: true, presence: true }
     validates :recovery_password_digest, { uniqueness: true, presence: true }
-    validates_presence_of :password_confirmation
+    validates_presence_of :password_confirmation, on: :create
 
     after_initialize :ensure_recovery_password_digest, :ensure_session_token
 
