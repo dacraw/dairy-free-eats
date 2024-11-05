@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { getCsrfToken } from "../util/formUtil";
 
 type StripeProduct = {
   default_price: string;
@@ -11,9 +12,8 @@ const Order = () => {
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data: { [key: string]: string }) => {
-    const csrfToken = document
-      .querySelector('meta[name="csrf-token"]')
-      ?.getAttribute("content");
+    const csrfToken = getCsrfToken();
+
     if (!csrfToken) return null;
     const url = "/api/v1/stripe/create_checkout_session";
     const response = await fetch(url, {
