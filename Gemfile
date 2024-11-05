@@ -52,6 +52,9 @@ group :development, :test do
 
   # rspec for backend tests
   gem "rspec-rails", "~> 7.0.0"
+
+  # FactoryBot for spec fixtures
+  gem "factory_bot_rails"
 end
 
 group :development do
