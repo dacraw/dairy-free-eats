@@ -22,6 +22,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resource :session, only: [ :new, :create, :destroy ]
+
+  get "/signup", to: "users#new"
+
+  resources :users, only: [ :create ]
+
   namespace :stripe do
     resources :events, only: [ :create ]
   end
