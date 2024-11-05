@@ -6,6 +6,7 @@ class UsersController < ApplicationController
         user = User.new user_params
 
         if user.save
+            login(user)
             render json: { message: "user created" }, status: 200
         else
             render json: { message: "user was not created", errors: user.errors.full_messages }, status: 400

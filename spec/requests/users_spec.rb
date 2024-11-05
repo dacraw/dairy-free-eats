@@ -2,11 +2,26 @@ require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
   describe "POST /create" do
-    it "creates a user with valid params" do
-      expect {
-        post users_url,
-          params: { user: { email: "test@somewhere.com", password: "password", password_confirmation: "password" } }
-      }.to change { User.count }.from(0).to(1)
+    context "with valid params" do
+      let(:valid_params) {
+        { user: { email: "test@somewhere.com", password: "password", password_confirmation: "password" } }
+      }
+
+      it "creates a user" do
+        expect {
+          post users_url,
+            params: valid_params
+        }.to change { User.count }.from(0).to(1)
+      end
+
+      it "logs in the user" do
+        post users_url, params: valid_params
+
+        user = User.last
+        expect(user.session_token).to eq session[:session_token]
+        expect(controller.logged_in?).to eq true
+        expect(controller.current_user).to eq user
+      end
     end
 
     context "when there is an issue with the password" do
