@@ -24,6 +24,10 @@ class SessionsController < ApplicationController
         render json: { message: "successfully logged out" }, status: 200
     end
 
+    def check_current_user
+        render json: {current_user: current_user.as_json(only: [:id])}
+    end
+
     private
     def session_params
         params.require(:session).permit(:email, :password)

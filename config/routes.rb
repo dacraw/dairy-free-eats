@@ -23,6 +23,9 @@ Rails.application.routes.draw do
   end
 
   resource :session, only: [ :new, :create, :destroy ]
+
+  get "/check_current_user", to: "sessions#check_current_user"
+
   get "/login", to: "sessions#new"
   get "/signup", to: "users#new"
 
