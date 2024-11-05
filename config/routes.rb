@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   end
 
   resource :session, only: [ :new, :create, :destroy ]
-
+  get "/login", to: "sessions#new"
   get "/signup", to: "users#new"
 
   resources :users, only: [ :create ]
