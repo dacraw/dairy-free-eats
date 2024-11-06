@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
     end
 
     def check_current_user
-        render json: {current_user: current_user.as_json(only: [:id])}
+        render json: { current_user: current_user.as_json(only: [ :id ]) }
     end
 
     private
