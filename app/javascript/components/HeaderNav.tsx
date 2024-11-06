@@ -150,7 +150,7 @@ const HeaderNav = () => {
     if (!csrfToken) return;
 
     const fetchCurrentUser = async () => {
-      const url = "/check_current_user";
+      const url = "/api/v1/session/check_current_user";
       const response = await fetch(url, {
         method: "POST",
         headers: {
@@ -170,7 +170,7 @@ const HeaderNav = () => {
     const csrfToken = getCsrfToken();
     if (!csrfToken) return null;
 
-    await fetch("/session", {
+    await fetch("/api/v1/session", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
