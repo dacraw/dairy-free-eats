@@ -1,19 +1,21 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { getCsrfToken } from "../util/formUtil";
 import { useNavigate } from "react-router-dom";
+import { getCsrfToken } from "util/formUtil";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm<{
+    email: string;
+    password: string;
+  }>();
   const navigate = useNavigate();
 
-  const onSubmit = async (data) => {
+  const onSubmit = handleSubmit(async (data) => {
     const csrfToken = getCsrfToken();
 
     if (!csrfToken) return null;
 
-    const url = "/session";
-    const response = await fetch(url, {
+    await fetch("/session", {
       method: "POST",
       body: JSON.stringify({ session: data }),
       headers: {
@@ -22,12 +24,11 @@ const Login = () => {
       },
     });
 
-    const responseData = await response.json();
     navigate("/");
-  };
+  });
   return (
     <div className="grid place-content-center">
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <h3 className="mb-4 text-2xl">Login</h3>
         <div>
           <label className="block ">Email</label>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { getCsrfToken } from "../util/formUtil";
+import { getCsrfToken } from "util/formUtil";
 
 type StripeProduct = {
   default_price: string;

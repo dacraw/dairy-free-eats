@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getCsrfToken } from "../util/formUtil";
+import { getCsrfToken } from "util/formUtil";
 
 const HeaderNav = () => {
   const [currentUser, setCurrentUser] = useState(null);
