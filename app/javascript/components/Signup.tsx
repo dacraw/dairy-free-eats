@@ -11,12 +11,11 @@ const Signup = () => {
     errors: string[];
   } | null>(null);
   const onSubmit = async (data: { [key: string]: string }) => {
-    const url = "/users";
     const csrfToken = getCsrfToken();
 
     if (!csrfToken) return null;
 
-    const response = await fetch(url, {
+    const response = await fetch("/api/v1/users", {
       method: "POST",
       body: JSON.stringify({ user: data }),
       headers: {

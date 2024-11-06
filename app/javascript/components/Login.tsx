@@ -15,7 +15,7 @@ const Login = () => {
 
     if (!csrfToken) return null;
 
-    await fetch("/session", {
+    await fetch("api/v1/session", {
       method: "POST",
       body: JSON.stringify({ session: data }),
       headers: {

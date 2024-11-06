@@ -19,17 +19,15 @@ Rails.application.routes.draw do
     namespace :v1 do
       get "stripe/products"
       post "stripe/create_checkout_session"
+      resource :session, only: [ :new, :create, :destroy ] do
+        post "check_current_user"
+      end
+      resources :users, only: [ :create ]
     end
   end
 
-  resource :session, only: [ :new, :create, :destroy ]
-
-  post "/check_current_user", to: "sessions#check_current_user"
-
-  get "/login", to: "sessions#new"
-  get "/signup", to: "users#new"
-
-  resources :users, only: [ :create ]
+  get "login", to: "api/v1/sessions#new"
+  get "signup", to: "api/v1/users#new"
 
   namespace :stripe do
     resources :events, only: [ :create ]
