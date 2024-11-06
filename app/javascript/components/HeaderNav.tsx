@@ -92,7 +92,12 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
   return (
     <nav>
       <div className="flex justify-between items-center md:hidden">
-        <Link to="/order">Order Now</Link>
+        <Link
+          className="rounded py-2 px-4 bg-blue-400 text-gray-100 font-bold"
+          to="/order"
+        >
+          Order Now
+        </Link>
 
         <div className="text-right">
           <FontAwesomeIcon
