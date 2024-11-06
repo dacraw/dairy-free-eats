@@ -28,21 +28,17 @@ const HeaderNav = () => {
     fetchCurrentUser();
   }, [location.pathname]);
 
-  const logout = async (e) => {
-    e.preventDefault();
-
+  const logout = async () => {
     const csrfToken = getCsrfToken();
     if (!csrfToken) return null;
-    const url = "/session";
-    const response = await fetch(url, {
+
+    await fetch("/session", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "X-CSRF-Token": csrfToken,
       },
     });
-
-    const responseData = await response.json();
 
     navigate("/login");
   };
