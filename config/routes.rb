@@ -24,6 +24,9 @@ Rails.application.routes.draw do
 
   resource :session, only: [ :new, :create, :destroy ]
 
+  post "/check_current_user", to: "sessions#check_current_user"
+
+  get "/login", to: "sessions#new"
   get "/signup", to: "users#new"
 
   resources :users, only: [ :create ]

@@ -1,8 +1,17 @@
+import HeaderNav from "components/HeaderNav";
 import React from "react";
-import AppRouter from "../routes/index";
+import AppRoute from "routes";
 
 const App = () => {
-  return <>{<AppRouter />}</>;
+  return (
+    <>
+      {
+        <AppRoute>
+          <HeaderNav />
+        </AppRoute>
+      }
+    </>
+  );
 };
 
 export default App;
