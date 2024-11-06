@@ -22,13 +22,13 @@ Rails.application.routes.draw do
       resource :session, only: [ :new, :create, :destroy ] do
         post "check_current_user"
       end
+      resources :users, only: [ :create ]
     end
   end
 
   get "login", to: "api/v1/sessions#new"
-  get "signup", to: "users#new"
+  get "signup", to: "api/v1/users#new"
 
-  resources :users, only: [ :create ]
 
   namespace :stripe do
     resources :events, only: [ :create ]
