@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe "Sessions", type: :request do
+RSpec.describe "Api::V1::Sessions", type: :request do
   describe "POST /create" do
     it "creates a new session for a user" do
       user = create :user, :valid_user
 
-      post session_url, params: { session: { email: user.email, password: user.password } }
+      post api_v1_session_url, params: { session: { email: user.email, password: user.password } }
 
       logged_in_user = User.last
       expect(logged_in_user.email).to eq user.email
@@ -19,12 +19,12 @@ RSpec.describe "Sessions", type: :request do
     it "logs out a user" do
       user = create :user, :valid_user
 
-      post session_url, params: { session: { email: user.email, password: user.password } }
+      post api_v1_session_url, params: { session: { email: user.email, password: user.password } }
 
       logged_in_user = User.last
       expect(session[:session_token]).to eq logged_in_user.session_token
 
-      delete session_url
+      delete api_v1_session_url
 
       logged_out_user = User.last
       expect(logged_in_user.session_token).to eq logged_out_user.session_token

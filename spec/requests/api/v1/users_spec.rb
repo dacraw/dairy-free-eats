@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Users", type: :request do
+RSpec.describe "API::V1::Users", type: :request do
   describe "POST /create" do
     context "with valid params" do
       let(:valid_params) {
@@ -9,13 +9,13 @@ RSpec.describe "Users", type: :request do
 
       it "creates a user" do
         expect {
-          post users_url,
+          post api_v1_users_url,
             params: valid_params
         }.to change { User.count }.from(0).to(1)
       end
 
       it "logs in the user" do
-        post users_url, params: valid_params
+        post api_v1_users_url, params: valid_params
 
         user = User.last
         expect(user.session_token).to eq session[:session_token]
@@ -27,7 +27,7 @@ RSpec.describe "Users", type: :request do
     context "when there is an issue with the password" do
       it "expects password to be present" do
         expect {
-          post users_url, params: { user: { email: "test@somewhere.com", password_confirmation: "password" } }
+          post api_v1_users_url, params: { user: { email: "test@somewhere.com", password_confirmation: "password" } }
         }.not_to change { User.count }
 
         expect(response.status).to eq 400
@@ -39,7 +39,7 @@ RSpec.describe "Users", type: :request do
 
       it "expects password to be at least 8 characters long" do
         expect {
-          post users_url, params: { user: { email: "test@somewhere.com", password: "short", password_confirmation: "short" } }
+          post api_v1_users_url, params: { user: { email: "test@somewhere.com", password: "short", password_confirmation: "short" } }
         }.not_to change { User.count }
 
         expect(response.status).to eq 400
@@ -51,7 +51,7 @@ RSpec.describe "Users", type: :request do
 
       it "expects password confirmation to be present" do
         expect {
-          post users_url, params: { user: { email: "test@somewhere.com", password: "password" } }
+          post api_v1_users_url, params: { user: { email: "test@somewhere.com", password: "password" } }
         }.not_to change { User.count }
 
         expect(response.status).to eq 400
