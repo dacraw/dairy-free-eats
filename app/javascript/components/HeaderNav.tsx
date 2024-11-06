@@ -4,6 +4,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {} from "@fortawesome/free-regular-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getCsrfToken } from "util/formUtil";
+import { gql, useLazyQuery } from "@apollo/client";
 
 type CurrentUser = {
   id: number;
@@ -140,31 +141,29 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
   );
 };
 
+const FETCH_CURRENT_USER = gql`
+  query CurrentUser {
+    currentUser {
+      id
+      email
+    }
+  }
+`;
+
 const HeaderNav = () => {
-  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const [getCurrentUser, { loading, data, error }] = useLazyQuery(
+    FETCH_CURRENT_USER,
+    { fetchPolicy: "network-only" }
+  );
 
   useEffect(() => {
-    const csrfToken = getCsrfToken();
-    if (!csrfToken) return;
-
-    const fetchCurrentUser = async () => {
-      const url = "/api/v1/session/check_current_user";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "X-CSRF-Token": csrfToken,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const responseData = await response.json();
-      setCurrentUser(responseData.current_user);
-    };
-
-    fetchCurrentUser();
+    getCurrentUser();
   }, [location.pathname]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   const logout = async () => {
     const csrfToken = getCsrfToken();
@@ -183,8 +182,11 @@ const HeaderNav = () => {
 
   return (
     <header className="border-b-2 mb-4 p-2">
-      <DesktopNav currentUser={currentUser} logout={logout} />
-      <ResponsiveNav currentUser={currentUser} logout={logout} />
+      <p onClick={() => getCurrentUser()}>
+        Logged in as: {data?.currentUser?.email}{" "}
+      </p>
+      <DesktopNav currentUser={data?.currentUser} logout={logout} />
+      <ResponsiveNav currentUser={data?.currentUser} logout={logout} />
     </header>
   );
 };
