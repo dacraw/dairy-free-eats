@@ -29,7 +29,6 @@ Rails.application.routes.draw do
   get "login", to: "api/v1/sessions#new"
   get "signup", to: "api/v1/users#new"
 
-
   namespace :stripe do
     resources :events, only: [ :create ]
   end
