@@ -45,18 +45,43 @@ const HeaderNav = () => {
 
   return (
     <header className="flex border-b-2 my-2 p-2 justify-between">
-      <div className="border-2 gap-4 flex">
-        <Link to="/">Home</Link>
-        <Link to="/order">Order</Link>
+      <div className="gap-4 flex">
+        <Link
+          className="hover:bg-blue-400 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold text-gray-700"
+          to="/"
+        >
+          HOME
+        </Link>
+        <Link
+          className="hover:bg-blue-400 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold text-gray-700"
+          to="/order"
+        >
+          ORDER
+        </Link>
       </div>
-      <div className="border-2 gap-4 flex">
+      <div className="gap-4 flex">
         {!currentUser ? (
           <>
-            <Link to="/login">Login</Link>
-            <Link to="/signup">Signup</Link>
+            <Link
+              className="hover:bg-green-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
+              to="/login"
+            >
+              Login
+            </Link>
+            <Link
+              className="hover:bg-green-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
+              to="/signup"
+            >
+              Signup
+            </Link>
           </>
         ) : (
-          <button onClick={logout}>Logout</button>
+          <button
+            className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
+            onClick={logout}
+          >
+            Logout
+          </button>
         )}
       </div>
     </header>
