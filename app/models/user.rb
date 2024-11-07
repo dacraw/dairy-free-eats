@@ -23,7 +23,9 @@ class User < ApplicationRecord
     end
 
     def reset_session_token!
-        self.update(session_token: User.generate_token)
+        # debugger
+        # self.update(session_token: User.generate_token)
+        self.update_column(:session_token, User.generate_token)
         self.session_token
     end
 end

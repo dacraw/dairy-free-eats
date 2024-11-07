@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { getCsrfToken } from "util/formUtil";
@@ -8,6 +8,7 @@ const Login = () => {
     email: string;
     password: string;
   }>();
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const onSubmit = handleSubmit(async (data) => {
@@ -15,7 +16,7 @@ const Login = () => {
 
     if (!csrfToken) return null;
 
-    await fetch("api/v1/session", {
+    const response = await fetch("api/v1/session", {
       method: "POST",
       body: JSON.stringify({ session: data }),
       headers: {
@@ -24,11 +25,20 @@ const Login = () => {
       },
     });
 
-    navigate("/");
+    const responseData = await response.json();
+
+    console.log(responseData);
+    if (!response.ok) {
+      setError(responseData.message);
+    }
+
+    // navigate("/");
   });
+
   return (
     <div className="grid place-content-center">
       <form onSubmit={onSubmit}>
+        {error && <p className="text-red-700">{error}</p>}
         <h3 className="mb-4 text-2xl">Login</h3>
         <div>
           <label className="block ">Email</label>
@@ -41,6 +51,7 @@ const Login = () => {
         <div>
           <label className="block ">Password</label>
           <input
+            minLength={8}
             className="mb-2 text-center"
             {...register("password")}
             type="password"

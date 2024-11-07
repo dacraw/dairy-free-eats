@@ -12,7 +12,9 @@ module Mutations
     def resolve(user_input:)
       user = ::User.new(**user_input)
 
+
       if user.save
+        context[:controller].login(user)
         { user: user, errors: [] }
       else
         errors = user.errors.map do |error|
