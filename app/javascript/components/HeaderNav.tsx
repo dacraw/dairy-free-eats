@@ -32,7 +32,7 @@ const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
           ORDER
         </Link>
       </div>
-      <div className="gap-4 flex">
+      <div className="gap-4 flex items-center">
         {!currentUser ? (
           <>
             <Link
@@ -49,12 +49,18 @@ const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
             </Link>
           </>
         ) : (
-          <button
-            className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
-            onClick={logout}
-          >
-            Logout
-          </button>
+          <>
+            <p>
+              Logged in as:{" "}
+              <strong className="font-bold">{currentUser?.email}</strong>
+            </p>
+            <button
+              className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          </>
         )}
       </div>
     </nav>
@@ -109,9 +115,9 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
               toggleShowMenu(!showMenu);
             }}
           />
-          <div className="relative w-28 z-10" ref={menuRef}>
+          <div className="relative z-10" ref={menuRef}>
             <div
-              className={`absolute overflow-hidden bg-white shadow w-full text-center transition-all duration-500 ease-in-out ${
+              className={`absolute overflow-hidden bg-white shadow w-64 right-0 top-2 text-center transition-all duration-500 ease-in-out ${
                 showMenu ? "max-h-60" : "max-h-0"
               }`}
             >
@@ -122,7 +128,15 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
                 Order
               </Link>
               {currentUser ? (
-                <button onClick={logout}>Logout</button>
+                <>
+                  <button className="mb-4" onClick={logout}>
+                    Logout
+                  </button>
+                  <p>
+                    Logged in as:{" "}
+                    <strong className="font-bold">{currentUser?.email}</strong>
+                  </p>
+                </>
               ) : (
                 <>
                   <Link className="block py-1" to="/login">
@@ -182,9 +196,6 @@ const HeaderNav = () => {
 
   return (
     <header className="border-b-2 mb-4 p-2">
-      <p onClick={() => getCurrentUser()}>
-        Logged in as: {data?.currentUser?.email}{" "}
-      </p>
       <DesktopNav currentUser={data?.currentUser} logout={logout} />
       <ResponsiveNav currentUser={data?.currentUser} logout={logout} />
     </header>

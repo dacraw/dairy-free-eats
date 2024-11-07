@@ -1,35 +1,33 @@
-import React, { useState } from "react";
+import { gql, useMutation } from "@apollo/client";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { getCsrfToken } from "util/formUtil";
+import { startCase } from "lodash";
+
+const CREATE_USER = gql`
+  mutation CreateUser($input: UserCreateInput!) {
+    userCreate(input: $input) {
+      user {
+        id
+        email
+      }
+      errors {
+        message
+        path
+      }
+    }
+  }
+`;
 
 const Signup = () => {
   const navigate = useNavigate();
+  const [createUser, { loading, data }] = useMutation(CREATE_USER);
   const { register, handleSubmit } = useForm();
-  const [error, setError] = useState<{
-    message: string;
-    errors: string[];
-  } | null>(null);
+
+  if (loading) return <p>Loading....</p>;
+
   const onSubmit = async (data: { [key: string]: string }) => {
-    const csrfToken = getCsrfToken();
-
-    if (!csrfToken) return null;
-
-    const response = await fetch("/api/v1/users", {
-      method: "POST",
-      body: JSON.stringify({ user: data }),
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken,
-      },
-    });
-
-    const responseData = await response.json();
-
-    if (response.status !== 200) {
-      setError(responseData);
-      return;
-    }
+    createUser({ variables: { input: { userInput: data } } });
 
     navigate("/order");
   };
@@ -44,7 +42,11 @@ const Signup = () => {
       </p>
 
       <div className="w-1/2 grid place-content-center mx-auto">
-        {error && error.errors.map((error, i) => <p key={i}>{error}</p>)}
+        {data?.userCreate?.errors?.map((error, i) => (
+          <p className="text-red-800" key={i}>
+            {startCase(error.path[1])} {error.message}
+          </p>
+        ))}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-2">
             <label className="block" htmlFor="email">
@@ -78,7 +80,7 @@ const Signup = () => {
               id="password_confirmation"
               type="password"
               minLength={8}
-              {...register("password_confirmation")}
+              {...register("passwordConfirmation")}
             />
           </div>
           <input
