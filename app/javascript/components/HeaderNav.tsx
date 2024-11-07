@@ -191,6 +191,8 @@ const HeaderNav = () => {
       },
     });
 
+    await getCurrentUser();
+
     navigate("/login");
   };
 

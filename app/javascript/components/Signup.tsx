@@ -47,7 +47,7 @@ const Signup = () => {
         })}
         <form
           onSubmit={handleSubmit(async (data) => {
-            createUser({ variables: { input: { userInput: data } } });
+            await createUser({ variables: { input: { userInput: data } } });
 
             navigate("/order");
           })}

@@ -30,9 +30,10 @@ const Login = () => {
     console.log(responseData);
     if (!response.ok) {
       setError(responseData.message);
+      return;
     }
 
-    // navigate("/");
+    navigate("/");
   });
 
   return (
