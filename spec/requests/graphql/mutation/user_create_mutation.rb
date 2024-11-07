@@ -56,7 +56,9 @@ RSpec.describe "User Create Mutation", type: :request do
                 }
             }
 
-            post "/graphql", params: { query: query, variables: variables }
+            expect {
+                post "/graphql", params: { query: query, variables: variables }
+            }.not_to change { User.count }
             
             data = JSON.parse(response.body)["data"]
             expect(data["userCreate"]["user"]).to be nil
