@@ -42,7 +42,7 @@ const Signup = () => {
       </p>
 
       <div className="w-1/2 grid place-content-center mx-auto">
-        {data?.userCreate?.errors?.map((error, i) => (
+        {data?.userCreate?.errors?.map((error: any, i: any) => (
           <p className="text-red-800" key={i}>
             {startCase(error.path[1])} {error.message}
           </p>
