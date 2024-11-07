@@ -4,6 +4,7 @@ import { faBars } from "@fortawesome/free-solid-svg-icons";
 import {} from "@fortawesome/free-regular-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getCsrfToken } from "util/formUtil";
+import { gql, useLazyQuery } from "@apollo/client";
 
 type CurrentUser = {
   id: number;
@@ -31,7 +32,7 @@ const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
           ORDER
         </Link>
       </div>
-      <div className="gap-4 flex">
+      <div className="gap-4 flex items-center">
         {!currentUser ? (
           <>
             <Link
@@ -48,12 +49,18 @@ const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
             </Link>
           </>
         ) : (
-          <button
-            className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
-            onClick={logout}
-          >
-            Logout
-          </button>
+          <>
+            <p>
+              Logged in as:{" "}
+              <strong className="font-bold">{currentUser?.email}</strong>
+            </p>
+            <button
+              className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          </>
         )}
       </div>
     </nav>
@@ -108,9 +115,9 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
               toggleShowMenu(!showMenu);
             }}
           />
-          <div className="relative w-28 z-10" ref={menuRef}>
+          <div className="relative z-10" ref={menuRef}>
             <div
-              className={`absolute overflow-hidden bg-white shadow w-full text-center transition-all duration-500 ease-in-out ${
+              className={`absolute overflow-hidden bg-white shadow w-64 right-0 top-2 text-center transition-all duration-500 ease-in-out ${
                 showMenu ? "max-h-60" : "max-h-0"
               }`}
             >
@@ -121,7 +128,15 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
                 Order
               </Link>
               {currentUser ? (
-                <button onClick={logout}>Logout</button>
+                <>
+                  <button className="mb-4" onClick={logout}>
+                    Logout
+                  </button>
+                  <p>
+                    Logged in as:{" "}
+                    <strong className="font-bold">{currentUser?.email}</strong>
+                  </p>
+                </>
               ) : (
                 <>
                   <Link className="block py-1" to="/login">
@@ -140,31 +155,29 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
   );
 };
 
+const FETCH_CURRENT_USER = gql`
+  query CurrentUser {
+    currentUser {
+      id
+      email
+    }
+  }
+`;
+
 const HeaderNav = () => {
-  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  const [getCurrentUser, { loading, data, error }] = useLazyQuery(
+    FETCH_CURRENT_USER,
+    { fetchPolicy: "network-only" }
+  );
 
   useEffect(() => {
-    const csrfToken = getCsrfToken();
-    if (!csrfToken) return;
-
-    const fetchCurrentUser = async () => {
-      const url = "/api/v1/session/check_current_user";
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "X-CSRF-Token": csrfToken,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const responseData = await response.json();
-      setCurrentUser(responseData.current_user);
-    };
-
-    fetchCurrentUser();
+    getCurrentUser();
   }, [location.pathname]);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
 
   const logout = async () => {
     const csrfToken = getCsrfToken();
@@ -183,8 +196,8 @@ const HeaderNav = () => {
 
   return (
     <header className="border-b-2 mb-4 p-2">
-      <DesktopNav currentUser={currentUser} logout={logout} />
-      <ResponsiveNav currentUser={currentUser} logout={logout} />
+      <DesktopNav currentUser={data?.currentUser} logout={logout} />
+      <ResponsiveNav currentUser={data?.currentUser} logout={logout} />
     </header>
   );
 };
