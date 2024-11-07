@@ -20,7 +20,7 @@ gql`
 
 const Login = () => {
   const { register, handleSubmit } = useForm<SessionInput>();
-  const [login, { loading, data }] = useCreateSessionMutation();
+  const [login, { loading }] = useCreateSessionMutation();
   const navigate = useNavigate();
 
   return (

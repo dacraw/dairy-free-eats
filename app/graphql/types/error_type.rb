@@ -5,6 +5,6 @@ module Types
     description "Generic error type"
 
     field :message, String, null: false
-    field :path, [ String ], null: false
+    field :path, [ String ], null: true
   end
 end
