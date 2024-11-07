@@ -1,49 +1,46 @@
+import { gql } from "@apollo/client";
+import { useCreateSessionMutation } from "graphql/types";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { getCsrfToken } from "util/formUtil";
+
+gql`
+  mutation CreateSession($input: SessionCreateInput!) {
+    sessionCreate(input: $input) {
+      user {
+        id
+      }
+      errors {
+        message
+        path
+      }
+    }
+  }
+`;
 
 const Login = () => {
   const { register, handleSubmit } = useForm<{
     email: string;
     password: string;
   }>();
-  const [error, setError] = useState(null);
+  const [login, { loading, data }] = useCreateSessionMutation();
   const navigate = useNavigate();
-
-  const onSubmit = handleSubmit(async (data) => {
-    const csrfToken = getCsrfToken();
-
-    if (!csrfToken) return null;
-
-    const response = await fetch("api/v1/session", {
-      method: "POST",
-      body: JSON.stringify({ session: data }),
-      headers: {
-        "X-CSRF-Token": csrfToken,
-        "Content-Type": "application/json",
-      },
-    });
-
-    const responseData = await response.json();
-
-    if (!response.ok) {
-      setError(responseData.message);
-      return;
-    }
-
-    navigate("/");
-  });
 
   return (
     <div className="grid place-content-center">
-      <form onSubmit={onSubmit}>
-        {error && <p className="text-red-700">{error}</p>}
+      <form
+        onSubmit={handleSubmit(async (data) => {
+          await login({ variables: { input: { sessionInput: data } } });
+
+          navigate("/");
+        })}
+      >
         <h3 className="mb-4 text-2xl">Login</h3>
         <div>
           <label className="block ">Email</label>
           <input
-            className="mb-2 text-center"
+            disabled={loading ? true : false}
+            className={`mb-2 text-center ${loading ? "blur" : ""}`}
             {...register("email")}
             type="email"
           />
@@ -51,14 +48,19 @@ const Login = () => {
         <div>
           <label className="block ">Password</label>
           <input
+            disabled={loading ? true : false}
             minLength={8}
-            className="mb-2 text-center"
+            className={`mb-2 text-center ${loading ? "blur" : ""}`}
             {...register("password")}
             type="password"
           />
         </div>
         <div>
-          <input type="submit" className="w-full border-2 col-end-3" />
+          <input
+            disabled={loading ? true : false}
+            type="submit"
+            className="w-full border-2 col-end-3"
+          />
         </div>
       </form>
     </div>

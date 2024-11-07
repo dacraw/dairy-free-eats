@@ -6,7 +6,7 @@ import { startCase } from "lodash";
 import { CreateUserMutation, UserInput } from "graphql/graphql";
 import { useCreateUserMutation } from "graphql/types";
 
-const CREATE_USER = gql`
+gql`
   mutation CreateUser($input: UserCreateInput!) {
     userCreate(input: $input) {
       user {
