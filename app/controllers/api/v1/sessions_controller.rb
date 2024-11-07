@@ -4,18 +4,21 @@ class Api::V1::SessionsController < ApplicationController
 
     def create
         user = User.find_by_email(session_params[:email])
-        # set the password in order to login and pass validation when resetting session token
-        user.password = session_params[:password]
 
-        return render json: { message: "user does not exist" }, status: 400 if user.nil?
+        return render json: { message: "Invalid credentials." }, status: 400 if user.nil?
+
+        # set the password in order to login and pass validation when resetting session token
+        # user.password = session_params[:password]
 
         authenticated_user = user.authenticate(session_params[:password])
 
-        return render json: { message: "invalid credentials" }, status: 400 if !authenticated_user
+        # debugger
+        p "dougie: #{authenticated_user}"
+        return render json: { message: "Invalid credentials." }, status: 400 if !authenticated_user
 
         login(user)
 
-        render json: { message: "login successful" }, status: 200
+        render json: { message: "Login Successful" }, status: 200
     end
 
     def destroy

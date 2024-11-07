@@ -26,7 +26,6 @@ Rails.application.routes.draw do
       resource :session, only: [ :new, :create, :destroy ] do
         post "check_current_user"
       end
-      resources :users, only: [ :create ]
     end
   end
 
