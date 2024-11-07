@@ -5,7 +5,7 @@ module Mutations
     description "Creates a new user"
 
     field :user, Types::UserType, null: true
-    field :errors, [Types::ErrorType], null: false
+    field :errors, [ Types::ErrorType ], null: false
 
     argument :user_input, Types::UserInputType, required: true
 
@@ -16,7 +16,7 @@ module Mutations
         { user: user, errors: [] }
       else
         errors = user.errors.map do |error|
-          path = ["attributes", error.attribute.to_s.camelize(:lower)]
+          path = [ "attributes", error.attribute.to_s.camelize(:lower) ]
           {
             path: path,
             message: error.message
