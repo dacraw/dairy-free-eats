@@ -7,13 +7,8 @@ class Api::V1::SessionsController < ApplicationController
 
         return render json: { message: "Invalid credentials." }, status: 400 if user.nil?
 
-        # set the password in order to login and pass validation when resetting session token
-        # user.password = session_params[:password]
-
         authenticated_user = user.authenticate(session_params[:password])
 
-        # debugger
-        p "dougie: #{authenticated_user}"
         return render json: { message: "Invalid credentials." }, status: 400 if !authenticated_user
 
         login(user)
