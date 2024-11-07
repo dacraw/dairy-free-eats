@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import { useCreateSessionMutation } from "graphql/types";
+import { SessionInput, useCreateSessionMutation } from "graphql/types";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -19,10 +19,7 @@ gql`
 `;
 
 const Login = () => {
-  const { register, handleSubmit } = useForm<{
-    email: string;
-    password: string;
-  }>();
+  const { register, handleSubmit } = useForm<SessionInput>();
   const [login, { loading, data }] = useCreateSessionMutation();
   const navigate = useNavigate();
 
