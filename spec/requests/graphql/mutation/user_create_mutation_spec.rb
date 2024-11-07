@@ -20,7 +20,7 @@ RSpec.describe "User Create Mutation", type: :request do
     
     context "with valid params" do
         let(:email) { Faker::Internet.email }
-        let(:password) { Faker::Internet.password }
+        let(:password) { Faker::Internet.password(min_length: 8) }
         let(:variables) {
             {
                 input: {
