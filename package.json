@@ -1,6 +1,9 @@
 {
   "name": "app",
   "private": true,
+  "engines": {
+    "node": "22.11.0"
+  },
   "devDependencies": {
     "@types/lodash": "^4.17.13",
     "@types/react": "^18.3.12",
