@@ -52,7 +52,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
+          node-version: "v22.11.0"
 
       - name: Install packages
         run: sudo apt-get update && sudo apt-get install --no-install-recommends -y google-chrome-stable postgresql-client
