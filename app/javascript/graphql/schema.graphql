@@ -3,7 +3,7 @@ Generic error type
 """
 type Error {
   message: String!
-  path: [String!]
+  path: [String!]!
 }
 
 """

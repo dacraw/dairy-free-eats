@@ -3,6 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { startCase } from "lodash";
+import { CreateUserMutation } from "graphql/graphql";
 
 const CREATE_USER = gql`
   mutation CreateUser($input: UserCreateInput!) {
@@ -21,7 +22,8 @@ const CREATE_USER = gql`
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [createUser, { loading, data }] = useMutation(CREATE_USER);
+  const [createUser, { loading, data }] =
+    useMutation<CreateUserMutation>(CREATE_USER);
   const { register, handleSubmit } = useForm();
 
   if (loading) return <p>Loading....</p>;
@@ -42,11 +44,13 @@ const Signup = () => {
       </p>
 
       <div className="w-1/2 grid place-content-center mx-auto">
-        {data?.userCreate?.errors?.map((error: any, i: any) => (
-          <p className="text-red-800" key={i}>
-            {startCase(error.path[1])} {error.message}
-          </p>
-        ))}
+        {data?.userCreate?.errors?.map((error, i) => {
+          return (
+            <p className="text-red-800" key={i}>
+              {startCase(error.path[1])} {error.message}
+            </p>
+          );
+        })}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-2">
             <label className="block" htmlFor="email">
