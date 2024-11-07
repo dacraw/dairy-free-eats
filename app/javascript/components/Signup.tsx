@@ -3,6 +3,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { startCase } from "lodash";
+import { CreateUserMutation, UserInput } from "graphql/graphql";
+import { useCreateUserMutation } from "graphql/types";
 
 const CREATE_USER = gql`
   mutation CreateUser($input: UserCreateInput!) {
@@ -21,16 +23,10 @@ const CREATE_USER = gql`
 
 const Signup = () => {
   const navigate = useNavigate();
-  const [createUser, { loading, data }] = useMutation(CREATE_USER);
-  const { register, handleSubmit } = useForm();
+  const [createUser, { loading, data }] = useCreateUserMutation();
+  const { register, handleSubmit } = useForm<UserInput>();
 
   if (loading) return <p>Loading....</p>;
-
-  const onSubmit = async (data: { [key: string]: string }) => {
-    createUser({ variables: { input: { userInput: data } } });
-
-    navigate("/order");
-  };
 
   return (
     <div>
@@ -42,12 +38,20 @@ const Signup = () => {
       </p>
 
       <div className="w-1/2 grid place-content-center mx-auto">
-        {data?.userCreate?.errors?.map((error: any, i: any) => (
-          <p className="text-red-800" key={i}>
-            {startCase(error.path[1])} {error.message}
-          </p>
-        ))}
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {data?.userCreate?.errors?.map((error, i) => {
+          return (
+            <p className="text-red-800" key={i}>
+              {startCase(error.path[1])} {error.message}
+            </p>
+          );
+        })}
+        <form
+          onSubmit={handleSubmit(async (data) => {
+            createUser({ variables: { input: { userInput: data } } });
+
+            navigate("/order");
+          })}
+        >
           <div className="mb-2">
             <label className="block" htmlFor="email">
               Email
