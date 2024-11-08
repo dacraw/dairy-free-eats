@@ -23,9 +23,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get "stripe/products"
       post "stripe/create_checkout_session"
-      resource :session, only: [ :new, :create, :destroy ] do
-        post "check_current_user"
-      end
+      resource :session, only: [ :new ]
     end
   end
 
