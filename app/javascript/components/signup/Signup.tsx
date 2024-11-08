@@ -3,8 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { startCase } from "lodash";
-import { UserInput } from "graphql/graphql";
-import { useCreateUserMutation } from "graphql/types";
+import { UserInput, useCreateUserMutation } from "graphql/types";
 
 gql`
   mutation CreateUser($input: UserCreateInput!) {
