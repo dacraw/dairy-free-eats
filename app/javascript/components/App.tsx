@@ -4,13 +4,9 @@ import AppRoute from "routes";
 
 const App = () => {
   return (
-    <>
-      {
-        <AppRoute>
-          <HeaderNav />
-        </AppRoute>
-      }
-    </>
+    <AppRoute>
+      <HeaderNav />
+    </AppRoute>
   );
 };
 
