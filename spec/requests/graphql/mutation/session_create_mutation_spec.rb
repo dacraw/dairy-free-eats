@@ -16,10 +16,10 @@ RSpec.describe "Session Create Mutation" do
             }
         GRAPHQL
     }
-    
+
     context "with valid params" do
         let!(:user) { create :user, :valid_user }
-        let(:variables){
+        let(:variables) {
             {
                 input: {
                     sessionInput: {
@@ -50,18 +50,18 @@ RSpec.describe "Session Create Mutation" do
 
         it "verifies a user with the provided email exists" do
             variables = {
-                input: { 
+                input: {
                     sessionInput: {
                         email: "not_a_user@nope.com",
                         password: Faker::Internet.password(min_length: 8)
                     }
                 }
             }
-            post "/graphql", params: { query: query, variables: variables}
+            post "/graphql", params: { query: query, variables: variables }
 
             data = JSON.parse(response.body)["data"]
             expect(data["sessionCreate"]["user"]).to be nil
-            expect(data["sessionCreate"]["errors"]).to match_array([{"message"=>"invalid", "path"=>["attributes", "credentials"]}])
+            expect(data["sessionCreate"]["errors"]).to match_array([ { "message"=>"invalid", "path"=>[ "attributes", "credentials" ] } ])
             expect(session[:session_token]).to be nil
         end
 
@@ -80,7 +80,7 @@ RSpec.describe "Session Create Mutation" do
             data = JSON.parse(response.body)["data"]
 
             expect(data["sessionCreate"]["user"]).to be nil
-            expect(data["sessionCreate"]["errors"]).to match_array([{"message"=>"invalid", "path"=>["attributes", "credentials"]}])
+            expect(data["sessionCreate"]["errors"]).to match_array([ { "message"=>"invalid", "path"=>[ "attributes", "credentials" ] } ])
             expect(session[:session_token]).to be nil
         end
     end

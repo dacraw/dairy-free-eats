@@ -16,8 +16,8 @@ RSpec.describe "User Create Mutation", type: :request do
                 }
             }
         GRAPHQL
-    } 
-    
+    }
+
     context "with valid params" do
         let(:email) { Faker::Internet.email }
         let(:password) { Faker::Internet.password(min_length: 8) }
@@ -35,7 +35,7 @@ RSpec.describe "User Create Mutation", type: :request do
 
         it "creates a new user and logs them in" do
             expect {
-                post "/graphql", params: {query: query, variables: variables}
+                post "/graphql", params: { query: query, variables: variables }
             }.to change { User.count }.from(0).to(1)
 
             user = User.last
@@ -59,12 +59,12 @@ RSpec.describe "User Create Mutation", type: :request do
             expect {
                 post "/graphql", params: { query: query, variables: variables }
             }.not_to change { User.count }
-            
+
             data = JSON.parse(response.body)["data"]
             expect(data["userCreate"]["user"]).to be nil
-            
+
             errors = data["userCreate"]["errors"]
-            expect(errors).to eq [{"message"=>"doesn't match Password", "path"=>["attributes", "passwordConfirmation"]}, {"message"=>"is too short (minimum is 8 characters)", "path"=>["attributes", "password"]}]
+            expect(errors).to eq [ { "message"=>"doesn't match Password", "path"=>[ "attributes", "passwordConfirmation" ] }, { "message"=>"is too short (minimum is 8 characters)", "path"=>[ "attributes", "password" ] } ]
         end
     end
 end

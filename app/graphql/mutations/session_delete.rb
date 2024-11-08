@@ -5,11 +5,11 @@ module Mutations
     description "Logs the current user out"
 
     field :user, Types::UserType, null: true
-    field :errors, [Types::ErrorType], null: false
+    field :errors, [ Types::ErrorType ], null: false
 
     def resolve
       if !context[:current_user]
-        return {user: nil, errors: [message: "There is no current user"]}
+        return { user: nil, errors: [ message: "There is no current user" ] }
       end
       context[:controller].logout!
 

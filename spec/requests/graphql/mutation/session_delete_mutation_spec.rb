@@ -35,7 +35,7 @@ RSpec.describe "Session Delete Mutation Spec" do
         GRAPHQL
     }
 
-    let(:login_variables){
+    let(:login_variables) {
         {
             input: {
                 sessionInput: {
@@ -51,7 +51,7 @@ RSpec.describe "Session Delete Mutation Spec" do
             post "/graphql", params: { query: login_query, variables: login_variables }
 
             expect(session[:session_token]).to eq User.last.session_token
-            
+
             post "/graphql", params: { query: query, variables: { input: nil } }
 
             data = JSON.parse(response.body)["data"]
@@ -68,7 +68,7 @@ RSpec.describe "Session Delete Mutation Spec" do
             data = JSON.parse(response.body)["data"]
 
             expect(data["sessionDelete"]["user"]).to be nil
-            expect(data["sessionDelete"]["errors"]).to match_array([{"message"=>"There is no current user", "path"=>nil}])
+            expect(data["sessionDelete"]["errors"]).to match_array([ { "message"=>"There is no current user", "path"=>nil } ])
             expect(session[:session_token]).to be nil
         end
     end
