@@ -1,5 +1,4 @@
-import React, { act } from "react";
-import "@testing-library/jest-dom";
+import React from "react";
 import { screen, render } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";

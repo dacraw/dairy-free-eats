@@ -4,7 +4,6 @@ import Signup, { CREATE_USER } from "components/signup/Signup";
 import { BrowserRouter } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import userEvent from "@testing-library/user-event";
-import "@testing-library/jest-dom";
 
 const validMocks: MockedResponse[] = [
   {
