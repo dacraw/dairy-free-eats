@@ -1,5 +1,5 @@
+import HeaderNav from "components/headerNav/HeaderNav";
 import React from "react";
-import HeaderNav from "components/HeaderNav";
 import AppRoute from "routes";
 
 const App = () => {
