@@ -1,18 +1,17 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import {} from "@fortawesome/free-regular-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { getCsrfToken } from "util/formUtil";
-import { gql, useLazyQuery } from "@apollo/client";
-
-type CurrentUser = {
-  id: number;
-};
+import { gql } from "@apollo/client";
+import {
+  CurrentUserQuery,
+  useCurrentUserLazyQuery,
+  useSessionDeleteMutation,
+} from "graphql/types";
 
 type NavProps = {
-  currentUser: CurrentUser | null;
-  logout: () => Promise<null | undefined>;
+  currentUser: CurrentUserQuery["currentUser"];
+  logout: () => Promise<void>;
 };
 
 const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
@@ -56,7 +55,7 @@ const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
             </p>
             <button
               className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
-              onClick={logout}
+              onClick={() => logout()}
             >
               Logout
             </button>
@@ -129,7 +128,7 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
               </Link>
               {currentUser ? (
                 <>
-                  <button className="mb-4" onClick={logout}>
+                  <button className="mb-4" onClick={() => logout()}>
                     Logout
                   </button>
                   <p>
@@ -155,7 +154,7 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
   );
 };
 
-const FETCH_CURRENT_USER = gql`
+gql`
   query CurrentUser {
     currentUser {
       id
@@ -164,42 +163,44 @@ const FETCH_CURRENT_USER = gql`
   }
 `;
 
+gql`
+  mutation SessionDelete {
+    sessionDelete(input: {}) {
+      user {
+        id
+      }
+      errors {
+        message
+        path
+      }
+    }
+  }
+`;
+
 const HeaderNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [getCurrentUser, { loading, data, error }] = useLazyQuery(
-    FETCH_CURRENT_USER,
-    { fetchPolicy: "network-only" }
-  );
+  const [getCurrentUser, { loading, data, error }] = useCurrentUserLazyQuery({
+    fetchPolicy: "network-only",
+  });
+  const [logout, { loading: logoutLoading, data: logoutData }] =
+    useSessionDeleteMutation();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
 
   useEffect(() => {
     getCurrentUser();
   }, [location.pathname]);
 
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
-
-  const logout = async () => {
-    const csrfToken = getCsrfToken();
-    if (!csrfToken) return null;
-
-    await fetch("/api/v1/session", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRF-Token": csrfToken,
-      },
-    });
-
-    await getCurrentUser();
-
-    navigate("/login");
-  };
 
   return (
     <header className="border-b-2 mb-4 p-2">
-      <DesktopNav currentUser={data?.currentUser} logout={logout} />
-      <ResponsiveNav currentUser={data?.currentUser} logout={logout} />
+      <DesktopNav currentUser={data?.currentUser} logout={handleLogout} />
+      <ResponsiveNav currentUser={data?.currentUser} logout={handleLogout} />
     </header>
   );
 };

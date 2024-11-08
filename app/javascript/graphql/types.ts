@@ -130,6 +130,11 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, email: string } | null };
 
+export type SessionDeleteMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SessionDeleteMutation = { __typename?: 'Mutation', sessionDelete?: { __typename?: 'SessionDeletePayload', user?: { __typename?: 'User', id: string } | null, errors: Array<{ __typename?: 'Error', message: string, path?: Array<string> | null }> } | null };
+
 export type CreateSessionMutationVariables = Exact<{
   input: SessionCreateInput;
 }>;
@@ -185,6 +190,44 @@ export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserSuspenseQueryHookResult = ReturnType<typeof useCurrentUserSuspenseQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const SessionDeleteDocument = gql`
+    mutation SessionDelete {
+  sessionDelete(input: {}) {
+    user {
+      id
+    }
+    errors {
+      message
+      path
+    }
+  }
+}
+    `;
+export type SessionDeleteMutationFn = Apollo.MutationFunction<SessionDeleteMutation, SessionDeleteMutationVariables>;
+
+/**
+ * __useSessionDeleteMutation__
+ *
+ * To run a mutation, you first call `useSessionDeleteMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSessionDeleteMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sessionDeleteMutation, { data, loading, error }] = useSessionDeleteMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useSessionDeleteMutation(baseOptions?: Apollo.MutationHookOptions<SessionDeleteMutation, SessionDeleteMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SessionDeleteMutation, SessionDeleteMutationVariables>(SessionDeleteDocument, options);
+      }
+export type SessionDeleteMutationHookResult = ReturnType<typeof useSessionDeleteMutation>;
+export type SessionDeleteMutationResult = Apollo.MutationResult<SessionDeleteMutation>;
+export type SessionDeleteMutationOptions = Apollo.BaseMutationOptions<SessionDeleteMutation, SessionDeleteMutationVariables>;
 export const CreateSessionDocument = gql`
     mutation CreateSession($input: SessionCreateInput!) {
   sessionCreate(input: $input) {
