@@ -1,9 +1,9 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { startCase } from "lodash";
-import { CreateUserMutation, UserInput } from "graphql/graphql";
+import { UserInput } from "graphql/graphql";
 import { useCreateUserMutation } from "graphql/types";
 
 gql`
@@ -39,6 +39,8 @@ const Signup = () => {
 
       <div className="w-1/2 grid place-content-center mx-auto">
         {data?.userCreate?.errors?.map((error, i) => {
+          if (!error.path) return null;
+
           return (
             <p className="text-red-800" key={i}>
               {startCase(error.path[1])} {error.message}
