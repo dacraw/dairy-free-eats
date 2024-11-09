@@ -1,6 +1,6 @@
 import React from "react";
-import { screen, render } from "@testing-library/react";
-import { BrowserRouter } from "react-router-dom";
+import { screen, render, waitFor } from "@testing-library/react";
+import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import HeaderNav, {
   CURRENT_USER,
@@ -12,6 +12,8 @@ import {
   SessionDeleteMutationResult,
 } from "graphql/types";
 import userEvent from "@testing-library/user-event";
+import Login from "components/login/Login";
+import Home from "components/Home";
 
 describe("<HeaderNav />", () => {
   let currentUserPresentMocks: MockedResponse<
@@ -95,14 +97,18 @@ describe("<HeaderNav />", () => {
       expect(await screen.findAllByText("Logging Out")).toBeTruthy();
     });
 
-    it("clicking logout invokes the session delete mutation", async () => {
+    it("clicking logout invokes the session delete mutation and redirects to login page", async () => {
       render(
         <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
-          <BrowserRouter
+          <MemoryRouter
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
             <HeaderNav />
-          </BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          </MemoryRouter>
         </MockedProvider>
       );
 
@@ -116,9 +122,13 @@ describe("<HeaderNav />", () => {
 
       await userEvent.click(logoutButton[0]);
 
-      const target2 = await screen.findAllByText("test@demo.com");
+      await waitFor(() => {
+        const target2 = screen.queryAllByText("test@demo.com");
+        expect(target2.length).toEqual(0);
 
-      expect(target2[0]).not.toBeInTheDocument();
+        expect(screen.getByLabelText("Email")).toBeInTheDocument();
+        expect(screen.getByLabelText("Password")).toBeInTheDocument();
+      });
     });
   });
 
