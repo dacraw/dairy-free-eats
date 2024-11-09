@@ -36,7 +36,7 @@ jobs:
 
       - name: Lint code for consistent style
         run: bin/rubocop -f github
-  test:
+  rspec:
     runs-on: ubuntu-latest
 
     services:
@@ -78,3 +78,15 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/screenshots
           if-no-files-found: ignore
+  jest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "v22.11.0"
+      - uses: actions/checkout@v4
+      - name: Install modules
+        run: yarn
+      - name: Run Tests
+        run: yarn jest

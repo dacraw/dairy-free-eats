@@ -1,13 +1,19 @@
 import Home from "components/Home";
-import Login from "components/Login";
 import Order from "components/Order";
-import Signup from "components/Signup";
+import Login from "components/login/Login";
+import Signup from "components/signup/Signup";
+
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const AppRoute = ({ children }: { children: React.ReactElement }) => {
+const AppRoute = ({ children }: { children?: React.ReactElement }) => {
   return (
-    <Router>
+    <Router
+      future={{
+        v7_startTransition: true,
+        v7_relativeSplatPath: true,
+      }}
+    >
       {children}
       <Routes>
         <Route path="/" element={<Home />} />

@@ -12,9 +12,14 @@ import {
 type NavProps = {
   currentUser: CurrentUserQuery["currentUser"];
   logout: () => Promise<void>;
+  loggingOut: boolean;
 };
 
-const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
+const DesktopNav: React.FC<NavProps> = ({
+  currentUser,
+  logout,
+  loggingOut,
+}) => {
   return (
     <nav className="hidden justify-between md:flex">
       <div className="gap-4 flex">
@@ -50,8 +55,14 @@ const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
         ) : (
           <>
             <p>
-              Logged in as:{" "}
-              <strong className="font-bold">{currentUser?.email}</strong>
+              {loggingOut ? (
+                <>Logging Out</>
+              ) : (
+                <>
+                  Logged in as:{" "}
+                  <strong className="font-bold">{currentUser?.email}</strong>
+                </>
+              )}
             </p>
             <button
               className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
@@ -66,7 +77,11 @@ const DesktopNav: React.FC<NavProps> = ({ currentUser, logout }) => {
   );
 };
 
-const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
+const ResponsiveNav: React.FC<NavProps> = ({
+  currentUser,
+  logout,
+  loggingOut,
+}) => {
   const [showMenu, toggleShowMenu] = useState(false);
   const location = useLocation();
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -132,8 +147,16 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
                     Logout
                   </button>
                   <p>
-                    Logged in as:{" "}
-                    <strong className="font-bold">{currentUser?.email}</strong>
+                    {loggingOut ? (
+                      <>Logging Out</>
+                    ) : (
+                      <>
+                        Logged in as:{" "}
+                        <strong className="font-bold">
+                          {currentUser?.email}
+                        </strong>
+                      </>
+                    )}
                   </p>
                 </>
               ) : (
@@ -154,7 +177,7 @@ const ResponsiveNav: React.FC<NavProps> = ({ currentUser, logout }) => {
   );
 };
 
-gql`
+export const CURRENT_USER = gql`
   query CurrentUser {
     currentUser {
       id
@@ -163,7 +186,7 @@ gql`
   }
 `;
 
-gql`
+export const SESSION_DELETE = gql`
   mutation SessionDelete {
     sessionDelete(input: {}) {
       user {
@@ -195,12 +218,19 @@ const HeaderNav = () => {
     getCurrentUser();
   }, [location.pathname]);
 
-  if (error) return <p>Error: {error.message}</p>;
-
   return (
     <header className="border-b-2 mb-4 p-2">
-      <DesktopNav currentUser={data?.currentUser} logout={handleLogout} />
-      <ResponsiveNav currentUser={data?.currentUser} logout={handleLogout} />
+      {error && <span>{error.message}</span>}
+      <DesktopNav
+        currentUser={data?.currentUser}
+        logout={handleLogout}
+        loggingOut={logoutLoading}
+      />
+      <ResponsiveNav
+        currentUser={data?.currentUser}
+        logout={handleLogout}
+        loggingOut={logoutLoading}
+      />
     </header>
   );
 };

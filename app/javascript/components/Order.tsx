@@ -43,9 +43,9 @@ const Order = () => {
       });
 
       const data = await response.json();
-
       setProducts(data);
     };
+
     fetchProducts();
   }, []);
 

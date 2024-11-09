@@ -1,10 +1,11 @@
 import { gql } from "@apollo/client";
 import { SessionInput, useCreateSessionMutation } from "graphql/types";
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { startCase } from "lodash";
 
-gql`
+export const CREATE_SESSION = gql`
   mutation CreateSession($input: SessionCreateInput!) {
     sessionCreate(input: $input) {
       user {
@@ -20,22 +21,38 @@ gql`
 
 const Login = () => {
   const { register, handleSubmit } = useForm<SessionInput>();
-  const [login, { loading }] = useCreateSessionMutation();
+  const [login, { loading, data }] = useCreateSessionMutation();
   const navigate = useNavigate();
 
   return (
     <div className="grid place-content-center">
       <form
         onSubmit={handleSubmit(async (data) => {
-          await login({ variables: { input: { sessionInput: data } } });
+          const mutationData = await login({
+            variables: { input: { sessionInput: data } },
+          });
 
-          navigate("/");
+          if (!mutationData?.data?.sessionCreate?.errors?.length) {
+            navigate("/");
+          }
         })}
       >
+        {data?.sessionCreate?.errors?.map((error, i) => {
+          if (!error.path) return null;
+
+          return (
+            <p key={i} className="text-red-700">
+              {startCase(error.path[1])} {error.message}
+            </p>
+          );
+        })}
         <h3 className="mb-4 text-2xl">Login</h3>
         <div>
-          <label className="block ">Email</label>
+          <label className="block" htmlFor="email">
+            Email
+          </label>
           <input
+            id="email"
             disabled={loading ? true : false}
             className={`mb-2 text-center ${loading ? "blur" : ""}`}
             {...register("email")}
@@ -43,8 +60,11 @@ const Login = () => {
           />
         </div>
         <div>
-          <label className="block ">Password</label>
+          <label className="block" htmlFor="password">
+            Password
+          </label>
           <input
+            id="password"
             disabled={loading ? true : false}
             minLength={8}
             className={`mb-2 text-center ${loading ? "blur" : ""}`}
