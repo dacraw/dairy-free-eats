@@ -99,7 +99,13 @@ RSpec.feature "Signups", type: :feature do
         fill_in "email", with: email
         fill_in "password", with: password
         fill_in "passwordConfirmation", with: "doesNotMatch"
+        find("input[type='submit']").click
+
+        expect(page).to have_content "Password Confirmation doesn't match Password"
       }.not_to change { User.count }
+
+      expect(page).to have_content "Email"
+      expect(page).to have_content "Password"
     end
   end
 end
