@@ -24,13 +24,13 @@ const DesktopNav: React.FC<NavProps> = ({
     <nav className="hidden justify-between md:flex">
       <div className="gap-4 flex">
         <Link
-          className="hover:bg-blue-400 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold text-gray-700"
+          className="hover:bg-blue-400 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
           to="/"
         >
           HOME
         </Link>
         <Link
-          className="hover:bg-blue-400 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold text-gray-700"
+          className="hover:bg-blue-400 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
           to="/order"
         >
           ORDER
@@ -40,13 +40,13 @@ const DesktopNav: React.FC<NavProps> = ({
         {!currentUser ? (
           <>
             <Link
-              className="hover:bg-green-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
+              className="hover:bg-green-400 hover:text-gray-100 py-2 px-4 transition-colors rounded "
               to="/login"
             >
               Login
             </Link>
             <Link
-              className="hover:bg-green-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
+              className="hover:bg-green-400 hover:text-gray-100 py-2 px-4 transition-colors rounded "
               to="/signup"
             >
               Signup
@@ -65,7 +65,7 @@ const DesktopNav: React.FC<NavProps> = ({
               )}
             </p>
             <button
-              className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded text-gray-700"
+              className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded "
               onClick={() => logout()}
             >
               Logout
@@ -131,7 +131,7 @@ const ResponsiveNav: React.FC<NavProps> = ({
           />
           <div className="relative z-10" ref={menuRef}>
             <div
-              className={`absolute overflow-hidden bg-white shadow w-64 right-0 top-2 text-center transition-all duration-500 ease-in-out ${
+              className={`absolute overflow-hidden bg-gray-600 rounded shadow w-64 right-0 top-2 text-center transition-all duration-500 ease-in-out ${
                 showMenu ? "max-h-60" : "max-h-0"
               }`}
             >
