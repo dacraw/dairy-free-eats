@@ -91,10 +91,7 @@ const Signup = () => {
               {...register("passwordConfirmation")}
             />
           </div>
-          <input
-            className="text-center border-2 border-gray-700 p-2 w-full"
-            type="submit"
-          />
+          <input className="text-center w-full green-button" type="submit" />
         </form>
       </div>
     </div>

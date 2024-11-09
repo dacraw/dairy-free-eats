@@ -80,7 +80,7 @@ const Order = () => {
                   </React.Fragment>
                 );
               })}
-              <input type="submit" className="col-span-2 border-2" />
+              <input type="submit" className="col-span-2 green-button" />
             </div>
           </div>
         </div>

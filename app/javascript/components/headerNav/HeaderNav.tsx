@@ -40,13 +40,13 @@ const DesktopNav: React.FC<NavProps> = ({
         {!currentUser ? (
           <>
             <Link
-              className="hover:bg-green-700 hover:text-gray-100 py-2 px-4 transition-colors rounded "
+              className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
               to="/login"
             >
               Login
             </Link>
             <Link
-              className="hover:bg-green-700 hover:text-gray-100 py-2 px-4 transition-colors rounded "
+              className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
               to="/signup"
             >
               Signup
