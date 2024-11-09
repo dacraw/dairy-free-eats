@@ -1,6 +1,6 @@
 import Home from "components/Home";
-import Login from "components/Login";
 import Order from "components/Order";
+import Login from "components/login/Login";
 import Signup from "components/signup/Signup";
 
 import React from "react";
