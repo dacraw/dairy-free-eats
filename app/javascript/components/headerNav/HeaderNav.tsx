@@ -24,13 +24,13 @@ const DesktopNav: React.FC<NavProps> = ({
     <nav className="hidden justify-between md:flex">
       <div className="gap-4 flex">
         <Link
-          className="hover:bg-blue-400 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
+          className="hover:bg-blue-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
           to="/"
         >
           HOME
         </Link>
         <Link
-          className="hover:bg-blue-400 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
+          className="hover:bg-blue-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
           to="/order"
         >
           ORDER
@@ -40,13 +40,13 @@ const DesktopNav: React.FC<NavProps> = ({
         {!currentUser ? (
           <>
             <Link
-              className="hover:bg-green-400 hover:text-gray-100 py-2 px-4 transition-colors rounded "
+              className="hover:bg-green-700 hover:text-gray-100 py-2 px-4 transition-colors rounded "
               to="/login"
             >
               Login
             </Link>
             <Link
-              className="hover:bg-green-400 hover:text-gray-100 py-2 px-4 transition-colors rounded "
+              className="hover:bg-green-700 hover:text-gray-100 py-2 px-4 transition-colors rounded "
               to="/signup"
             >
               Signup
@@ -65,7 +65,7 @@ const DesktopNav: React.FC<NavProps> = ({
               )}
             </p>
             <button
-              className="hover:bg-red-400 hover:text-gray-100 py-2 px-4 transition-colors rounded "
+              className="hover:bg-red-700 hover:text-gray-100 py-2 px-4 transition-colors rounded "
               onClick={() => logout()}
             >
               Logout
@@ -114,7 +114,7 @@ const ResponsiveNav: React.FC<NavProps> = ({
     <nav>
       <div className="flex justify-between items-center md:hidden">
         <Link
-          className="rounded py-2 px-4 bg-blue-400 text-gray-100 font-bold"
+          className="rounded py-2 px-4 bg-blue-700 text-gray-100 font-bold"
           to="/order"
         >
           Order Now
