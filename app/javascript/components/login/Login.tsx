@@ -76,7 +76,7 @@ const Login = () => {
           <input
             disabled={loading ? true : false}
             type="submit"
-            className="w-full border-2 col-end-3"
+            className="w-full col-end-3 green-button"
           />
         </div>
       </form>
