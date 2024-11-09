@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.feature "Signups", type: :feature do
   let(:email) { Faker::Internet.email }
   let(:password) { Faker::Internet.password min_length: 8 }
-  
+
   let(:mock_description_1) { "mock_description_1" }
   let(:mock_name_1) { "mock_name_1" }
   let(:mock_price_1) { "mock_price_1" }
@@ -74,12 +74,12 @@ RSpec.feature "Signups", type: :feature do
 
       expect {
         expect(page).to have_content("Sign up for an account")
-    
+
         fill_in "email", with: email
         fill_in "password", with: password
         fill_in "passwordConfirmation", with: password
         find("input[type='submit']").click
-    
+
         expect(page).to have_content "Welcome to the order page!"
         expect(page).to have_content mock_name_1
         expect(current_path).to eq order_path
@@ -95,7 +95,7 @@ RSpec.feature "Signups", type: :feature do
 
       expect {
         expect(page).to have_content "Sign up for an account"
-        
+
         fill_in "email", with: email
         fill_in "password", with: password
         fill_in "passwordConfirmation", with: "doesNotMatch"

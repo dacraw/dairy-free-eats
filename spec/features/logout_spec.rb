@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature "Logout", type: :feature do
   let!(:user) { create :user, :valid_user }
-  
+
   before(:each) do
     visit login_path
 
@@ -19,7 +19,7 @@ RSpec.feature "Logout", type: :feature do
   end
 
   it "logs out the current user and redirects to the root page" do
-    click_button "Logout" 
+    click_button "Logout"
 
     expect(page).not_to have_content "Logged in as: #{user.email}"
   end
