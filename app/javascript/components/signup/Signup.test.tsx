@@ -1,9 +1,28 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import Signup, { CREATE_USER } from "components/signup/Signup";
-import { BrowserRouter } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import userEvent from "@testing-library/user-event";
+import Order from "components/Order";
+
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () =>
+      Promise.resolve([
+        {
+          default_price: "price_5555",
+          description: "Blended mixed berries, filtered water",
+          name: "Mixed Berry Smoothie (Water base)",
+        },
+        {
+          default_price: "price_4444",
+          description: "2 salted/peppered eggs, 2 strips of bacon, hummis",
+          name: "Breakfast Burrito",
+        },
+      ]),
+  })
+) as jest.Mock;
 
 const validMocks: MockedResponse[] = [
   {
@@ -64,17 +83,23 @@ const invalidMocks: MockedResponse[] = [
 ];
 
 describe("<Signup />", () => {
-  test("triggers the user create mutation with valid params", async () => {
+  afterEach(() => jest.restoreAllMocks());
+
+  test("triggers the user create mutation with valid params and redirects to the order page", async () => {
     render(
       <MockedProvider mocks={validMocks} addTypename={false}>
-        <BrowserRouter
+        <MemoryRouter
+          initialEntries={["/signup"]}
           future={{
             v7_startTransition: true,
             v7_relativeSplatPath: true,
           }}
         >
-          <Signup />
-        </BrowserRouter>
+          <Routes>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/order" element={<Order />} />
+          </Routes>
+        </MemoryRouter>
       </MockedProvider>
     );
 
@@ -86,19 +111,27 @@ describe("<Signup />", () => {
     await userEvent.type(screen.getByLabelText("Confirm Password"), "password");
 
     await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+
+    expect(
+      await screen.findByText("Mixed Berry Smoothie (Water base)")
+    ).toBeInTheDocument();
   });
 
-  test("it displays errors when there's an issue with a mutation", async () => {
+  test("it displays errors when there's an issue with a mutation and does not redirect to order page", async () => {
     render(
       <MockedProvider mocks={invalidMocks} addTypename={false}>
-        <BrowserRouter
+        <MemoryRouter
+          initialEntries={["/signup"]}
           future={{
             v7_startTransition: true,
             v7_relativeSplatPath: true,
           }}
         >
-          <Signup />
-        </BrowserRouter>
+          <Routes>
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/order" element={<Order />} />
+          </Routes>
+        </MemoryRouter>
       </MockedProvider>
     );
 
@@ -119,5 +152,9 @@ describe("<Signup />", () => {
         return content.includes("Password Confirmation does not match");
       })
     ).toBeInTheDocument();
+
+    expect(
+      screen.queryByText("Blended mixed berries, filtered water")
+    ).not.toBeInTheDocument();
   });
 });
