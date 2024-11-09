@@ -73,4 +73,7 @@ end
 group :test do
   # Faker gem for assisting with random values in specs
   gem "faker"
+
+  gem "capybara"
+  gem "selenium-webdriver"
 end
