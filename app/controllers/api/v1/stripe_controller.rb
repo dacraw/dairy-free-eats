@@ -1,16 +1,4 @@
 class Api::V1::StripeController < ApplicationController
-    def products
-        products = Stripe::Product.list
-
-        if products.data.empty?
-            return render json: { message: "No products could be fetched" }, status: 400
-        end
-
-        values = products.data.map { |product| product.to_h.slice :default_price, :description, :name }
-
-        render json: values, status: 200
-    end
-
     def create_checkout_session
         line_items = []
 

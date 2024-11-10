@@ -1,16 +1,28 @@
-import React, { useEffect, useState } from "react";
+import { gql } from "@apollo/client";
+import { useGetProductsQuery } from "graphql/types";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { getCsrfToken } from "util/formUtil";
 
-type StripeProduct = {
-  default_price: string;
-  description: string;
-  name: string;
-};
+const GET_PRODUCTS = gql`
+  query GetProducts {
+    listProducts {
+      stripeObject
+      hasMore
+      url
+      data {
+        defaultPrice
+        description
+        name
+      }
+    }
+  }
+`;
 
 const Order = () => {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<string | null>(null);
+  const { data: getProductsData } = useGetProductsQuery();
 
   const onSubmit = async (data: { [key: string]: string }) => {
     const csrfToken = getCsrfToken();
@@ -27,10 +39,7 @@ const Order = () => {
     });
     const responseData = await response.json();
 
-    console.log("response", response);
-    console.log("responseData", responseData);
     if (!response.ok) {
-      console.log("hey guys");
       setError(responseData.message);
       return;
     }
@@ -38,26 +47,10 @@ const Order = () => {
     window.location.href = responseData.checkout_url;
   };
 
-  const [products, setProducts] = useState<StripeProduct[] | null>(null);
-
-  useEffect(() => {
-    const url = "/api/v1/stripe/products";
-
-    const fetchProducts = async () => {
-      const response = await fetch(url, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response.json();
-      setProducts(data);
-    };
-
-    fetchProducts();
-  }, []);
-
+  if (!getProductsData) return null;
+  const {
+    listProducts: { data: products },
+  } = getProductsData;
   if (!products) return null;
 
   return (
@@ -75,17 +68,15 @@ const Order = () => {
             <div className="grid grid-cols-[1fr_50px] gap-2">
               {products.map((product) => {
                 return (
-                  <React.Fragment key={product.default_price}>
-                    <label htmlFor={product.default_price}>
-                      {product.name}
-                    </label>
+                  <React.Fragment key={product.defaultPrice}>
+                    <label htmlFor={product.defaultPrice}>{product.name}</label>
                     <input
                       className="border-2 self-center text-center"
                       type="number"
                       placeholder="0"
-                      key={product.default_price}
-                      id={product.default_price}
-                      {...register(product.default_price)}
+                      key={product.defaultPrice}
+                      id={product.defaultPrice}
+                      {...register(product.defaultPrice)}
                     />
                   </React.Fragment>
                 );

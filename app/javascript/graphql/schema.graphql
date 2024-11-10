@@ -11,6 +11,18 @@ An ISO 8601-encoded datetime
 """
 scalar ISO8601DateTime @specifiedBy(url: "https://tools.ietf.org/html/rfc3339")
 
+"""
+Represents untyped JSON
+"""
+scalar JSON
+
+type ListObject {
+  data: [Product!]
+  hasMore: Boolean!
+  stripeObject: String!
+  url: String!
+}
+
 type Mutation {
   """
   Creates a new session
@@ -43,8 +55,33 @@ type Mutation {
   ): UserCreatePayload
 }
 
+type Product {
+  active: Boolean!
+  attributes: [String]!
+  created: ISO8601DateTime!
+  defaultPrice: String!
+  description: String!
+  id: String!
+  images: [String]!
+  livemode: Boolean!
+  marketingFeatures: JSON!
+  metadata: JSON!
+  name: String!
+  packageDimensions: JSON
+  shippable: Boolean
+  statementDescriptor: String
+  stripeObject: String!
+  taxCode: String!
+  type: String!
+  unitLabel: String
+  updated: ISO8601DateTime!
+  url: String
+}
+
 type Query {
   currentUser: User
+  listProducts: ListObject!
+  retrieveProduct(productId: String!): Product
 }
 
 """
