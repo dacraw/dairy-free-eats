@@ -4,7 +4,12 @@ import Signup, { CREATE_USER } from "components/signup/Signup";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import userEvent from "@testing-library/user-event";
-import Order from "components/Order/Order";
+import Order, { GET_PRODUCTS } from "components/Order/Order";
+import {
+  CreateUserMutation,
+  CreateUserMutationVariables,
+  GetProductsQuery,
+} from "graphql/types";
 
 global.fetch = jest.fn(() =>
   Promise.resolve({
@@ -24,7 +29,10 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 
-const validMocks: MockedResponse[] = [
+const validMocks: MockedResponse<
+  CreateUserMutation | GetProductsQuery,
+  CreateUserMutationVariables
+>[] = [
   {
     request: {
       query: CREATE_USER,
@@ -46,6 +54,32 @@ const validMocks: MockedResponse[] = [
             email: "2",
           },
           errors: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_PRODUCTS,
+    },
+    result: {
+      data: {
+        listProducts: {
+          stripeObject: "list",
+          hasMore: false,
+          url: "/v1/products",
+          data: [
+            {
+              defaultPrice: "price_12345",
+              description: "Blended mixed berries, filtered water",
+              name: "Mixed Berry Smoothie (Water base)",
+            },
+            {
+              defaultPrice: "price_54321",
+              description: "2 salted/peppered eggs, 2 strips of bacon, hummis",
+              name: "Breakfast Burrito",
+            },
+          ],
         },
       },
     },
