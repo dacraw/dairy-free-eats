@@ -10,6 +10,7 @@ type StripeProduct = {
 
 const Order = () => {
   const { register, handleSubmit } = useForm();
+  const [error, setError] = useState<string | null>(null);
 
   const onSubmit = async (data: { [key: string]: string }) => {
     const csrfToken = getCsrfToken();
@@ -25,6 +26,14 @@ const Order = () => {
       },
     });
     const responseData = await response.json();
+
+    console.log("response", response);
+    console.log("responseData", responseData);
+    if (!response.ok) {
+      console.log("hey guys");
+      setError(responseData.message);
+      return;
+    }
 
     window.location.href = responseData.checkout_url;
   };
@@ -57,6 +66,7 @@ const Order = () => {
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid place-content-center h-48 md:border-2 md:m-2">
+          {error && <p className="text-red-700">{error}</p>}
           <div>
             <h5 className="mb-6">
               Enter the number of each item you would like to order and then

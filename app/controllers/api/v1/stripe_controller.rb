@@ -37,10 +37,11 @@ class Api::V1::StripeController < ApplicationController
 
         return render json: { message: "no quantities entered" }, status: 400 if line_items.empty?
 
+
         begin
             checkout_session = Stripe::Checkout::Session.create({
-                success_url: "https://glad-promoted-falcon.ngrok-free.app/success",
-                cancel_url: "https://glad-promoted-falcon.ngrok-free.app/order",
+                success_url: "http://localhost:3000/success",
+                cancel_url: "http://localhost:3000/order",
                 line_items: line_items,
                 mode: "payment",
                 phone_number_collection: {
@@ -48,8 +49,9 @@ class Api::V1::StripeController < ApplicationController
                 },
                 customer_email: (current_user.email if current_user.present?)
             })
+
         rescue Stripe::InvalidRequestError => e
-            return render json: { message: "failed", error: e.message }, status: 400
+            return render json: { message: "Unfortunately, there is an issue with the Stripe checkout at this time. Please try again later.", error: e.message }, status: 500
         end
 
         render json: { message: "success", checkout_url: checkout_session.url }, status: 200
