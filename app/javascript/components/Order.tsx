@@ -1,8 +1,11 @@
 import { gql } from "@apollo/client";
-import { useGetProductsQuery } from "graphql/types";
+import {
+  OrderPageInput,
+  useGetProductsQuery,
+  useStripeCheckoutSessionCreateMutation,
+} from "graphql/types";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { getCsrfToken } from "util/formUtil";
 
 const GET_PRODUCTS = gql`
   query GetProducts {
@@ -19,33 +22,53 @@ const GET_PRODUCTS = gql`
   }
 `;
 
+const STRIPE_CHECKOUT_SESSION_CREATE = gql`
+  mutation StripeCheckoutSessionCreate(
+    $input: StripeCheckoutSessionCreateInput!
+  ) {
+    stripeCheckoutSessionCreate(input: $input) {
+      stripeCheckoutSession {
+        url
+      }
+    }
+  }
+`;
+
 const Order = () => {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState<string | null>(null);
   const { data: getProductsData } = useGetProductsQuery();
+  const [createStripeCheckoutSession, { data: stripeCheckoutSessionData }] =
+    useStripeCheckoutSessionCreateMutation();
 
-  const onSubmit = async (data: { [key: string]: string }) => {
-    const csrfToken = getCsrfToken();
+  // const onSubmit = async (data) => {
+  //   const items: OrderPageInput[] = [];
+  //   Object.entries(data).map(([productId, quantity]) => {
+  //     items.push({ productId, quantity: parseInt(quantity) || 0 });
+  //   });
+  //   console.log(items);
+  //   await createStripeCheckoutSession
+  //   // const csrfToken = getCsrfToken();
 
-    if (!csrfToken) return null;
-    const url = "/api/v1/stripe/create_checkout_session";
-    const response = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify({ stripe: data }),
-      headers: {
-        "X-CSRF-Token": csrfToken,
-        "Content-Type": "application/json",
-      },
-    });
-    const responseData = await response.json();
+  //   // if (!csrfToken) return null;
+  //   // const url = "/api/v1/stripe/create_checkout_session";
+  //   // const response = await fetch(url, {
+  //   //   method: "POST",
+  //   //   body: JSON.stringify({ stripe: data }),
+  //   //   headers: {
+  //   //     "X-CSRF-Token": csrfToken,
+  //   //     "Content-Type": "application/json",
+  //   //   },
+  //   // });
+  //   // const responseData = await response.json();
 
-    if (!response.ok) {
-      setError(responseData.message);
-      return;
-    }
+  //   // if (!response.ok) {
+  //   //   setError(responseData.message);
+  //   //   return;
+  //   // }
 
-    window.location.href = responseData.checkout_url;
-  };
+  //   // window.location.href = responseData.checkout_url;
+  // };
 
   if (!getProductsData) return null;
   const {
@@ -57,7 +80,26 @@ const Order = () => {
     <>
       <p>Welcome to the order page!</p>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        onSubmit={handleSubmit(async (data) => {
+          const items: OrderPageInput[] = [];
+          Object.entries(data).map(([price, quantity]) => {
+            items.push({ price, quantity: parseInt(quantity) || 0 });
+          });
+          console.log(items);
+          const mutationData = await createStripeCheckoutSession({
+            variables: {
+              input: {
+                stripeCheckoutSessionInput: {
+                  lineItems: items,
+                },
+              },
+            },
+          });
+
+          console.log(mutationData);
+        })}
+      >
         <div className="grid place-content-center h-48 md:border-2 md:m-2">
           {error && <p className="text-red-700">{error}</p>}
           <div>
