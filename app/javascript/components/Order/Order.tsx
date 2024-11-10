@@ -1,13 +1,14 @@
 import { gql } from "@apollo/client";
 import {
   OrderPageInput,
+  StripeCheckoutSessionCreatePayload,
   useGetProductsQuery,
   useStripeCheckoutSessionCreateMutation,
 } from "graphql/types";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-const GET_PRODUCTS = gql`
+export const GET_PRODUCTS = gql`
   query GetProducts {
     listProducts {
       stripeObject
@@ -22,7 +23,7 @@ const GET_PRODUCTS = gql`
   }
 `;
 
-const STRIPE_CHECKOUT_SESSION_CREATE = gql`
+export const STRIPE_CHECKOUT_SESSION_CREATE = gql`
   mutation StripeCheckoutSessionCreate(
     $input: StripeCheckoutSessionCreateInput!
   ) {
@@ -39,39 +40,14 @@ const STRIPE_CHECKOUT_SESSION_CREATE = gql`
 
 const Order = () => {
   const { register, handleSubmit } = useForm();
-  const [error, setError] = useState<string | null>(null);
-  const { data: getProductsData } = useGetProductsQuery();
+  const [
+    stripeCheckoutSessionCreateError,
+    setStripeCheckoutSessionCreateError,
+  ] = useState<StripeCheckoutSessionCreatePayload["errors"] | null>(null);
+  const { data: getProductsData, loading: getProductsLoading } =
+    useGetProductsQuery();
   const [createStripeCheckoutSession, { data: stripeCheckoutSessionData }] =
     useStripeCheckoutSessionCreateMutation();
-
-  // const onSubmit = async (data) => {
-  //   const items: OrderPageInput[] = [];
-  //   Object.entries(data).map(([productId, quantity]) => {
-  //     items.push({ productId, quantity: parseInt(quantity) || 0 });
-  //   });
-  //   console.log(items);
-  //   await createStripeCheckoutSession
-  //   // const csrfToken = getCsrfToken();
-
-  //   // if (!csrfToken) return null;
-  //   // const url = "/api/v1/stripe/create_checkout_session";
-  //   // const response = await fetch(url, {
-  //   //   method: "POST",
-  //   //   body: JSON.stringify({ stripe: data }),
-  //   //   headers: {
-  //   //     "X-CSRF-Token": csrfToken,
-  //   //     "Content-Type": "application/json",
-  //   //   },
-  //   // });
-  //   // const responseData = await response.json();
-
-  //   // if (!response.ok) {
-  //   //   setError(responseData.message);
-  //   //   return;
-  //   // }
-
-  //   // window.location.href = responseData.checkout_url;
-  // };
 
   if (!getProductsData) return null;
   const {
@@ -87,9 +63,12 @@ const Order = () => {
         onSubmit={handleSubmit(async (data) => {
           const items: OrderPageInput[] = [];
           Object.entries(data).map(([price, quantity]) => {
-            items.push({ price, quantity: parseInt(quantity) || 0 });
+            const quantityInt = parseInt(quantity) || 0;
+            if (quantityInt === 0) return;
+
+            items.push({ price, quantity: quantityInt });
           });
-          console.log(items);
+
           const mutationData = await createStripeCheckoutSession({
             variables: {
               input: {
@@ -100,11 +79,31 @@ const Order = () => {
             },
           });
 
-          console.log(mutationData);
+          if (mutationData?.data?.stripeCheckoutSessionCreate?.errors?.length) {
+            setStripeCheckoutSessionCreateError(
+              mutationData?.data?.stripeCheckoutSessionCreate?.errors
+            );
+            return;
+          }
+
+          const checkoutUrl =
+            mutationData?.data?.stripeCheckoutSessionCreate
+              ?.stripeCheckoutSession?.url;
+
+          if (checkoutUrl) {
+            window.location.href = checkoutUrl;
+          }
         })}
       >
         <div className="grid place-content-center h-48 md:border-2 md:m-2">
-          {error && <p className="text-red-700">{error}</p>}
+          {stripeCheckoutSessionCreateError &&
+            stripeCheckoutSessionCreateError.map((error, i) => {
+              return (
+                <p key={i} className="text-red-700">
+                  {error.message}
+                </p>
+              );
+            })}
           <div>
             <h5 className="mb-6">
               Enter the number of each item you would like to order and then

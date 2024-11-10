@@ -1,5 +1,5 @@
 import Home from "components/Home";
-import Order from "components/Order";
+import Order from "components/Order/Order";
 import Login from "components/login/Login";
 import Signup from "components/signup/Signup";
 

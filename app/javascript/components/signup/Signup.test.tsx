@@ -4,7 +4,7 @@ import Signup, { CREATE_USER } from "components/signup/Signup";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import userEvent from "@testing-library/user-event";
-import Order from "components/Order";
+import Order from "components/Order/Order";
 
 global.fetch = jest.fn(() =>
   Promise.resolve({

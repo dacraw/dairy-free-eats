@@ -15,7 +15,7 @@ module Mutations
       if items.any? { |item| !item.price.match /^price_.*$/ }
         return {
           stripe_checkout_session: nil,
-          errors: [ { message: "one of the entered keys doesn't represent a price id" } ]
+          errors: [ { message: "One of the entered keys doesn't represent a price id." } ]
         }
       end
 
