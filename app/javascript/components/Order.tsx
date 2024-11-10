@@ -30,6 +30,9 @@ const STRIPE_CHECKOUT_SESSION_CREATE = gql`
       stripeCheckoutSession {
         url
       }
+      errors {
+        message
+      }
     }
   }
 `;

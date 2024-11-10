@@ -162,7 +162,8 @@ export type StripeCheckoutSessionCreatePayload = {
   __typename?: 'StripeCheckoutSessionCreatePayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
-  stripeCheckoutSession: CheckoutSession;
+  errors: Array<Error>;
+  stripeCheckoutSession?: Maybe<CheckoutSession>;
 };
 
 export type StripeCheckoutSessionInput = {
@@ -212,7 +213,7 @@ export type StripeCheckoutSessionCreateMutationVariables = Exact<{
 }>;
 
 
-export type StripeCheckoutSessionCreateMutation = { __typename?: 'Mutation', stripeCheckoutSessionCreate?: { __typename?: 'StripeCheckoutSessionCreatePayload', stripeCheckoutSession: { __typename?: 'CheckoutSession', url: string } } | null };
+export type StripeCheckoutSessionCreateMutation = { __typename?: 'Mutation', stripeCheckoutSessionCreate?: { __typename?: 'StripeCheckoutSessionCreatePayload', stripeCheckoutSession?: { __typename?: 'CheckoutSession', url: string } | null, errors: Array<{ __typename?: 'Error', message: string }> } | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -290,6 +291,9 @@ export const StripeCheckoutSessionCreateDocument = gql`
   stripeCheckoutSessionCreate(input: $input) {
     stripeCheckoutSession {
       url
+    }
+    errors {
+      message
     }
   }
 }

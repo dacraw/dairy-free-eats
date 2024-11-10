@@ -1147,16 +1147,38 @@
               ]
             },
             {
-              "name": "stripeCheckoutSession",
+              "name": "errors",
               "description": null,
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "OBJECT",
-                  "name": "CheckoutSession",
-                  "ofType": null
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "Error",
+                      "ofType": null
+                    }
+                  }
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+
+              ]
+            },
+            {
+              "name": "stripeCheckoutSession",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "CheckoutSession",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
