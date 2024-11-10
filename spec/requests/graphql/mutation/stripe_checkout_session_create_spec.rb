@@ -86,7 +86,7 @@ RSpec.describe "StripeCheckoutSessionCreate", type: :request do
       data = JSON.parse(response.body)["data"]
 
       expect(data["stripeCheckoutSessionCreate"]["stripeCheckoutSession"]).to be nil
-      expect(data["stripeCheckoutSessionCreate"]["errors"]).to match_array([ { "message"=>"one of the entered keys doesn't represent a price id" } ])
+      expect(data["stripeCheckoutSessionCreate"]["errors"]).to match_array([ { "message"=>"One of the entered keys doesn't represent a price id." } ])
     end
 
     it "validates that at least one quantity has been entered" do
