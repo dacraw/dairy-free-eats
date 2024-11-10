@@ -21,7 +21,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      post "stripe/create_checkout_session"
       resource :session, only: [ :new ]
     end
   end
