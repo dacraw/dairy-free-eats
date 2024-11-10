@@ -63,7 +63,7 @@ describe("<Order />", () => {
             data: {
               stripeCheckoutSessionCreate: {
                 stripeCheckoutSession: {
-                  url: "www.mocked.com",
+                  url: "http://www.mocked.com",
                 },
                 errors: [],
               },
@@ -71,6 +71,22 @@ describe("<Order />", () => {
           },
         },
       ];
+
+      Object.defineProperty(window, "location", {
+        configurable: true,
+        enumerable: true,
+        value: new URL(window.location.href),
+      });
+    });
+
+    let originalWindowLocation = window.location;
+
+    afterEach(() => {
+      Object.defineProperty(window, "location", {
+        configurable: true,
+        enumerable: true,
+        value: originalWindowLocation,
+      });
     });
 
     it("renders", async () => {
@@ -120,6 +136,8 @@ describe("<Order />", () => {
 
       await userEvent.type(firstProductInput, "1");
       await userEvent.click(screen.getByRole("button", { name: /Submit/i }));
+
+      expect(window.location.href).toBe("http://www.mocked.com/");
     });
   });
 
