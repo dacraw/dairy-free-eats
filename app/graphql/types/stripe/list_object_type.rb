@@ -1,7 +1,7 @@
 class Types::Stripe::ListObjectType < Types::BaseObject
     field :stripe_object, String, null: false
     def stripe_object
-        object[:object]
+        object.object
     end
 
     field :data, [ Types::Stripe::ProductType ], null: true

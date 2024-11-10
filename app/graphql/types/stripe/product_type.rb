@@ -4,7 +4,7 @@ class Types::Stripe::ProductType < Types::BaseObject
     field :id, String, null: false
     field :stripe_object, String, null: false
     def stripe_object
-        object[:object]
+        object.object
     end
 
     field :active, Boolean, null: false

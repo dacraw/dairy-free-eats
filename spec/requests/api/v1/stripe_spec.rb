@@ -40,9 +40,9 @@ RSpec.describe "Api::V1::Stripe", type: :request do
 
         body = JSON.parse response.body
 
-        expect(body["message"]).to eq "failed"
+        expect(body["message"]).to eq "Unfortunately, there is an issue with the Stripe checkout at this time. Please try again later."
         expect(body["error"]).to eq error.message
-        expect(response.status).to eq 400
+        expect(response.status).to eq 500
       end
     end
 
