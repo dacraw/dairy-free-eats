@@ -45,7 +45,8 @@ class Api::V1::StripeController < ApplicationController
                 mode: "payment",
                 phone_number_collection: {
                     enabled: true
-                }
+                },
+                customer_email: (current_user.email if current_user.present?)
             })
         rescue Stripe::InvalidRequestError => e
             return render json: { message: "failed", error: e.message }, status: 400
