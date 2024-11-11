@@ -44,7 +44,7 @@ RSpec.describe "Stripe::EventsController", type: :request do
 
           expect {
             post "/stripe/events", params: webhook_request
-          }.to change { Order.count }.by(1)
+          }.to change { Order.count }.from(0).to(1)
 
           expect(response.status).to eq 200
         end
@@ -96,7 +96,7 @@ RSpec.describe "Stripe::EventsController", type: :request do
 
           expect {
             post "/stripe/events", params: webhook_request
-          }.to change { Order.count }.by(1)
+          }.to change { Order.count }.from(0).to(1)
         end
       end
     end
