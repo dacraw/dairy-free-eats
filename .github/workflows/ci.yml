@@ -38,6 +38,8 @@ jobs:
         run: bin/rubocop -f github
   rspec:
     runs-on: ubuntu-latest
+    env:
+      RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
 
     services:
       postgres:
