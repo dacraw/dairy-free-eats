@@ -1,3 +1,12 @@
+input AddressInput {
+  city: String!
+  country: String!
+  line1: String!
+  line2: String
+  postalCode: String!
+  state: String!
+}
+
 type CheckoutSession {
   url: String!
 }
@@ -212,9 +221,16 @@ type UserCreatePayload {
 }
 
 input UserInput {
+  address: AddressInput!
   email: String!
   id: ID
+
+  """
+  The full name of the user
+  """
+  name: String!
   password: String!
   passwordConfirmation: String!
+  phone: String!
   stripeCustomerId: String
 }
