@@ -20,7 +20,7 @@ class Stripe::EventsController < ApplicationController
             rescue Stripe::SignatureVerificationError => e
                 puts "Stripe webhook signature verification failed. #{e.message}"
 
-                return json: { message: "There was an issue with this Stripe request. Please try again later." }, status: 500
+                return render json: { message: "There was an issue with this Stripe request. Please try again later." }, status: 500
             end
         end
 
