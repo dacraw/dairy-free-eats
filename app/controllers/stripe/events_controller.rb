@@ -30,10 +30,11 @@ class Stripe::EventsController < ApplicationController
     private
 
     def payment_intent_succeeded(event)
-        customer_email = event.data.object.customer
+        stripe_customer_id = event.data.object.customer
 
-        if customer_email
-            user = User.find_by_email(customer_email)
+
+        if stripe_customer_id
+            user = User.find_by_stripe_customer_id stripe_customer_id
         end
 
         order = Order.new stripe_id: event.data.object.id, user: user
