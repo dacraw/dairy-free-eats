@@ -39,13 +39,14 @@ module Mutations
               enabled: context[:current_user].present? ? false : true
           },
           saved_payment_method_options: {
-            allow_redisplay_filters: ["always"],
-            payment_method_save: "enabled"
+            payment_method_save: ("enabled" if context[:current_user].present?)
           },
           customer: (context[:current_user].stripe_customer_id if context[:current_user].present?)
         })
 
       rescue Stripe::InvalidRequestError => e
+          puts "Stripe::InvalidRequestError: #{e.message}"
+          
           return {
             stripe_checkout_session: nil,
             errors: [ { message: "Unfortunately, there is an issue with the Stripe checkout at this time. Please try again later." } ]

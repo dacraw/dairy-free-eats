@@ -1,6 +1,122 @@
 ---
 http_interactions:
 - request:
+    method: post
+    uri: https://api.stripe.com/v1/customers
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/13.1.1
+      Authorization:
+      - "<BEARER_TOKEN>"
+      Idempotency-Key:
+      - "<IDEMPOTENCY_KEY>"
+      Stripe-Version:
+      - 2024-10-28.acacia
+      X-Stripe-Client-User-Agent:
+      - "<X_STRIPE_CLIENT_USER_AGENT>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 12 Nov 2024 11:32:06 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '614'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - report-uri https://q.stripe.com/csp-report?p=v1%2Fcustomers; block-all-mixed-content;
+        default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="coop"
+      Idempotency-Key:
+      - "<IDEMPOTENCY_KEY>"
+      Original-Request:
+      - req_5ze4E1v7kOkVnt
+      Report-To:
+      - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - coop="https://q.stripe.com/coop-report"
+      Request-Id:
+      - req_5ze4E1v7kOkVnt
+      Stripe-Should-Retry:
+      - 'false'
+      Stripe-Version:
+      - 2024-10-28.acacia
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - A
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "cus_RChjlA63qIPJtX",
+          "object": "customer",
+          "address": null,
+          "balance": 0,
+          "created": 1731411126,
+          "currency": null,
+          "default_source": null,
+          "delinquent": false,
+          "description": null,
+          "discount": null,
+          "email": null,
+          "invoice_prefix": "97BDD9E3",
+          "invoice_settings": {
+            "custom_fields": null,
+            "default_payment_method": null,
+            "footer": null,
+            "rendering_options": null
+          },
+          "livemode": false,
+          "metadata": {},
+          "name": null,
+          "next_invoice_sequence": 1,
+          "phone": null,
+          "preferred_locales": [],
+          "shipping": null,
+          "tax_exempt": "none",
+          "test_clock": null
+        }
+  recorded_at: Tue, 12 Nov 2024 11:32:06 GMT
+- request:
     method: get
     uri: https://api.stripe.com/v1/products
     body:
@@ -11,6 +127,8 @@ http_interactions:
       - Stripe/v1 RubyBindings/13.1.1
       Authorization:
       - "<BEARER_TOKEN>"
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics":{"request_id":"req_5ze4E1v7kOkVnt","request_duration_ms":350}}'
       Stripe-Version:
       - 2024-10-28.acacia
       X-Stripe-Client-User-Agent:
@@ -27,7 +145,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 12 Nov 2024 09:13:29 GMT
+      - Tue, 12 Nov 2024 11:32:06 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -58,7 +176,7 @@ http_interactions:
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_HfalK2ThHHQf8Y
+      - req_ME6XKGHoUuwEVr
       Stripe-Version:
       - 2024-10-28.acacia
       Vary:
@@ -127,20 +245,129 @@ http_interactions:
           "has_more": false,
           "url": "/v1/products"
         }
-  recorded_at: Tue, 12 Nov 2024 09:13:29 GMT
+  recorded_at: Tue, 12 Nov 2024 11:32:06 GMT
 - request:
-    method: post
-    uri: https://api.stripe.com/v1/checkout/sessions
+    method: get
+    uri: https://api.stripe.com/v1/customers/cus_RChjlA63qIPJtX
     body:
-      encoding: UTF-8
-      string: success_url=http%3A%2F%2Flocalhost%3A3000%2Fsuccess&cancel_url=http%3A%2F%2Flocalhost%3A3000%2Forder&line_items[0][price]=price_1QG44XElA4InVgv8dOnqfhyu&line_items[0][quantity]=1&line_items[1][price]=price_1QG432ElA4InVgv8Zy7PaGPY&line_items[1][quantity]=1&mode=payment&phone_number_collection[enabled]=true
+      encoding: US-ASCII
+      string: ''
     headers:
       User-Agent:
       - Stripe/v1 RubyBindings/13.1.1
       Authorization:
       - "<BEARER_TOKEN>"
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics":{"request_id":"req_HfalK2ThHHQf8Y","request_duration_ms":264}}'
+      - '{"last_request_metrics":{"request_id":"req_ME6XKGHoUuwEVr","request_duration_ms":228}}'
+      Stripe-Version:
+      - 2024-10-28.acacia
+      X-Stripe-Client-User-Agent:
+      - "<X_STRIPE_CLIENT_USER_AGENT>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 12 Nov 2024 11:32:06 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '614'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - report-uri https://q.stripe.com/csp-report?p=v1%2Fcustomers%2F%3Acustomer;
+        block-all-mixed-content; default-src 'none'; base-uri 'none'; form-action
+        'none'; frame-ancestors 'none'; img-src 'self'; script-src 'self' 'report-sample';
+        style-src 'self'
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="coop"
+      Report-To:
+      - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - coop="https://q.stripe.com/coop-report"
+      Request-Id:
+      - req_ABXPgGxQdwsFpY
+      Stripe-Version:
+      - 2024-10-28.acacia
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - A
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "cus_RChjlA63qIPJtX",
+          "object": "customer",
+          "address": null,
+          "balance": 0,
+          "created": 1731411126,
+          "currency": null,
+          "default_source": null,
+          "delinquent": false,
+          "description": null,
+          "discount": null,
+          "email": null,
+          "invoice_prefix": "97BDD9E3",
+          "invoice_settings": {
+            "custom_fields": null,
+            "default_payment_method": null,
+            "footer": null,
+            "rendering_options": null
+          },
+          "livemode": false,
+          "metadata": {},
+          "name": null,
+          "next_invoice_sequence": 1,
+          "phone": null,
+          "preferred_locales": [],
+          "shipping": null,
+          "tax_exempt": "none",
+          "test_clock": null
+        }
+  recorded_at: Tue, 12 Nov 2024 11:32:06 GMT
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/checkout/sessions
+    body:
+      encoding: UTF-8
+      string: success_url=http%3A%2F%2Flocalhost%3A3000%2Fsuccess&cancel_url=http%3A%2F%2Flocalhost%3A3000%2Forder&line_items[0][price]=price_1QG44XElA4InVgv8dOnqfhyu&line_items[0][quantity]=1&line_items[1][price]=price_1QG432ElA4InVgv8Zy7PaGPY&line_items[1][quantity]=1&mode=payment&billing_address_collection=auto&phone_number_collection[enabled]=false&saved_payment_method_options[payment_method_save]=enabled&customer=cus_RChjlA63qIPJtX
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/13.1.1
+      Authorization:
+      - "<BEARER_TOKEN>"
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics":{"request_id":"req_ABXPgGxQdwsFpY","request_duration_ms":117}}'
       Idempotency-Key:
       - "<IDEMPOTENCY_KEY>"
       Stripe-Version:
@@ -161,11 +388,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 12 Nov 2024 09:13:30 GMT
+      - Tue, 12 Nov 2024 11:32:07 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '2484'
+      - '2743'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
@@ -190,13 +417,13 @@ http_interactions:
       Idempotency-Key:
       - "<IDEMPOTENCY_KEY>"
       Original-Request:
-      - req_nmMCbQh2vmdEeM
+      - req_PrkTC5GJifpYlK
       Report-To:
       - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_nmMCbQh2vmdEeM
+      - req_PrkTC5GJifpYlK
       Stripe-Should-Retry:
       - 'false'
       Stripe-Version:
@@ -217,7 +444,7 @@ http_interactions:
       encoding: UTF-8
       string: |-
         {
-          "id": "cs_test_b18tkInAeoJkwAJBlLXoL7OpZdYe38KyJMPfYXO0C1QaYxCwU8dtUZ8IX0",
+          "id": "cs_test_b1voXwCKsNJjJbD4QIyjGViAeMhmkFebqfr4LmTZvYSg2vsDaSJzAu4lIp",
           "object": "checkout.session",
           "adaptive_pricing": {
             "enabled": false
@@ -231,13 +458,13 @@ http_interactions:
             "liability": null,
             "status": null
           },
-          "billing_address_collection": null,
+          "billing_address_collection": "auto",
           "cancel_url": "http://localhost:3000/order",
           "client_reference_id": null,
           "client_secret": null,
           "consent": null,
           "consent_collection": null,
-          "created": 1731402810,
+          "created": 1731411127,
           "currency": "usd",
           "currency_conversion": null,
           "custom_fields": [],
@@ -247,11 +474,11 @@ http_interactions:
             "submit": null,
             "terms_of_service_acceptance": null
           },
-          "customer": null,
-          "customer_creation": "if_required",
+          "customer": "cus_RChjlA63qIPJtX",
+          "customer_creation": null,
           "customer_details": null,
           "customer_email": null,
-          "expires_at": 1731489209,
+          "expires_at": 1731497527,
           "invoice": null,
           "invoice_creation": {
             "enabled": false,
@@ -272,21 +499,34 @@ http_interactions:
           "payment_intent": null,
           "payment_link": null,
           "payment_method_collection": "if_required",
-          "payment_method_configuration_details": null,
+          "payment_method_configuration_details": {
+            "id": "pmc_1QKI6xElA4InVgv8AaZ4UKa9",
+            "parent": null
+          },
           "payment_method_options": {
             "card": {
               "request_three_d_secure": "automatic"
             }
           },
           "payment_method_types": [
-            "card"
+            "card",
+            "klarna",
+            "link",
+            "cashapp",
+            "amazon_pay"
           ],
           "payment_status": "unpaid",
           "phone_number_collection": {
-            "enabled": true
+            "enabled": false
           },
           "recovered_from": null,
-          "saved_payment_method_options": null,
+          "saved_payment_method_options": {
+            "allow_redisplay_filters": [
+              "always"
+            ],
+            "payment_method_remove": null,
+            "payment_method_save": "enabled"
+          },
           "setup_intent": null,
           "shipping_address_collection": null,
           "shipping_cost": null,
@@ -302,7 +542,7 @@ http_interactions:
             "amount_tax": 0
           },
           "ui_mode": "hosted",
-          "url": "https://checkout.stripe.com/c/pay/cs_test_b18tkInAeoJkwAJBlLXoL7OpZdYe38KyJMPfYXO0C1QaYxCwU8dtUZ8IX0#fidkdWxOYHwnPyd1blpxYHZxWjA0VEI2anxAaUQxTGtTYnM9QkdkaFx%2Fc1xsPWJCZ05wYzVqU0RHfUZ0PG5XfGtBU2NhdEpDU2hmU01pPDxhQndwVDFNR31Ma1d1VzdfMExmM0J9QTZfb0pTNTVkclVrXExUaicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPydocGlxbFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"
+          "url": "https://checkout.stripe.com/c/pay/cs_test_b1voXwCKsNJjJbD4QIyjGViAeMhmkFebqfr4LmTZvYSg2vsDaSJzAu4lIp#fidkdWxOYHwnPyd1blpxYHZxWjA0VEI2anxAaUQxTGtTYnM9QkdkaFx%2Fc1xsPWJCZ05wYzVqU0RHfUZ0PG5XfGtBU2NhdEpDU2hmU01pPDxhQndwVDFNR31Ma1d1VzdfMExmM0J9QTZfb0pTNTVkclVrXExUaicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPydocGlxbFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"
         }
-  recorded_at: Tue, 12 Nov 2024 09:13:29 GMT
+  recorded_at: Tue, 12 Nov 2024 11:32:07 GMT
 recorded_with: VCR 6.3.1
