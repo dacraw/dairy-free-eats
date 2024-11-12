@@ -54,7 +54,7 @@ RSpec.describe "User Create Mutation", type: :request do
             stripe_customer_json = YAML.load_file("./spec/cassettes/user_signup_create_stripe_customer.yml")["http_interactions"].first["response"]["body"]["string"]
 
             stripe_customer = JSON.parse(stripe_customer_json, symbolize_names: true)
-            
+
             user = User.last
             expect(user.session_token).to eq session[:session_token]
             expect(user.email).to eq email

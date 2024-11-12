@@ -16,7 +16,7 @@ RSpec.feature "Signups", type: :feature do
       expect {
         expect(page).to have_content("Sign up for an account")
 
-        VCR.use_cassette "signup_feature_spec" do 
+        VCR.use_cassette "signup_feature_spec" do
           fill_in "address.city", with: stripe_customer["address"]["city"]
           fill_in "address.country", with: ""
           fill_in "address.country", with: stripe_customer["address"]["country"]
@@ -34,14 +34,14 @@ RSpec.feature "Signups", type: :feature do
 
           expect(page).to have_content "Welcome to the order page!"
 
-          stripe_product_list["data"].each {|product| expect(page).to have_content product["name"] }
-          
+          stripe_product_list["data"].each { |product| expect(page).to have_content product["name"] }
+
           expect(current_path).to eq order_path
         end
-
       }.to change { User.count }.from(0).to(1)
 
       expect(User.last.email).to eq stripe_customer["email"]
+      expect(User.last.stripe_customer_id).to eq stripe_customer["id"]
     end
   end
 
@@ -50,7 +50,7 @@ RSpec.feature "Signups", type: :feature do
 
     it "renders errors and does not redirect" do
       expect(Stripe::Customer).not_to receive(:create)
-      
+
       visit signup_path
 
       expect {

@@ -50,9 +50,9 @@ RSpec.describe User, type: :model do
       it "allows a value starting with 'cus_'" do
         stripe_customer_id = "cus_12345"
         user = build(
-          :user, 
-          password: "password", 
-          password_confirmation: "password", 
+          :user,
+          password: "password",
+          password_confirmation: "password",
           stripe_customer_id: stripe_customer_id,
           email: "tester@test.com"
         )
@@ -63,9 +63,9 @@ RSpec.describe User, type: :model do
 
       it "disallows a value not starting with 'cus_" do
         user = build(
-          :user, 
-          password: "password", 
-          password_confirmation: "password", 
+          :user,
+          password: "password",
+          password_confirmation: "password",
           stripe_customer_id: "this_is_not_right",
           email: "tester@test.com"
         )
@@ -76,9 +76,9 @@ RSpec.describe User, type: :model do
 
       it "does not add an error if the field is blank" do
         user = build(
-          :user, 
-          password: "password", 
-          password_confirmation: "password", 
+          :user,
+          password: "password",
+          password_confirmation: "password",
           email: "tester@test.com"
         )
 
