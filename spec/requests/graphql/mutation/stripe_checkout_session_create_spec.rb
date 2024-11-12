@@ -39,11 +39,13 @@ RSpec.describe "StripeCheckoutSessionCreate", type: :request do
           post "/graphql", headers: { "Content-Type": "application/json" }, params: params.to_json
 
           data = JSON.parse(response.body)["data"]
-          checkout_session = data["stripeCheckoutSessionCreate"]["stripeCheckoutSession"]
+          graphql_response = data["stripeCheckoutSessionCreate"]["stripeCheckoutSession"]
 
-          expect(checkout_session["url"]).to be_present
-          expect(checkout_session["customer"]).to be nil
-          expect(checkout_session["phone_number_collection"]["enabled"]).to be true
+          expect(graphql_response["url"]).to be_present
+          expect(graphql_response["customer"]).to be nil
+          checkout_session_json = YAML.load_file("./spec/cassettes/stripe_checkout_session_successful.yml")["http_interactions"].last["response"]["body"]["string"]
+          stripe_checkout_session = JSON.parse(checkout_session_json, symbolize_names: true)
+          expect(stripe_checkout_session[:phone_number_collection][:enabled]).to be true
         end
       end
     end
