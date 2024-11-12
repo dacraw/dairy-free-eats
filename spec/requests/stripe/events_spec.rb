@@ -20,7 +20,7 @@ RSpec.describe "Stripe::EventsController", type: :request do
           bypass_event_signature payload
 
           event = JSON.parse(payload)
-          
+
           # Use VCR for the manually pinged Stripe::Checkout::Session.list payment_intent: "pi_..."
           # Where the PI ID is used from the above json mock payment intent
           VCR.use_cassette cassette_name do
@@ -28,7 +28,7 @@ RSpec.describe "Stripe::EventsController", type: :request do
               post "/stripe/events", params: event
             }.to change { Order.count }.from(0).to(1)
           end
-          
+
           expect(Order.last.stripe_payment_intent_id).to eq event["data"]["object"]["id"]
           expect(event["data"]["object"]["customer"]).to be_present
 
@@ -39,7 +39,7 @@ RSpec.describe "Stripe::EventsController", type: :request do
           response_checkout_line_items = JSON.parse(cassette_contents["http_interactions"].last["response"]["body"]["string"], symbolize_names: true)
 
           # Ensure that the Order has its line items matching those from the
-          expected_checkout_line_items = response_checkout_line_items[:data].map {|item| {"name" => item[:description], "quantity" => item[:quantity]}}
+          expected_checkout_line_items = response_checkout_line_items[:data].map { |item| { "name" => item[:description], "quantity" => item[:quantity] } }
 
           expect(Order.last.stripe_checkout_session_line_items)
             .to eq(expected_checkout_line_items)
