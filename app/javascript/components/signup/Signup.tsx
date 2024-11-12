@@ -118,7 +118,7 @@ const Signup = () => {
                 <input
                   className="border-2 border-gray-600 p-2"
                   id="address.state"
-                  placeholder="ex: Unit 123, Apt 567"
+                  placeholder="ex: NV, CO, NY, AL"
                   {...register("address.state")}
                 />
               </div>
