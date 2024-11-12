@@ -34,8 +34,13 @@ module Mutations
           cancel_url: "http://localhost:3000/order",
           line_items: items.map { |item| item.to_h },
           mode: "payment",
+          billing_address_collection: context[:current_user].present? ? "auto" : "required",
           phone_number_collection: {
               enabled: context[:current_user].present? ? false : true
+          },
+          saved_payment_method_options: {
+            allow_redisplay_filters: ["always"],
+            payment_method_save: "enabled"
           },
           customer: (context[:current_user].stripe_customer_id if context[:current_user].present?)
         })
