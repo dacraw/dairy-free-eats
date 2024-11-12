@@ -9,6 +9,7 @@ import {
   CreateUserMutation,
   CreateUserMutationVariables,
   GetProductsQuery,
+  UserInput,
 } from "graphql/types";
 
 global.fetch = jest.fn(() =>
@@ -29,6 +30,22 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 
+const validUserInput: UserInput = {
+  address: {
+    city: "Some city",
+    country: "Some country",
+    line1: "123 St.",
+    line2: "Apt 1111",
+    postalCode: "12345",
+    state: "Best state",
+  },
+  email: "test@demo.com",
+  name: "Great Name",
+  password: "password",
+  passwordConfirmation: "password",
+  phone: "123-456-7890",
+};
+
 const validMocks: MockedResponse<
   CreateUserMutation | GetProductsQuery,
   CreateUserMutationVariables
@@ -38,11 +55,7 @@ const validMocks: MockedResponse<
       query: CREATE_USER,
       variables: {
         input: {
-          userInput: {
-            email: "test@demo.com",
-            password: "password",
-            passwordConfirmation: "password",
-          },
+          userInput: validUserInput,
         },
       },
     },
@@ -86,17 +99,32 @@ const validMocks: MockedResponse<
   },
 ];
 
-const invalidMocks: MockedResponse[] = [
+const invalidUserInput = {
+  address: {
+    city: "Some city",
+    country: "Some country",
+    line1: "123 St.",
+    line2: "Apt 1111",
+    postalCode: "12345",
+    state: "Best state",
+  },
+  email: "test@demo.com",
+  name: "Great Name",
+  password: "password1",
+  passwordConfirmation: "password2",
+  phone: "123-456-7890",
+};
+
+const invalidMocks: MockedResponse<
+  CreateUserMutation | GetProductsQuery,
+  CreateUserMutationVariables
+>[] = [
   {
     request: {
       query: CREATE_USER,
       variables: {
         input: {
-          userInput: {
-            email: "test@demo.com",
-            password: "password1",
-            passwordConfirmation: "password2",
-          },
+          userInput: invalidUserInput,
         },
       },
     },
@@ -137,12 +165,48 @@ describe("<Signup />", () => {
       </MockedProvider>
     );
 
+    // Address
     await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "test@demo.com"
+      screen.getByLabelText(/City/i),
+      validUserInput.address.city
     );
-    await userEvent.type(screen.getByLabelText("Password"), "password");
-    await userEvent.type(screen.getByLabelText("Confirm Password"), "password");
+
+    const countryInput = screen.getByLabelText(/Country/i);
+    await userEvent.clear(countryInput);
+    await userEvent.type(countryInput, validUserInput.address.country);
+
+    await userEvent.type(
+      screen.getByLabelText(/Address 1/i),
+      validUserInput.address.line1
+    );
+    await userEvent.type(
+      screen.getByLabelText(/Address 2/i),
+      validUserInput.address.line2!
+    );
+    await userEvent.type(
+      screen.getByLabelText(/Postal Code/i),
+      validUserInput.address.postalCode
+    );
+    await userEvent.type(
+      screen.getByLabelText(/State/i),
+      validUserInput.address.state
+    );
+
+    // Contact/login information
+    await userEvent.type(
+      screen.getByLabelText(/Full Name/i),
+      validUserInput.name
+    );
+    await userEvent.type(screen.getByLabelText(/Phone/i), validUserInput.phone);
+    await userEvent.type(screen.getByLabelText(/email/i), validUserInput.email);
+    await userEvent.type(
+      screen.getByLabelText("Password"),
+      validUserInput.password
+    );
+    await userEvent.type(
+      screen.getByLabelText("Confirm Password"),
+      validUserInput.passwordConfirmation
+    );
 
     await userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
@@ -169,20 +233,59 @@ describe("<Signup />", () => {
       </MockedProvider>
     );
 
+    // Address
     await userEvent.type(
-      screen.getByRole("textbox", { name: /email/i }),
-      "test@demo.com"
+      screen.getByLabelText(/City/i),
+      invalidUserInput.address.city
     );
-    await userEvent.type(screen.getByLabelText("Password"), "password1");
+
+    const countryInput = screen.getByLabelText(/Country/i);
+    await userEvent.clear(countryInput);
+    await userEvent.type(countryInput, invalidUserInput.address.country);
+
+    await userEvent.type(
+      screen.getByLabelText(/Address 1/i),
+      invalidUserInput.address.line1
+    );
+    await userEvent.type(
+      screen.getByLabelText(/Address 2/i),
+      invalidUserInput.address.line2!
+    );
+    await userEvent.type(
+      screen.getByLabelText(/Postal Code/i),
+      invalidUserInput.address.postalCode
+    );
+    await userEvent.type(
+      screen.getByLabelText(/State/i),
+      invalidUserInput.address.state
+    );
+
+    // Contact/login information
+    await userEvent.type(
+      screen.getByLabelText(/Full Name/i),
+      invalidUserInput.name
+    );
+    await userEvent.type(
+      screen.getByLabelText(/Phone/i),
+      invalidUserInput.phone
+    );
+    await userEvent.type(
+      screen.getByLabelText(/email/i),
+      invalidUserInput.email
+    );
+    await userEvent.type(
+      screen.getByLabelText("Password"),
+      invalidUserInput.password
+    );
     await userEvent.type(
       screen.getByLabelText("Confirm Password"),
-      "password2"
+      invalidUserInput.passwordConfirmation
     );
 
     await userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
     expect(
-      screen.getByText((content) => {
+      await screen.findByText((content) => {
         return content.includes("Password Confirmation does not match");
       })
     ).toBeInTheDocument();
