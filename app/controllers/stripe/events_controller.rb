@@ -62,5 +62,7 @@ class Stripe::EventsController < ApplicationController
                 message: "There was an issue creating your order. Please try again later."
             }, status: 500
         end
+
+        OrderMailer.with(order: order).order_received.deliver_later
     end
 end
