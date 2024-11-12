@@ -1,96 +1,56 @@
 require 'rails_helper'
+require "./spec/support/vcr"
 
 RSpec.feature "Signups", type: :feature do
-  let(:email) { Faker::Internet.email }
   let(:password) { Faker::Internet.password min_length: 8 }
-
-  let(:mock_description_1) { "mock_description_1" }
-  let(:mock_name_1) { "mock_name_1" }
-  let(:mock_price_1) { "mock_price_1" }
-
-  let(:mock_description_2) { "mock_description_2" }
-  let(:mock_name_2) { "mock_name_2" }
-  let(:mock_price_2) { "mock_price_2" }
-
-  let(:product_list_double) {
-    double(
-      Stripe::ListObject,
-      object: "list",
-      data: [
-        {
-          "id": "prod_12345",
-          "object": "product",
-          "active": true,
-          "attributes": [],
-          "created": 1730403020,
-          "default_price": mock_price_1,
-          "description": mock_description_1,
-          "images": [],
-          "livemode": false,
-          "marketing_features": [],
-          "metadata": {},
-          "name": mock_name_1,
-          "package_dimensions": nil,
-          "shippable": nil,
-          "statement_descriptor": nil,
-          "tax_code": "txcd_20030000",
-          "type": "service",
-          "unit_label": nil,
-          "updated": 1730403021,
-          "url": nil
-        },
-        {
-          "id": "prod_12345",
-          "object": "product",
-          "active": true,
-          "attributes": [],
-          "created": 1730402927,
-          "default_price": mock_price_2,
-          "description": mock_description_2,
-          "images": [],
-          "livemode": false,
-          "marketing_features": [],
-          "metadata": {},
-          "name": mock_name_2,
-          "package_dimensions": nil,
-          "shippable": nil,
-          "statement_descriptor": nil,
-          "tax_code": "txcd_20030000",
-          "type": "service",
-          "unit_label": nil,
-          "updated": 1730402928,
-          "url": nil
-        }
-      ],
-      has_more: false,
-      url: "/test/mock"
-    )
-  }
 
   context "when the signup is successful" do
     it "signs up a new user and redirects to the order page" do
-      expect(Stripe::Product).to receive(:list) { product_list_double }
       visit signup_path
+
+      cassette_file = YAML.load_file("./spec/cassettes/signup_feature_spec.yml")["http_interactions"]
+
+      stripe_customer = JSON.parse(cassette_file.first["response"]["body"]["string"])
+      stripe_product_list = JSON.parse(cassette_file.last["response"]["body"]["string"])
 
       expect {
         expect(page).to have_content("Sign up for an account")
 
-        fill_in "email", with: email
-        fill_in "password", with: password
-        fill_in "passwordConfirmation", with: password
-        find("input[type='submit']").click
+        VCR.use_cassette "signup_feature_spec" do 
+          fill_in "address.city", with: stripe_customer["address"]["city"]
+          fill_in "address.country", with: ""
+          fill_in "address.country", with: stripe_customer["address"]["country"]
+          fill_in "address.line1", with: stripe_customer["address"]["line1"]
+          fill_in "address.line2", with: stripe_customer["address"]["line2"]
+          fill_in "address.postalCode", with: stripe_customer["address"]["postalCode"]
+          fill_in "name", with: stripe_customer["name"]
+          fill_in "phone", with: stripe_customer["phone"]
 
-        expect(page).to have_content "Welcome to the order page!"
-        expect(page).to have_content mock_name_1
-        expect(current_path).to eq order_path
+          fill_in "email", with: stripe_customer["email"]
+          fill_in "password", with: password
+          fill_in "passwordConfirmation", with: password
+
+          find("input[type='submit']").click
+
+          expect(page).to have_content "Welcome to the order page!"
+
+          stripe_product_list["data"].each {|product| expect(page).to have_content product["name"] }
+          
+          expect(current_path).to eq order_path
+        end
+
       }.to change { User.count }.from(0).to(1)
 
-      expect(User.last.email).to eq email
+      expect(User.last.email).to eq stripe_customer["email"]
     end
   end
 
   context "when the signup fails" do
+    let(:email) { Faker::Internet.email }
+
     it "renders errors and does not redirect" do
+      expect(Stripe::Customer).not_to receive(:create)
+      
       visit signup_path
 
       expect {

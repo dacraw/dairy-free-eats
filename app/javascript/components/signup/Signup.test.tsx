@@ -12,24 +12,6 @@ import {
   UserInput,
 } from "graphql/types";
 
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    json: () =>
-      Promise.resolve([
-        {
-          default_price: "price_5555",
-          description: "Blended mixed berries, filtered water",
-          name: "Mixed Berry Smoothie (Water base)",
-        },
-        {
-          default_price: "price_4444",
-          description: "2 salted/peppered eggs, 2 strips of bacon, hummis",
-          name: "Breakfast Burrito",
-        },
-      ]),
-  })
-) as jest.Mock;
-
 const validUserInput: UserInput = {
   address: {
     city: "Some city",

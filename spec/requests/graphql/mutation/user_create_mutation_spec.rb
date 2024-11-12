@@ -46,7 +46,7 @@ RSpec.describe "User Create Mutation", type: :request do
 
         it "creates a new user and logs them in" do
             expect {
-                 VCR.use_cassette "user_signup_create_stripe_customer" do
+                VCR.use_cassette "user_signup_create_stripe_customer" do
                     post "/graphql", params: { query: query, variables: variables }
                 end
             }.to change { User.count }.from(0).to(1)
