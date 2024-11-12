@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.stripe.com/v1/customers
     body:
       encoding: UTF-8
-      string: email=new_user_valid_params%40test.com&address[city]=San+Francisco&address[country]=USA&address[line1]=123+Main+St.&address[line2]=Suite+55&address[postal_code]=&address[state]=&name=Tester+Testington&phone=123-555-8901
+      string: email=some%40email.com&address[city]=Some+City&address[country]=Some+Country&address[line1]=Some+address&address[line2]=Some+additional+address&address[postal_code]=12345&address[state]=&name=Some+Name&phone=123-456-7890
     headers:
       User-Agent:
       - Stripe/v1 RubyBindings/13.1.1
@@ -31,11 +31,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 12 Nov 2024 02:48:58 GMT
+      - Tue, 12 Nov 2024 22:25:26 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '812'
+      - '813'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
@@ -60,13 +60,13 @@ http_interactions:
       Idempotency-Key:
       - "<IDEMPOTENCY_KEY>"
       Original-Request:
-      - req_RmnoO0igguZoVQ
+      - req_rvnLhwwOVydgXP
       Report-To:
       - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_RmnoO0igguZoVQ
+      - req_rvnLhwwOVydgXP
       Stripe-Should-Retry:
       - 'false'
       Stripe-Version:
@@ -87,25 +87,25 @@ http_interactions:
       encoding: UTF-8
       string: |-
         {
-          "id": "cus_RCZIJ7sFlVkgf2",
+          "id": "cus_RCsHtnIrVKu0yH",
           "object": "customer",
           "address": {
-            "city": "San Francisco",
-            "country": "USA",
-            "line1": "123 Main St.",
-            "line2": "Suite 55",
-            "postal_code": "",
+            "city": "Some City",
+            "country": "Some Country",
+            "line1": "Some address",
+            "line2": "Some additional address",
+            "postal_code": "12345",
             "state": ""
           },
           "balance": 0,
-          "created": 1731379738,
+          "created": 1731450325,
           "currency": null,
           "default_source": null,
           "delinquent": false,
           "description": null,
           "discount": null,
-          "email": "new_user_valid_params@test.com",
-          "invoice_prefix": "343C8B6B",
+          "email": "some@email.com",
+          "invoice_prefix": "00C5BEDE",
           "invoice_settings": {
             "custom_fields": null,
             "default_payment_method": null,
@@ -114,18 +114,18 @@ http_interactions:
           },
           "livemode": false,
           "metadata": {},
-          "name": "Tester Testington",
+          "name": "Some Name",
           "next_invoice_sequence": 1,
-          "phone": "123-555-8901",
+          "phone": "123-456-7890",
           "preferred_locales": [],
           "shipping": null,
           "tax_exempt": "none",
           "test_clock": null
         }
-  recorded_at: Tue, 12 Nov 2024 02:48:58 GMT
+  recorded_at: Tue, 12 Nov 2024 22:25:25 GMT
 - request:
     method: get
-    uri: https://api.stripe.com/v1/products
+    uri: https://api.stripe.com/v1/products?active=true
     body:
       encoding: US-ASCII
       string: ''
@@ -150,7 +150,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 12 Nov 2024 02:48:58 GMT
+      - Tue, 12 Nov 2024 22:25:26 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -181,7 +181,7 @@ http_interactions:
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_M6SJVLEvCsygGq
+      - req_Cr8LxFa7AxGoHk
       Stripe-Version:
       - 2024-10-28.acacia
       Vary:
@@ -250,5 +250,5 @@ http_interactions:
           "has_more": false,
           "url": "/v1/products"
         }
-  recorded_at: Tue, 12 Nov 2024 02:48:58 GMT
+  recorded_at: Tue, 12 Nov 2024 22:25:26 GMT
 recorded_with: VCR 6.3.1

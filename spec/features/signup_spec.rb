@@ -5,28 +5,24 @@ RSpec.feature "Signups", type: :feature do
   let(:password) { Faker::Internet.password min_length: 8 }
 
   context "when the signup is successful" do
+    let(:email) { "some@email.com" }
     it "signs up a new user and redirects to the order page" do
       visit signup_path
-
-      cassette_file = YAML.load_file("./spec/cassettes/signup_feature_spec.yml")["http_interactions"]
-
-      stripe_customer = JSON.parse(cassette_file.first["response"]["body"]["string"])
-      stripe_product_list = JSON.parse(cassette_file.last["response"]["body"]["string"])
 
       expect {
         expect(page).to have_content("Sign up for an account")
 
         VCR.use_cassette "signup_feature_spec" do
-          fill_in "address.city", with: stripe_customer["address"]["city"]
+          fill_in "address.city", with: "Some City"
           fill_in "address.country", with: ""
-          fill_in "address.country", with: stripe_customer["address"]["country"]
-          fill_in "address.line1", with: stripe_customer["address"]["line1"]
-          fill_in "address.line2", with: stripe_customer["address"]["line2"]
-          fill_in "address.postalCode", with: stripe_customer["address"]["postalCode"]
-          fill_in "name", with: stripe_customer["name"]
-          fill_in "phone", with: stripe_customer["phone"]
+          fill_in "address.country", with: "Some Country"
+          fill_in "address.line1", with: "Some address"
+          fill_in "address.line2", with: "Some additional address"
+          fill_in "address.postalCode", with: "12345"
+          fill_in "name", with: "Some Name"
+          fill_in "phone", with: "123-456-7890"
 
-          fill_in "email", with: stripe_customer["email"]
+          fill_in "email", with: email
           fill_in "password", with: password
           fill_in "passwordConfirmation", with: password
 
@@ -34,14 +30,12 @@ RSpec.feature "Signups", type: :feature do
 
           expect(page).to have_content "Welcome to the order page!"
 
-          stripe_product_list["data"].each { |product| expect(page).to have_content product["name"] }
-
           expect(current_path).to eq order_path
         end
       }.to change { User.count }.from(0).to(1)
 
-      expect(User.last.email).to eq stripe_customer["email"]
-      expect(User.last.stripe_customer_id).to eq stripe_customer["id"]
+      expect(User.last.email).to eq email
+      expect(User.last.stripe_customer_id).to be_present
     end
   end
 

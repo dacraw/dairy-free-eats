@@ -32,12 +32,29 @@ class Stripe::EventsController < ApplicationController
     def payment_intent_succeeded(event)
         stripe_customer_id = event.data.object.customer
 
-
         if stripe_customer_id
             user = User.find_by_stripe_customer_id stripe_customer_id
         end
 
-        order = Order.new stripe_id: event.data.object.id, user: user
+
+        stripe_checkout_session = Stripe::Checkout::Session.list payment_intent: event.data.object.id
+
+        if stripe_checkout_session.blank?
+            puts "No Stripe Checkout session associated with payment intent ##{event.data.object.id} - Cannot proceed since line items cannot be stored in the order."
+            render json: {
+                message: "There was an issue creating your order. Please try again later."
+            }, status: 500
+        end
+
+        checkout_line_items = Stripe::Checkout::Session.list_line_items stripe_checkout_session.first.id
+
+        stripe_checkout_session_line_items = checkout_line_items.map { |item| { name: item.description, quantity: item.quantity } }
+
+        order = Order.new(
+            stripe_payment_intent_id: event.data.object.id,
+            user: user,
+            stripe_checkout_session_line_items: stripe_checkout_session_line_items
+        )
 
         if !order.save
             puts "There was an issue creating an order for Payment Intent# #{event.data.object.id}"

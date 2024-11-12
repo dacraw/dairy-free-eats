@@ -35,7 +35,7 @@ module Types
 
     field :list_products, Types::Stripe::ListObjectType, null: false
     def list_products
-      ::Stripe::Product.list
+      ::Stripe::Product.list active: true
     end
   end
 end

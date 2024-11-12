@@ -11,6 +11,8 @@ class User < ApplicationRecord
 
     after_initialize :ensure_recovery_password_digest, :ensure_session_token
 
+    has_many :orders
+
     def self.generate_token
         SecureRandom.urlsafe_base64 36
     end
