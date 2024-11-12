@@ -82,6 +82,6 @@ test:
 #
 production:
   <<: *default
-  database: dairy_free_food_production
-  username: dairy_free_food
-  password: <%= ENV["DAIRY_FREE_FOOD_DATABASE_PASSWORD"] %>
+  # database: dairy_free_food_production
+  # username: dairy_free_food
+  # password: <%= ENV["DAIRY_FREE_FOOD_DATABASE_PASSWORD"] %>
