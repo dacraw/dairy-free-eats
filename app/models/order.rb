@@ -3,7 +3,7 @@ class Order < ApplicationRecord
 
   enum :status, [ :received, :active, :in_transit, :completed ]
 
-  validates_presence_of :stripe_id
+  validates_presence_of :stripe_payment_intent_id
 
   before_create  { |order| order.status = :received }
 end
