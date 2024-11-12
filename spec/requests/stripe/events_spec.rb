@@ -10,93 +10,39 @@ RSpec.describe "Stripe::EventsController", type: :request do
 
   describe "POST /stripe/events" do
     context "payment_intent.succeeded" do
-      context "when there is no customer" do
-        let(:stripe_object) {
-          VCR.use_cassette "stripe_create_payment_intent_succeeded_no_customer" do
-            payment_intent = Stripe::PaymentIntent.create({
-              amount: 500,
-              automatic_payment_methods: {
-                enabled: true,
-                allow_redirects: "never"
-              },
-              confirm: true,
-              currency: 'usd',
-              description: "This is is test mode payment intent with no customer.",
-              payment_method: "pm_card_visa",
-              shipping: {
-                address: {
-                  city: "San Francisco",
-                  country: "US",
-                  line1: "510 Townsend St",
-                  lin2: nil,
-                  postal_code: "94103",
-                  state: "CA"
-                },
-                name: "Jenny Rosen"
-              }
-            })
-          end
-        }
-
-        it "responds to payment_intent.succeeded" do
-          webhook_request = Stripe::EventHelper.construct_event_request stripe_object, "payment_intent.succeeded"
-          bypass_event_signature webhook_request.to_json
-
-          expect {
-            post "/stripe/events", params: webhook_request
-          }.to change { Order.count }.from(0).to(1)
-
-          expect(response.status).to eq 200
-        end
-      end
-
       context "when there is a customer" do
-        let(:user) { create :user, :valid_user, email: "beebo@rado.com" }
-        let(:stripe_customer) {
-          VCR.use_cassette("stripe_create_customer") do
-            Stripe::Customer.create({
-              description: "This customer was created by specs for testing only.",
-              email: "beebo@rado.com",
-              name: "Sir Beebo Radoton",
-              phone: "123-456-7890"
-            })
-          end
-        }
-        let(:stripe_payment_intent) {
-          VCR.use_cassette "stripe_create_payment_intent_succeeded" do
-            payment_intent = Stripe::PaymentIntent.create({
-              amount: 500,
-              automatic_payment_methods: {
-                enabled: true,
-                allow_redirects: "never"
-              },
-              confirm: true,
-              currency: 'usd',
-              customer: stripe_customer.id,
-              description: "This is is test mode payment intent.",
-              payment_method: "pm_card_visa",
-              shipping: {
-                address: {
-                  city: "San Francisco",
-                  country: "US",
-                  line1: "510 Townsend St",
-                  lin2: nil,
-                  postal_code: "94103",
-                  state: "CA"
-                },
-                name: "Jenny Rosen"
-              }
-            })
-          end
-        }
+        let(:cassette_name) { "event_payment_intent_succeeded_checkout" }
 
         it "creates an order" do
-          webhook_request = Stripe::EventHelper.construct_event_request stripe_payment_intent, "payment_intent.succeeded"
-          bypass_event_signature webhook_request.to_json
+          # Use a payment intent generated through the Stripe Checkout page
+          # This more accurately reflects a successful payment intent, versus creating one manually using VCR
+          payload = File.read("spec/fixtures/stripe/event_payment_intent_succeeded.json")
+          bypass_event_signature payload
 
-          expect {
-            post "/stripe/events", params: webhook_request
-          }.to change { Order.count }.from(0).to(1)
+          event = JSON.parse(payload)
+          
+          # Use VCR for the manually pinged Stripe::Checkout::Session.list payment_intent: "pi_..."
+          # Where the PI ID is used from the above json mock payment intent
+          VCR.use_cassette cassette_name do
+            expect {
+              post "/stripe/events", params: event
+            }.to change { Order.count }.from(0).to(1)
+          end
+          
+          expect(Order.last.stripe_payment_intent_id).to eq event["data"]["object"]["id"]
+          expect(event["data"]["object"]["customer"]).to be_present
+
+          # Parse the cassette contents to match against the actual request
+          cassette_contents = YAML.load_file("./spec/cassettes/#{cassette_name}.yml")
+
+          # The parsed line items from the cassette contents
+          response_checkout_line_items = JSON.parse(cassette_contents["http_interactions"].last["response"]["body"]["string"], symbolize_names: true)
+
+          # Ensure that the Order has its line items matching those from the
+          expected_checkout_line_items = response_checkout_line_items[:data].map {|item| {"name" => item[:description], "quantity" => item[:quantity]}}
+
+          expect(Order.last.stripe_checkout_session_line_items)
+            .to eq(expected_checkout_line_items)
         end
       end
     end
