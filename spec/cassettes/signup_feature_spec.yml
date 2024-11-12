@@ -1,0 +1,254 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/customers
+    body:
+      encoding: UTF-8
+      string: email=new_user_valid_params%40test.com&address[city]=San+Francisco&address[country]=USA&address[line1]=123+Main+St.&address[line2]=Suite+55&address[postal_code]=&address[state]=&name=Tester+Testington&phone=123-555-8901
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/13.1.1
+      Authorization:
+      - "<BEARER_TOKEN>"
+      Idempotency-Key:
+      - "<IDEMPOTENCY_KEY>"
+      Stripe-Version:
+      - 2024-10-28.acacia
+      X-Stripe-Client-User-Agent:
+      - "<X_STRIPE_CLIENT_USER_AGENT>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 12 Nov 2024 02:48:58 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '812'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - report-uri https://q.stripe.com/csp-report?p=v1%2Fcustomers; block-all-mixed-content;
+        default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="coop"
+      Idempotency-Key:
+      - "<IDEMPOTENCY_KEY>"
+      Original-Request:
+      - req_RmnoO0igguZoVQ
+      Report-To:
+      - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - coop="https://q.stripe.com/coop-report"
+      Request-Id:
+      - req_RmnoO0igguZoVQ
+      Stripe-Should-Retry:
+      - 'false'
+      Stripe-Version:
+      - 2024-10-28.acacia
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - A
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "cus_RCZIJ7sFlVkgf2",
+          "object": "customer",
+          "address": {
+            "city": "San Francisco",
+            "country": "USA",
+            "line1": "123 Main St.",
+            "line2": "Suite 55",
+            "postal_code": "",
+            "state": ""
+          },
+          "balance": 0,
+          "created": 1731379738,
+          "currency": null,
+          "default_source": null,
+          "delinquent": false,
+          "description": null,
+          "discount": null,
+          "email": "new_user_valid_params@test.com",
+          "invoice_prefix": "343C8B6B",
+          "invoice_settings": {
+            "custom_fields": null,
+            "default_payment_method": null,
+            "footer": null,
+            "rendering_options": null
+          },
+          "livemode": false,
+          "metadata": {},
+          "name": "Tester Testington",
+          "next_invoice_sequence": 1,
+          "phone": "123-555-8901",
+          "preferred_locales": [],
+          "shipping": null,
+          "tax_exempt": "none",
+          "test_clock": null
+        }
+  recorded_at: Tue, 12 Nov 2024 02:48:58 GMT
+- request:
+    method: get
+    uri: https://api.stripe.com/v1/products
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/13.1.1
+      Authorization:
+      - "<BEARER_TOKEN>"
+      Stripe-Version:
+      - 2024-10-28.acacia
+      X-Stripe-Client-User-Agent:
+      - "<X_STRIPE_CLIENT_USER_AGENT>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 12 Nov 2024 02:48:58 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1374'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - report-uri https://q.stripe.com/csp-report?p=v1%2Fproducts; block-all-mixed-content;
+        default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="coop"
+      Report-To:
+      - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - coop="https://q.stripe.com/coop-report"
+      Request-Id:
+      - req_M6SJVLEvCsygGq
+      Stripe-Version:
+      - 2024-10-28.acacia
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - A
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "object": "list",
+          "data": [
+            {
+              "id": "prod_R8KkVOibvpRPlc",
+              "object": "product",
+              "active": true,
+              "attributes": [],
+              "created": 1730403020,
+              "default_price": "price_1QG44XElA4InVgv8dOnqfhyu",
+              "description": "Blended mixed berries, filtered water",
+              "images": [],
+              "livemode": false,
+              "marketing_features": [],
+              "metadata": {},
+              "name": "Mixed Berry Smoothie (Water base)",
+              "package_dimensions": null,
+              "shippable": null,
+              "statement_descriptor": null,
+              "tax_code": "txcd_20030000",
+              "type": "service",
+              "unit_label": null,
+              "updated": 1731379640,
+              "url": null
+            },
+            {
+              "id": "prod_R8KiBa0tljS7SV",
+              "object": "product",
+              "active": true,
+              "attributes": [],
+              "created": 1730402927,
+              "default_price": "price_1QG432ElA4InVgv8Zy7PaGPY",
+              "description": "2 salted/peppered eggs, 2 strips of bacon, hummis",
+              "images": [],
+              "livemode": false,
+              "marketing_features": [],
+              "metadata": {},
+              "name": "Breakfast Burrito",
+              "package_dimensions": null,
+              "shippable": null,
+              "statement_descriptor": null,
+              "tax_code": "txcd_20030000",
+              "type": "service",
+              "unit_label": null,
+              "updated": 1731379647,
+              "url": null
+            }
+          ],
+          "has_more": false,
+          "url": "/v1/products"
+        }
+  recorded_at: Tue, 12 Nov 2024 02:48:58 GMT
+recorded_with: VCR 6.3.1

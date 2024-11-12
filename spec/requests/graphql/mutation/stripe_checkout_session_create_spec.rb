@@ -1,4 +1,5 @@
 require 'rails_helper'
+require "./spec/support/vcr"
 
 RSpec.describe "StripeCheckoutSessionCreate", type: :request do
   let(:query) {
@@ -18,46 +19,104 @@ RSpec.describe "StripeCheckoutSessionCreate", type: :request do
   }
 
   context "for a successful request" do
-    let(:mock_checkout_url) { "www.checkoutpage.com" }
-    let(:session_double) { double(Stripe::Checkout::Session, "url" => mock_checkout_url) }
+    context "when a current user is not present" do
+      it "creates a successful stripe checkout session" do
+        VCR.use_cassette "stripe_checkout_session_successful" do
+          product_list = Stripe::Product.list
+          line_items = product_list.data.map { |product| { price: product.default_price, quantity: 1 } }
 
-    it "creates a successful stripe checkout session" do
-      line_items = [
-        { price: "price_12345", quantity: 1 },
-        { price: "price_54321", quantity: 1 }
-      ]
-
-      params = {
-        query: query,
-        variables: {
-          input: {
-            stripeCheckoutSessionInput: {
-              lineItems: line_items
+          params = {
+            query: query,
+            variables: {
+              input: {
+                stripeCheckoutSessionInput: {
+                  lineItems: line_items
+                }
+              }
             }
           }
-        }
-      }
+          # Must specify the params as json so that GraphQL can parse the intergers correctly
+          post "/graphql", headers: { "Content-Type": "application/json" }, params: params.to_json
 
-      expect(Stripe::Checkout::Session)
-        .to receive(:create)
-        .with({
-          success_url: "http://localhost:3000/success",
-          cancel_url: "http://localhost:3000/order",
-          line_items: line_items,
-          mode: "payment",
-          phone_number_collection: {
-              enabled: true
-          },
-          customer_email: nil
-        })
-        .and_return(session_double)
+          data = JSON.parse(response.body)["data"]
+          graphql_response = data["stripeCheckoutSessionCreate"]["stripeCheckoutSession"]
 
-      # Must specify the params as json so that GraphQL can parse the intergers correctly
-      post "/graphql", headers: { "Content-Type": "application/json" }, params: params.to_json
+          expect(graphql_response["url"]).to be_present
+          expect(graphql_response["customer"]).to be nil
+          checkout_session_json = YAML.load_file("./spec/cassettes/stripe_checkout_session_successful.yml")["http_interactions"].last["response"]["body"]["string"]
+          stripe_checkout_session = JSON.parse(checkout_session_json, symbolize_names: true)
+          expect(stripe_checkout_session[:phone_number_collection][:enabled]).to be true
+        end
+      end
+    end
 
-      data = JSON.parse(response.body)["data"]
+    context "when a current user is present" do
+      let(:user) { create :user, :valid_user }
 
-      expect(data["stripeCheckoutSessionCreate"]["stripeCheckoutSession"]["url"]).to eq mock_checkout_url
+      it "creates a stripe checkout session" do
+        VCR.use_cassette "stripe_checkout_session_customer_present" do
+          customer = Stripe::Customer.create
+
+          user.update(stripe_customer_id: customer.id)
+
+          # Sign in user - convert this into a helper
+          sign_in_query =
+            <<-GRAPHQL
+                mutation CreateSession($input: SessionCreateInput!) {
+                    sessionCreate(input: $input){
+                        user {
+                            id
+                        }
+                        errors {
+                            message
+                            path
+                        }
+                    }
+                }
+            GRAPHQL
+
+          sign_in_variables = {
+            input: {
+                sessionInput: {
+                    email: user.email,
+                    password: user.password
+                }
+            }
+          }
+
+          post "/graphql", params: { query: sign_in_query, variables: sign_in_variables }
+
+          expect(controller.current_user).to be_present
+
+          product_list = Stripe::Product.list
+          line_items = product_list.data.map { |product| { price: product.default_price, quantity: 1 } }
+
+          params = {
+            query: query,
+            variables: {
+              input: {
+                stripeCheckoutSessionInput: {
+                  lineItems: line_items
+                }
+              }
+            }
+          }
+          # Must specify the params as json so that GraphQL can parse the intergers correctly
+          post "/graphql", headers: { "Content-Type": "application/json" }, params: params.to_json
+
+          data = JSON.parse(response.body)["data"]
+          graphql_response = data["stripeCheckoutSessionCreate"]["stripeCheckoutSession"]
+
+          expect(graphql_response["url"]).to be_present
+
+          stripe_checkout_session_json = YAML.load_file("./spec/cassettes/stripe_checkout_session_customer_present.yml")["http_interactions"].last["response"]["body"]["string"]
+
+          stripe_checkout_session = JSON.parse(stripe_checkout_session_json, symbolize_names: true)
+
+          expect(graphql_response["url"]).to eq stripe_checkout_session[:url]
+          expect(stripe_checkout_session[:customer]).to eq user.stripe_customer_id
+        end
+      end
     end
   end
 

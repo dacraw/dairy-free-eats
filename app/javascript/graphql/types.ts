@@ -21,6 +21,15 @@ export type Scalars = {
   JSON: { input: any; output: any; }
 };
 
+export type AddressInput = {
+  city: Scalars['String']['input'];
+  country: Scalars['String']['input'];
+  line1: Scalars['String']['input'];
+  line2?: InputMaybe<Scalars['String']['input']>;
+  postalCode: Scalars['String']['input'];
+  state: Scalars['String']['input'];
+};
+
 export type CheckoutSession = {
   __typename?: 'CheckoutSession';
   url: Scalars['String']['output'];
@@ -196,10 +205,14 @@ export type UserCreatePayload = {
 };
 
 export type UserInput = {
+  address: AddressInput;
   email: Scalars['String']['input'];
   id?: InputMaybe<Scalars['ID']['input']>;
+  /** The full name of the user */
+  name: Scalars['String']['input'];
   password: Scalars['String']['input'];
   passwordConfirmation: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
   stripeCustomerId?: InputMaybe<Scalars['String']['input']>;
 };
 

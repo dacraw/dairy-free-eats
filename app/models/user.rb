@@ -7,6 +7,7 @@ class User < ApplicationRecord
     validates :session_token, { uniqueness: true, presence: true }
     validates :recovery_password_digest, { uniqueness: true, presence: true }
     validates_presence_of :password_confirmation, on: :create
+    validate :stripe_customer_id_format, if: -> { stripe_customer_id.present? }
 
     after_initialize :ensure_recovery_password_digest, :ensure_session_token
 
@@ -23,9 +24,15 @@ class User < ApplicationRecord
     end
 
     def reset_session_token!
-        # debugger
-        # self.update(session_token: User.generate_token)
         self.update_column(:session_token, User.generate_token)
         self.session_token
+    end
+
+    private
+
+    def stripe_customer_id_format
+        if !self.stripe_customer_id.match? /^cus_.*/
+            self.errors.add :stripe_customer_id, "does not represent a properly formatted Stripe Customer id."
+        end
     end
 end

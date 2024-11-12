@@ -26,6 +26,8 @@ module Mutations
         }
       end
 
+      stripe_customer = context[:current_user]&.stripe_customer_id&.present? ? Stripe::Customer.retrieve(context[:current_user]&.stripe_customer_id) : nil
+
       begin
         stripe_checkout_session = Stripe::Checkout::Session.create({
           success_url: "http://localhost:3000/success",
@@ -33,9 +35,9 @@ module Mutations
           line_items: items.map { |item| item.to_h },
           mode: "payment",
           phone_number_collection: {
-              enabled: true
+              enabled: context[:current_user].present? ? false : true
           },
-          customer_email: (context[:current_user].email if context[:current_user].present?)
+          customer: (context[:current_user].stripe_customer_id if context[:current_user].present?)
         })
 
       rescue Stripe::InvalidRequestError => e
