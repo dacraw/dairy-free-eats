@@ -29,10 +29,10 @@ module Mutations
 
         if !user.update(stripe_customer_id: stripe_customer.id)
           return {
-            user: user, 
+            user: user,
             errors: [
-              { 
-                path: ["attributes", user.errors.first.attribute.to_s.camelize(:lower)], 
+              {
+                path: [ "attributes", user.errors.first.attribute.to_s.camelize(:lower) ],
                 message: user.errors.full_messages.first
               }
             ]

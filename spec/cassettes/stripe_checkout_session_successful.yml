@@ -1,0 +1,308 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.stripe.com/v1/products
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/13.1.1
+      Authorization:
+      - "<BEARER_TOKEN>"
+      Stripe-Version:
+      - 2024-10-28.acacia
+      X-Stripe-Client-User-Agent:
+      - "<X_STRIPE_CLIENT_USER_AGENT>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 12 Nov 2024 09:13:29 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1374'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - report-uri https://q.stripe.com/csp-report?p=v1%2Fproducts; block-all-mixed-content;
+        default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="coop"
+      Report-To:
+      - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - coop="https://q.stripe.com/coop-report"
+      Request-Id:
+      - req_HfalK2ThHHQf8Y
+      Stripe-Version:
+      - 2024-10-28.acacia
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - A
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "object": "list",
+          "data": [
+            {
+              "id": "prod_R8KkVOibvpRPlc",
+              "object": "product",
+              "active": true,
+              "attributes": [],
+              "created": 1730403020,
+              "default_price": "price_1QG44XElA4InVgv8dOnqfhyu",
+              "description": "Blended mixed berries, filtered water",
+              "images": [],
+              "livemode": false,
+              "marketing_features": [],
+              "metadata": {},
+              "name": "Mixed Berry Smoothie (Water base)",
+              "package_dimensions": null,
+              "shippable": null,
+              "statement_descriptor": null,
+              "tax_code": "txcd_20030000",
+              "type": "service",
+              "unit_label": null,
+              "updated": 1731379640,
+              "url": null
+            },
+            {
+              "id": "prod_R8KiBa0tljS7SV",
+              "object": "product",
+              "active": true,
+              "attributes": [],
+              "created": 1730402927,
+              "default_price": "price_1QG432ElA4InVgv8Zy7PaGPY",
+              "description": "2 salted/peppered eggs, 2 strips of bacon, hummis",
+              "images": [],
+              "livemode": false,
+              "marketing_features": [],
+              "metadata": {},
+              "name": "Breakfast Burrito",
+              "package_dimensions": null,
+              "shippable": null,
+              "statement_descriptor": null,
+              "tax_code": "txcd_20030000",
+              "type": "service",
+              "unit_label": null,
+              "updated": 1731379647,
+              "url": null
+            }
+          ],
+          "has_more": false,
+          "url": "/v1/products"
+        }
+  recorded_at: Tue, 12 Nov 2024 09:13:29 GMT
+- request:
+    method: post
+    uri: https://api.stripe.com/v1/checkout/sessions
+    body:
+      encoding: UTF-8
+      string: success_url=http%3A%2F%2Flocalhost%3A3000%2Fsuccess&cancel_url=http%3A%2F%2Flocalhost%3A3000%2Forder&line_items[0][price]=price_1QG44XElA4InVgv8dOnqfhyu&line_items[0][quantity]=1&line_items[1][price]=price_1QG432ElA4InVgv8Zy7PaGPY&line_items[1][quantity]=1&mode=payment&phone_number_collection[enabled]=true
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/13.1.1
+      Authorization:
+      - "<BEARER_TOKEN>"
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics":{"request_id":"req_HfalK2ThHHQf8Y","request_duration_ms":264}}'
+      Idempotency-Key:
+      - "<IDEMPOTENCY_KEY>"
+      Stripe-Version:
+      - 2024-10-28.acacia
+      X-Stripe-Client-User-Agent:
+      - "<X_STRIPE_CLIENT_USER_AGENT>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 12 Nov 2024 09:13:30 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2484'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - report-uri https://q.stripe.com/csp-report?p=v1%2Fcheckout%2Fsessions; block-all-mixed-content;
+        default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="coop"
+      Idempotency-Key:
+      - "<IDEMPOTENCY_KEY>"
+      Original-Request:
+      - req_nmMCbQh2vmdEeM
+      Report-To:
+      - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - coop="https://q.stripe.com/coop-report"
+      Request-Id:
+      - req_nmMCbQh2vmdEeM
+      Stripe-Should-Retry:
+      - 'false'
+      Stripe-Version:
+      - 2024-10-28.acacia
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - A
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "id": "cs_test_b18tkInAeoJkwAJBlLXoL7OpZdYe38KyJMPfYXO0C1QaYxCwU8dtUZ8IX0",
+          "object": "checkout.session",
+          "adaptive_pricing": {
+            "enabled": false
+          },
+          "after_expiration": null,
+          "allow_promotion_codes": null,
+          "amount_subtotal": 600,
+          "amount_total": 600,
+          "automatic_tax": {
+            "enabled": false,
+            "liability": null,
+            "status": null
+          },
+          "billing_address_collection": null,
+          "cancel_url": "http://localhost:3000/order",
+          "client_reference_id": null,
+          "client_secret": null,
+          "consent": null,
+          "consent_collection": null,
+          "created": 1731402810,
+          "currency": "usd",
+          "currency_conversion": null,
+          "custom_fields": [],
+          "custom_text": {
+            "after_submit": null,
+            "shipping_address": null,
+            "submit": null,
+            "terms_of_service_acceptance": null
+          },
+          "customer": null,
+          "customer_creation": "if_required",
+          "customer_details": null,
+          "customer_email": null,
+          "expires_at": 1731489209,
+          "invoice": null,
+          "invoice_creation": {
+            "enabled": false,
+            "invoice_data": {
+              "account_tax_ids": null,
+              "custom_fields": null,
+              "description": null,
+              "footer": null,
+              "issuer": null,
+              "metadata": {},
+              "rendering_options": null
+            }
+          },
+          "livemode": false,
+          "locale": null,
+          "metadata": {},
+          "mode": "payment",
+          "payment_intent": null,
+          "payment_link": null,
+          "payment_method_collection": "if_required",
+          "payment_method_configuration_details": null,
+          "payment_method_options": {
+            "card": {
+              "request_three_d_secure": "automatic"
+            }
+          },
+          "payment_method_types": [
+            "card"
+          ],
+          "payment_status": "unpaid",
+          "phone_number_collection": {
+            "enabled": true
+          },
+          "recovered_from": null,
+          "saved_payment_method_options": null,
+          "setup_intent": null,
+          "shipping_address_collection": null,
+          "shipping_cost": null,
+          "shipping_details": null,
+          "shipping_options": [],
+          "status": "open",
+          "submit_type": null,
+          "subscription": null,
+          "success_url": "http://localhost:3000/success",
+          "total_details": {
+            "amount_discount": 0,
+            "amount_shipping": 0,
+            "amount_tax": 0
+          },
+          "ui_mode": "hosted",
+          "url": "https://checkout.stripe.com/c/pay/cs_test_b18tkInAeoJkwAJBlLXoL7OpZdYe38KyJMPfYXO0C1QaYxCwU8dtUZ8IX0#fidkdWxOYHwnPyd1blpxYHZxWjA0VEI2anxAaUQxTGtTYnM9QkdkaFx%2Fc1xsPWJCZ05wYzVqU0RHfUZ0PG5XfGtBU2NhdEpDU2hmU01pPDxhQndwVDFNR31Ma1d1VzdfMExmM0J9QTZfb0pTNTVkclVrXExUaicpJ2N3amhWYHdzYHcnP3F3cGApJ2lkfGpwcVF8dWAnPydocGlxbFpscWBoJyknYGtkZ2lgVWlkZmBtamlhYHd2Jz9xd3BgeCUl"
+        }
+  recorded_at: Tue, 12 Nov 2024 09:13:29 GMT
+recorded_with: VCR 6.3.1

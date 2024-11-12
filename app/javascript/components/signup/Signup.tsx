@@ -152,6 +152,7 @@ const Signup = () => {
                   <input
                     className="border-2 border-gray-600 p-2"
                     id="phone"
+                    type="tel"
                     placeholder="ex: 555-123-4567"
                     {...register("phone")}
                   />
