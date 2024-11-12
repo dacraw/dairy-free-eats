@@ -190,7 +190,9 @@ describe("<Signup />", () => {
       validUserInput.passwordConfirmation
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    await userEvent.click(
+      screen.getByRole("button", { name: /Create Account/i })
+    );
 
     expect(
       await screen.findByText("Mixed Berry Smoothie (Water base)")
@@ -264,7 +266,9 @@ describe("<Signup />", () => {
       invalidUserInput.passwordConfirmation
     );
 
-    await userEvent.click(screen.getByRole("button", { name: /submit/i }));
+    await userEvent.click(
+      screen.getByRole("button", { name: /Create Account/i })
+    );
 
     expect(
       await screen.findByText((content) => {
