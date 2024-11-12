@@ -34,13 +34,19 @@ module Mutations
           cancel_url: "http://localhost:3000/order",
           line_items: items.map { |item| item.to_h },
           mode: "payment",
+          billing_address_collection: context[:current_user].present? ? "auto" : "required",
           phone_number_collection: {
               enabled: context[:current_user].present? ? false : true
+          },
+          saved_payment_method_options: {
+            payment_method_save: ("enabled" if context[:current_user].present?)
           },
           customer: (context[:current_user].stripe_customer_id if context[:current_user].present?)
         })
 
       rescue Stripe::InvalidRequestError => e
+          puts "Stripe::InvalidRequestError: #{e.message}"
+
           return {
             stripe_checkout_session: nil,
             errors: [ { message: "Unfortunately, there is an issue with the Stripe checkout at this time. Please try again later." } ]
