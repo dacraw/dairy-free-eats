@@ -12,6 +12,7 @@ RSpec.describe "Stripe::EventsController", type: :request do
     context "payment_intent.succeeded" do
       context "when there is a customer" do
         let(:cassette_name) { "event_payment_intent_succeeded_checkout" }
+        let(:mailer_double) { double(OrderMailer) }
 
         it "creates an order" do
           # Use a payment intent generated through the Stripe Checkout page
@@ -20,6 +21,10 @@ RSpec.describe "Stripe::EventsController", type: :request do
           bypass_event_signature payload
 
           event = JSON.parse(payload)
+
+          expect(OrderMailer).to receive(:with) { mailer_double }
+          expect(mailer_double).to receive(:order_received) { mailer_double }
+          expect(mailer_double).to receive(:deliver_later) { mailer_double }
 
           # Use VCR for the manually pinged Stripe::Checkout::Session.list payment_intent: "pi_..."
           # Where the PI ID is used from the above json mock payment intent
