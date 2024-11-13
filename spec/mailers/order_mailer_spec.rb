@@ -1,5 +1,4 @@
 require "rails_helper"
-require "./spec/support/vcr"
 
 RSpec.describe OrderMailer, type: :mailer do
   let(:order) { create :order, stripe_payment_intent_id: "pi_12345" }
