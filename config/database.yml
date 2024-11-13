@@ -59,7 +59,6 @@ development:
 test:
   <<: *default
   database: dairy_free_food_test
-
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
 # ever seen by anyone, they now have access to your database.
@@ -80,8 +79,8 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-production:
-  <<: *default
-  database: dairy_free_food_production
-  username: dairy_free_food
-  password: <%= ENV["DAIRY_FREE_FOOD_DATABASE_PASSWORD"] %>
+# production:
+#   <<: *default
+# database: dairy_free_food_production
+# username: dairy_free_food
+# password: <%= ENV["DAIRY_FREE_FOOD_DATABASE_PASSWORD"] %>

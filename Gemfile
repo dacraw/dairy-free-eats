@@ -86,3 +86,5 @@ group :test do
   # Hooked into by VCR
   gem "webmock"
 end
+
+gem "dockerfile-rails", ">= 1.6", group: :development
