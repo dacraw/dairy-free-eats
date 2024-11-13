@@ -62,6 +62,13 @@ class Stripe::EventsController < ApplicationController
             }, status: 500
         end
 
-        OrderMailer.with(order: order).order_received.deliver_later
+        OrderMailer
+            .with(
+                order: order,
+                stripe_checkout_session: stripe_checkout_session.list,
+                line_items: order.stripe_checkout_session_line_items
+            )
+            .order_received
+            .deliver_later
     end
 end
