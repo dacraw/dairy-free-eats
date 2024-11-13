@@ -36,7 +36,6 @@ class Stripe::EventsController < ApplicationController
             user = User.find_by_stripe_customer_id stripe_customer_id
         end
 
-
         stripe_checkout_session = Stripe::Checkout::Session.list payment_intent: event.data.object.id
 
         if stripe_checkout_session.blank?
@@ -62,5 +61,7 @@ class Stripe::EventsController < ApplicationController
                 message: "There was an issue creating your order. Please try again later."
             }, status: 500
         end
+
+        OrderMailer.with(order: order).order_received.deliver_later
     end
 end
