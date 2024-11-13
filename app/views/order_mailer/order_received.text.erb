@@ -1,5 +1,12 @@
 Your order has been received
-========================================
+================================================
+
 Order #<%= @order.id %> has been received, and will begin processing as soon as possible.
 
+Items Ordered:
+<% @line_items.map do |item| %>
+    - <%= item["name"] %> x<%= item["quantity"] %>
+<% end %>
+
+================================================
 Thank you for your order.

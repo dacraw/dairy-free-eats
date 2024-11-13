@@ -36,7 +36,6 @@ class Stripe::EventsController < ApplicationController
             user = User.find_by_stripe_customer_id stripe_customer_id
         end
 
-
         stripe_checkout_session = Stripe::Checkout::Session.list payment_intent: event.data.object.id
 
         if stripe_checkout_session.blank?
@@ -51,9 +50,9 @@ class Stripe::EventsController < ApplicationController
         stripe_checkout_session_line_items = checkout_line_items.map { |item| { name: item.description, quantity: item.quantity } }
 
         order = Order.new(
-            stripe_payment_intent_id: event.data.object.id,
             user: user,
-            stripe_checkout_session_line_items: stripe_checkout_session_line_items
+            stripe_checkout_session_line_items: stripe_checkout_session_line_items,
+            stripe_payment_intent_id: event.data.object.id
         )
 
         if !order.save
@@ -62,5 +61,23 @@ class Stripe::EventsController < ApplicationController
                 message: "There was an issue creating your order. Please try again later."
             }, status: 500
         end
+
+        OrderMailer
+            .with(
+                order: order,
+                stripe_checkout_session: stripe_checkout_session.first,
+                line_items: order.stripe_checkout_session_line_items
+            )
+            .order_received
+            .deliver_later
+
+        Admin::OrderMailer
+            .with(
+                order: order,
+                stripe_checkout_session: stripe_checkout_session.first,
+                line_items: order.stripe_checkout_session_line_items
+            )
+            .order_received
+            .deliver_later
     end
 end

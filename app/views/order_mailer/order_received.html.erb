@@ -1,3 +1,12 @@
 <h1>Your order has been received</h1>
 <p>Order #<%= @order.id %> has been received, and will begin processing as soon as possible.</p>
+
+<h4>Items Ordered:</h4>
+<ul>
+    <% @line_items.map do |item| %>
+        <li><%= item["name"] %> x<%= item["quantity"] %></li>
+    <% end %>
+</ul>
+<hr />
+
 <p>Thank you for your order.</p>
