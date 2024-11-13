@@ -50,9 +50,9 @@ class Stripe::EventsController < ApplicationController
         stripe_checkout_session_line_items = checkout_line_items.map { |item| { name: item.description, quantity: item.quantity } }
 
         order = Order.new(
-            stripe_payment_intent_id: event.data.object.id,
             user: user,
-            stripe_checkout_session_line_items: stripe_checkout_session_line_items
+            stripe_checkout_session_line_items: stripe_checkout_session_line_items,
+            stripe_payment_intent_id: event.data.object.id
         )
 
         if !order.save
@@ -65,7 +65,16 @@ class Stripe::EventsController < ApplicationController
         OrderMailer
             .with(
                 order: order,
-                stripe_checkout_session: stripe_checkout_session.list,
+                stripe_checkout_session: stripe_checkout_session.first,
+                line_items: order.stripe_checkout_session_line_items
+            )
+            .order_received
+            .deliver_later
+
+        Admin::OrderMailer
+            .with(
+                order: order,
+                stripe_checkout_session: stripe_checkout_session.first,
                 line_items: order.stripe_checkout_session_line_items
             )
             .order_received
