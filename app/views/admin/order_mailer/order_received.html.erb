@@ -1,7 +1,7 @@
 <h1>A User has placed an order</h1>
 <hr />
 <p>Order #<%= @order.id %></p>
-<p>Placed by: <%= @stripe_checkout_session.customer_details.email %></p>
+<p>Placed by: <%= @email %></p>
 <% if @order.user.present? %>
     <p>User id: <%= @order.user.id %></p>
 <% end %>

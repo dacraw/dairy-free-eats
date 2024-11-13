@@ -2,7 +2,7 @@ A User has placed an order
 ================================================
 
 Order #<%= @order.id %>
-Placed by: <%= @stripe_checkout_session.customer_details.email %>
+Placed by: <%= @email %>
 <% if @order.user.present? %>
     User id: <%= @order.user.id %>
 <% end %>
