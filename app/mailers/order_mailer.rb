@@ -10,14 +10,8 @@ class OrderMailer < ApplicationMailer
             return
         end
 
-        if @order.user.nil?
-            email = checkout_session.customer_details.email
-        else
-            email = @order.user.email
-        end
-
         mail(
-            to: email,
+            to: checkout_session.customer_details.email,
             subject: "Order received"
         )
     end
