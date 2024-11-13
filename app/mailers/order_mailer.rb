@@ -2,16 +2,16 @@ class OrderMailer < ApplicationMailer
     def order_received
         @line_items = params[:line_items]
         @order = params[:order]
-        stripe_checkout_session = params[:stripe_checkout_session]
+        email = params[:stripe_customer_email]
 
-        if stripe_checkout_session.blank?
-            puts "No checkout session found for the customer"
+        if email.blank?
+            puts "No stripe customer email found for the customer: Order##{@order.id}"
 
             return
         end
 
         mail(
-            to: stripe_checkout_session.customer_details.email,
+            to: email,
             subject: "Order received"
         )
     end

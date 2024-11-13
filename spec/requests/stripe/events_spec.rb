@@ -72,7 +72,7 @@ RSpec.describe "Stripe::EventsController", type: :request do
           # Expect mailers to have been called
           expect(OrderMailer).to have_received(:with).with(
             order: order,
-            stripe_checkout_session: response_checkout_session["data"].first,
+            stripe_customer_email: response_checkout_session["data"].first["customer_details"]["email"],
             line_items: order.stripe_checkout_session_line_items
           )
           expect(mailer_double).to have_received(:order_received)

@@ -65,7 +65,7 @@ class Stripe::EventsController < ApplicationController
         OrderMailer
             .with(
                 order: order,
-                stripe_checkout_session: stripe_checkout_session.first,
+                stripe_customer_email: stripe_checkout_session.first.customer_details.email,
                 line_items: order.stripe_checkout_session_line_items
             )
             .order_received

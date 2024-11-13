@@ -6,14 +6,14 @@ class OrderMailerPreview < ActionMailer::Preview
             symbolize_names: true
         )
 
-        stripe_checkout_session = Stripe::Checkout::Session.construct_from(checkout_session_mock_json)
+        email = Stripe::Checkout::Session.construct_from(checkout_session_mock_json).customer_details.email
         order = Order.last
         line_items = order.stripe_checkout_session_line_items
 
         OrderMailer
             .with(
                 order: order,
-                stripe_checkout_session: stripe_checkout_session,
+                stripe_customer_email: email,
                 line_items: line_items
             )
             .order_received
