@@ -1,0 +1,13 @@
+A User has placed an order
+================================================
+
+Order #<%= @order.id %>
+Placed by: <%= @stripe_checkout_session.customer_details.email %>
+<% if @order.user.present? %>
+    User id: <%= @order.user.id %>
+<% end %>
+
+Items Ordered:
+<% @line_items.map do |item| %>
+    <%= item["name"] %> x<%= item["quantity"] %>
+<% end %>

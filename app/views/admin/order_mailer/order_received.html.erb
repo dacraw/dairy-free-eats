@@ -1,0 +1,15 @@
+<h1>A User has placed an order</h1>
+<hr />
+<p>Order #<%= @order.id %></p>
+<p>Placed by: <%= @stripe_checkout_session.customer_details.email %></p>
+<% if @order.user.present? %>
+    <p>User id: <%= @order.user.id %></p>
+<% end %>
+
+<h4>Items Ordered:</h4>
+<ul>
+    <% @line_items.map do |item| %>
+        <li><%= item["name"] %> x<%= item["quantity"] %></li>
+    <% end %>
+</ul>
+<hr />
