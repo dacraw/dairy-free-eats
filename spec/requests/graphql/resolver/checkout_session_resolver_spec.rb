@@ -4,21 +4,22 @@ RSpec.describe "CheckoutSessionResolver", type: :request do
   let(:query) {
     <<-GRAPHQL
       query FetchStripeCheckoutSession($id: ID!) {
-        fetchCheckoutSession(id: $id){
+        fetchCheckoutSession(id: $id) {
           id
           amountTotal
           lineItems {
-            id
-            amountTotal
-            description
-            quantity
+            hasMore
+            data {
+              id
+              amountTotal
+              description
+              quantity
+            }
           }
         }
       }
     GRAPHQL
   }
-
-  let(:cassette_name) { "checkout_session_resolver_spec" }
 
   it "returns a checkout session with the given id" do
     stripe_checkout_session_mock_json = File.read("spec/fixtures/stripe/stripe_checkout_session_customer_present.json")
@@ -44,9 +45,9 @@ RSpec.describe "CheckoutSessionResolver", type: :request do
     expect(graphql_fetch_checkout_session[:id]).to eq stripe_checkout_session.id
 
     expect(
-      graphql_fetch_checkout_session[:lineItems]
-      .pluck(:id, :amount_total, :description, :quantity)
+      graphql_fetch_checkout_session[:lineItems][:data]
+      .pluck(:id, :amountTotal, :description, :quantity)
     ).to match_array(
-      stripe_checkout_session_line_items.pluck(:id, :amountTotal, :description, :quantity))
+      stripe_checkout_session_line_items.pluck(:id, :amount_total, :description, :quantity))
   end
 end
