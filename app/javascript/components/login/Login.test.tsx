@@ -141,7 +141,7 @@ describe("<Login />", () => {
       await userEvent.click(screen.getByRole("button", { name: /submit/i }));
 
       expect(
-        screen.getByText(
+        await screen.findByText(
           "Order lactose-free food that is tasty and affordable."
         )
       ).toBeInTheDocument();
