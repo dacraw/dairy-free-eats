@@ -23,6 +23,8 @@ RSpec.describe "Stripe::EventsController", type: :request do
 
           event = JSON.parse(payload)
 
+          expect(event["data"]["object"]["metadata"]["RAILS_ENV"]).to eq Rails.env
+
           # Mock mailers now for expectation later
           allow(OrderMailer).to receive(:with) { mailer_double }
           allow(mailer_double).to receive(:order_received) { mailer_double }
