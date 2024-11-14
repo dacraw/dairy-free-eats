@@ -116,15 +116,15 @@ const OrderSuccess = () => {
             <div className="w-80 text-sm">
               <p className="mb-4">
                 If you ordered using an email address that you can access, you
-                should have retrieved an email confirming that the order was
+                should have received an email confirming that the order was
                 received.
               </p>
               <p className="mb-4">
-                Next, the order needs to be accepted by the admin to enter the
-                active state (i.e. the order is being prepared). After that, the
-                admin can mark the order as in-transit when the item is being
-                delivered. Finally, when the order is delivered the admin may
-                mark the order as completed.
+                Next, the order needs to be accepted by the admin for it to
+                enter the active state (i.e. the order is being prepared). After
+                that, the admin can mark the order as in-transit when the item
+                is being delivered. Finally, when the order is delivered the
+                admin may mark the order as completed.
               </p>
               <p className="font-bold">
                 You should receive an email each time the order status is
