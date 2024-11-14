@@ -205,10 +205,11 @@ const Signup = () => {
             </p>
             <p>
               <strong className="font-bold underline">Note:</strong> Only your
-              email and password will be stored by this app for logging in, the
-              rest of the information will be stored by Stripe and accessed by
-              this app via Stripe API for order delivery purposes (including
-              contacting you during the lifetime of an order, as necessary).
+              email and hashed password will be stored by this app for logging
+              in, the rest of the information will be stored by Stripe and
+              accessed by this app via Stripe API for order delivery purposes
+              (including contacting you during the lifetime of an order, as
+              necessary).
             </p>
           </div>
           <input

@@ -1,6 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
+  it "allows an admin user to be created" do
+    user = build :user, password: "password", password_confirmation: "password", email: "admin@email.com", admin: true
+
+    expect { user.save }.to change { User.count }.by(1)
+    expect(user.admin?).to be true
+  end
+
   context "callbacks" do
     context "when initialized" do
       it "ensures there is a password recovery digest" do
