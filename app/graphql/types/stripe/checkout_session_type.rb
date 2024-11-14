@@ -18,7 +18,7 @@ class Types::Stripe::CheckoutSessionType < Types::BaseObject
     field :customer_details, Types::Stripe::CheckoutSession::CustomerDetailsType, null: true
     field :customer_email, String, null: true
     field :livemode, Boolean, null: false
-    field :line_items, GraphQL::Types::JSON, null: false
+    field :line_items, [ Types::Stripe::LineItemType ], null: false
     def line_items
         Stripe::Checkout::Session.list_line_items object.id
     end

@@ -7,7 +7,12 @@ RSpec.describe "CheckoutSessionResolver", type: :request do
         fetchCheckoutSession(id: $id){
           id
           amountTotal
-          lineItems
+          lineItems {
+            id
+            amountTotal
+            description
+            quantity
+          }
         }
       }
     GRAPHQL
@@ -20,9 +25,8 @@ RSpec.describe "CheckoutSessionResolver", type: :request do
     stripe_checkout_session = Stripe::Checkout::Session.construct_from(JSON.parse(stripe_checkout_session_mock_json))
     expect(Stripe::Checkout::Session).to receive(:retrieve).with(stripe_checkout_session.id) { stripe_checkout_session }
 
-
     stripe_checkout_session_line_items_mock_json = File.read("spec/fixtures/stripe/stripe_checkout_session_line_items.json")
-    stripe_checkout_session_line_items = Stripe::ListObject.construct_from(data: JSON.parse(stripe_checkout_session_line_items_mock_json))
+    stripe_checkout_session_line_items = Stripe::ListObject.construct_from(JSON.parse(stripe_checkout_session_line_items_mock_json))
     expect(Stripe::Checkout::Session).to receive(:list_line_items) { stripe_checkout_session_line_items }
 
     post graphql_path, params: {
@@ -38,5 +42,11 @@ RSpec.describe "CheckoutSessionResolver", type: :request do
     )[:data][:fetchCheckoutSession]
 
     expect(graphql_fetch_checkout_session[:id]).to eq stripe_checkout_session.id
+
+    expect(
+      graphql_fetch_checkout_session[:lineItems]
+      .pluck(:id, :amount_total, :description, :quantity)
+    ).to match_array(
+      stripe_checkout_session_line_items.pluck(:id, :amountTotal, :description, :quantity))
   end
 end
