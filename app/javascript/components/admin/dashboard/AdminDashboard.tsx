@@ -1,9 +1,143 @@
+import { gql } from "@apollo/client";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  FetchOrdersQuery,
+  useFetchOrdersQuery,
+  useSetOrderActiveMutation,
+} from "graphql/types";
 import React from "react";
 
-const AdminDashboard = () => {
+const SET_ORDER_ACTIVE = gql`
+  mutation SetOrderActive($input: SetOrderActiveInput!) {
+    setOrderActive(input: $input) {
+      order {
+        id
+        status
+      }
+    }
+  }
+`;
+
+const FETCH_ORDERS = gql`
+  query FetchOrders {
+    orders {
+      id
+      status
+      stripeCheckoutSessionLineItems {
+        name
+        quantity
+      }
+      user {
+        id
+        email
+      }
+    }
+  }
+`;
+
+const DesktopOrderTable: React.FC<{ orders: FetchOrdersQuery["orders"] }> = ({
+  orders,
+}) => {
+  if (!orders) return null;
+
   return (
-    <div>
-      <p>Admin Dashboard</p>
+    <div className="hidden md:block">
+      <h5 className="text-lg mb-6 border-b-2 font-bold">ORDERS</h5>
+      <div className="grid grid-cols-4 gap-4">
+        <p className="font-bold">Id</p>
+        <p className="font-bold">Status</p>
+        <p className="font-bold">Email</p>
+        <p className="font-bold">Items</p>
+      </div>
+      {orders.map((order) => (
+        <div key={order.id} className="grid grid-cols-4 gap-4">
+          <p>{order.id}</p>
+          <p>{order.status}</p>
+          <p>{order.user?.email}</p>
+          <div>
+            {order.stripeCheckoutSessionLineItems.map((item, i) => (
+              <p key={i}>
+                {item.name} x{item.quantity}
+              </p>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const ResponsiveOrderTable: React.FC<{
+  orders: FetchOrdersQuery["orders"];
+}> = ({ orders }) => {
+  if (!orders) return null;
+
+  return (
+    <div className="md:hidden">
+      <h5 className="text-lg mb-2 border-b-2 font-bold">ORDERS</h5>
+      <div className="">
+        {orders.map((order) => (
+          <div key={order.id} className="bg-blue-700 rounded mb-2 p-2">
+            <div className="mb-2">
+              <p className="font-bold">Id </p>
+              <p>{order.id}</p>
+            </div>
+            <div className="mb-2">
+              <p className="font-bold">Status </p>
+              <p>{order.status}</p>
+            </div>
+            <div className="mb-2">
+              <p className="font-bold">Email </p>
+              <p>{order.user?.email}</p>
+            </div>
+            <div className="mb-2">
+              <p className="font-bold">Items </p>
+              <div>
+                {order.stripeCheckoutSessionLineItems.map((item, i) => (
+                  <p key={i}>
+                    {item.name} x{item.quantity}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+const AdminDashboard = () => {
+  //   const [
+  //     setOrderActive,
+  //     {
+  //       loading: setOrderActiveLoading,
+  //       data: setOrderActiveData,
+  //       error: setOrderActiveError,
+  //     },
+  //   ] = useSetOrderActiveMutation();
+  const { loading: ordersLoading, data: ordersData } = useFetchOrdersQuery();
+  return (
+    <div className=" grid place-content-center  ">
+      {ordersLoading ? (
+        <div className="">
+          <FontAwesomeIcon className="text-6xl mb-6" spin icon={faSpinner} />
+          <p>Loading orders...</p>
+        </div>
+      ) : (
+        <div className=" rounded p-2 md:p-6 ">
+          <h3 className="text-3xl font-bold text-center mb-6">
+            Admin Dashboard
+          </h3>
+          {ordersData?.orders?.length && (
+            <>
+              <DesktopOrderTable orders={ordersData.orders} />
+              <ResponsiveOrderTable orders={ordersData.orders} />
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 class Resolvers::OrdersResolver < Resolvers::BaseResolver
-    type [Types::OrderType], null: false
+    type [ Types::OrderType ], null: false
 
     def resolve
         Order.all
