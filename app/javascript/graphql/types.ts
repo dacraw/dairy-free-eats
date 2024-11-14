@@ -30,9 +30,60 @@ export type AddressInput = {
   state: Scalars['String']['input'];
 };
 
+export type AutomaticTax = {
+  __typename?: 'AutomaticTax';
+  enabled: Scalars['Boolean']['output'];
+  liability?: Maybe<Scalars['JSON']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+};
+
+/** Based on https://docs.stripe.com/api/checkout/sessions/object */
 export type CheckoutSession = {
   __typename?: 'CheckoutSession';
+  amountSubtotal?: Maybe<Scalars['Int']['output']>;
+  amountTotal?: Maybe<Scalars['Int']['output']>;
+  automaticTax: AutomaticTax;
+  billingAddressCollection?: Maybe<Scalars['String']['output']>;
+  cancelUrl?: Maybe<Scalars['String']['output']>;
+  clientReferenceId?: Maybe<Scalars['String']['output']>;
+  created: Scalars['ISO8601DateTime']['output'];
+  currency?: Maybe<Scalars['String']['output']>;
+  customer?: Maybe<Scalars['String']['output']>;
+  customerDetails?: Maybe<CustomerDetails>;
+  customerEmail?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  livemode: Scalars['Boolean']['output'];
+  locale?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  mode: Scalars['String']['output'];
+  paymentIntent?: Maybe<Scalars['String']['output']>;
+  paymentMethodCollection?: Maybe<Scalars['String']['output']>;
+  paymentMethodTypes: Array<Scalars['String']['output']>;
+  paymentStatus: Scalars['String']['output'];
+  stripeObject: Scalars['String']['output'];
+  successUrl: Scalars['String']['output'];
+  totalDetails: TotalDetails;
   url: Scalars['String']['output'];
+};
+
+export type CustomerAddress = {
+  __typename?: 'CustomerAddress';
+  city?: Maybe<Scalars['String']['output']>;
+  country?: Maybe<Scalars['String']['output']>;
+  line1?: Maybe<Scalars['String']['output']>;
+  line2?: Maybe<Scalars['String']['output']>;
+  postalCode?: Maybe<Scalars['String']['output']>;
+  state?: Maybe<Scalars['String']['output']>;
+};
+
+export type CustomerDetails = {
+  __typename?: 'CustomerDetails';
+  address?: Maybe<CustomerAddress>;
+  email?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  taxExempt?: Maybe<Scalars['String']['output']>;
+  taxIds?: Maybe<Array<Scalars['JSON']['output']>>;
 };
 
 /** Generic error type */
@@ -177,6 +228,13 @@ export type StripeCheckoutSessionCreatePayload = {
 
 export type StripeCheckoutSessionInput = {
   lineItems: Array<OrderPageInput>;
+};
+
+export type TotalDetails = {
+  __typename?: 'TotalDetails';
+  amountDiscount: Scalars['Int']['output'];
+  amountShipping: Scalars['Int']['output'];
+  amountTax: Scalars['Int']['output'];
 };
 
 export type User = {

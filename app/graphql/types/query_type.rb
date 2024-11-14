@@ -37,5 +37,7 @@ module Types
     def list_products
       ::Stripe::Product.list active: true
     end
+
+    field :fetch_checkout_session, resolver: Resolvers::Stripe::CheckoutSessionResolver, null: true
   end
 end

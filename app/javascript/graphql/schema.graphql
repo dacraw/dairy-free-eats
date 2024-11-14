@@ -7,8 +7,58 @@ input AddressInput {
   state: String!
 }
 
+type AutomaticTax {
+  enabled: Boolean!
+  liability: JSON
+  status: String
+}
+
+"""
+Based on https://docs.stripe.com/api/checkout/sessions/object
+"""
 type CheckoutSession {
+  amountSubtotal: Int
+  amountTotal: Int
+  automaticTax: AutomaticTax!
+  billingAddressCollection: String
+  cancelUrl: String
+  clientReferenceId: String
+  created: ISO8601DateTime!
+  currency: String
+  customer: String
+  customerDetails: CustomerDetails
+  customerEmail: String
+  id: String!
+  livemode: Boolean!
+  locale: String
+  metadata: JSON
+  mode: String!
+  paymentIntent: String
+  paymentMethodCollection: String
+  paymentMethodTypes: [String!]!
+  paymentStatus: String!
+  stripeObject: String!
+  successUrl: String!
+  totalDetails: TotalDetails!
   url: String!
+}
+
+type CustomerAddress {
+  city: String
+  country: String
+  line1: String
+  line2: String
+  postalCode: String
+  state: String
+}
+
+type CustomerDetails {
+  address: CustomerAddress
+  email: String
+  name: String
+  phone: String
+  taxExempt: String
+  taxIds: [JSON!]
 }
 
 """
@@ -187,6 +237,12 @@ type StripeCheckoutSessionCreatePayload {
 
 input StripeCheckoutSessionInput {
   lineItems: [OrderPageInput!]!
+}
+
+type TotalDetails {
+  amountDiscount: Int!
+  amountShipping: Int!
+  amountTax: Int!
 }
 
 type User {
