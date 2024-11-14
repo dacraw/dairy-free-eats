@@ -30,9 +30,61 @@ export type AddressInput = {
   state: Scalars['String']['input'];
 };
 
+export type AutomaticTax = {
+  __typename?: 'AutomaticTax';
+  enabled: Scalars['Boolean']['output'];
+  liability?: Maybe<Scalars['JSON']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+};
+
+/** Based on https://docs.stripe.com/api/checkout/sessions/object */
 export type CheckoutSession = {
   __typename?: 'CheckoutSession';
+  amountSubtotal?: Maybe<Scalars['Int']['output']>;
+  amountTotal?: Maybe<Scalars['Int']['output']>;
+  automaticTax: AutomaticTax;
+  billingAddressCollection?: Maybe<Scalars['String']['output']>;
+  cancelUrl?: Maybe<Scalars['String']['output']>;
+  clientReferenceId?: Maybe<Scalars['String']['output']>;
+  created: Scalars['ISO8601DateTime']['output'];
+  currency?: Maybe<Scalars['String']['output']>;
+  customer?: Maybe<Scalars['String']['output']>;
+  customerDetails?: Maybe<CustomerDetails>;
+  customerEmail?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  lineItems: LineItemListObject;
+  livemode: Scalars['Boolean']['output'];
+  locale?: Maybe<Scalars['String']['output']>;
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  mode: Scalars['String']['output'];
+  paymentIntent?: Maybe<Scalars['String']['output']>;
+  paymentMethodCollection?: Maybe<Scalars['String']['output']>;
+  paymentMethodTypes: Array<Scalars['String']['output']>;
+  paymentStatus: Scalars['String']['output'];
+  stripeObject: Scalars['String']['output'];
+  successUrl: Scalars['String']['output'];
+  totalDetails: TotalDetails;
   url: Scalars['String']['output'];
+};
+
+export type CustomerAddress = {
+  __typename?: 'CustomerAddress';
+  city?: Maybe<Scalars['String']['output']>;
+  country?: Maybe<Scalars['String']['output']>;
+  line1?: Maybe<Scalars['String']['output']>;
+  line2?: Maybe<Scalars['String']['output']>;
+  postalCode?: Maybe<Scalars['String']['output']>;
+  state?: Maybe<Scalars['String']['output']>;
+};
+
+export type CustomerDetails = {
+  __typename?: 'CustomerDetails';
+  address?: Maybe<CustomerAddress>;
+  email?: Maybe<Scalars['String']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  phone?: Maybe<Scalars['String']['output']>;
+  taxExempt?: Maybe<Scalars['String']['output']>;
+  taxIds?: Maybe<Array<Scalars['JSON']['output']>>;
 };
 
 /** Generic error type */
@@ -42,9 +94,18 @@ export type Error = {
   path?: Maybe<Array<Scalars['String']['output']>>;
 };
 
-export type ListObject = {
-  __typename?: 'ListObject';
-  data?: Maybe<Array<Product>>;
+export type LineItem = {
+  __typename?: 'LineItem';
+  amountTotal: Scalars['Int']['output'];
+  description: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  quantity: Scalars['Int']['output'];
+  stripeObject: Scalars['String']['output'];
+};
+
+export type LineItemListObject = {
+  __typename?: 'LineItemListObject';
+  data?: Maybe<Array<LineItem>>;
   hasMore: Scalars['Boolean']['output'];
   stripeObject: Scalars['String']['output'];
   url: Scalars['String']['output'];
@@ -111,11 +172,25 @@ export type Product = {
   url?: Maybe<Scalars['String']['output']>;
 };
 
+export type ProductListObject = {
+  __typename?: 'ProductListObject';
+  data?: Maybe<Array<Product>>;
+  hasMore: Scalars['Boolean']['output'];
+  stripeObject: Scalars['String']['output'];
+  url: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
-  listProducts: ListObject;
+  fetchCheckoutSession?: Maybe<CheckoutSession>;
+  listProducts: ProductListObject;
   retrieveProduct?: Maybe<Product>;
+};
+
+
+export type QueryFetchCheckoutSessionArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -179,6 +254,13 @@ export type StripeCheckoutSessionInput = {
   lineItems: Array<OrderPageInput>;
 };
 
+export type TotalDetails = {
+  __typename?: 'TotalDetails';
+  amountDiscount: Scalars['Int']['output'];
+  amountShipping: Scalars['Int']['output'];
+  amountTax: Scalars['Int']['output'];
+};
+
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -219,7 +301,7 @@ export type UserInput = {
 export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProductsQuery = { __typename?: 'Query', listProducts: { __typename?: 'ListObject', stripeObject: string, hasMore: boolean, url: string, data?: Array<{ __typename?: 'Product', defaultPrice: string, description: string, name: string }> | null } };
+export type GetProductsQuery = { __typename?: 'Query', listProducts: { __typename?: 'ProductListObject', stripeObject: string, hasMore: boolean, url: string, data?: Array<{ __typename?: 'Product', defaultPrice: string, description: string, name: string }> | null } };
 
 export type StripeCheckoutSessionCreateMutationVariables = Exact<{
   input: StripeCheckoutSessionCreateInput;
@@ -244,6 +326,13 @@ export type CreateSessionMutationVariables = Exact<{
 
 
 export type CreateSessionMutation = { __typename?: 'Mutation', sessionCreate?: { __typename?: 'SessionCreatePayload', user?: { __typename?: 'User', id: string } | null, errors: Array<{ __typename?: 'Error', message: string, path?: Array<string> | null }> } | null };
+
+export type FetchStripeCheckoutSessionQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type FetchStripeCheckoutSessionQuery = { __typename?: 'Query', fetchCheckoutSession?: { __typename?: 'CheckoutSession', id: string, amountTotal?: number | null, lineItems: { __typename?: 'LineItemListObject', hasMore: boolean, data?: Array<{ __typename?: 'LineItem', id: string, amountTotal: number, description: string, quantity: number }> | null } } | null };
 
 export type CreateUserMutationVariables = Exact<{
   input: UserCreateInput;
@@ -454,6 +543,56 @@ export function useCreateSessionMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateSessionMutationHookResult = ReturnType<typeof useCreateSessionMutation>;
 export type CreateSessionMutationResult = Apollo.MutationResult<CreateSessionMutation>;
 export type CreateSessionMutationOptions = Apollo.BaseMutationOptions<CreateSessionMutation, CreateSessionMutationVariables>;
+export const FetchStripeCheckoutSessionDocument = gql`
+    query FetchStripeCheckoutSession($id: ID!) {
+  fetchCheckoutSession(id: $id) {
+    id
+    amountTotal
+    lineItems {
+      hasMore
+      data {
+        id
+        amountTotal
+        description
+        quantity
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useFetchStripeCheckoutSessionQuery__
+ *
+ * To run a query within a React component, call `useFetchStripeCheckoutSessionQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchStripeCheckoutSessionQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchStripeCheckoutSessionQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFetchStripeCheckoutSessionQuery(baseOptions: Apollo.QueryHookOptions<FetchStripeCheckoutSessionQuery, FetchStripeCheckoutSessionQueryVariables> & ({ variables: FetchStripeCheckoutSessionQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchStripeCheckoutSessionQuery, FetchStripeCheckoutSessionQueryVariables>(FetchStripeCheckoutSessionDocument, options);
+      }
+export function useFetchStripeCheckoutSessionLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchStripeCheckoutSessionQuery, FetchStripeCheckoutSessionQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchStripeCheckoutSessionQuery, FetchStripeCheckoutSessionQueryVariables>(FetchStripeCheckoutSessionDocument, options);
+        }
+export function useFetchStripeCheckoutSessionSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FetchStripeCheckoutSessionQuery, FetchStripeCheckoutSessionQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FetchStripeCheckoutSessionQuery, FetchStripeCheckoutSessionQueryVariables>(FetchStripeCheckoutSessionDocument, options);
+        }
+export type FetchStripeCheckoutSessionQueryHookResult = ReturnType<typeof useFetchStripeCheckoutSessionQuery>;
+export type FetchStripeCheckoutSessionLazyQueryHookResult = ReturnType<typeof useFetchStripeCheckoutSessionLazyQuery>;
+export type FetchStripeCheckoutSessionSuspenseQueryHookResult = ReturnType<typeof useFetchStripeCheckoutSessionSuspenseQuery>;
+export type FetchStripeCheckoutSessionQueryResult = Apollo.QueryResult<FetchStripeCheckoutSessionQuery, FetchStripeCheckoutSessionQueryVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($input: UserCreateInput!) {
   userCreate(input: $input) {
