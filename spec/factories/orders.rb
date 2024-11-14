@@ -9,5 +9,11 @@ FactoryBot.define do
         ]
       }
     end
+
+    trait :active do
+      after(:create) do |order|
+        order.active!
+      end
+    end
   end
 end
