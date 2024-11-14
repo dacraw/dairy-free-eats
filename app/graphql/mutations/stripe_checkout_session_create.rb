@@ -30,7 +30,7 @@ module Mutations
 
       begin
         stripe_checkout_session = Stripe::Checkout::Session.create({
-          success_url: Rails.env.production? ? "https://dairy-free-food.fly.dev/success" : "http://localhost:3000/success",
+          success_url: Rails.env.production? ? "https://dairy-free-food.fly.dev/success?checkout_id={CHECKOUT_SESSION_ID}" : "http://localhost:3000/success?checkout_id={CHECKOUT_SESSION_ID}",
           cancel_url: Rails.env.production? ? "https://dairy-free-food.fly.dev/order" : "http://localhost:3000/order",
           line_items: items.map { |item| item.to_h },
           mode: "payment",
