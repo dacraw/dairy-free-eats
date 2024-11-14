@@ -29,6 +29,7 @@ type CheckoutSession {
   customerDetails: CustomerDetails
   customerEmail: String
   id: String!
+  lineItems: LineItemListObject!
   livemode: Boolean!
   locale: String
   metadata: JSON
@@ -79,8 +80,16 @@ Represents untyped JSON
 """
 scalar JSON
 
-type ListObject {
-  data: [Product!]
+type LineItem {
+  amountTotal: Int!
+  description: String!
+  id: String!
+  quantity: Int!
+  stripeObject: String!
+}
+
+type LineItemListObject {
+  data: [LineItem!]
   hasMore: Boolean!
   stripeObject: String!
   url: String!
@@ -156,9 +165,17 @@ type Product {
   url: String
 }
 
+type ProductListObject {
+  data: [Product!]
+  hasMore: Boolean!
+  stripeObject: String!
+  url: String!
+}
+
 type Query {
   currentUser: User
-  listProducts: ListObject!
+  fetchCheckoutSession(id: ID!): CheckoutSession
+  listProducts: ProductListObject!
   retrieveProduct(productId: String!): Product
 }
 

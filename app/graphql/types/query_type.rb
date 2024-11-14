@@ -33,7 +33,7 @@ module Types
       ::Stripe::Product.retrieve product_id
     end
 
-    field :list_products, Types::Stripe::ListObjectType, null: false
+    field :list_products, Types::Stripe::ProductListObjectType, null: false
     def list_products
       ::Stripe::Product.list active: true
     end
