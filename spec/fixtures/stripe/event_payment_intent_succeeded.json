@@ -27,7 +27,9 @@
       "last_payment_error": null,
       "latest_charge": "ch_3QKRKvElA4InVgv81purNRwM",
       "livemode": false,
-      "metadata": {},
+      "metadata": {
+        "RAILS_ENV": "test"
+      },
       "next_action": null,
       "on_behalf_of": null,
       "payment_method": "pm_1QKHpeElA4InVgv8FWy944dm",

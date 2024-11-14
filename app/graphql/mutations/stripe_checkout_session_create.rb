@@ -41,7 +41,12 @@ module Mutations
           saved_payment_method_options: {
             payment_method_save: ("enabled" if context[:current_user].present?)
           },
-          customer: (context[:current_user].stripe_customer_id if context[:current_user].present?)
+          customer: (context[:current_user].stripe_customer_id if context[:current_user].present?),
+          payment_intent_data: {
+            metadata: {
+              RAILS_ENV: Rails.env
+            }
+          }
         })
 
       rescue Stripe::InvalidRequestError => e

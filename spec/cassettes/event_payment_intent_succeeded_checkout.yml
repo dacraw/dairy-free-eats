@@ -27,7 +27,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Wed, 13 Nov 2024 23:10:22 GMT
+      - Thu, 14 Nov 2024 03:07:40 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -58,7 +58,7 @@ http_interactions:
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_M8kiFgVQlDrnmZ
+      - req_591nQWbgngZvN0
       Stripe-Version:
       - 2024-10-28.acacia
       Vary:
@@ -197,7 +197,7 @@ http_interactions:
           "has_more": false,
           "url": "/v1/checkout/sessions"
         }
-  recorded_at: Wed, 13 Nov 2024 23:10:21 GMT
+  recorded_at: Thu, 14 Nov 2024 03:07:39 GMT
 - request:
     method: get
     uri: https://api.stripe.com/v1/checkout/sessions/cs_test_a1BBn4RW1sExgdMOA3yk7xvFVn2XGfONbOZsy0h6Up4CROhQKSYxcLJ49U/line_items
@@ -210,7 +210,7 @@ http_interactions:
       Authorization:
       - "<BEARER_TOKEN>"
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics":{"request_id":"req_M8kiFgVQlDrnmZ","request_duration_ms":280}}'
+      - '{"last_request_metrics":{"request_id":"req_591nQWbgngZvN0","request_duration_ms":270}}'
       Stripe-Version:
       - 2024-10-28.acacia
       X-Stripe-Client-User-Agent:
@@ -227,7 +227,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Wed, 13 Nov 2024 23:10:22 GMT
+      - Thu, 14 Nov 2024 03:07:40 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -259,7 +259,7 @@ http_interactions:
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_DIwaS9f90CHCLs
+      - req_rIs58O8tcFLhgA
       Stripe-Version:
       - 2024-10-28.acacia
       Vary:
@@ -316,5 +316,5 @@ http_interactions:
           "has_more": false,
           "url": "/v1/checkout/sessions/cs_test_a1BBn4RW1sExgdMOA3yk7xvFVn2XGfONbOZsy0h6Up4CROhQKSYxcLJ49U/line_items"
         }
-  recorded_at: Wed, 13 Nov 2024 23:10:21 GMT
+  recorded_at: Thu, 14 Nov 2024 03:07:40 GMT
 recorded_with: VCR 6.3.1

@@ -14,6 +14,10 @@ class Stripe::EventsController < ApplicationController
 
                 case event.type
                 when "payment_intent.succeeded"
+                    if event.data.object.metadata.RAILS_ENV != Rails.env
+                        return render json: { message: "Environment does not match origin environment. Exiting webhook." }, status: 200
+                    end
+
                     payment_intent_succeeded(event)
                 end
 
