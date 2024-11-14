@@ -9,6 +9,7 @@ import {
   FetchStripeCheckoutSessionQuery,
   FetchStripeCheckoutSessionQueryVariables,
 } from "graphql/types";
+import Home from "components/Home";
 
 const validMocks: MockedResponse<
   FetchStripeCheckoutSessionQuery,
@@ -43,6 +44,36 @@ const validMocks: MockedResponse<
   },
 ];
 
+const checkoutIdParamMissingMocks: MockedResponse<
+  FetchStripeCheckoutSessionQuery,
+  FetchStripeCheckoutSessionQueryVariables
+>[] = [
+  {
+    request: {
+      query: FETCH_STRIPE_CHECKOUT_SESSION,
+      variables: { id: "" },
+    },
+    result: {
+      data: {
+        fetchCheckoutSession: null,
+      },
+    },
+  },
+];
+
+const checkoutIdParamInvalidMocks: MockedResponse<
+  FetchStripeCheckoutSessionQuery,
+  FetchStripeCheckoutSessionQueryVariables
+>[] = [
+  {
+    request: {
+      query: FETCH_STRIPE_CHECKOUT_SESSION,
+      variables: { id: "invalid_id" },
+    },
+    error: new Error("An error occurred"),
+  },
+];
+
 describe("<OrderSuccess />", () => {
   describe("when there is a checkout_id search param", () => {
     it("renders the order items and amount total", async () => {
@@ -69,6 +100,58 @@ describe("<OrderSuccess />", () => {
       expect(screen.getByText("$6,247.00")).toBeInTheDocument();
       expect(
         screen.getByText("Mixed Berry Smoothie (Water base) x1")
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("when there is no checkout_id param present", () => {
+    it("redirects to the home page", async () => {
+      render(
+        <MockedProvider mocks={checkoutIdParamMissingMocks}>
+          <MemoryRouter
+            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+            initialEntries={["/success"]}
+          >
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/success" element={<OrderSuccess />} />
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>
+      );
+
+      expect(
+        await screen.findByText(
+          "Order lactose-free food that is tasty and affordable."
+        )
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("when the checkout_id param is an invalid Stripe Checkout id", () => {
+    it("renders error information on the page", async () => {
+      render(
+        <MockedProvider mocks={checkoutIdParamInvalidMocks}>
+          <MemoryRouter
+            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+            initialEntries={[
+              {
+                pathname: "/success",
+                search: "?checkout_id=" + "invalid_id",
+              },
+            ]}
+          >
+            <Routes>
+              <Route path="/success" element={<OrderSuccess />} />
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>
+      );
+
+      expect(
+        await screen.findByText(
+          "There was an issue retrieving the Stripe order."
+        )
       ).toBeInTheDocument();
     });
   });

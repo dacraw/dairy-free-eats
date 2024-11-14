@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { gql } from "@apollo/client";
-import { faCircleCheck } from "@fortawesome/free-regular-svg-icons";
+import {
+  faCircleCheck,
+  faCircleXmark,
+} from "@fortawesome/free-regular-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFetchStripeCheckoutSessionQuery } from "graphql/types";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 export const FETCH_STRIPE_CHECKOUT_SESSION = gql`
   query FetchStripeCheckoutSession($id: ID!) {
@@ -28,14 +31,38 @@ const OrderSuccess = () => {
   const [params] = useSearchParams();
   const checkoutId = params.get("checkout_id");
   const navigate = useNavigate();
-
-  if (!checkoutId) {
-    return navigate("/");
-  }
-
-  const { data, loading } = useFetchStripeCheckoutSessionQuery({
-    variables: { id: checkoutId },
+  const location = useLocation();
+  const { data, loading, error } = useFetchStripeCheckoutSessionQuery({
+    variables: { id: checkoutId || "" },
   });
+
+  useEffect(() => {
+    if (!checkoutId) {
+      navigate("/");
+    }
+  }, [checkoutId]);
+
+  if (error) {
+    return (
+      <div className="text-center">
+        <p className="p-6 ">There was an issue retrieving the Stripe order.</p>
+        <p className="p-6 mb-4 ">
+          If you placed an order and were redirected here, please contact{" "}
+          <a
+            href="mailto:dairyfreeeats555@gmail.com"
+            className="underline font-bold"
+          >
+            dairyfreeeats555@gmail.com
+          </a>{" "}
+          so I can investigate the issue!
+        </p>
+        <FontAwesomeIcon
+          className="text-9xl text-red-700"
+          icon={faCircleXmark}
+        />
+      </div>
+    );
+  }
 
   return (
     <div>
