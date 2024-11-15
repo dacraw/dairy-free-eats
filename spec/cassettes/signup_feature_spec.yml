@@ -5,7 +5,7 @@ http_interactions:
     uri: https://api.stripe.com/v1/customers
     body:
       encoding: UTF-8
-      string: email=some%40email.com&address[city]=Some+City&address[country]=Some+Country&address[line1]=Some+address&address[line2]=Some+additional+address&address[postal_code]=12345&address[state]=&name=Some+Name&phone=123-456-7890
+      string: email=some%40email.com
     headers:
       User-Agent:
       - Stripe/v1 RubyBindings/13.1.1
@@ -31,11 +31,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 12 Nov 2024 22:25:26 GMT
+      - Fri, 15 Nov 2024 23:20:15 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '813'
+      - '626'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
@@ -60,13 +60,13 @@ http_interactions:
       Idempotency-Key:
       - "<IDEMPOTENCY_KEY>"
       Original-Request:
-      - req_rvnLhwwOVydgXP
+      - req_5stC6R91615SQ4
       Report-To:
       - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_rvnLhwwOVydgXP
+      - req_5stC6R91615SQ4
       Stripe-Should-Retry:
       - 'false'
       Stripe-Version:
@@ -87,25 +87,18 @@ http_interactions:
       encoding: UTF-8
       string: |-
         {
-          "id": "cus_RCsHtnIrVKu0yH",
+          "id": "cus_RE0pIjUL7TF9I7",
           "object": "customer",
-          "address": {
-            "city": "Some City",
-            "country": "Some Country",
-            "line1": "Some address",
-            "line2": "Some additional address",
-            "postal_code": "12345",
-            "state": ""
-          },
+          "address": null,
           "balance": 0,
-          "created": 1731450325,
+          "created": 1731712814,
           "currency": null,
           "default_source": null,
           "delinquent": false,
           "description": null,
           "discount": null,
           "email": "some@email.com",
-          "invoice_prefix": "00C5BEDE",
+          "invoice_prefix": "465A319A",
           "invoice_settings": {
             "custom_fields": null,
             "default_payment_method": null,
@@ -114,15 +107,15 @@ http_interactions:
           },
           "livemode": false,
           "metadata": {},
-          "name": "Some Name",
+          "name": null,
           "next_invoice_sequence": 1,
-          "phone": "123-456-7890",
+          "phone": null,
           "preferred_locales": [],
           "shipping": null,
           "tax_exempt": "none",
           "test_clock": null
         }
-  recorded_at: Tue, 12 Nov 2024 22:25:25 GMT
+  recorded_at: Fri, 15 Nov 2024 23:20:15 GMT
 - request:
     method: get
     uri: https://api.stripe.com/v1/products?active=true
@@ -150,7 +143,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Tue, 12 Nov 2024 22:25:26 GMT
+      - Fri, 15 Nov 2024 23:20:15 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -181,7 +174,7 @@ http_interactions:
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_Cr8LxFa7AxGoHk
+      - req_YfapBvmqWq3sBv
       Stripe-Version:
       - 2024-10-28.acacia
       Vary:
@@ -250,5 +243,5 @@ http_interactions:
           "has_more": false,
           "url": "/v1/products"
         }
-  recorded_at: Tue, 12 Nov 2024 22:25:26 GMT
+  recorded_at: Fri, 15 Nov 2024 23:20:15 GMT
 recorded_with: VCR 6.3.1

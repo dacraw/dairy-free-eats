@@ -28,17 +28,18 @@ RSpec.describe "User Create Mutation", type: :request do
                     userInput: {
                         email: email,
                         password: password,
-                        passwordConfirmation: password,
-                        address: {
-                            city: "San Francisco",
-                            country: "USA",
-                            line1: "123 Main St.",
-                            line2: "Suite 55",
-                            postalCode: "12555",
-                            state: "CA"
-                        },
-                        name: "Tester Testington",
-                        phone: "123-555-8901"
+                        passwordConfirmation: password
+                      # Commenting this out to make demo'ing easier
+                      # address: {
+                      #     city: "San Francisco",
+                      #     country: "USA",
+                      #     line1: "123 Main St.",
+                      #     line2: "Suite 55",
+                      #     postalCode: "12555",
+                      #     state: "CA"
+                      # },
+                      # name: "Tester Testington",
+                      # phone: "123-555-8901"
                     }
                 }
             }
@@ -69,16 +70,17 @@ RSpec.describe "User Create Mutation", type: :request do
             variables = {
                 input: {
                     userInput: {
-                        address: {
-                            city: "Here",
-                            country: "#1",
-                            line1: "555 Big St.",
-                            postalCode: "555555",
-                            state: "There"
-                        },
+                        # Commenting this out to make demo'ing easier
+                        # address: {
+                        #     city: "Here",
+                        #     country: "#1",
+                        #     line1: "555 Big St.",
+                        #     postalCode: "555555",
+                        #     state: "There"
+                        # },
+                        # name: "Some Body",
+                        # phone: "123-555-1111",
                         email: "not_an_email",
-                        name: "Some Body",
-                        phone: "123-555-1111",
                         password: "short",
                         passwordConfirmation: "does_not_match"
                     }

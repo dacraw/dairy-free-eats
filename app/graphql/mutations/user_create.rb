@@ -21,10 +21,11 @@ module Mutations
 
         stripe_customer = ::Stripe::Customer.create({
           # address will not be stored in app database, it's only being used to setup the Stripe Customer
-          email: user_input.email,
-          address: { **user_input.address },
-          name: user_input.name,
-          phone: user_input.phone
+          email: user_input.email
+          # commenting out these fields to make demo'ing the site easier
+          # address: { **user_input.address },
+          # phone: user_input.phone,
+          # name: user_input.name,
         })
 
         if !user.update(stripe_customer_id: stripe_customer.id)

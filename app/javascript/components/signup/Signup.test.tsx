@@ -13,19 +13,20 @@ import {
 } from "graphql/types";
 
 const validUserInput: UserInput = {
-  address: {
-    city: "Some city",
-    country: "Some country",
-    line1: "123 St.",
-    line2: "Apt 1111",
-    postalCode: "12345",
-    state: "Best state",
-  },
+  /* Commenting out to make demo'ing easier */
+  // address: {
+  //   city: "Some city",
+  //   country: "Some country",
+  //   line1: "123 St.",
+  //   line2: "Apt 1111",
+  //   postalCode: "12345",
+  //   state: "Best state",
+  // },
+  // name: "Great Name",
+  // phone: "123-456-7890",
   email: "test@demo.com",
-  name: "Great Name",
   password: "password",
   passwordConfirmation: "password",
-  phone: "123-456-7890",
 };
 
 const validMocks: MockedResponse<
@@ -82,19 +83,20 @@ const validMocks: MockedResponse<
 ];
 
 const invalidUserInput = {
-  address: {
-    city: "Some city",
-    country: "Some country",
-    line1: "123 St.",
-    line2: "Apt 1111",
-    postalCode: "12345",
-    state: "Best state",
-  },
+  /* Commenting out to make demo'ing easier */
+  // address: {
+  //   city: "Some city",
+  //   country: "Some country",
+  //   line1: "123 St.",
+  //   line2: "Apt 1111",
+  //   postalCode: "12345",
+  //   state: "Best state",
+  // },
+  // name: "Great Name",
+  // phone: "123-456-7890",
   email: "test@demo.com",
-  name: "Great Name",
   password: "password1",
   passwordConfirmation: "password2",
-  phone: "123-456-7890",
 };
 
 const invalidMocks: MockedResponse<
@@ -147,39 +149,41 @@ describe("<Signup />", () => {
       </MockedProvider>
     );
 
-    // Address
-    await userEvent.type(
-      screen.getByLabelText(/City/i),
-      validUserInput.address.city
-    );
+    /* Commenting out to make demo'ing easier */
+    // // Address
+    // await userEvent.type(
+    //   screen.getByLabelText(/City/i),
+    //   validUserInput.address.city
+    // );
 
-    const countryInput = screen.getByLabelText(/Country/i);
-    await userEvent.clear(countryInput);
-    await userEvent.type(countryInput, validUserInput.address.country);
+    // const countryInput = screen.getByLabelText(/Country/i);
+    // await userEvent.clear(countryInput);
+    // await userEvent.type(countryInput, validUserInput.address.country);
 
-    await userEvent.type(
-      screen.getByLabelText(/Address 1/i),
-      validUserInput.address.line1
-    );
-    await userEvent.type(
-      screen.getByLabelText(/Address 2/i),
-      validUserInput.address.line2!
-    );
-    await userEvent.type(
-      screen.getByLabelText(/Postal Code/i),
-      validUserInput.address.postalCode
-    );
-    await userEvent.type(
-      screen.getByLabelText(/State/i),
-      validUserInput.address.state
-    );
+    // await userEvent.type(
+    //   screen.getByLabelText(/Address 1/i),
+    //   validUserInput.address.line1
+    // );
+    // await userEvent.type(
+    //   screen.getByLabelText(/Address 2/i),
+    //   validUserInput.address.line2!
+    // );
+    // await userEvent.type(
+    //   screen.getByLabelText(/Postal Code/i),
+    //   validUserInput.address.postalCode
+    // );
+    // await userEvent.type(
+    //   screen.getByLabelText(/State/i),
+    //   validUserInput.address.state
+    // );
 
-    // Contact/login information
-    await userEvent.type(
-      screen.getByLabelText(/Full Name/i),
-      validUserInput.name
-    );
-    await userEvent.type(screen.getByLabelText(/Phone/i), validUserInput.phone);
+    // // Contact/login information
+    // await userEvent.type(
+    //   screen.getByLabelText(/Full Name/i),
+    //   validUserInput.name
+    // );
+    // await userEvent.type(screen.getByLabelText(/Phone/i), validUserInput.phone);
+
     await userEvent.type(screen.getByLabelText(/email/i), validUserInput.email);
     await userEvent.type(
       screen.getByLabelText("Password"),
@@ -217,42 +221,44 @@ describe("<Signup />", () => {
       </MockedProvider>
     );
 
-    // Address
-    await userEvent.type(
-      screen.getByLabelText(/City/i),
-      invalidUserInput.address.city
-    );
+    /* Commenting out to make demo'ing easier */
+    // // Address
+    // await userEvent.type(
+    //   screen.getByLabelText(/City/i),
+    //   invalidUserInput.address.city
+    // );
 
-    const countryInput = screen.getByLabelText(/Country/i);
-    await userEvent.clear(countryInput);
-    await userEvent.type(countryInput, invalidUserInput.address.country);
+    // const countryInput = screen.getByLabelText(/Country/i);
+    // await userEvent.clear(countryInput);
+    // await userEvent.type(countryInput, invalidUserInput.address.country);
 
-    await userEvent.type(
-      screen.getByLabelText(/Address 1/i),
-      invalidUserInput.address.line1
-    );
-    await userEvent.type(
-      screen.getByLabelText(/Address 2/i),
-      invalidUserInput.address.line2!
-    );
-    await userEvent.type(
-      screen.getByLabelText(/Postal Code/i),
-      invalidUserInput.address.postalCode
-    );
-    await userEvent.type(
-      screen.getByLabelText(/State/i),
-      invalidUserInput.address.state
-    );
+    // await userEvent.type(
+    //   screen.getByLabelText(/Address 1/i),
+    //   invalidUserInput.address.line1
+    // );
+    // await userEvent.type(
+    //   screen.getByLabelText(/Address 2/i),
+    //   invalidUserInput.address.line2!
+    // );
+    // await userEvent.type(
+    //   screen.getByLabelText(/Postal Code/i),
+    //   invalidUserInput.address.postalCode
+    // );
+    // await userEvent.type(
+    //   screen.getByLabelText(/State/i),
+    //   invalidUserInput.address.state
+    // );
 
-    // Contact/login information
-    await userEvent.type(
-      screen.getByLabelText(/Full Name/i),
-      invalidUserInput.name
-    );
-    await userEvent.type(
-      screen.getByLabelText(/Phone/i),
-      invalidUserInput.phone
-    );
+    // // Contact/login information
+    // await userEvent.type(
+    //   screen.getByLabelText(/Full Name/i),
+    //   invalidUserInput.name
+    // );
+    // await userEvent.type(
+    //   screen.getByLabelText(/Phone/i),
+    //   invalidUserInput.phone
+    // );
+
     await userEvent.type(
       screen.getByLabelText(/email/i),
       invalidUserInput.email
