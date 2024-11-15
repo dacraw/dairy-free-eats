@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.feature "Admin Dashboard", type: :feature do
     context "when there is an admin user logged in" do
-        let!(:orders) { create_list :order, 3, :with_line_items }
+        let!(:orders) { create_list :order, 3, :with_line_items, :with_a_user }
         let(:user) { create :user, :valid_user, admin: true }
 
         before(:each) do
@@ -14,7 +14,7 @@ RSpec.feature "Admin Dashboard", type: :feature do
 
             expect(page).to have_content "Admin Dashboard"
 
-            order_row = find("p", text: orders.first.id).find(:xpath, "./..")
+            order_row = find("p", text: orders.first.user.email).find(:xpath, "./..")
             set_active_button = order_row.find_button("Set Active")
 
             set_active_button.click
