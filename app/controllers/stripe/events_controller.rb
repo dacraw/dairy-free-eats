@@ -56,7 +56,8 @@ class Stripe::EventsController < ApplicationController
         order = Order.new(
             user: user,
             stripe_checkout_session_line_items: stripe_checkout_session_line_items,
-            stripe_payment_intent_id: event.data.object.id
+            stripe_payment_intent_id: event.data.object.id,
+            guest_email: user.present? ? nil : stripe_checkout_session.first.customer_details.email
         )
 
         if !order.save
