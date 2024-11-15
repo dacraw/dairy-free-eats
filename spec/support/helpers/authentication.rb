@@ -32,5 +32,19 @@ module Helpers
 
           user
         end
+
+        def feature_login_user(user)
+            visit login_path
+
+            expect(page).to have_content "Email"
+            expect(page).to have_content "Password"
+      
+            fill_in "Email", with: user.email
+            fill_in "Password", with: user.password
+            find("input[type='submit']").click
+      
+            expect(page).to have_content "Order lactose-free food that is tasty and affordable."
+            expect(page).to have_content "Logged in as: #{user.email}"
+        end
     end
 end

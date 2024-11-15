@@ -64,5 +64,5 @@ RSpec.configure do |config|
   # config.filter_gems_from_backtrace("gem name")
 
 
-  config.include Helpers::Authentication, type: :request
+  config.include Helpers::Authentication
 end

@@ -5,17 +5,7 @@ RSpec.feature "Logins", type: :feature do
 
   context "with valid credentials" do
     it "redirects to the root page" do
-      visit login_path
-
-      expect(page).to have_content "Email"
-      expect(page).to have_content "Password"
-
-      fill_in "Email", with: user.email
-      fill_in "Password", with: user.password
-      find("input[type='submit']").click
-
-      expect(page).to have_content "Order lactose-free food that is tasty and affordable."
-      expect(page).to have_content "Logged in as: #{user.email}"
+      feature_login_user user
     end
   end
 
