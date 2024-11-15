@@ -29,12 +29,9 @@ const Signup = () => {
     <div className="p-4 grid place-content-center">
       {loading && <p>Loading</p>}
 
-      <div className="md:w-[500px] md:mx-auto md:grid md:place-content-center">
-        <h1 className="text-2xl mb-2">Sign up for an account</h1>
-        <p className="mb-4">
-          Sign up with an email you can receives messages to; alternatively,
-          Order as a Guest with an email you can receive messages to.
-        </p>
+      <div className="md:max-w-[500px] md:mx-auto md:grid md:place-content-center">
+        <h1 className="text-2xl mb-6 text-center">Sign up for an account</h1>
+
         <form
           onSubmit={handleSubmit(async (formData) => {
             const mutationData = await createUser({
@@ -212,6 +209,14 @@ const Signup = () => {
               (including contacting you during the lifetime of an order, as
               necessary).
             </p> */}
+            <p className="mb-4">
+              Sign up with an email you can receives messages to; alternatively,
+              Order as a Guest with an email you can receive messages to.
+            </p>
+            <p className="mb-4">
+              Emails will be sent to the email address used in Stripe Checkout
+              (the email will be prefilled if you Signup for an account here).
+            </p>
           </div>
           <input
             className="text-center w-full green-button col-span-2"
