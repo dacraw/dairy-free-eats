@@ -15,6 +15,8 @@ module Types
     field :stripe_checkout_session_line_items, [ Types::OrderLineItemType ], null: false
     field :guest_email, String, null: true
     def guest_email
+      return nil if object.guest_email.nil?
+
       if context[:current_user].present? && context[:current_user].demo_admin?
         "redacted email (as demo admin)"
       else
