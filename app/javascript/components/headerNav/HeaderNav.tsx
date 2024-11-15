@@ -35,6 +35,14 @@ const DesktopNav: React.FC<NavProps> = ({
         >
           ORDER
         </Link>
+        {currentUser?.admin && (
+          <Link
+            className="hover:bg-blue-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
+            to="/admin/dashboard"
+          >
+            ADMIN DASHBOARD
+          </Link>
+        )}
       </div>
       <div className="gap-4 flex items-center">
         {!currentUser ? (
@@ -141,6 +149,11 @@ const ResponsiveNav: React.FC<NavProps> = ({
               <Link className="block py-1" to="/order">
                 Order
               </Link>
+              {currentUser?.admin && (
+                <Link className="block py-1" to="/order">
+                  Admin Dashboard
+                </Link>
+              )}
               {currentUser ? (
                 <>
                   <button className="mb-4" onClick={() => logout()}>
@@ -182,6 +195,7 @@ export const CURRENT_USER = gql`
     currentUser {
       id
       email
+      admin
     }
   }
 `;

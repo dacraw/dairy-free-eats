@@ -302,6 +302,7 @@ export type TotalDetails = {
 
 export type User = {
   __typename?: 'User';
+  admin: Scalars['Boolean']['output'];
   createdAt: Scalars['ISO8601DateTime']['output'];
   email: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -364,7 +365,7 @@ export type FetchOrdersQuery = { __typename?: 'Query', orders?: Array<{ __typena
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, email: string } | null };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, email: string, admin: boolean } | null };
 
 export type SessionDeleteMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -566,6 +567,7 @@ export const CurrentUserDocument = gql`
   currentUser {
     id
     email
+    admin
   }
 }
     `;

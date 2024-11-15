@@ -6,4 +6,5 @@ class Types::UserType < Types::BaseObject
     field :stripe_customer_id, String
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :admin, Boolean, null: false
 end

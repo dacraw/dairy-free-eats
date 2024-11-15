@@ -307,6 +307,7 @@ type TotalDetails {
 }
 
 type User {
+  admin: Boolean!
   createdAt: ISO8601DateTime!
   email: String!
   id: ID!
