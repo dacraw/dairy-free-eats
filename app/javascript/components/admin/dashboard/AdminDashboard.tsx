@@ -90,7 +90,8 @@ const DesktopOrderTable: React.FC<{
 
 const ResponsiveOrderTable: React.FC<{
   orders: FetchOrdersQuery["orders"];
-}> = ({ orders }) => {
+  setOrderActive: SetOrderActiveMutationFn;
+}> = ({ orders, setOrderActive }) => {
   if (!orders) return null;
 
   return (
@@ -100,19 +101,19 @@ const ResponsiveOrderTable: React.FC<{
         {orders.map((order) => (
           <div key={order.id} className="bg-blue-700 rounded mb-2 p-2">
             <div className="mb-2">
-              <p className="font-bold">Id </p>
+              <p className="font-bold">Id</p>
               <p>{order.id}</p>
             </div>
             <div className="mb-2">
-              <p className="font-bold">Status </p>
+              <p className="font-bold">Status</p>
               <p>{order.status}</p>
             </div>
             <div className="mb-2">
-              <p className="font-bold">Email </p>
+              <p className="font-bold">Email</p>
               <p>{order.user?.email}</p>
             </div>
             <div className="mb-2">
-              <p className="font-bold">Items </p>
+              <p className="font-bold">Items</p>
               <div>
                 {order.stripeCheckoutSessionLineItems.map((item, i) => (
                   <p key={i}>
@@ -120,6 +121,18 @@ const ResponsiveOrderTable: React.FC<{
                   </p>
                 ))}
               </div>
+            </div>
+            <div>
+              {order.status === "received" && (
+                <button
+                  className="green-button"
+                  onClick={() =>
+                    setOrderActive({ variables: { input: { id: order.id } } })
+                  }
+                >
+                  Set Active
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -164,7 +177,10 @@ const AdminDashboard = () => {
                 orders={ordersData.orders}
                 setOrderActive={setOrderActive}
               />
-              <ResponsiveOrderTable orders={ordersData.orders} />
+              <ResponsiveOrderTable
+                orders={ordersData.orders}
+                setOrderActive={setOrderActive}
+              />
             </>
           )}
         </div>
