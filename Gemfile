@@ -40,11 +40,10 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
+gem "solid_queue", "~> 1.0"
+
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
-
-# Create Stripe events based on the Stripe API to be used for testing Stripe webhook
-# gem "stripe_event"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -71,6 +70,8 @@ group :development do
 
   # Highlight the fine-grained location where an error occurred [https://github.com/ruby/error_highlight]
   gem "error_highlight", ">= 0.6.0", platforms: [ :ruby ]
+
+  gem "dockerfile-rails", ">= 1.6"
 end
 
 group :test do
@@ -86,5 +87,3 @@ group :test do
   # Hooked into by VCR
   gem "webmock"
 end
-
-gem "dockerfile-rails", ">= 1.6", group: :development
