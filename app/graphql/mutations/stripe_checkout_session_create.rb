@@ -50,7 +50,7 @@ module Mutations
         })
 
       rescue Stripe::InvalidRequestError => e
-          puts "Stripe::InvalidRequestError: #{e.message}"
+        puts "Stripe::InvalidRequestError: #{e.message}" unless Rails.env.test?
 
           return {
             stripe_checkout_session: nil,
