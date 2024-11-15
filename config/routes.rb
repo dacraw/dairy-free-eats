@@ -31,4 +31,8 @@ Rails.application.routes.draw do
   namespace :stripe do
     resources :events, only: [ :create ]
   end
+
+  namespace :admin do
+    resources :dashboard, only: [ :index ]
+  end
 end

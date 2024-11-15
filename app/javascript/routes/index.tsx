@@ -1,5 +1,6 @@
 import Home from "components/Home";
 import Order from "components/Order/Order";
+import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 import Login from "components/login/Login";
 import OrderSuccess from "components/orderSuccess/OrderSuccess";
 import Signup from "components/signup/Signup";
@@ -22,6 +23,7 @@ const AppRoute = ({ children }: { children?: React.ReactElement }) => {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/success" element={<OrderSuccess />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
     </Router>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render, waitFor, queryByRole } from "@testing-library/react";
 import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import HeaderNav, {
@@ -30,6 +30,7 @@ describe("<HeaderNav />", () => {
               currentUser: {
                 id: "1",
                 email: "test@demo.com",
+                admin: false,
               },
             },
           },
@@ -70,6 +71,26 @@ describe("<HeaderNav />", () => {
       const target = await screen.findAllByText("test@demo.com");
 
       expect(target[0]).toBeInTheDocument();
+    });
+
+    it("does not display the admin dashboard link for non admin", async () => {
+      render(
+        <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
+          <BrowserRouter
+            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+          >
+            <HeaderNav />
+          </BrowserRouter>
+        </MockedProvider>
+      );
+
+      const target = await screen.findAllByText("test@demo.com");
+
+      expect(target[0]).toBeInTheDocument();
+
+      expect(
+        screen.queryAllByRole("link", { name: /ADMIN DASHBOARD/i }).length
+      ).toEqual(0);
     });
 
     it("says 'Logging Out' while logging out", async () => {
@@ -128,6 +149,43 @@ describe("<HeaderNav />", () => {
 
         expect(screen.getByLabelText("Email")).toBeInTheDocument();
         expect(screen.getByLabelText("Password")).toBeInTheDocument();
+      });
+    });
+
+    describe("when the current user is an admin", () => {
+      it("displays the admin dashboard link", async () => {
+        currentUserPresentMocks = [
+          {
+            request: { query: CURRENT_USER },
+            result: {
+              data: {
+                currentUser: {
+                  id: "1",
+                  email: "admin@demo.com",
+                  admin: true,
+                },
+              },
+            },
+          },
+        ];
+
+        render(
+          <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
+            <BrowserRouter
+              future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+            >
+              <HeaderNav />
+            </BrowserRouter>
+          </MockedProvider>
+        );
+
+        expect(
+          (await screen.findAllByText("admin@demo.com")).length
+        ).toBeTruthy();
+
+        expect(
+          screen.getAllByRole("link", { name: /ADMIN DASHBOARD/i }).length
+        ).toBeTruthy();
       });
     });
   });
