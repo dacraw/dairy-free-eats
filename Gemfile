@@ -87,6 +87,3 @@ group :test do
   # Hooked into by VCR
   gem "webmock"
 end
-
-
-
