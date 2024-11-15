@@ -3,10 +3,12 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   FetchOrdersQuery,
+  useCurrentUserQuery,
   useFetchOrdersQuery,
   useSetOrderActiveMutation,
 } from "graphql/types";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SET_ORDER_ACTIVE = gql`
   mutation SetOrderActive($input: SetOrderActiveInput!) {
@@ -118,6 +120,14 @@ const AdminDashboard = () => {
   //     },
   //   ] = useSetOrderActiveMutation();
   const { loading: ordersLoading, data: ordersData } = useFetchOrdersQuery();
+  const { loading: currentUserLoading, data: currentUserData } =
+    useCurrentUserQuery();
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!currentUserData?.currentUser?.admin) {
+      navigate("/");
+    }
+  }, [currentUserData]);
   return (
     <div className=" grid place-content-center  ">
       {ordersLoading ? (
