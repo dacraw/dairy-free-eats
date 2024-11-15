@@ -83,12 +83,13 @@ production:
   primary: &primary_production
     adapter: postgresql
     encoding: unicode
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
     url: <%= Rails.application.credentials.dig(:db, :connection_string) %>
   queue:
     <<: *primary_production
+    database: dairy_free_food_queue
     migration_paths: db/queue_migrate
-    url: <%= Rails.application.credentials.dig(:solid_queue_db, :connection_string) %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+    # url: <%= Rails.application.credentials.dig(:solid_queue_db, :connection_string) %>
 #   <<: *default
 # database: dairy_free_food_production
 # username: dairy_free_food
