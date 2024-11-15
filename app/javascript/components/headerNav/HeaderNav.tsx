@@ -5,7 +5,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import {
   CurrentUserQuery,
+  DemoAdminSessionCreateMutationFn,
   useCurrentUserLazyQuery,
+  useDemoAdminSessionCreateMutation,
   useSessionDeleteMutation,
 } from "graphql/types";
 
@@ -13,10 +15,12 @@ type NavProps = {
   currentUser: CurrentUserQuery["currentUser"];
   logout: () => Promise<void>;
   loggingOut: boolean;
+  demoAdminLogin: () => Promise<void>;
 };
 
 const DesktopNav: React.FC<NavProps> = ({
   currentUser,
+  demoAdminLogin,
   logout,
   loggingOut,
 }) => {
@@ -47,6 +51,12 @@ const DesktopNav: React.FC<NavProps> = ({
       <div className="gap-4 flex items-center">
         {!currentUser ? (
           <>
+            <button
+              onClick={async () => demoAdminLogin()}
+              className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
+            >
+              Admin Demo
+            </button>
             <Link
               className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
               to="/login"
@@ -87,6 +97,7 @@ const DesktopNav: React.FC<NavProps> = ({
 
 const ResponsiveNav: React.FC<NavProps> = ({
   currentUser,
+  demoAdminLogin,
   logout,
   loggingOut,
 }) => {
@@ -174,6 +185,12 @@ const ResponsiveNav: React.FC<NavProps> = ({
                 </>
               ) : (
                 <>
+                  <button
+                    onClick={async () => demoAdminLogin()}
+                    className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
+                  >
+                    Admin Demo
+                  </button>
                   <Link className="block py-1" to="/login">
                     Login
                   </Link>
@@ -189,6 +206,17 @@ const ResponsiveNav: React.FC<NavProps> = ({
     </nav>
   );
 };
+
+export const DEMO_ADMIN_SESSION_CREATE = gql`
+  mutation DemoAdminSessionCreate($input: DemoAdminSessionCreateInput!) {
+    demoAdminSessionCreate(input: $input) {
+      user {
+        id
+        email
+      }
+    }
+  }
+`;
 
 export const CURRENT_USER = gql`
   query CurrentUser {
@@ -222,10 +250,19 @@ const HeaderNav = () => {
   });
   const [logout, { loading: logoutLoading, data: logoutData }] =
     useSessionDeleteMutation();
+  const [
+    loginDemoAdmin,
+    { loading: loginDemoAdminLoading, data: loginDemoAdminData },
+  ] = useDemoAdminSessionCreateMutation();
 
   const handleLogout = async () => {
     await logout();
     navigate("/login");
+  };
+
+  const demoAdminLogin = async () => {
+    await loginDemoAdmin({ variables: { input: {} } });
+    navigate("/admin/dashboard");
   };
 
   useEffect(() => {
@@ -238,10 +275,12 @@ const HeaderNav = () => {
       <DesktopNav
         currentUser={data?.currentUser}
         logout={handleLogout}
+        demoAdminLogin={demoAdminLogin}
         loggingOut={logoutLoading}
       />
       <ResponsiveNav
         currentUser={data?.currentUser}
+        demoAdminLogin={demoAdminLogin}
         logout={handleLogout}
         loggingOut={logoutLoading}
       />

@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+    DEMO_ADMIN_EMAIL = "demoadmin@dairytest.com"
+
     has_secure_password
     has_secure_password :recovery_password, validations: false
 
@@ -28,6 +30,10 @@ class User < ApplicationRecord
     def reset_session_token!
         self.update_column(:session_token, User.generate_token)
         self.session_token
+    end
+
+    def demo_admin?
+        self.email === DEMO_ADMIN_EMAIL
     end
 
     private

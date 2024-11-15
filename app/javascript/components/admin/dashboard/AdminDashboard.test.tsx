@@ -20,6 +20,7 @@ const validMocks: MockedResponse<
   SetOrderActiveMutationVariables
 >[] = [
   {
+    maxUsageCount: 2,
     request: {
       query: FETCH_ORDERS,
     },
@@ -101,6 +102,7 @@ const validMocks: MockedResponse<
               id: "1",
               email: "testuser@test.com",
             },
+            guestEmail: null,
           },
         ],
       },
@@ -112,6 +114,7 @@ const currentUserNotAdmin: MockedResponse<
   FetchOrdersQuery | CurrentUserQuery
 >[] = [
   {
+    maxUsageCount: Infinity,
     request: {
       query: FETCH_ORDERS,
     },
@@ -169,7 +172,7 @@ describe("<AdminDashboard />", () => {
   describe("when the user is an admin", () => {
     it("renders without errors", async () => {
       render(
-        <MockedProvider mocks={validMocks}>
+        <MockedProvider mocks={validMocks} addTypename={false}>
           <MemoryRouter
             initialEntries={["/admin/dashboard"]}
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
@@ -181,15 +184,19 @@ describe("<AdminDashboard />", () => {
         </MockedProvider>
       );
       expect(await screen.findByText("Admin Dashboard")).toBeInTheDocument();
-      expect(screen.getAllByText("guestEmail@test.com").length).toBeTruthy();
-      expect(screen.getAllByText("testuser@test.com").length).toBeTruthy();
+      expect(
+        (await screen.findAllByText("testuser@test.com")).length
+      ).toBeTruthy();
+      expect(
+        (await screen.findAllByText("guestEmail@test.com")).length
+      ).toBeTruthy();
     });
   });
 
   describe("when the user is not an admin", () => {
     it("redirects to the home page", async () => {
       render(
-        <MockedProvider mocks={currentUserNotAdmin}>
+        <MockedProvider mocks={currentUserNotAdmin} addTypename={false}>
           <MemoryRouter
             initialEntries={["/admin/dashboard"]}
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}

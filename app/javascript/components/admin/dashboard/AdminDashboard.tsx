@@ -151,7 +151,12 @@ const AdminDashboard = () => {
       error: setOrderActiveError,
     },
   ] = useSetOrderActiveMutation();
-  const { loading: ordersLoading, data: ordersData } = useFetchOrdersQuery();
+  const {
+    loading: ordersLoading,
+    data: ordersData,
+    refetch: refetchOrders,
+  } = useFetchOrdersQuery();
+
   const { loading: currentUserLoading, data: currentUserData } =
     useCurrentUserQuery();
   const navigate = useNavigate();
@@ -160,6 +165,12 @@ const AdminDashboard = () => {
     if (currentUserData?.currentUser && !currentUserData.currentUser.admin) {
       navigate("/");
     }
+  }, [currentUserData]);
+
+  useEffect(() => {
+    // for the demo admin, refetch orders when the current user changes
+    // this avoids using stale cache data
+    refetchOrders();
   }, [currentUserData]);
 
   return (
