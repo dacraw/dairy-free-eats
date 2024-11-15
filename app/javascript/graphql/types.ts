@@ -152,6 +152,7 @@ export type MutationUserCreateArgs = {
 export type Order = {
   __typename?: 'Order';
   createdAt: Scalars['ISO8601DateTime']['output'];
+  guestEmail?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   status: Scalars['String']['output'];
   stripeCheckoutSessionLineItems: Array<OrderLineItem>;
@@ -360,7 +361,7 @@ export type SetOrderActiveMutation = { __typename?: 'Mutation', setOrderActive?:
 export type FetchOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchOrdersQuery = { __typename?: 'Query', orders?: Array<{ __typename?: 'Order', id: string, status: string, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
+export type FetchOrdersQuery = { __typename?: 'Query', orders?: Array<{ __typename?: 'Order', id: string, status: string, guestEmail?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -527,6 +528,7 @@ export const FetchOrdersDocument = gql`
       id
       email
     }
+    guestEmail
   }
 }
     `;

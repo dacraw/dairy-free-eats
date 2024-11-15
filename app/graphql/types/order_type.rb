@@ -13,5 +13,6 @@ module Types
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :stripe_checkout_session_line_items, [ Types::OrderLineItemType ], null: false
+    field :guest_email, String, null: true
   end
 end

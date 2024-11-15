@@ -35,6 +35,7 @@ export const FETCH_ORDERS = gql`
         id
         email
       }
+      guestEmail
     }
   }
 `;
@@ -62,7 +63,7 @@ const DesktopOrderTable: React.FC<{
         >
           <p>{order.id}</p>
           <p>{order.status}</p>
-          <p>{order.user?.email}</p>
+          <p>{order.user?.email || order.guestEmail}</p>
           <div>
             {order.stripeCheckoutSessionLineItems.map((item, i) => (
               <p key={i}>
@@ -110,7 +111,7 @@ const ResponsiveOrderTable: React.FC<{
             </div>
             <div className="mb-2">
               <p className="font-bold">Email</p>
-              <p>{order.user?.email}</p>
+              <p>{order.user?.email || order.guestEmail}</p>
             </div>
             <div className="mb-2">
               <p className="font-bold">Items</p>
