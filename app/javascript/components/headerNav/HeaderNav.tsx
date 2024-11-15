@@ -150,7 +150,7 @@ const ResponsiveNav: React.FC<NavProps> = ({
                 Order
               </Link>
               {currentUser?.admin && (
-                <Link className="block py-1" to="/order">
+                <Link className="block py-1" to="/admin/dashboard">
                   Admin Dashboard
                 </Link>
               )}
