@@ -11,7 +11,7 @@ import {
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const SET_ORDER_ACTIVE = gql`
+export const SET_ORDER_ACTIVE = gql`
   mutation SetOrderActive($input: SetOrderActiveInput!) {
     setOrderActive(input: $input) {
       order {
@@ -22,7 +22,7 @@ const SET_ORDER_ACTIVE = gql`
   }
 `;
 
-const FETCH_ORDERS = gql`
+export const FETCH_ORDERS = gql`
   query FetchOrders {
     orders {
       id
@@ -154,11 +154,13 @@ const AdminDashboard = () => {
   const { loading: currentUserLoading, data: currentUserData } =
     useCurrentUserQuery();
   const navigate = useNavigate();
+
   useEffect(() => {
     if (currentUserData?.currentUser && !currentUserData.currentUser.admin) {
       navigate("/");
     }
   }, [currentUserData]);
+
   return (
     <div className=" grid place-content-center  ">
       {ordersLoading || currentUserLoading || setOrderActiveLoading ? (
