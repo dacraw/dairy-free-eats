@@ -79,7 +79,13 @@ test:
 # Read https://guides.rubyonrails.org/configuring.html#configuring-a-database
 # for a full overview on how database connection configuration can be specified.
 #
-# production:
+production:
+  queue:
+    adapter: postgresql
+    encoding: unicode
+    migration_paths: db/queue_migrate
+    url: <%= Rails.application.credentials.dig(:solid_queue_db, :connection_string) %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 #   <<: *default
 # database: dairy_free_food_production
 # username: dairy_free_food
