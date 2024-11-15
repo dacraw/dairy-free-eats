@@ -3,6 +3,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   FetchOrdersQuery,
+  SetOrderActiveMutationFn,
   useCurrentUserQuery,
   useFetchOrdersQuery,
   useSetOrderActiveMutation,
@@ -38,22 +39,27 @@ const FETCH_ORDERS = gql`
   }
 `;
 
-const DesktopOrderTable: React.FC<{ orders: FetchOrdersQuery["orders"] }> = ({
-  orders,
-}) => {
+const DesktopOrderTable: React.FC<{
+  orders: FetchOrdersQuery["orders"];
+  setOrderActive: SetOrderActiveMutationFn;
+}> = ({ orders, setOrderActive }) => {
   if (!orders) return null;
 
   return (
     <div className="hidden md:block">
       <h5 className="text-lg mb-6 border-b-2 font-bold">ORDERS</h5>
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4">
         <p className="font-bold">Id</p>
         <p className="font-bold">Status</p>
         <p className="font-bold">Email</p>
         <p className="font-bold">Items</p>
+        <p></p>
       </div>
       {orders.map((order) => (
-        <div key={order.id} className="grid grid-cols-4 gap-4">
+        <div
+          key={order.id}
+          className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4"
+        >
           <p>{order.id}</p>
           <p>{order.status}</p>
           <p>{order.user?.email}</p>
@@ -63,6 +69,18 @@ const DesktopOrderTable: React.FC<{ orders: FetchOrdersQuery["orders"] }> = ({
                 {item.name} x{item.quantity}
               </p>
             ))}
+          </div>
+          <div className="justify-self-center">
+            {order.status === "received" && (
+              <button
+                className="green-button"
+                onClick={() =>
+                  setOrderActive({ variables: { input: { id: order.id } } })
+                }
+              >
+                Set Active
+              </button>
+            )}
           </div>
         </div>
       ))}
@@ -111,29 +129,29 @@ const ResponsiveOrderTable: React.FC<{
 };
 
 const AdminDashboard = () => {
-  //   const [
-  //     setOrderActive,
-  //     {
-  //       loading: setOrderActiveLoading,
-  //       data: setOrderActiveData,
-  //       error: setOrderActiveError,
-  //     },
-  //   ] = useSetOrderActiveMutation();
+  const [
+    setOrderActive,
+    {
+      loading: setOrderActiveLoading,
+      data: setOrderActiveData,
+      error: setOrderActiveError,
+    },
+  ] = useSetOrderActiveMutation();
   const { loading: ordersLoading, data: ordersData } = useFetchOrdersQuery();
   const { loading: currentUserLoading, data: currentUserData } =
     useCurrentUserQuery();
   const navigate = useNavigate();
   useEffect(() => {
-    if (!currentUserData?.currentUser?.admin) {
+    if (currentUserData?.currentUser && !currentUserData.currentUser.admin) {
       navigate("/");
     }
   }, [currentUserData]);
   return (
     <div className=" grid place-content-center  ">
-      {ordersLoading ? (
+      {ordersLoading || currentUserLoading || setOrderActiveLoading ? (
         <div className="">
           <FontAwesomeIcon className="text-6xl mb-6" spin icon={faSpinner} />
-          <p>Loading orders...</p>
+          <p>Loading...</p>
         </div>
       ) : (
         <div className=" rounded p-2 md:p-6 ">
@@ -142,7 +160,10 @@ const AdminDashboard = () => {
           </h3>
           {ordersData?.orders?.length && (
             <>
-              <DesktopOrderTable orders={ordersData.orders} />
+              <DesktopOrderTable
+                orders={ordersData.orders}
+                setOrderActive={setOrderActive}
+              />
               <ResponsiveOrderTable orders={ordersData.orders} />
             </>
           )}
