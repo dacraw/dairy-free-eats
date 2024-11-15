@@ -185,6 +185,12 @@ const ResponsiveNav: React.FC<NavProps> = ({
                 </>
               ) : (
                 <>
+                  <button
+                    onClick={async () => demoAdminLogin()}
+                    className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
+                  >
+                    Admin Demo
+                  </button>
                   <Link className="block py-1" to="/login">
                     Login
                   </Link>

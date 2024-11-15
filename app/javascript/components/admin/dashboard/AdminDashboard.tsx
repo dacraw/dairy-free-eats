@@ -156,7 +156,7 @@ const AdminDashboard = () => {
     data: ordersData,
     refetch: refetchOrders,
   } = useFetchOrdersQuery();
-  console.log("ordersLoading", ordersLoading);
+
   const { loading: currentUserLoading, data: currentUserData } =
     useCurrentUserQuery();
   const navigate = useNavigate();
