@@ -80,9 +80,12 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  queue:
+  primary: &primary_production
     adapter: postgresql
     encoding: unicode
+    url: <%= Rails.application.credentials.dig(:db, :connection_string) %>
+  queue:
+    <<: *primary_production
     migration_paths: db/queue_migrate
     url: <%= Rails.application.credentials.dig(:solid_queue_db, :connection_string) %>
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
