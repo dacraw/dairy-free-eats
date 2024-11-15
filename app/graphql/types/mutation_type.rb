@@ -6,6 +6,7 @@ module Types
     field :stripe_checkout_session_create, mutation: Mutations::StripeCheckoutSessionCreate
     field :session_delete, mutation: Mutations::SessionDelete
     field :session_create, mutation: Mutations::SessionCreate
+    field :demo_admin_session_create, mutation: Mutations::DemoAdminSessionCreate
     field :user_create, mutation: Mutations::UserCreate
   end
 end
