@@ -13,7 +13,7 @@ import {
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const SET_ORDER_ACTIVE = gql`
+export const SET_ORDER_STATUS = gql`
   mutation SetOrderStatus($input: SetOrderStatusInput!) {
     setOrderStatus(input: $input) {
       order {

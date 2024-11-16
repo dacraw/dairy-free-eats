@@ -2,22 +2,23 @@ import React from "react";
 import { screen, render } from "@testing-library/react";
 import AdminDashboard, {
   FETCH_ORDERS,
-  SET_ORDER_ACTIVE,
+  SET_ORDER_STATUS,
 } from "components/admin/dashboard/AdminDashboard";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import {
   CurrentUserQuery,
   FetchOrdersQuery,
-  SetOrderActiveMutation,
-  SetOrderActiveMutationVariables,
+  OrderStatus,
+  SetOrderStatusMutation,
+  SetOrderStatusMutationVariables,
 } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import Home from "components/Home";
 
 const validMocks: MockedResponse<
-  FetchOrdersQuery | CurrentUserQuery | SetOrderActiveMutation,
-  SetOrderActiveMutationVariables
+  FetchOrdersQuery | CurrentUserQuery | SetOrderStatusMutation,
+  SetOrderStatusMutationVariables
 >[] = [
   {
     maxUsageCount: 2,
@@ -29,7 +30,7 @@ const validMocks: MockedResponse<
         orders: [
           {
             id: "1",
-            status: "received",
+            status: OrderStatus.Received,
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
@@ -44,7 +45,7 @@ const validMocks: MockedResponse<
           },
           {
             id: "2",
-            status: "received",
+            status: OrderStatus.Received,
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
@@ -73,11 +74,18 @@ const validMocks: MockedResponse<
     },
   },
   {
-    request: { query: SET_ORDER_ACTIVE, variables: { input: { id: "1" } } },
+    request: {
+      query: SET_ORDER_STATUS,
+      variables: {
+        input: {
+          setOrderStatusInputType: { id: "1", status: OrderStatus.Active },
+        },
+      },
+    },
     result: {
       data: {
-        setOrderActive: {
-          order: { id: "1", status: "active" },
+        setOrderStatus: {
+          order: { id: "1", status: OrderStatus.Active },
         },
       },
     },
@@ -91,7 +99,7 @@ const validMocks: MockedResponse<
         orders: [
           {
             id: "1",
-            status: "active",
+            status: OrderStatus.Active,
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
@@ -123,7 +131,7 @@ const currentUserNotAdmin: MockedResponse<
         orders: [
           {
             id: "1",
-            status: "received",
+            status: OrderStatus.Received,
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
@@ -138,7 +146,7 @@ const currentUserNotAdmin: MockedResponse<
           },
           {
             id: "2",
-            status: "received",
+            status: OrderStatus.Received,
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
