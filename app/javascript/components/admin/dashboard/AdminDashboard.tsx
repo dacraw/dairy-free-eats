@@ -3,17 +3,19 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   FetchOrdersQuery,
-  SetOrderActiveMutationFn,
+  OrderStatus,
+  SetOrderStatusInput,
+  SetOrderStatusMutationVariables,
   useCurrentUserQuery,
   useFetchOrdersQuery,
-  useSetOrderActiveMutation,
+  useSetOrderStatusMutation,
 } from "graphql/types";
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const SET_ORDER_ACTIVE = gql`
-  mutation SetOrderActive($input: SetOrderActiveInput!) {
-    setOrderActive(input: $input) {
+export const SET_ORDER_STATUS = gql`
+  mutation SetOrderStatus($input: SetOrderStatusInput!) {
+    setOrderStatus(input: $input) {
       order {
         id
         status
@@ -40,10 +42,17 @@ export const FETCH_ORDERS = gql`
   }
 `;
 
-const DesktopOrderTable: React.FC<{
+type OrderTableArgs = {
   orders: FetchOrdersQuery["orders"];
-  setOrderActive: SetOrderActiveMutationFn;
-}> = ({ orders, setOrderActive }) => {
+  setOrderActive: (
+    id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
+  ) => void;
+};
+
+const DesktopOrderTable: React.FC<OrderTableArgs> = ({
+  orders,
+  setOrderActive,
+}) => {
   if (!orders) return null;
 
   return (
@@ -75,9 +84,7 @@ const DesktopOrderTable: React.FC<{
             {order.status === "received" && (
               <button
                 className="green-button"
-                onClick={() =>
-                  setOrderActive({ variables: { input: { id: order.id } } })
-                }
+                onClick={() => setOrderActive(order.id)}
               >
                 Set Active
               </button>
@@ -89,10 +96,10 @@ const DesktopOrderTable: React.FC<{
   );
 };
 
-const ResponsiveOrderTable: React.FC<{
-  orders: FetchOrdersQuery["orders"];
-  setOrderActive: SetOrderActiveMutationFn;
-}> = ({ orders, setOrderActive }) => {
+const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
+  orders,
+  setOrderActive,
+}) => {
   if (!orders) return null;
 
   return (
@@ -127,9 +134,7 @@ const ResponsiveOrderTable: React.FC<{
               {order.status === "received" && (
                 <button
                   className="green-button"
-                  onClick={() =>
-                    setOrderActive({ variables: { input: { id: order.id } } })
-                  }
+                  onClick={() => setOrderActive(order.id)}
                 >
                   Set Active
                 </button>
@@ -142,20 +147,42 @@ const ResponsiveOrderTable: React.FC<{
   );
 };
 
+const setOrderActiveVariables = (
+  id: SetOrderStatusMutationVariables["input"]["setOrderStatusInputType"]["id"],
+  status: SetOrderStatusMutationVariables["input"]["setOrderStatusInputType"]["status"]
+): SetOrderStatusMutationVariables => {
+  return {
+    input: {
+      setOrderStatusInputType: {
+        id,
+        status,
+      },
+    },
+  };
+};
+
 const AdminDashboard = () => {
   const [
-    setOrderActive,
+    setOrderStatus,
     {
       loading: setOrderActiveLoading,
       data: setOrderActiveData,
       error: setOrderActiveError,
     },
-  ] = useSetOrderActiveMutation();
+  ] = useSetOrderStatusMutation();
   const {
     loading: ordersLoading,
     data: ordersData,
     refetch: refetchOrders,
   } = useFetchOrdersQuery();
+
+  const setOrderActive = (
+    id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
+  ) => {
+    setOrderStatus({
+      variables: setOrderActiveVariables(id, OrderStatus.Active),
+    });
+  };
 
   const { loading: currentUserLoading, data: currentUserData } =
     useCurrentUserQuery();
