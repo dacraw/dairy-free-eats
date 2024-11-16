@@ -2,9 +2,10 @@ class User < ApplicationRecord
     DEMO_ADMIN_EMAIL = "demoadmin@dairytest.com"
 
     has_secure_password
-    has_secure_password :recovery_password, validations: false
 
-    validates :email, presence: true
+    normalizes :email_address, with: ->(e) { e.strip.downcase }
+
+    validates :email_address, presence: true
     validates_length_of :password, minimum: 8
     validates :session_token, { uniqueness: true, presence: true }
     validates :recovery_password_digest, { uniqueness: true, presence: true }
@@ -14,6 +15,7 @@ class User < ApplicationRecord
     after_initialize :ensure_recovery_password_digest, :ensure_session_token
 
     has_many :orders
+    has_many :sessions, dependent: :destroy
 
     def self.generate_token
         SecureRandom.urlsafe_base64 36
