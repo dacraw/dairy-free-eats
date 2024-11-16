@@ -11,7 +11,7 @@ module Mutations
 
     def resolve(user_input:)
       user = ::User.new(
-        email: user_input.email,
+        email_address: user_input.email,
         password: user_input.password,
         password_confirmation: user_input.password_confirmation
       )

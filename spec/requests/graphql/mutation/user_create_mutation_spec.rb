@@ -58,9 +58,9 @@ RSpec.describe "User Create Mutation", type: :request do
 
             user = User.last
             expect(user.session_token).to eq session[:session_token]
-            expect(user.email).to eq email
+            expect(user.email_address).to eq email
 
-            expect(stripe_customer[:email]).to eq user.email
+            expect(stripe_customer[:email]).to eq user.email_address
             expect(user.stripe_customer_id).to eq stripe_customer[:id]
         end
     end

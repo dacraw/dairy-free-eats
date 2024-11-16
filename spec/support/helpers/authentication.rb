@@ -20,7 +20,7 @@ module Helpers
           sign_in_variables = {
             input: {
                 sessionInput: {
-                    email: user.email,
+                    email: user.email_address,
                     password: user.password
                 }
             }
@@ -39,12 +39,12 @@ module Helpers
             expect(page).to have_content "Email"
             expect(page).to have_content "Password"
 
-            fill_in "Email", with: user.email
+            fill_in "Email", with: user.email_address
             fill_in "Password", with: user.password
             find("input[type='submit']").click
 
             expect(page).to have_content "Order lactose-free food that is tasty and affordable."
-            expect(page).to have_content "Logged in as: #{user.email}"
+            expect(page).to have_content "Logged in as: #{user.email_address}"
         end
     end
 end

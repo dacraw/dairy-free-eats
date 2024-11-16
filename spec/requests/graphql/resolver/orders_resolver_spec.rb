@@ -33,7 +33,7 @@ RSpec.describe "Orders Resolver Spec" do
         expect(graphql_orders_response.map { |order| order["user"]["id"].to_i })
             .to match_array(orders.pluck(:user_id))
         expect(graphql_orders_response.map { |order| order["user"]["email"] })
-            .to match_array(orders.map { |order| order.user.email })
+            .to match_array(orders.map { |order| order.user.email_address })
         expect(graphql_orders_response.map { |order| order["stripeCheckoutSessionLineItems"] })
             .to match_array(orders.map { |order| order.stripe_checkout_session_line_items })
 

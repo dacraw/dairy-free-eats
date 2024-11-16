@@ -30,7 +30,7 @@ RSpec.feature "Logins", type: :feature do
         expect(page).to have_content "Email"
         expect(page).to have_content "Password"
 
-        fill_in "Email", with: user.email
+        fill_in "Email", with: user.email_address
         fill_in "Password", with: Faker::Internet.password(min_length: 9)
         find("input[type='submit']").click
 

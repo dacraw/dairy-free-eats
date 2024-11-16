@@ -39,7 +39,7 @@ RSpec.describe "Session Delete Mutation Spec" do
         {
             input: {
                 sessionInput: {
-                    email: user.email,
+                    email: user.email_address,
                     password: user.password
                 }
             }

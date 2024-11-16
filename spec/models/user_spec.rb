@@ -26,21 +26,21 @@ RSpec.describe User, type: :model do
 
   context "validations" do
     it "requires a password" do
-      user = build :user, email: "test@demo.com", password_confirmation: "password"
+      user = build :user, email_address: "test@demo.com", password_confirmation: "password"
 
       expect(user.save).to eq false
       expect(user.errors.full_messages).to include "Password can't be blank"
     end
 
     it "requires password to be at least 8 characters long" do
-      user = build :user, email: "test@demo.com", password: "short", password_confirmation: "short"
+      user = build :user, email_address: "test@demo.com", password: "short", password_confirmation: "short"
 
       expect(user.save).to eq false
       expect(user.errors.full_messages).to include "Password is too short (minimum is 8 characters)"
     end
 
     it "requires a password confirmation" do
-      user = build :user, email: "test@demo.com", password: "password"
+      user = build :user, email_address: "test@demo.com", password: "password"
 
       expect(user.save).to eq false
       expect(user.errors.full_messages).to include "Password confirmation can't be blank"
@@ -61,7 +61,7 @@ RSpec.describe User, type: :model do
           password: "password",
           password_confirmation: "password",
           stripe_customer_id: stripe_customer_id,
-          email: "tester@test.com"
+          email_address: "tester@test.com"
         )
 
         expect { user.save }.to change { User.count }.from(0).to(1)
@@ -74,7 +74,7 @@ RSpec.describe User, type: :model do
           password: "password",
           password_confirmation: "password",
           stripe_customer_id: "this_is_not_right",
-          email: "tester@test.com"
+          email_address: "tester@test.com"
         )
 
         expect { user.save }.not_to change { User.count }
@@ -86,7 +86,7 @@ RSpec.describe User, type: :model do
           :user,
           password: "password",
           password_confirmation: "password",
-          email: "tester@test.com"
+          email_address: "tester@test.com"
         )
 
         expect { user.save }.to change { User.count }.from(0).to(1)

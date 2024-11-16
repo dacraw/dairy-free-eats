@@ -35,7 +35,7 @@ class User < ApplicationRecord
     end
 
     def demo_admin?
-        self.email === DEMO_ADMIN_EMAIL
+        self.email_address === DEMO_ADMIN_EMAIL
     end
 
     private

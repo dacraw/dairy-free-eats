@@ -8,7 +8,7 @@ module Mutations
     field :errors, [ Types::ErrorType ], null: false
 
     def resolve
-      user = User.find_by_email(User::DEMO_ADMIN_EMAIL)
+      user = User.find_by_email_address(User::DEMO_ADMIN_EMAIL)
 
       authenticated_user = user.authenticate(Rails.application.credentials.dig(:demo_admin_password))
 

@@ -35,7 +35,7 @@ RSpec.feature "Signups", type: :feature do
         end
       }.to change { User.count }.from(0).to(1)
 
-      expect(User.last.email).to eq email
+      expect(User.last.email_address).to eq email
       expect(User.last.stripe_customer_id).to be_present
     end
   end

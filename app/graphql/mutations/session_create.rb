@@ -10,7 +10,7 @@ module Mutations
     argument :session_input, Types::SessionInputType, required: true
 
     def resolve(session_input:)
-      user = User.find_by_email(session_input[:email])
+      user = User.find_by_email_address(session_input[:email])
 
       invalid_credentials_error = [ { path: [ "attributes", "credentials" ], message: "invalid" } ]
 

@@ -14,7 +14,7 @@ RSpec.feature "Admin Dashboard", type: :feature do
 
             expect(page).to have_content "Admin Dashboard"
 
-            order_row = find("p", text: orders.first.user.email).find(:xpath, "./..")
+            order_row = find("p", text: orders.first.user.email_address).find(:xpath, "./..")
             set_active_button = order_row.find_button("Set Active")
 
             set_active_button.click
