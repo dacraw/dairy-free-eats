@@ -46,6 +46,47 @@ export const useLogin = (): [
   return [login, { data, error, loading }];
 };
 
+export const useAdminLogin = (): [
+  adminLogin: () => Promise<void>,
+  {
+    data: { message: string };
+    error: Error | null;
+    loading: boolean;
+  }
+] => {
+  const [csrfToken, setCsrfToken] = useState("");
+  const [data, setData] = useState<{ message: string }>({ message: "" });
+  const [error, setError] = useState<Error | null>(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setCsrfToken(getCsrfToken()!);
+  }, []);
+
+  const adminLogin = async () => {
+    setLoading(true);
+
+    const response = await fetch("/demo_admin_login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+    });
+    const responseData = await response.json();
+
+    setLoading(false);
+    setData(responseData);
+
+    if (!response.ok) setError(new Error(responseData.error));
+
+    navigate(responseData.redirect_url);
+  };
+
+  return [adminLogin, { data, error, loading }];
+};
+
 export const useLogout = (): [
   logout: () => Promise<void>,
   {
