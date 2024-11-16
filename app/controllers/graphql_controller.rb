@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class GraphqlController < ApplicationController
+  allow_unauthenticated_access
+  before_action :resume_session
   # If accessing from outside this domain, nullify the session
   # This allows for outside API access while preventing CSRF attacks,
   # but you'll have to authenticate your user separately
@@ -11,8 +13,7 @@ class GraphqlController < ApplicationController
     query = params[:query]
     operation_name = params[:operationName]
     context = {
-      # Query context goes here, for example:
-      current_user: current_user,
+      current_user: Current.user,
       controller: self
     }
     result = DairyFreeFoodSchema.execute(query, variables: variables, context: context, operation_name: operation_name)

@@ -3,13 +3,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
-import {
-  CurrentUserQuery,
-  DemoAdminSessionCreateMutationFn,
-  useCurrentUserLazyQuery,
-  useDemoAdminSessionCreateMutation,
-  useSessionDeleteMutation,
-} from "graphql/types";
+import { CurrentUserQuery, useCurrentUserLazyQuery } from "graphql/types";
+import { useAdminLogin, useLogout } from "hooks/auth";
 
 type NavProps = {
   currentUser: CurrentUserQuery["currentUser"];
@@ -207,17 +202,6 @@ const ResponsiveNav: React.FC<NavProps> = ({
   );
 };
 
-export const DEMO_ADMIN_SESSION_CREATE = gql`
-  mutation DemoAdminSessionCreate($input: DemoAdminSessionCreateInput!) {
-    demoAdminSessionCreate(input: $input) {
-      user {
-        id
-        email
-      }
-    }
-  }
-`;
-
 export const CURRENT_USER = gql`
   query CurrentUser {
     currentUser {
@@ -228,42 +212,21 @@ export const CURRENT_USER = gql`
   }
 `;
 
-export const SESSION_DELETE = gql`
-  mutation SessionDelete {
-    sessionDelete(input: {}) {
-      user {
-        id
-      }
-      errors {
-        message
-        path
-      }
-    }
-  }
-`;
-
 const HeaderNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [getCurrentUser, { loading, data, error }] = useCurrentUserLazyQuery({
     fetchPolicy: "network-only",
   });
-  const [logout, { loading: logoutLoading, data: logoutData }] =
-    useSessionDeleteMutation();
+
+  const [
+    logout,
+    { loading: loggingOut, data: logoutData, error: logoutError },
+  ] = useLogout();
   const [
     loginDemoAdmin,
     { loading: loginDemoAdminLoading, data: loginDemoAdminData },
-  ] = useDemoAdminSessionCreateMutation();
-
-  const handleLogout = async () => {
-    await logout();
-    navigate("/login");
-  };
-
-  const demoAdminLogin = async () => {
-    await loginDemoAdmin({ variables: { input: {} } });
-    navigate("/admin/dashboard");
-  };
+  ] = useAdminLogin();
 
   useEffect(() => {
     getCurrentUser();
@@ -274,15 +237,15 @@ const HeaderNav = () => {
       {error && <span>{error.message}</span>}
       <DesktopNav
         currentUser={data?.currentUser}
-        logout={handleLogout}
-        demoAdminLogin={demoAdminLogin}
-        loggingOut={logoutLoading}
+        logout={logout}
+        demoAdminLogin={loginDemoAdmin}
+        loggingOut={loggingOut}
       />
       <ResponsiveNav
         currentUser={data?.currentUser}
-        demoAdminLogin={demoAdminLogin}
-        logout={handleLogout}
-        loggingOut={logoutLoading}
+        demoAdminLogin={loginDemoAdmin}
+        logout={logout}
+        loggingOut={loggingOut}
       />
     </header>
   );

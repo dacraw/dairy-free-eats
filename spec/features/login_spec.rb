@@ -21,7 +21,7 @@ RSpec.feature "Logins", type: :feature do
         fill_in "Password", with: user.password
         find("input[type='submit']").click
 
-        expect(page).to have_content "Credentials invalid"
+        expect(page).to have_content "Invalid Credentials"
       end
 
       it "renders error for an invalid password" do
@@ -30,11 +30,11 @@ RSpec.feature "Logins", type: :feature do
         expect(page).to have_content "Email"
         expect(page).to have_content "Password"
 
-        fill_in "Email", with: user.email
+        fill_in "Email", with: user.email_address
         fill_in "Password", with: Faker::Internet.password(min_length: 9)
         find("input[type='submit']").click
 
-        expect(page).to have_content "Credentials invalid"
+        expect(page).to have_content "Invalid Credentials"
       end
     end
   end

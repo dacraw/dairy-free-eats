@@ -2,23 +2,20 @@ import React from "react";
 import { screen, render, waitFor, queryByRole } from "@testing-library/react";
 import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import HeaderNav, {
-  CURRENT_USER,
-  SESSION_DELETE,
-} from "components/headerNav/HeaderNav";
-import {
-  CurrentUserQuery,
-  SessionDeleteMutation,
-  SessionDeleteMutationResult,
-} from "graphql/types";
+import HeaderNav, { CURRENT_USER } from "components/headerNav/HeaderNav";
+import { CurrentUserQuery } from "graphql/types";
 import userEvent from "@testing-library/user-event";
 import Login from "components/login/Login";
 import Home from "components/Home";
 
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({ message: "success", redirect_url: "/login" }),
+  })
+) as jest.Mock;
+
 describe("<HeaderNav />", () => {
-  let currentUserPresentMocks: MockedResponse<
-    CurrentUserQuery | SessionDeleteMutation
-  >[];
+  let currentUserPresentMocks: MockedResponse<CurrentUserQuery>[];
 
   describe("when there is a current user", () => {
     beforeEach(() => {
@@ -31,17 +28,6 @@ describe("<HeaderNav />", () => {
                 id: "1",
                 email: "test@demo.com",
                 admin: false,
-              },
-            },
-          },
-        },
-        {
-          request: { query: SESSION_DELETE },
-          result: {
-            data: {
-              sessionDelete: {
-                user: null,
-                errors: [],
               },
             },
           },

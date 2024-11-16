@@ -2,45 +2,29 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   it "allows an admin user to be created" do
-    user = build :user, password: "password", password_confirmation: "password", email: "admin@email.com", admin: true
+    user = build :user, password: "password", password_confirmation: "password", email_address: "admin@email.com", admin: true
 
     expect { user.save }.to change { User.count }.by(1)
     expect(user.admin?).to be true
   end
 
-  context "callbacks" do
-    context "when initialized" do
-      it "ensures there is a password recovery digest" do
-        user = build :user
-
-        expect(user.recovery_password_digest).to be_present
-      end
-
-      it "ensures there is a session token" do
-        user = build :user
-
-        expect(user.session_token).to be_present
-      end
-    end
-  end
-
   context "validations" do
     it "requires a password" do
-      user = build :user, email: "test@demo.com", password_confirmation: "password"
+      user = build :user, email_address: "test@demo.com", password_confirmation: "password"
 
       expect(user.save).to eq false
       expect(user.errors.full_messages).to include "Password can't be blank"
     end
 
     it "requires password to be at least 8 characters long" do
-      user = build :user, email: "test@demo.com", password: "short", password_confirmation: "short"
+      user = build :user, email_address: "test@demo.com", password: "short", password_confirmation: "short"
 
       expect(user.save).to eq false
       expect(user.errors.full_messages).to include "Password is too short (minimum is 8 characters)"
     end
 
     it "requires a password confirmation" do
-      user = build :user, email: "test@demo.com", password: "password"
+      user = build :user, email_address: "test@demo.com", password: "password"
 
       expect(user.save).to eq false
       expect(user.errors.full_messages).to include "Password confirmation can't be blank"
@@ -50,7 +34,7 @@ RSpec.describe User, type: :model do
       user = build :user, password: "password", password_confirmation: "password"
 
       expect(user.save).to eq false
-      expect(user.errors.full_messages).to include "Email can't be blank"
+      expect(user.errors.full_messages).to include "Email address can't be blank"
     end
 
     context "#stripe_customer_id" do
@@ -61,7 +45,7 @@ RSpec.describe User, type: :model do
           password: "password",
           password_confirmation: "password",
           stripe_customer_id: stripe_customer_id,
-          email: "tester@test.com"
+          email_address: "tester@test.com"
         )
 
         expect { user.save }.to change { User.count }.from(0).to(1)
@@ -74,7 +58,7 @@ RSpec.describe User, type: :model do
           password: "password",
           password_confirmation: "password",
           stripe_customer_id: "this_is_not_right",
-          email: "tester@test.com"
+          email_address: "tester@test.com"
         )
 
         expect { user.save }.not_to change { User.count }
@@ -86,7 +70,7 @@ RSpec.describe User, type: :model do
           :user,
           password: "password",
           password_confirmation: "password",
-          email: "tester@test.com"
+          email_address: "tester@test.com"
         )
 
         expect { user.save }.to change { User.count }.from(0).to(1)
