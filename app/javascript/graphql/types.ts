@@ -379,12 +379,12 @@ export type StripeCheckoutSessionCreateMutationVariables = Exact<{
 
 export type StripeCheckoutSessionCreateMutation = { __typename?: 'Mutation', stripeCheckoutSessionCreate?: { __typename?: 'StripeCheckoutSessionCreatePayload', stripeCheckoutSession?: { __typename?: 'CheckoutSession', url: string } | null, errors: Array<{ __typename?: 'Error', message: string }> } | null };
 
-export type SetOrderActiveMutationVariables = Exact<{
+export type SetOrderStatusMutationVariables = Exact<{
   input: SetOrderStatusInput;
 }>;
 
 
-export type SetOrderActiveMutation = { __typename?: 'Mutation', setOrderStatus?: { __typename?: 'SetOrderStatusPayload', order: { __typename?: 'Order', id: string, status: OrderStatus } } | null };
+export type SetOrderStatusMutation = { __typename?: 'Mutation', setOrderStatus?: { __typename?: 'SetOrderStatusPayload', order: { __typename?: 'Order', id: string, status: OrderStatus } } | null };
 
 export type FetchOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -514,8 +514,8 @@ export function useStripeCheckoutSessionCreateMutation(baseOptions?: Apollo.Muta
 export type StripeCheckoutSessionCreateMutationHookResult = ReturnType<typeof useStripeCheckoutSessionCreateMutation>;
 export type StripeCheckoutSessionCreateMutationResult = Apollo.MutationResult<StripeCheckoutSessionCreateMutation>;
 export type StripeCheckoutSessionCreateMutationOptions = Apollo.BaseMutationOptions<StripeCheckoutSessionCreateMutation, StripeCheckoutSessionCreateMutationVariables>;
-export const SetOrderActiveDocument = gql`
-    mutation SetOrderActive($input: SetOrderStatusInput!) {
+export const SetOrderStatusDocument = gql`
+    mutation SetOrderStatus($input: SetOrderStatusInput!) {
   setOrderStatus(input: $input) {
     order {
       id
@@ -524,32 +524,32 @@ export const SetOrderActiveDocument = gql`
   }
 }
     `;
-export type SetOrderActiveMutationFn = Apollo.MutationFunction<SetOrderActiveMutation, SetOrderActiveMutationVariables>;
+export type SetOrderStatusMutationFn = Apollo.MutationFunction<SetOrderStatusMutation, SetOrderStatusMutationVariables>;
 
 /**
- * __useSetOrderActiveMutation__
+ * __useSetOrderStatusMutation__
  *
- * To run a mutation, you first call `useSetOrderActiveMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useSetOrderActiveMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useSetOrderStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetOrderStatusMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [setOrderActiveMutation, { data, loading, error }] = useSetOrderActiveMutation({
+ * const [setOrderStatusMutation, { data, loading, error }] = useSetOrderStatusMutation({
  *   variables: {
  *      input: // value for 'input'
  *   },
  * });
  */
-export function useSetOrderActiveMutation(baseOptions?: Apollo.MutationHookOptions<SetOrderActiveMutation, SetOrderActiveMutationVariables>) {
+export function useSetOrderStatusMutation(baseOptions?: Apollo.MutationHookOptions<SetOrderStatusMutation, SetOrderStatusMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SetOrderActiveMutation, SetOrderActiveMutationVariables>(SetOrderActiveDocument, options);
+        return Apollo.useMutation<SetOrderStatusMutation, SetOrderStatusMutationVariables>(SetOrderStatusDocument, options);
       }
-export type SetOrderActiveMutationHookResult = ReturnType<typeof useSetOrderActiveMutation>;
-export type SetOrderActiveMutationResult = Apollo.MutationResult<SetOrderActiveMutation>;
-export type SetOrderActiveMutationOptions = Apollo.BaseMutationOptions<SetOrderActiveMutation, SetOrderActiveMutationVariables>;
+export type SetOrderStatusMutationHookResult = ReturnType<typeof useSetOrderStatusMutation>;
+export type SetOrderStatusMutationResult = Apollo.MutationResult<SetOrderStatusMutation>;
+export type SetOrderStatusMutationOptions = Apollo.BaseMutationOptions<SetOrderStatusMutation, SetOrderStatusMutationVariables>;
 export const FetchOrdersDocument = gql`
     query FetchOrders {
   orders {
