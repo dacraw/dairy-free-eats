@@ -5,11 +5,10 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import {
   CurrentUserQuery,
-  DemoAdminSessionCreateMutationFn,
   useCurrentUserLazyQuery,
   useDemoAdminSessionCreateMutation,
-  useSessionDeleteMutation,
 } from "graphql/types";
+import { useLogout } from "hooks/auth";
 
 type NavProps = {
   currentUser: CurrentUserQuery["currentUser"];
@@ -228,37 +227,21 @@ export const CURRENT_USER = gql`
   }
 `;
 
-export const SESSION_DELETE = gql`
-  mutation SessionDelete {
-    sessionDelete(input: {}) {
-      user {
-        id
-      }
-      errors {
-        message
-        path
-      }
-    }
-  }
-`;
-
 const HeaderNav = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [getCurrentUser, { loading, data, error }] = useCurrentUserLazyQuery({
     fetchPolicy: "network-only",
   });
-  const [logout, { loading: logoutLoading, data: logoutData }] =
-    useSessionDeleteMutation();
+
+  const [
+    logout,
+    { loading: loggingOut, data: logoutData, error: logoutError },
+  ] = useLogout();
   const [
     loginDemoAdmin,
     { loading: loginDemoAdminLoading, data: loginDemoAdminData },
   ] = useDemoAdminSessionCreateMutation();
-
-  const handleLogout = async () => {
-    await logout();
-    navigate("/login");
-  };
 
   const demoAdminLogin = async () => {
     await loginDemoAdmin({ variables: { input: {} } });
@@ -274,15 +257,15 @@ const HeaderNav = () => {
       {error && <span>{error.message}</span>}
       <DesktopNav
         currentUser={data?.currentUser}
-        logout={handleLogout}
+        logout={logout}
         demoAdminLogin={demoAdminLogin}
-        loggingOut={logoutLoading}
+        loggingOut={loggingOut}
       />
       <ResponsiveNav
         currentUser={data?.currentUser}
         demoAdminLogin={demoAdminLogin}
-        logout={handleLogout}
-        loggingOut={logoutLoading}
+        logout={logout}
+        loggingOut={loggingOut}
       />
     </header>
   );

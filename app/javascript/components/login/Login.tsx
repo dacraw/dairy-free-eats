@@ -1,26 +1,14 @@
 import { gql } from "@apollo/client";
-import { SessionInput } from "graphql/types";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { startCase } from "lodash";
 import { useLogin } from "hooks/auth";
 
-export const CREATE_SESSION = gql`
-  mutation CreateSession($input: SessionCreateInput!) {
-    sessionCreate(input: $input) {
-      user {
-        id
-      }
-      errors {
-        message
-        path
-      }
-    }
-  }
-`;
-
 const Login = () => {
-  const { register, handleSubmit } = useForm<SessionInput>();
+  const { register, handleSubmit } = useForm<{
+    email: string;
+    password: string;
+  }>();
   const [login, { data, loading, error }] = useLogin();
 
   if (!data) return null;

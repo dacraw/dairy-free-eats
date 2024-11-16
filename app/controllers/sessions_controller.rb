@@ -16,6 +16,7 @@ class SessionsController < ApplicationController
 
   def destroy
     terminate_session
-    redirect_to new_session_path
+
+    render json: { message: "success", redirect_url: URI(login_path).path }, status: 200
   end
 end

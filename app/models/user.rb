@@ -14,19 +14,6 @@ class User < ApplicationRecord
     has_many :orders
     has_many :sessions, dependent: :destroy
 
-    def self.generate_token
-        SecureRandom.urlsafe_base64 36
-    end
-
-    def ensure_session_token
-        self.session_token ||= User.generate_token
-    end
-
-    def reset_session_token!
-        self.update_column(:session_token, User.generate_token)
-        self.session_token
-    end
-
     def demo_admin?
         self.email_address === DEMO_ADMIN_EMAIL
     end

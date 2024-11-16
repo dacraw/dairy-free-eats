@@ -7,7 +7,7 @@ export const useLogin = (): [
   {
     data: { message: string };
     error: Error | null;
-    loading: Boolean;
+    loading: boolean;
   }
 ] => {
   const [csrfToken, setCsrfToken] = useState("");
@@ -44,4 +44,45 @@ export const useLogin = (): [
   };
 
   return [login, { data, error, loading }];
+};
+
+export const useLogout = (): [
+  logout: () => Promise<void>,
+  {
+    data: { message: string };
+    error: Error | null;
+    loading: boolean;
+  }
+] => {
+  const [csrfToken, setCsrfToken] = useState("");
+  const [data, setData] = useState<{ message: string }>({ message: "" });
+  const [error, setError] = useState<Error | null>(null);
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setCsrfToken(getCsrfToken()!);
+  }, []);
+
+  const logout = async () => {
+    setLoading(true);
+
+    const response = await fetch("/session", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+    });
+    const responseData = await response.json();
+
+    setLoading(false);
+    setData(responseData);
+
+    if (!response.ok) setError(new Error(responseData.error));
+
+    navigate(responseData.redirect_url);
+  };
+
+  return [logout, { data, error, loading }];
 };
