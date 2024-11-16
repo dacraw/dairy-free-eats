@@ -310,13 +310,6 @@ export type FetchOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type FetchOrdersQuery = { __typename?: 'Query', orders?: Array<{ __typename?: 'Order', id: string, status: OrderStatus, guestEmail?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
 
-export type DemoAdminSessionCreateMutationVariables = Exact<{
-  input: DemoAdminSessionCreateInput;
-}>;
-
-
-export type DemoAdminSessionCreateMutation = { __typename?: 'Mutation', demoAdminSessionCreate?: { __typename?: 'DemoAdminSessionCreatePayload', user?: { __typename?: 'User', id: string, email: string } | null } | null };
-
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -499,42 +492,6 @@ export type FetchOrdersQueryHookResult = ReturnType<typeof useFetchOrdersQuery>;
 export type FetchOrdersLazyQueryHookResult = ReturnType<typeof useFetchOrdersLazyQuery>;
 export type FetchOrdersSuspenseQueryHookResult = ReturnType<typeof useFetchOrdersSuspenseQuery>;
 export type FetchOrdersQueryResult = Apollo.QueryResult<FetchOrdersQuery, FetchOrdersQueryVariables>;
-export const DemoAdminSessionCreateDocument = gql`
-    mutation DemoAdminSessionCreate($input: DemoAdminSessionCreateInput!) {
-  demoAdminSessionCreate(input: $input) {
-    user {
-      id
-      email
-    }
-  }
-}
-    `;
-export type DemoAdminSessionCreateMutationFn = Apollo.MutationFunction<DemoAdminSessionCreateMutation, DemoAdminSessionCreateMutationVariables>;
-
-/**
- * __useDemoAdminSessionCreateMutation__
- *
- * To run a mutation, you first call `useDemoAdminSessionCreateMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDemoAdminSessionCreateMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [demoAdminSessionCreateMutation, { data, loading, error }] = useDemoAdminSessionCreateMutation({
- *   variables: {
- *      input: // value for 'input'
- *   },
- * });
- */
-export function useDemoAdminSessionCreateMutation(baseOptions?: Apollo.MutationHookOptions<DemoAdminSessionCreateMutation, DemoAdminSessionCreateMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DemoAdminSessionCreateMutation, DemoAdminSessionCreateMutationVariables>(DemoAdminSessionCreateDocument, options);
-      }
-export type DemoAdminSessionCreateMutationHookResult = ReturnType<typeof useDemoAdminSessionCreateMutation>;
-export type DemoAdminSessionCreateMutationResult = Apollo.MutationResult<DemoAdminSessionCreateMutation>;
-export type DemoAdminSessionCreateMutationOptions = Apollo.BaseMutationOptions<DemoAdminSessionCreateMutation, DemoAdminSessionCreateMutationVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
