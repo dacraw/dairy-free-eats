@@ -10,13 +10,13 @@ export const useSignup = (): [
   }) => Promise<void>,
   {
     data: { message: string };
-    error: Error | null;
+    errors: string[] | null;
     loading: boolean;
   }
 ] => {
   const [csrfToken, setCsrfToken] = useState("");
   const [data, setData] = useState<{ message: string }>({ message: "" });
-  const [error, setError] = useState<Error | null>(null);
+  const [errors, setErrors] = useState<string[] | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ export const useSignup = (): [
         user: {
           email_address: data?.email,
           password: data?.password,
-          password_confirmation: data?.password,
+          password_confirmation: data?.passwordConfirmation,
         },
       }),
       headers: {
@@ -45,15 +45,19 @@ export const useSignup = (): [
         "X-CSRF-Token": csrfToken,
       },
     });
+
     const responseData = await response.json();
 
     setLoading(false);
-    setData(responseData);
+    setData(responseData.message);
 
-    if (!response.ok) setError(new Error(responseData.error));
+    if (!response.ok) {
+      setErrors(responseData.errors);
+      return;
+    }
 
     navigate(responseData.redirect_url);
   };
 
-  return [signup, { data, error, loading }];
+  return [signup, { data, errors, loading }];
 };

@@ -5,9 +5,7 @@ import { startCase } from "lodash";
 import { useSignup } from "hooks/user";
 
 const Signup = () => {
-  const [signup, { loading, data, error }] = useSignup();
-
-  if (!data) return null;
+  const [signup, { loading, data, errors }] = useSignup();
 
   const { register, handleSubmit } = useForm<{
     email: string;
@@ -15,7 +13,7 @@ const Signup = () => {
     passwordConfirmation: string;
   }>();
 
-  console.log(data, loading, error);
+  if (!data) return null;
 
   return (
     <div className="p-4 grid place-content-center">
@@ -25,10 +23,14 @@ const Signup = () => {
         <h1 className="text-2xl mb-6 text-center">Sign up for an account</h1>
 
         <form onSubmit={handleSubmit(signup)}>
-          <div>
-            {error && (
-              <p className="text-red-800">{startCase(error.message)}</p>
-            )}
+          <div className="text-center my-2">
+            {errors?.map((message, i) => {
+              return (
+                <p key={i} className="text-red-800">
+                  {message}
+                </p>
+              );
+            })}
           </div>
           <div className="md:grid md:grid-cols-1 md:gap-10">
             {/* <div className="mb-2">
