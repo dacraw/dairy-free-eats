@@ -26,14 +26,12 @@ const Signup = () => {
   const { register, handleSubmit } = useForm<UserInput>();
 
   return (
-    <div className="p-4">
+    <div className="p-4 grid place-content-center">
       {loading && <p>Loading</p>}
-      <h1 className="text-2xl mb-2">Sign up for an account</h1>
-      <p className="mb-4">
-        An account will fill in your information to make ordering easier.
-      </p>
 
-      <div className="md:w-[500px] md:mx-auto md:grid md:place-content-center">
+      <div className="md:max-w-[500px] md:mx-auto md:grid md:place-content-center">
+        <h1 className="text-2xl mb-6 text-center">Sign up for an account</h1>
+
         <form
           onSubmit={handleSubmit(async (formData) => {
             const mutationData = await createUser({
@@ -56,8 +54,8 @@ const Signup = () => {
               );
             })}
           </div>
-          <div className="md:grid md:grid-cols-2 md:gap-10">
-            <div className="mb-2">
+          <div className="md:grid md:grid-cols-1 md:gap-10">
+            {/* <div className="mb-2">
               <h3 className="font-bold text-lg border-b-2 mb-4 ">
                 Address Information
               </h3>
@@ -139,13 +137,13 @@ const Signup = () => {
                   />
                 </div>
               </div>
-            </div>
+            </div> */}
             <div className="mb-2">
-              <h3 className="font-bold text-lg border-b-2 mb-4 ">
+              {/* <h3 className="font-bold text-lg border-b-2 mb-4 ">
                 Contact/Login Information
-              </h3>
-              <div className="grid justify-center md:block">
-                <div className="mb-2">
+              </h3> */}
+              <div className="grid justify-center">
+                {/* <div className="mb-2">
                   <label className="block" htmlFor="phone">
                     Phone
                   </label>
@@ -156,7 +154,7 @@ const Signup = () => {
                     placeholder="ex: 555-123-4567"
                     {...register("phone")}
                   />
-                </div>
+                </div> */}
                 <div className="mb-2">
                   <label className="block" htmlFor="email">
                     Email
@@ -196,20 +194,28 @@ const Signup = () => {
             </div>
           </div>
           <div className="text-xs mb-4">
-            <p>
+            {/* <p>
               Address information, name and phone number will be used to create
               your Stripe Customer account, and is necessary for billing and
               delivery. This information will be required during the Stripe
               Checkout, so it's recommended to fill it out now to save time
               later.
-            </p>
-            <p>
+            </p> */}
+            {/* <p>
               <strong className="font-bold underline">Note:</strong> Only your
               email and hashed password will be stored by this app for logging
               in, the rest of the information will be stored by Stripe and
               accessed by this app via Stripe API for order delivery purposes
               (including contacting you during the lifetime of an order, as
               necessary).
+            </p> */}
+            <p className="mb-4">
+              Sign up with an email you can receives messages to; alternatively,
+              Order as a Guest with an email you can receive messages to.
+            </p>
+            <p className="mb-4">
+              Emails will be sent to the email address used in Stripe Checkout
+              (the email will be prefilled if you Signup for an account here).
             </p>
           </div>
           <input

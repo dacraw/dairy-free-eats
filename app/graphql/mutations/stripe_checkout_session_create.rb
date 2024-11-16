@@ -34,10 +34,10 @@ module Mutations
           cancel_url: Rails.env.production? ? "https://dairy-free-food.fly.dev/order" : "http://localhost:3000/order",
           line_items: items.map { |item| item.to_h },
           mode: "payment",
-          billing_address_collection: context[:current_user].present? ? "auto" : "required",
-          phone_number_collection: {
-              enabled: context[:current_user].present? ? false : true
-          },
+          # billing_address_collection: context[:current_user].present? ? "auto" : "required",
+          # phone_number_collection: {
+          #     enabled: context[:current_user].present? ? false : true
+          # },
           saved_payment_method_options: {
             payment_method_save: ("enabled" if context[:current_user].present?)
           },

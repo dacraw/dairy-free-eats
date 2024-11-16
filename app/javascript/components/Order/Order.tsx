@@ -57,10 +57,16 @@ const Order = () => {
 
   return (
     <div className="grid place-content-center">
-      <div className="p-4">
-        <h5 className="font-bold md:px-6 text-center">
+      <div className="p-4 max-w-[500px]">
+        <h5 className="font-bold md:px-6 text-center text-xl mb-6">
           Welcome to the order page!
         </h5>
+
+        <p className="mb-6 font-bold text-sm">
+          Please read the information below this form before clicking "Submit",
+          as it contains information regarding the information to be entered
+          into the Stripe Checkout page in order to demo this process.
+        </p>
 
         <form
           onSubmit={handleSubmit(async (data) => {
@@ -100,7 +106,7 @@ const Order = () => {
             }
           })}
         >
-          <div className="grid place-content-center h-48 md:border-2 md:m-2 md:p-6">
+          <div className="grid place-content-center mb-6 p-2 border-2 md:m-2 md:p-6">
             {stripeCheckoutSessionCreateError &&
               stripeCheckoutSessionCreateError.map((error, i) => {
                 return (
@@ -110,10 +116,9 @@ const Order = () => {
                 );
               })}
             <div className="">
-              <h5 className="mb-6">
-                Enter the number of each item you would like to order and then
-                click "Submit"
-              </h5>
+              <h6 className="mb-8 pb-2 border-b-2 text-center text-lg font-bold">
+                ORDER FORM
+              </h6>
               <div className="grid grid-cols-[1fr_50px] gap-2">
                 {products.map((product) => {
                   return (
@@ -134,35 +139,79 @@ const Order = () => {
                     </React.Fragment>
                   );
                 })}
-                <input type="submit" className="col-span-2 green-button" />
+                <input type="submit" className="col-span-2 green-button mt-2" />
               </div>
             </div>
           </div>
         </form>
         <div className="md:p-6">
-          <p>
-            The items above are retrieved from the current Stripe products
-            created in the Stripe dashboard.
+          <h6 className="font-bold text-lg border-b-2 pb-2 mb-6 text-center">
+            Stripe Checkout Page Instructions
+          </h6>
+          <div className="mb-6 pb-2 border-b-2">
+            <strong className="font-bold">TLDR:</strong>
+            <ul className="list-disc ml-4">
+              <li>
+                Enter an email that you have access to if you want to receive
+                emails sent during the order process (this will be pre-filled
+                for you if you signed up on this app)
+              </li>
+              <li>Use Test Credit Card # 4242424242424242</li>
+              <li>Enter arbitrary values for everything else</li>
+            </ul>
+          </div>
+          <p className="mb-2">
+            On the Stripe Checkout page that you will be redirected to after
+            entering a quantity for at least one item above and clicking
+            "Submit", please use the following values:
           </p>
-          <p>
-            After entering a quantity for at least one item and clicking Submit,
-            you will be redirected to the Stripe Checkout page.
-          </p>
-          <p>
-            Please note that this is using a test API key, so no transaction
-            will occur. However, please do not use real payment information when
-            checking out.
-          </p>
-          <ul className="list-disc ml-4">
+          <ul className="list-disc ml-4 mb-2">
             <li>
-              Use Test Credit Card number
-              <strong className="font-bold"> 4242 4242 4242 4242</strong>
+              <strong className="font-bold">Email:</strong> This will be
+              pre-filled if you have an account on this app; otherwise, enter
+              any email you can receive messages to if you want to demo the
+              email functionality from the Stripe webhook configuration of this
+              app (if you don't care to receive the emails, you can enter any
+              arbitrary email formatted value such as "test@demo.com")
             </li>
             <li>
-              Use an email address that you can receive emails to, in order to
-              receive a confirmation email after the order.
+              <strong className="font-bold">Credit Card number:</strong> 4242
+              4242 4242 4242 (this is a test credit card number, feel free to
+              use any of the{" "}
+              <a
+                href="https://docs.stripe.com/testing#cards"
+                className="text-blue-700"
+              >
+                Test Card Numbers provided by Stripe
+              </a>
+              )
+            </li>
+            <li>
+              <strong className="font-bold">
+                Credit Card expiration date:
+              </strong>{" "}
+              Any month/year value in the future (e.g. "03/28")
+            </li>
+            <li>
+              <strong className="font-bold">Credit Card CVC:</strong> Any 3
+              consecutive numbers (e.g. "123")
+            </li>
+            <li>
+              <strong className="font-bold">Cardholder name:</strong> Any white
+              space delimited, two string combination (e.g. "Beebo Rado")
+            </li>
+            <li>
+              <strong className="font-bold">Zip:</strong> Any consecutive 5
+              numbers (e.g. "12345")
             </li>
           </ul>
+          <p className="text-sm">
+            Please note that the checkout is using a test API key to simulate
+            real transactions, so no charges will occur. Regardless,{" "}
+            <strong className="font-bold">
+              please do not use real credit card information when checking out.
+            </strong>
+          </p>
         </div>
       </div>
     </div>

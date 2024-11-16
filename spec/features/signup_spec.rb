@@ -13,14 +13,15 @@ RSpec.feature "Signups", type: :feature do
         expect(page).to have_content("Sign up for an account")
 
         VCR.use_cassette "signup_feature_spec" do
-          fill_in "address.city", with: "Some City"
-          fill_in "address.country", with: ""
-          fill_in "address.country", with: "Some Country"
-          fill_in "address.line1", with: "Some address"
-          fill_in "address.line2", with: "Some additional address"
-          fill_in "address.postalCode", with: "12345"
-          fill_in "name", with: "Some Name"
-          fill_in "phone", with: "123-456-7890"
+          # Commenting this out to make demo'ing easier
+          # fill_in "address.city", with: "Some City"
+          # fill_in "address.country", with: ""
+          # fill_in "address.country", with: "Some Country"
+          # fill_in "address.line1", with: "Some address"
+          # fill_in "address.line2", with: "Some additional address"
+          # fill_in "address.postalCode", with: "12345"
+          # fill_in "name", with: "Some Name"
+          # fill_in "phone", with: "123-456-7890"
 
           fill_in "email", with: email
           fill_in "password", with: password
