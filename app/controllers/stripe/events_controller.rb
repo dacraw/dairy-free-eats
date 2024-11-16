@@ -1,4 +1,5 @@
 class Stripe::EventsController < ApplicationController
+    allow_unauthenticated_access
     protect_from_forgery except: [ :create ]
 
     def create
