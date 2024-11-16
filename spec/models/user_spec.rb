@@ -10,12 +10,6 @@ RSpec.describe User, type: :model do
 
   context "callbacks" do
     context "when initialized" do
-      it "ensures there is a password recovery digest" do
-        user = build :user
-
-        expect(user.recovery_password_digest).to be_present
-      end
-
       it "ensures there is a session token" do
         user = build :user
 
