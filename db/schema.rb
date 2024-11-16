@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_16_054612) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_16_112328) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,10 +40,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_16_054612) do
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "session_token", null: false
     t.boolean "admin", default: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
-    t.index ["session_token"], name: "index_users_on_session_token", unique: true
   end
 
   add_foreign_key "orders", "users"

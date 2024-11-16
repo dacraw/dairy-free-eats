@@ -8,16 +8,6 @@ RSpec.describe User, type: :model do
     expect(user.admin?).to be true
   end
 
-  context "callbacks" do
-    context "when initialized" do
-      it "ensures there is a session token" do
-        user = build :user
-
-        expect(user.session_token).to be_present
-      end
-    end
-  end
-
   context "validations" do
     it "requires a password" do
       user = build :user, email_address: "test@demo.com", password_confirmation: "password"

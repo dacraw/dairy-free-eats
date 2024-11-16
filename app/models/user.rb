@@ -7,7 +7,6 @@ class User < ApplicationRecord
 
     validates :email_address, presence: true
     validates_length_of :password, minimum: 8
-    validates :session_token, { uniqueness: true, presence: true }
     validates_presence_of :password_confirmation, on: :create
     validate :stripe_customer_id_format, if: -> { stripe_customer_id.present? }
 
