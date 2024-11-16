@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   get "login", to: "sessions#new"
   get "signup", to: "api/v1/users#new"
   post "demo_admin_login", to: "sessions#demo_admin_login"
+  get "password_reset", to: "passwords#new"
 
   resources :passwords, param: :token
   if Rails.env.development?

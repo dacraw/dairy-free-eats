@@ -3,6 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { startCase } from "lodash";
 import { LoginInput, useLogin } from "hooks/auth";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const { register, handleSubmit } = useForm<LoginInput>();
@@ -12,7 +13,7 @@ const Login = () => {
 
   return (
     <div className="grid place-content-center">
-      <form onSubmit={handleSubmit(login)}>
+      <form onSubmit={handleSubmit(login)} className="mb-12">
         {error && <p className="text-red-700">{startCase(error.message)}</p>}
         <h3 className="mb-4 text-2xl">Login</h3>
         <div>
@@ -48,6 +49,10 @@ const Login = () => {
           />
         </div>
       </form>
+
+      <div className="text-center">
+        <Link to="/password_reset">Forgot Password?</Link>
+      </div>
     </div>
   );
 };

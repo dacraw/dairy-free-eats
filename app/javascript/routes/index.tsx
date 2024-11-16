@@ -3,6 +3,7 @@ import Order from "components/Order/Order";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 import Login from "components/login/Login";
 import OrderSuccess from "components/orderSuccess/OrderSuccess";
+import PasswordReset from "components/passwordReset/PasswordReset";
 import Signup from "components/signup/Signup";
 
 import React from "react";
@@ -24,6 +25,7 @@ const AppRoute = ({ children }: { children?: React.ReactElement }) => {
         <Route path="/login" element={<Login />} />
         <Route path="/success" element={<OrderSuccess />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/password_reset" element={<PasswordReset />} />
       </Routes>
     </Router>
   );
