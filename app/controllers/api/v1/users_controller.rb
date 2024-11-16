@@ -3,6 +3,13 @@ class Api::V1::UsersController < ApplicationController
     end
 
     def create
+        if User.find_by(email_address: user_params[:email_address]).present?
+            return render json: {
+                    message: "failed",
+                    errors: [ "That username is already taken." ]
+                }, status: 400
+        end
+
         user = User.new(user_params)
 
         if user.save
@@ -16,7 +23,7 @@ class Api::V1::UsersController < ApplicationController
             })
 
             if !user.update(stripe_customer_id: stripe_customer.id)
-                return render json: { message: "failed", errors: [ { message: "Could not update the user's stripe customer id" } ] }, status: 500
+                return render json: { message: "failed", errors: [ "Could not update the user's stripe customer id" ] }, status: 500
             end
 
             start_new_session_for user
