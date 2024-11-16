@@ -4,7 +4,7 @@ module Types
   class OrderType < Types::BaseObject
     field :id, ID, null: false
     field :user, Types::UserType
-    field :status, String, null: false
+    field :status, Types::OrderStatus, null: false
     def status
       # Return the string value instead of the integer enum
       object.status

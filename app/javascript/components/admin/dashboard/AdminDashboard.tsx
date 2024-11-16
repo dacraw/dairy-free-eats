@@ -12,8 +12,8 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const SET_ORDER_ACTIVE = gql`
-  mutation SetOrderActive($input: SetOrderActiveInput!) {
-    setOrderActive(input: $input) {
+  mutation SetOrderActive($input: SetOrderStatusInput!) {
+    setOrderStatus(input: $input) {
       order {
         id
         status
