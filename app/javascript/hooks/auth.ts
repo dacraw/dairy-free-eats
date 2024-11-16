@@ -2,8 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCsrfToken } from "util/formUtil";
 
+export type LoginInput = {
+  email: string;
+  password: string;
+};
+
 export const useLogin = (): [
-  login: (data: { email: string; password: string }) => Promise<void>,
+  login: (data: LoginInput) => Promise<void>,
   {
     data: { message: string };
     error: Error | null;
@@ -20,7 +25,7 @@ export const useLogin = (): [
     setCsrfToken(getCsrfToken()!);
   }, []);
 
-  const login = async (data: { email: string; password: string }) => {
+  const login = async (data: LoginInput) => {
     setLoading(true);
 
     const response = await fetch("/session", {

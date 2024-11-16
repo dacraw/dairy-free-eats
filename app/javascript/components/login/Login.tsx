@@ -2,13 +2,10 @@ import { gql } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { startCase } from "lodash";
-import { useLogin } from "hooks/auth";
+import { LoginInput, useLogin } from "hooks/auth";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm<{
-    email: string;
-    password: string;
-  }>();
+  const { register, handleSubmit } = useForm<LoginInput>();
   const [login, { data, loading, error }] = useLogin();
 
   if (!data) return null;

@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCsrfToken } from "util/formUtil";
 
+export type SignupInput = {
+  email: string;
+  password: string;
+  passwordConfirmation: string;
+};
+
 export const useSignup = (): [
-  signup: (data: {
-    email: string;
-    password: string;
-    passwordConfirmation: string;
-  }) => Promise<void>,
+  signup: (data: SignupInput) => Promise<void>,
   {
     data: { message: string };
     errors: string[] | null;
@@ -24,11 +26,7 @@ export const useSignup = (): [
     setCsrfToken(getCsrfToken()!);
   }, []);
 
-  const signup = async (data: {
-    email: string;
-    password: string;
-    passwordConfirmation: string;
-  }) => {
+  const signup = async (data: SignupInput) => {
     setLoading(true);
 
     const response = await fetch("/api/v1/users", {
@@ -49,7 +47,7 @@ export const useSignup = (): [
     const responseData = await response.json();
 
     setLoading(false);
-    setData(responseData.message);
+    setData(responseData);
 
     if (!response.ok) {
       setErrors(responseData.errors);
