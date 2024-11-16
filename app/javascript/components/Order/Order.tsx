@@ -148,17 +148,18 @@ const Order = () => {
           <h6 className="font-bold text-lg border-b-2 pb-2 mb-6 text-center">
             Stripe Checkout Page Instructions
           </h6>
-          <p className="mb-6 pb-2 border-b-2">
+          <div className="mb-6 pb-2 border-b-2">
             <strong className="font-bold">TLDR:</strong>
             <ul className="list-disc ml-4">
               <li>
                 Enter an email that you have access to if you want to receive
-                emails sent during the order process
+                emails sent during the order process (this will be pre-filled
+                for you if you signed up on this app)
               </li>
               <li>Use Test Credit Card # 4242424242424242</li>
               <li>Enter arbitrary values for everything else</li>
             </ul>
-          </p>
+          </div>
           <p className="mb-2">
             On the Stripe Checkout page that you will be redirected to after
             entering a quantity for at least one item above and clicking
@@ -166,11 +167,12 @@ const Order = () => {
           </p>
           <ul className="list-disc ml-4 mb-2">
             <li>
-              <strong className="font-bold">Email:</strong> Any email you can
-              receive messages to (if you want to demo the email functionality
-              from the Stripe webhook configuration of this app; otherwise, you
-              can enter any arbitrary email formatted value such as
-              "test@demo.com")
+              <strong className="font-bold">Email:</strong> This will be
+              pre-filled if you have an account on this app; otherwise, enter
+              any email you can receive messages to if you want to demo the
+              email functionality from the Stripe webhook configuration of this
+              app (if you don't care to receive the emails, you can enter any
+              arbitrary email formatted value such as "test@demo.com")
             </li>
             <li>
               <strong className="font-bold">Credit Card number:</strong> 4242
