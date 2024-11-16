@@ -122,7 +122,7 @@ export type Mutation = {
   /** Creates a new session */
   demoAdminSessionCreate?: Maybe<DemoAdminSessionCreatePayload>;
   /** Creates a new session */
-  sessionCreate?: Maybe<SessionCreatePayload>;
+  sessionCreate: SessionCreatePayload;
   /** Logs the current user out */
   sessionDelete?: Maybe<SessionDeletePayload>;
   setOrderStatus?: Maybe<SetOrderStatusPayload>;
@@ -268,6 +268,7 @@ export type SessionCreatePayload = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
   errors: Array<Error>;
+  redirectUrl: Scalars['String']['output'];
   user?: Maybe<User>;
 };
 
@@ -413,7 +414,7 @@ export type CreateSessionMutationVariables = Exact<{
 }>;
 
 
-export type CreateSessionMutation = { __typename?: 'Mutation', sessionCreate?: { __typename?: 'SessionCreatePayload', user?: { __typename?: 'User', id: string } | null, errors: Array<{ __typename?: 'Error', message: string, path?: Array<string> | null }> } | null };
+export type CreateSessionMutation = { __typename?: 'Mutation', sessionCreate: { __typename?: 'SessionCreatePayload', user?: { __typename?: 'User', id: string } | null, errors: Array<{ __typename?: 'Error', message: string, path?: Array<string> | null }> } };
 
 export type FetchStripeCheckoutSessionQueryVariables = Exact<{
   id: Scalars['ID']['input'];

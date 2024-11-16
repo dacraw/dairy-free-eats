@@ -1,9 +1,9 @@
 import { gql } from "@apollo/client";
-import { SessionInput, useCreateSessionMutation } from "graphql/types";
+import { SessionInput } from "graphql/types";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { startCase } from "lodash";
+import { useLogin } from "hooks/auth";
 
 export const CREATE_SESSION = gql`
   mutation CreateSession($input: SessionCreateInput!) {
@@ -21,31 +21,14 @@ export const CREATE_SESSION = gql`
 
 const Login = () => {
   const { register, handleSubmit } = useForm<SessionInput>();
-  const [login, { loading, data }] = useCreateSessionMutation();
-  const navigate = useNavigate();
+  const [login, { data, loading, error }] = useLogin();
+
+  if (!data) return null;
 
   return (
     <div className="grid place-content-center">
-      <form
-        onSubmit={handleSubmit(async (data) => {
-          const mutationData = await login({
-            variables: { input: { sessionInput: data } },
-          });
-
-          if (!mutationData?.data?.sessionCreate?.errors?.length) {
-            navigate("/");
-          }
-        })}
-      >
-        {data?.sessionCreate?.errors?.map((error, i) => {
-          if (!error.path) return null;
-
-          return (
-            <p key={i} className="text-red-700">
-              {startCase(error.path[1])} {error.message}
-            </p>
-          );
-        })}
+      <form onSubmit={handleSubmit(login)}>
+        {error && <p className="text-red-700">{startCase(error.message)}</p>}
         <h3 className="mb-4 text-2xl">Login</h3>
         <div>
           <label className="block" htmlFor="email">

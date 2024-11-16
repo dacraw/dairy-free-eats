@@ -127,7 +127,7 @@ type Mutation {
     Parameters for SessionCreate
     """
     input: SessionCreateInput!
-  ): SessionCreatePayload
+  ): SessionCreatePayload!
 
   """
   Logs the current user out
@@ -280,6 +280,7 @@ type SessionCreatePayload {
   """
   clientMutationId: String
   errors: [Error!]!
+  redirectUrl: String!
   user: User
 }
 

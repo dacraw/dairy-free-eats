@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   resource :session
+
+  get "login", to: "sessions#new"
+  get "signup", to: "api/v1/users#new"
+
   resources :passwords, param: :token
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
@@ -27,8 +31,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get "login", to: "api/v1/sessions#new"
-  get "signup", to: "api/v1/users#new"
 
   namespace :stripe do
     resources :events, only: [ :create ]
