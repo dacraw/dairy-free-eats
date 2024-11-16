@@ -1,29 +1,21 @@
 import { gql } from "@apollo/client";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { startCase } from "lodash";
-import { UserInput, useCreateUserMutation } from "graphql/types";
-
-export const CREATE_USER = gql`
-  mutation CreateUser($input: UserCreateInput!) {
-    userCreate(input: $input) {
-      user {
-        id
-        email
-      }
-      errors {
-        message
-        path
-      }
-    }
-  }
-`;
+import { useSignup } from "hooks/user";
 
 const Signup = () => {
-  const navigate = useNavigate();
-  const [createUser, { loading, data, error }] = useCreateUserMutation();
-  const { register, handleSubmit } = useForm<UserInput>();
+  const [signup, { loading, data, error }] = useSignup();
+
+  if (!data) return null;
+
+  const { register, handleSubmit } = useForm<{
+    email: string;
+    password: string;
+    passwordConfirmation: string;
+  }>();
+
+  console.log(data, loading, error);
 
   return (
     <div className="p-4 grid place-content-center">
@@ -32,27 +24,11 @@ const Signup = () => {
       <div className="md:max-w-[500px] md:mx-auto md:grid md:place-content-center">
         <h1 className="text-2xl mb-6 text-center">Sign up for an account</h1>
 
-        <form
-          onSubmit={handleSubmit(async (formData) => {
-            const mutationData = await createUser({
-              variables: { input: { userInput: formData } },
-            });
-
-            if (!mutationData?.data?.userCreate?.errors?.length) {
-              navigate("/order");
-            }
-          })}
-        >
+        <form onSubmit={handleSubmit(signup)}>
           <div>
-            {data?.userCreate?.errors?.map((error, i) => {
-              if (!error.path) return null;
-
-              return (
-                <p className="text-red-800" key={i}>
-                  {startCase(error.path[1])} {error.message}
-                </p>
-              );
-            })}
+            {error && (
+              <p className="text-red-800">{startCase(error.message)}</p>
+            )}
           </div>
           <div className="md:grid md:grid-cols-1 md:gap-10">
             {/* <div className="mb-2">

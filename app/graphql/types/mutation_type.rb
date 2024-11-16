@@ -5,6 +5,5 @@ module Types
     field :set_order_status, mutation: Mutations::SetOrderStatus
     field :stripe_checkout_session_create, mutation: Mutations::StripeCheckoutSessionCreate
     field :demo_admin_session_create, mutation: Mutations::DemoAdminSessionCreate
-    field :user_create, mutation: Mutations::UserCreate
   end
 end
