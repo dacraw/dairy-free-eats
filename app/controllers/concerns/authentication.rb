@@ -33,7 +33,9 @@ module Authentication
 
     def request_authentication
       session[:return_to_after_authenticating] = request.url
-      redirect_to login_path
+      # Commenting this out for now since redirects have no effect w/ React Router
+      # This should ideally return json with the redirect_url later
+      # redirect_to login_path
     end
 
     def after_authentication_url
