@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   it "allows an admin user to be created" do
-    user = build :user, password: "password", password_confirmation: "password", email: "admin@email.com", admin: true
+    user = build :user, password: "password", password_confirmation: "password", email_address: "admin@email.com", admin: true
 
     expect { user.save }.to change { User.count }.by(1)
     expect(user.admin?).to be true
@@ -34,7 +34,7 @@ RSpec.describe User, type: :model do
       user = build :user, password: "password", password_confirmation: "password"
 
       expect(user.save).to eq false
-      expect(user.errors.full_messages).to include "Email can't be blank"
+      expect(user.errors.full_messages).to include "Email address can't be blank"
     end
 
     context "#stripe_customer_id" do
