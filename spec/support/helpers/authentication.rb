@@ -2,35 +2,11 @@ module Helpers
     module Authentication
         def login_user(user)
           # Sign in user - convert this into a helper
-          sign_in_query =
-            <<-GRAPHQL
-                mutation CreateSession($input: SessionCreateInput!) {
-                    sessionCreate(input: $input){
-                        user {
-                            id
-                        }
-                        errors {
-                            message
-                            path
-                        }
-                    }
-                }
-            GRAPHQL
+          post session_url, params: { session: { email_address: user.email_address, password: user.password }}
 
-          sign_in_variables = {
-            input: {
-                sessionInput: {
-                    email: user.email_address,
-                    password: user.password
-                }
-            }
-          }
+          jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
 
-          post "/graphql", params: { query: sign_in_query, variables: sign_in_variables }
-
-          expect(controller.current_user).to be_present
-
-          user
+          expect(jar.signed[:session_id]).to eq user.sessions.last.id
         end
 
         def feature_login_user(user)
