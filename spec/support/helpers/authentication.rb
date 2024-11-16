@@ -2,7 +2,7 @@ module Helpers
     module Authentication
         def login_user(user)
           # Sign in user - convert this into a helper
-          post session_url, params: { session: { email_address: user.email_address, password: user.password }}
+          post session_url, params: { session: { email_address: user.email_address, password: user.password } }
 
           jar = ActionDispatch::Cookies::CookieJar.build(request, cookies.to_hash)
 
