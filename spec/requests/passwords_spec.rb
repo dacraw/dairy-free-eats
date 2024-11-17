@@ -55,5 +55,19 @@ RSpec.describe "Passwords", type: :request do
         end
       end
     end
+
+    context "with an invalid password reset token" do
+      let(:user) { create :user, :valid_user }
+
+      it "redirects to password reset path" do
+        expect(
+          patch password_path(token: "12345"), params: { 
+            password: "new_password",
+            password_confirmation: "new_password"
+          }
+        ).to redirect_to(password_reset_path)
+
+      end
+    end
   end
 end
