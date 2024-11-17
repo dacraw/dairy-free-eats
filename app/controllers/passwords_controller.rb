@@ -19,7 +19,7 @@ class PasswordsController < ApplicationController
 
   def update
     if @user.update(
-      password: password_reset_params[:password], 
+      password: password_reset_params[:password],
       password_confirmation: password_reset_params[:password_confirmation]
     )
       render json: { message: "success", redirect_url: login_path }
