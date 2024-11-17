@@ -1,6 +1,7 @@
 import { gql } from "@apollo/client";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ConfirmButton from "components/confirmButton/ConfirmButton";
 import {
   FetchOrdersQuery,
   OrderStatus,
@@ -82,12 +83,12 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
           </div>
           <div className="justify-self-center">
             {order.status === "received" && (
-              <button
-                className="green-button"
-                onClick={() => setOrderActive(order.id)}
-              >
-                Set Active
-              </button>
+              <ConfirmButton
+                action={() => setOrderActive(order.id)}
+                actionText={`Set order #${order.id} to active?`}
+                buttonClassName="green-button"
+                buttonText="Set Active"
+              />
             )}
           </div>
         </div>
@@ -132,12 +133,12 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
             </div>
             <div>
               {order.status === "received" && (
-                <button
-                  className="green-button"
-                  onClick={() => setOrderActive(order.id)}
-                >
-                  Set Active
-                </button>
+                <ConfirmButton
+                  action={() => setOrderActive(order.id)}
+                  actionText={`Set order #${order.id} to active?`}
+                  buttonClassName="green-button"
+                  buttonText="Set Active"
+                />
               )}
             </div>
           </div>
