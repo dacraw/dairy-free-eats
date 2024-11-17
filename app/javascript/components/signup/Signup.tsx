@@ -12,7 +12,7 @@ const Signup = () => {
   if (!data) return null;
 
   return (
-    <div className="p-4 grid place-content-center h-[calc(100vh-17em)]">
+    <div className="p-4 grid place-content-center">
       {loading && <p>Loading</p>}
 
       <div className="md:max-w-[500px] md:mx-auto md:grid md:place-content-center">
