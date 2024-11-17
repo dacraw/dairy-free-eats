@@ -41,5 +41,7 @@ module Types
     field :fetch_checkout_session, resolver: Resolvers::Stripe::CheckoutSessionResolver, null: true
 
     field :orders, resolver: Resolvers::OrdersResolver, null: true
+
+    field :order, resolver: Resolvers::OrderResolver, null: true
   end
 end
