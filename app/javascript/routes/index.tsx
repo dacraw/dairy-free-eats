@@ -10,7 +10,13 @@ import Signup from "components/signup/Signup";
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const AppRoute = ({ children }: { children?: React.ReactElement }) => {
+const AppRoute = ({
+  header,
+  footer,
+}: {
+  header: React.ReactElement;
+  footer: React.ReactElement;
+}) => {
   return (
     <Router
       future={{
@@ -18,7 +24,7 @@ const AppRoute = ({ children }: { children?: React.ReactElement }) => {
         v7_relativeSplatPath: true,
       }}
     >
-      {children}
+      {header}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/order" element={<Order />} />
@@ -29,6 +35,7 @@ const AppRoute = ({ children }: { children?: React.ReactElement }) => {
         <Route path="/password_reset" element={<PasswordReset />} />
         <Route path="/passwords/:token/edit" element={<CreateNewPassword />} />
       </Routes>
+      {footer}
     </Router>
   );
 };
