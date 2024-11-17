@@ -7,7 +7,7 @@ RSpec.feature "PasswordResets", type: :feature do
   it "sends an email" do
     visit password_reset_path
 
-    expect(page).to have_content "Reset Password"
+    expect(page).to have_content "Password Reset"
 
     expect(PasswordsMailer).to receive(:reset).with(user) { passwords_mailer_double }
     expect(passwords_mailer_double).to receive(:deliver_later) { true }

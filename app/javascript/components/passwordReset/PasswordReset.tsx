@@ -9,7 +9,7 @@ const PasswordReset = () => {
   const [passwordReset, { data, loading, error }] = usePasswordReset();
 
   return (
-    <div className="grid place-content-center">
+    <div className="grid justify-center h-[calc(100vh-17em)] p-4">
       <div className="md:w-[300px]">
         {loading ? (
           <>
@@ -18,7 +18,7 @@ const PasswordReset = () => {
           </>
         ) : (
           <div>
-            <h3 className="text-3xl mb-2">Reset Password</h3>
+            <h3 className="text-3xl mb-2">Password Reset</h3>
             <p className="mb-4">
               If you've lost your password, you can reset it using the form
               below.
