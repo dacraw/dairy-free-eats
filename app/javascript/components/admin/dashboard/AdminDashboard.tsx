@@ -202,7 +202,7 @@ const AdminDashboard = () => {
   }, [currentUserData]);
 
   return (
-    <div className=" grid place-content-center  ">
+    <div className=" grid place-content-center">
       {ordersLoading || currentUserLoading || setOrderActiveLoading ? (
         <div className="">
           <FontAwesomeIcon className="text-6xl mb-6" spin icon={faSpinner} />

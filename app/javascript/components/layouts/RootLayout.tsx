@@ -8,8 +8,10 @@ const RootLayout = () => {
     <div>
       <HeaderNav />
 
-      <div className="min-h-[calc(100vh-17em)]">
-        <Outlet />
+      <div className="min-h-[calc(100vh-17em)] grid justify-center">
+        <div className="md:min-w-[500px] px-4 grid justify-center">
+          <Outlet />
+        </div>
       </div>
 
       <Footer />
