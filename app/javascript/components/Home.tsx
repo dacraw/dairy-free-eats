@@ -2,8 +2,8 @@ import React from "react";
 
 const Home = () => {
   return (
-    <div className="grid place-content-center gap-6">
-      <div className="text-center w-80 bg-blue-700 rounded p-6">
+    <div className="grid place-content-center gap-6 md:w-80">
+      <div className="text-center bg-blue-700 rounded p-6">
         <p className="mb-4 text-gray-200 font-bold">
           Order lactose-free food that is tasty and affordable.
         </p>
@@ -19,7 +19,7 @@ const Home = () => {
         </p>
       </div>
 
-      <div className="text-center w-80 bg-green-700 rounded p-6 text-lg">
+      <div className="text-center bg-green-700 rounded p-6 text-lg">
         <h3 className="font-bold mb-2 underline">
           Project Technical Information:
         </h3>
