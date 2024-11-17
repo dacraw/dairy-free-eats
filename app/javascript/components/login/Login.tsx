@@ -12,7 +12,7 @@ const Login = () => {
   if (!data) return null;
 
   return (
-    <div className="grid align-top justify-center min-h-screen">
+    <div className="grid align-top justify-center h-[calc(100vh-17em)]">
       <div>
         <form onSubmit={handleSubmit(login)} className="mb-12">
           {error && <p className="text-red-700">{startCase(error.message)}</p>}

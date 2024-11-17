@@ -10,7 +10,7 @@ const CreateNewPassword = () => {
   const [createNewPassword, { data, loading, error }] = useCreateNewPassword();
 
   return (
-    <div className="grid place-content-center">
+    <div className="grid justify-center h-[calc(100vh-17em)]">
       <div className="w-[300px]">
         {loading ? (
           <>
