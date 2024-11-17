@@ -65,4 +65,8 @@ RSpec.configure do |config|
 
 
   config.include Helpers::Authentication
+
+  config.before(:each, type: :feature) do
+    page.driver.browser.manage.window.resize_to(1280, 1024)
+  end
 end
