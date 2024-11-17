@@ -18,9 +18,9 @@ const ConfirmButton: React.FC<{
 
   return (
     <div className="text-center select-none ">
-      <div className={buttonClassName} onClick={() => toggleShow(true)}>
-        <span>{buttonText}</span>
-      </div>
+      <button className={buttonClassName} onClick={() => toggleShow(true)}>
+        {buttonText}
+      </button>
       <div
         className={`${
           show ? "fixed" : "hidden"
