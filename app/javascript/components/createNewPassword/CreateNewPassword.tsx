@@ -19,14 +19,15 @@ const CreateNewPassword = () => {
           </>
         ) : (
           <div>
-            <h3 className="text-2xl mb-8">Set New Password</h3>
+            <h3 className="text-2xl mb-8">Create New Password</h3>
             <form onSubmit={handleSubmit(createNewPassword)}>
               {error && (
                 <p className="text-red-700 my-4 text-center">{error.message}</p>
               )}
               <div className="grid mb-4">
-                <label>New Password</label>
+                <label htmlFor="password">New Password</label>
                 <input
+                  id="password"
                   className="p-2"
                   minLength={8}
                   type="password"
@@ -34,8 +35,11 @@ const CreateNewPassword = () => {
                 />
               </div>
               <div className="grid mb-4">
-                <label>Confirm New Password</label>
+                <label htmlFor="passwordConfirmation">
+                  Confirm New Password
+                </label>
                 <input
+                  id="passwordConfirmation"
                   className="p-2"
                   minLength={8}
                   type="password"

@@ -9,9 +9,9 @@ RSpec.describe "Passwords", type: :request do
       it "sends an email to the user" do
         expect(PasswordsMailer).to receive(:reset).with(user) { passwords_mailer_double }
         expect(passwords_mailer_double).to receive(:deliver_later) { true }
-        
-        post passwords_path, params: { password: { email_address: user.email_address}}
-        
+
+        post passwords_path, params: { password: { email_address: user.email_address } }
+
         expect(response).to have_http_status(200)
 
         expect(JSON.parse(response.body)["message"]).to eq "Password reset instructions sent (if user with that email address exists)."
@@ -28,7 +28,7 @@ RSpec.describe "Passwords", type: :request do
           new_password = Faker::Internet.password min_length: 8
 
           expect {
-            patch password_path(token: user.password_reset_token), params: { 
+            patch password_path(token: user.password_reset_token), params: {
               password: new_password,
               password_confirmation: new_password
             }
@@ -43,7 +43,7 @@ RSpec.describe "Passwords", type: :request do
       context "when there is an unmatching password and password confirmation" do
         it "returns a json error" do
           expect {
-            patch password_path(token: user.password_reset_token), params: { 
+            patch password_path(token: user.password_reset_token), params: {
               password: "new_password",
               password_confirmation: "does_not_match"
             }
@@ -61,12 +61,11 @@ RSpec.describe "Passwords", type: :request do
 
       it "redirects to password reset path" do
         expect(
-          patch password_path(token: "12345"), params: { 
+          patch password_path(token: "12345"), params: {
             password: "new_password",
             password_confirmation: "new_password"
           }
         ).to redirect_to(password_reset_path)
-
       end
     end
   end
