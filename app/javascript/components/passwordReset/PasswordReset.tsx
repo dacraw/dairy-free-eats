@@ -9,7 +9,7 @@ const PasswordReset = () => {
   const [passwordReset, { data, loading, error }] = usePasswordReset();
 
   return (
-    <div className="grid justify-center h-[calc(100vh-17em)] p-4">
+    <div className="grid justify-center p-4">
       <div className="md:w-[300px]">
         {loading ? (
           <>
