@@ -6,7 +6,9 @@ Rails.application.routes.draw do
   post "demo_admin_login", to: "sessions#demo_admin_login"
   get "password_reset", to: "passwords#new"
 
-  resources :passwords, param: :token
+
+  resources :passwords, param: :token, except: [ :new ]
+
   if Rails.env.development?
     mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/graphql"
   end
