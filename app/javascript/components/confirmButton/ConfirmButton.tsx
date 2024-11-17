@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const ConfirmButton: React.FC<{
-  actionText?: string;
+  actionText: string;
   buttonText: string;
   buttonClassName?: string;
   action: () => void;
@@ -17,11 +17,12 @@ const ConfirmButton: React.FC<{
   }, [show]);
 
   return (
-    <div className="text-center select-none ">
+    <div className="text-center select-none">
       <button className={buttonClassName} onClick={() => toggleShow(true)}>
         {buttonText}
       </button>
       <div
+        data-testid="confirm-button-modal"
         className={`${
           show ? "fixed" : "hidden"
         } bg-gray-400/50 top-0 left-0 border-gray-200  flex justify-center items-center w-full h-full`}
