@@ -2,24 +2,14 @@ import React from "react";
 import { screen, render } from "@testing-library/react";
 import AdminDashboard, {
   FETCH_ORDERS,
-  SET_ORDER_STATUS,
 } from "components/admin/dashboard/AdminDashboard";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import {
-  CurrentUserQuery,
-  FetchOrdersQuery,
-  OrderStatus,
-  SetOrderStatusMutation,
-  SetOrderStatusMutationVariables,
-} from "graphql/types";
+import { CurrentUserQuery, FetchOrdersQuery, OrderStatus } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import Home from "components/Home";
 
-const validMocks: MockedResponse<
-  FetchOrdersQuery | CurrentUserQuery | SetOrderStatusMutation,
-  SetOrderStatusMutationVariables
->[] = [
+const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
   {
     maxUsageCount: 2,
     request: {
@@ -73,23 +63,7 @@ const validMocks: MockedResponse<
       },
     },
   },
-  {
-    request: {
-      query: SET_ORDER_STATUS,
-      variables: {
-        input: {
-          setOrderStatusInputType: { id: "1", status: OrderStatus.Active },
-        },
-      },
-    },
-    result: {
-      data: {
-        setOrderStatus: {
-          order: { id: "1", status: OrderStatus.Active },
-        },
-      },
-    },
-  },
+
   {
     request: {
       query: FETCH_ORDERS,
