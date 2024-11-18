@@ -30,11 +30,22 @@ class OrderMailerPreview < ActionMailer::Preview
         line_items = order.stripe_checkout_session_line_items
 
         OrderMailer
-            .with(
-                order: order,
-                email_to: email,
-                line_items: line_items
-            )
+            .with(order: order)
             .order_active
+    end
+
+    def order_in_transit
+        checkout_session_mock_json = JSON.parse(
+            File.read "./spec/fixtures/stripe/stripe_checkout_session_customer_present.json",
+            symbolize_names: true
+        )
+
+        email = Stripe::Checkout::Session.construct_from(checkout_session_mock_json).customer_details.email
+        order = Order.last
+        line_items = order.stripe_checkout_session_line_items
+
+        OrderMailer
+            .with(order: order)
+            .order_in_transit
     end
 end
