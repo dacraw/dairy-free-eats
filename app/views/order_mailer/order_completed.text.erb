@@ -1,0 +1,12 @@
+Order #<%= @order.id %> is officially complete!
+=======================================
+
+Completed Order Items:
+<% @line_items.map do |item| %>
+    <%= item["name"] %> x<%= item["quantity"] %>
+<% end %>
+=======================================
+
+Thank you so much for demo'ing this MVP for a food ordering app! I will be implementing new features to it as time goes on -- ideally, for both of us, with the end goal of actually delivering food!!
+
+Until we meet someday, I hope you fare incredibly well and make the most of every day!
