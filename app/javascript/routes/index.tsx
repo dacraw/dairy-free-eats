@@ -1,6 +1,7 @@
 import Home from "components/Home";
 import Order from "components/Order/Order";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
+import AdminOrder from "components/admin/order/AdminOrder";
 import CreateNewPassword from "components/createNewPassword/CreateNewPassword";
 import RootLayout from "components/layouts/RootLayout";
 import Login from "components/login/Login";
@@ -27,6 +28,7 @@ const AppRoute = () => {
           <Route path="login" element={<Login />} />
           <Route path="success" element={<OrderSuccess />} />
           <Route path="admin/dashboard" element={<AdminDashboard />} />
+          <Route path="admin/orders/:orderId" element={<AdminOrder />} />
           <Route path="password_reset" element={<PasswordReset />} />
           <Route
             path="/passwords/:token/edit"

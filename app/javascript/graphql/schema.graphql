@@ -137,13 +137,13 @@ type Mutation {
 }
 
 type Order {
-  createdAt: ISO8601DateTime!
+  createdAt: String!
   guestEmail: String
   id: ID!
   status: OrderStatus!
   stripeCheckoutSessionLineItems: [OrderLineItem!]!
   stripePaymentIntentId: String!
-  updatedAt: ISO8601DateTime!
+  updatedAt: String!
   user: User
 }
 
@@ -226,6 +226,7 @@ type Query {
   currentUser: User
   fetchCheckoutSession(id: ID!): CheckoutSession
   listProducts: ProductListObject!
+  order(id: ID!): Order
   orders: [Order!]
   retrieveProduct(productId: String!): Product
 }

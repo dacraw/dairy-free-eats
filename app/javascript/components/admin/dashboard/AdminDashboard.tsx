@@ -12,7 +12,7 @@ import {
   useSetOrderStatusMutation,
 } from "graphql/types";
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export const SET_ORDER_STATUS = gql`
   mutation SetOrderStatus($input: SetOrderStatusInput!) {
@@ -71,7 +71,14 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
           key={order.id}
           className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4"
         >
-          <p>{order.id}</p>
+          <p>
+            <Link
+              to={`/admin/orders/${order.id}`}
+              className="text-blue-400 hover:underline"
+            >
+              {order.id}
+            </Link>
+          </p>
           <p>{order.status}</p>
           <p>{order.user?.email || order.guestEmail}</p>
           <div>
@@ -111,7 +118,12 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
           <div key={order.id} className="bg-blue-700 rounded mb-2 p-2">
             <div className="mb-2">
               <p className="font-bold">Id</p>
-              <p>{order.id}</p>
+              <Link
+                className="underline text-blue-300"
+                to={`/admin/orders/${order.id}`}
+              >
+                {order.id}
+              </Link>
             </div>
             <div className="mb-2">
               <p className="font-bold">Status</p>
