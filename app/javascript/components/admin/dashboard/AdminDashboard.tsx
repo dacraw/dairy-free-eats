@@ -186,7 +186,7 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
                   buttonText="Set In-Transit"
                 />
               )}
-              {order.status === OrderStatus.Completed && (
+              {order.status === OrderStatus.InTransit && (
                 <ConfirmButton
                   action={() => setOrderInTransit(order.id)}
                   actionText={`Set order #${order.id} to completed?`}
