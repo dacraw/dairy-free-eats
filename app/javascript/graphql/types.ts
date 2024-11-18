@@ -143,7 +143,7 @@ export type MutationStripeCheckoutSessionCreateArgs = {
 
 export type Order = {
   __typename?: 'Order';
-  createdAt: Scalars['ISO8601DateTime']['output'];
+  createdAt: Scalars['String']['output'];
   guestEmail?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   status: OrderStatus;
@@ -220,12 +220,18 @@ export type Query = {
   currentUser?: Maybe<User>;
   fetchCheckoutSession?: Maybe<CheckoutSession>;
   listProducts: ProductListObject;
+  order?: Maybe<Order>;
   orders?: Maybe<Array<Order>>;
   retrieveProduct?: Maybe<Product>;
 };
 
 
 export type QueryFetchCheckoutSessionArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryOrderArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -309,6 +315,13 @@ export type FetchOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FetchOrdersQuery = { __typename?: 'Query', orders?: Array<{ __typename?: 'Order', id: string, status: OrderStatus, guestEmail?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
+
+export type FetchOrderQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+}>;
+
+
+export type FetchOrderQuery = { __typename?: 'Query', order?: { __typename?: 'Order', id: string, status: OrderStatus, stripePaymentIntentId: string, createdAt: string, updatedAt: any, guestEmail?: string | null, user?: { __typename?: 'User', id: string, email: string } | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }> } | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -492,6 +505,59 @@ export type FetchOrdersQueryHookResult = ReturnType<typeof useFetchOrdersQuery>;
 export type FetchOrdersLazyQueryHookResult = ReturnType<typeof useFetchOrdersLazyQuery>;
 export type FetchOrdersSuspenseQueryHookResult = ReturnType<typeof useFetchOrdersSuspenseQuery>;
 export type FetchOrdersQueryResult = Apollo.QueryResult<FetchOrdersQuery, FetchOrdersQueryVariables>;
+export const FetchOrderDocument = gql`
+    query FetchOrder($id: ID!) {
+  order(id: $id) {
+    id
+    user {
+      id
+      email
+    }
+    status
+    stripePaymentIntentId
+    createdAt
+    updatedAt
+    stripeCheckoutSessionLineItems {
+      name
+      quantity
+    }
+    guestEmail
+  }
+}
+    `;
+
+/**
+ * __useFetchOrderQuery__
+ *
+ * To run a query within a React component, call `useFetchOrderQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFetchOrderQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFetchOrderQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFetchOrderQuery(baseOptions: Apollo.QueryHookOptions<FetchOrderQuery, FetchOrderQueryVariables> & ({ variables: FetchOrderQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FetchOrderQuery, FetchOrderQueryVariables>(FetchOrderDocument, options);
+      }
+export function useFetchOrderLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FetchOrderQuery, FetchOrderQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FetchOrderQuery, FetchOrderQueryVariables>(FetchOrderDocument, options);
+        }
+export function useFetchOrderSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<FetchOrderQuery, FetchOrderQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<FetchOrderQuery, FetchOrderQueryVariables>(FetchOrderDocument, options);
+        }
+export type FetchOrderQueryHookResult = ReturnType<typeof useFetchOrderQuery>;
+export type FetchOrderLazyQueryHookResult = ReturnType<typeof useFetchOrderLazyQuery>;
+export type FetchOrderSuspenseQueryHookResult = ReturnType<typeof useFetchOrderSuspenseQuery>;
+export type FetchOrderQueryResult = Apollo.QueryResult<FetchOrderQuery, FetchOrderQueryVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {

@@ -10,7 +10,10 @@ module Types
       object.status
     end
     field :stripe_payment_intent_id, String, null: false
-    field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :created_at, String, null: false
+    def created_at
+      object.created_at.strftime "%Y-%m-%d"
+    end
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
     field :stripe_checkout_session_line_items, [ Types::OrderLineItemType ], null: false
     field :guest_email, String, null: true

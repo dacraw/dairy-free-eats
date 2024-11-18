@@ -137,7 +137,7 @@ type Mutation {
 }
 
 type Order {
-  createdAt: ISO8601DateTime!
+  createdAt: String!
   guestEmail: String
   id: ID!
   status: OrderStatus!
@@ -226,6 +226,7 @@ type Query {
   currentUser: User
   fetchCheckoutSession(id: ID!): CheckoutSession
   listProducts: ProductListObject!
+  order(id: ID!): Order
   orders: [Order!]
   retrieveProduct(productId: String!): Product
 }
