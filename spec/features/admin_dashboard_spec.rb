@@ -28,7 +28,7 @@ RSpec.feature "Admin Dashboard", type: :feature do
             expect(order.reload.active?).to be true
         end
 
-        it "allows the user to set a received order to in_transit" do
+        it "allows the user to set a received order to in transit" do
             order = create :order, :with_line_items, :with_a_user, :active
 
             expect(OrderMailer).to receive(:with).with(order: order) { mailer_double }
@@ -45,6 +45,25 @@ RSpec.feature "Admin Dashboard", type: :feature do
 
             expect(page).to have_content "In Transit"
             expect(order.reload.in_transit?).to be true
+        end
+
+        it "allows the user to set a received order to completed" do
+            order = create :order, :with_line_items, :with_a_user, :in_transit
+
+            expect(OrderMailer).to receive(:with).with(order: order) { mailer_double }
+            expect(mailer_double).to receive(:order_completed) { mailer_double }
+            expect(mailer_double).to receive(:deliver_later) { true }
+
+            visit admin_dashboard_index_path
+
+            expect(page).to have_content "Admin Dashboard"
+
+            click_button "Set Completed"
+            expect(page).to have_button "Confirm"
+            click_button "Confirm"
+
+            expect(page).to have_content "Completed"
+            expect(order.reload.completed?).to be true
         end
     end
 end

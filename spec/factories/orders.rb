@@ -16,6 +16,12 @@ FactoryBot.define do
       end
     end
 
+    trait :in_transit do
+      after(:create) do |order|
+        order.in_transit!
+      end
+    end
+
     trait :with_a_user do
       user { create :user, :valid_user }
     end

@@ -20,8 +20,9 @@ module Mutations
         OrderMailer.with(order: order).order_active.deliver_later
       when :in_transit
         OrderMailer.with(order: order).order_in_transit.deliver_later
+      when :completed
+        OrderMailer.with(order: order).order_completed.deliver_later
       end
-
 
       order.reload
 

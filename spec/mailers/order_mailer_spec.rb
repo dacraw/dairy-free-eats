@@ -59,7 +59,7 @@ RSpec.describe OrderMailer, type: :mailer do
   end
 
   context "#order_in_transit" do
-    let(:order) { create :order, :with_line_items, :with_a_user }
+    let(:order) { create :order, :with_line_items, :with_a_user, :active }
 
     it "sends an email" do
       expect {
@@ -74,6 +74,28 @@ RSpec.describe OrderMailer, type: :mailer do
       email_body = email.html_part.body.decoded
 
       expect(email_body).to include "Order ##{order.id} is now \"In Transit\"!"
+      order.stripe_checkout_session_line_items.each do |item|
+        expect(email_body).to include "#{item['name']} x#{item['quantity']}"
+      end
+    end
+  end
+
+  context "#order_completed" do
+    let(:order) { create :order, :with_line_items, :with_a_user, :in_transit }
+
+    it "sends an email" do
+      expect {
+        OrderMailer.with(order: order).order_completed.deliver_now
+      }.to change { ActionMailer::Base.deliveries.length }.from(0).to(1)
+
+      email = ActionMailer::Base.deliveries.first
+
+      expect(email.to).to include order.user.email_address
+      expect(email.subject).to eq "Order Completed!"
+
+      email_body = email.html_part.body.decoded
+
+      expect(email_body).to include "Order ##{order.id} is officially complete!"
       order.stripe_checkout_session_line_items.each do |item|
         expect(email_body).to include "#{item['name']} x#{item['quantity']}"
       end

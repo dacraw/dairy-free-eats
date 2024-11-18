@@ -1,0 +1,13 @@
+<p>Order #<%= @order.id %> is officially complete! &#128378;</p>
+
+<h4>Completed Order Items:</h4>
+<ul>
+    <% @line_items.map do |item| %>
+        <li><%= item["name"] %> x<%= item["quantity"] %></li>
+    <% end %>
+</ul>
+<hr />
+
+<p>Thank you so much for demo'ing this MVP for a food ordering app! &#128591; I will be implementing new features to it as time goes on -- ideally, for both of us, with the end goal of actually delivering food!!</p>
+
+<p>Until we meet someday, I hope you fare incredibly well and make the most of every day! &#128075;  &#128513;  </p>
