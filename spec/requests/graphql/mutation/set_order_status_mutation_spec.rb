@@ -68,6 +68,9 @@ RSpec.describe "Set Order Status Mutation Spec" do
       end
 
       context "when the order is set to active" do
+         let(:order) { create :order, :with_a_user, :with_line_items }
+         let(:mailer_double) { double('OrderMailer') }
+
          def perform_query(order)
             expect {
                post graphql_path, params: {
@@ -85,8 +88,6 @@ RSpec.describe "Set Order Status Mutation Spec" do
          end
 
          it "sets the order status" do
-            order = create :order, :with_line_items
-
             perform_query order
 
             graphql_response = JSON.parse(response.body)
@@ -96,17 +97,51 @@ RSpec.describe "Set Order Status Mutation Spec" do
             expect(graphql_order["status"]).to eq order.status
          end
 
-         context "when the order has a user" do
-            let(:order) { create :order, :with_a_user, :with_line_items }
-            let(:mailer_double) { double('OrderMailer') }
+         it "sends an email to the user's email address" do
+            expect(OrderMailer).to receive(:with).with(order: order) { mailer_double }
+            expect(mailer_double).to receive(:order_active) { mailer_double }
+            expect(mailer_double).to receive(:deliver_later) { true }
 
-            it "sends an email to the user's email address" do
-               expect(OrderMailer).to receive(:with).with(order: order) { mailer_double }
-               expect(mailer_double).to receive(:order_active) { mailer_double }
-               expect(mailer_double).to receive(:deliver_later) { true }
+            perform_query order
+         end
+      end
 
-               perform_query order
-            end
+      context "when the order is set to in-transit" do
+         let(:order) { create :order, :with_line_items, :active }
+         let(:mailer_double) { double(OrderMailer) }
+         
+         def perform_query(order)
+            expect {
+               post graphql_path, params: {
+                  query: query,
+                  variables: {
+                     input: {
+                        setOrderStatusInputType: {
+                           id: order.id,
+                           status: "in_transit"
+                        }
+                     }
+                  }
+               }
+            }.to change { order.reload.status }.from("active").to("in_transit")
+         end
+
+         it "sets the order status" do
+            perform_query order
+
+            graphql_response = JSON.parse(response.body)
+
+            graphql_order = graphql_response["data"]["setOrderStatus"]["order"]
+            expect(graphql_order["id"].to_i).to eq order.id
+            expect(graphql_order["status"]).to eq order.status
+         end
+
+         it "sends an email" do
+            expect(OrderMailer).to receive(:with).with(order: order) { mailer_double }
+            expect(mailer_double).to receive(:order_in_transit) { mailer_double }
+            expect(mailer_double).to receive(:deliver_later) { true }
+
+            perform_query order
          end
       end
    end
