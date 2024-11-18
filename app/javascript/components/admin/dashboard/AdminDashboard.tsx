@@ -11,6 +11,7 @@ import {
   useFetchOrdersQuery,
   useSetOrderStatusMutation,
 } from "graphql/types";
+import { startCase } from "lodash";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -84,7 +85,7 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
                 {order.id}
               </Link>
             </p>
-            <p>{order.status}</p>
+            <p>{startCase(order.status)}</p>
             <p>{order.user?.email || order.guestEmail}</p>
             <div>
               {order.stripeCheckoutSessionLineItems.map((item, i) => (
@@ -142,7 +143,7 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
             </div>
             <div className="mb-2">
               <p className="font-bold">Status</p>
-              <p>{order.status}</p>
+              <p>{startCase(order.status)}</p>
             </div>
             <div className="mb-2">
               <p className="font-bold">Email</p>
