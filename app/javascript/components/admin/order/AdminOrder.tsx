@@ -4,11 +4,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfirmButton from "components/confirmButton/ConfirmButton";
 import {
   OrderStatus,
+  useCurrentUserQuery,
   useFetchOrderQuery,
   useSetOrderStatusMutation,
 } from "graphql/types";
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const FETCH_ORDER = gql`
   query FetchOrder($id: ID!) {
@@ -46,6 +47,16 @@ const AdminOrder = () => {
       error: setOrderStatusError,
     },
   ] = useSetOrderStatusMutation();
+
+  const { loading: currentUserLoading, data: currentUserData } =
+    useCurrentUserQuery();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUserData?.currentUser && !currentUserData.currentUser.admin) {
+      navigate("/");
+    }
+  }, [currentUserData]);
 
   if (!data?.order) return null;
 
