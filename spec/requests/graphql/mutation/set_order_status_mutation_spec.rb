@@ -109,7 +109,7 @@ RSpec.describe "Set Order Status Mutation Spec" do
       context "when the order is set to in-transit" do
          let(:order) { create :order, :with_line_items, :active }
          let(:mailer_double) { double(OrderMailer) }
-         
+
          def perform_query(order)
             expect {
                post graphql_path, params: {
