@@ -37,8 +37,8 @@ RSpec.describe("Order Resolver Spec") do
             expect(gql_order["user"]["id"].to_i).to eq order.user.id
             expect(gql_order["status"]).to eq order.status
             expect(gql_order["stripePaymentIntentId"]).to eq order.stripe_payment_intent_id
-            expect(Time.parse(gql_order["createdAt"])).to be_within(1.second).of(order.created_at.to_datetime)
-            expect(Time.parse(gql_order["updatedAt"])).to be_within(1.second).of(order.updated_at.to_datetime)
+            expect(gql_order["createdAt"]).to eq order.created_at.strftime "%Y-%m-%d"
+            expect(gql_order["updatedAt"]).to eq order.updated_at.strftime "%Y-%m-%d"
             expect(gql_order["stripeCheckoutSessionLineItems"]).to match_array(order.stripe_checkout_session_line_items)
             expect(gql_order["guestEmail"]).to eq order.guest_email
         end

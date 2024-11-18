@@ -149,7 +149,7 @@ export type Order = {
   status: OrderStatus;
   stripeCheckoutSessionLineItems: Array<OrderLineItem>;
   stripePaymentIntentId: Scalars['String']['output'];
-  updatedAt: Scalars['ISO8601DateTime']['output'];
+  updatedAt: Scalars['String']['output'];
   user?: Maybe<User>;
 };
 
@@ -321,7 +321,7 @@ export type FetchOrderQueryVariables = Exact<{
 }>;
 
 
-export type FetchOrderQuery = { __typename?: 'Query', order?: { __typename?: 'Order', id: string, status: OrderStatus, stripePaymentIntentId: string, createdAt: string, updatedAt: any, guestEmail?: string | null, user?: { __typename?: 'User', id: string, email: string } | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }> } | null };
+export type FetchOrderQuery = { __typename?: 'Query', order?: { __typename?: 'Order', id: string, status: OrderStatus, stripePaymentIntentId: string, createdAt: string, updatedAt: string, guestEmail?: string | null, user?: { __typename?: 'User', id: string, email: string } | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }> } | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 

@@ -1303,7 +1303,7 @@
                 "name": null,
                 "ofType": {
                   "kind": "SCALAR",
-                  "name": "ISO8601DateTime",
+                  "name": "String",
                   "ofType": null
                 }
               },
