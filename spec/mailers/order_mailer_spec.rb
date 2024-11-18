@@ -54,7 +54,7 @@ RSpec.describe OrderMailer, type: :mailer do
 
       email_body = email.html_part.body.decoded
 
-      expect(email_body).to include "Order ##{order.id} is now being \"prepared\" and will soon enter the in-transit state."
+      expect(email_body).to include "Order ##{order.id} is now being \"prepared\", aka it has been set to active."
       order.stripe_checkout_session_line_items.each do |item|
         expect(email_body).to include "#{item['name']} x#{item['quantity']}"
       end
