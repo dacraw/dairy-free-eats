@@ -53,10 +53,10 @@ RSpec.describe OrderMailer, type: :mailer do
       expect(email.subject).to eq "Order Being Prepared"
 
       email_body = email.html_part.body.decoded
-      
+
       expect(email_body).to include "Order ##{order.id} is now being \"prepared\" and will soon enter the in-transit state."
-      order.stripe_checkout_session_line_items.each do |item| 
-        expect(email_body).to include "#{item['name']} x#{item['quantity']}" 
+      order.stripe_checkout_session_line_items.each do |item|
+        expect(email_body).to include "#{item['name']} x#{item['quantity']}"
       end
     end
   end
