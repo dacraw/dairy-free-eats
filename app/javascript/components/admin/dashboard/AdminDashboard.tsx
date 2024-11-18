@@ -71,10 +71,7 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
         <p className="font-bold">Items</p>
         <p></p>
       </div>
-      <div
-        // key={order.id}
-        className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4 items-center"
-      >
+      <div className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4 items-center">
         {orders.map((order) => (
           <React.Fragment key={order.id}>
             <p>
