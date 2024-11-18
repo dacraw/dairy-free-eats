@@ -52,12 +52,16 @@ type OrderTableArgs = {
   setOrderInTransit: (
     id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
   ) => void;
+  setOrderCompleted: (
+    id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
+  ) => void;
 };
 
 const DesktopOrderTable: React.FC<OrderTableArgs> = ({
   orders,
   setOrderActive,
   setOrderInTransit,
+  setOrderCompleted,
 }) => {
   if (!orders) return null;
 
@@ -108,6 +112,14 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
                   buttonText="Set In-Transit"
                 />
               )}
+              {order.status === OrderStatus.InTransit && (
+                <ConfirmButton
+                  action={() => setOrderCompleted(order.id)}
+                  actionText={`Set order #${order.id} to completed?`}
+                  buttonClassName="green-button"
+                  buttonText="Set Completed"
+                />
+              )}
             </div>
           </React.Fragment>
         ))}
@@ -120,6 +132,7 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
   orders,
   setOrderActive,
   setOrderInTransit,
+  setOrderCompleted,
 }) => {
   if (!orders) return null;
 
@@ -171,6 +184,14 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
                   actionText={`Set order #${order.id} to in-transit?`}
                   buttonClassName="green-button"
                   buttonText="Set In-Transit"
+                />
+              )}
+              {order.status === OrderStatus.Completed && (
+                <ConfirmButton
+                  action={() => setOrderInTransit(order.id)}
+                  actionText={`Set order #${order.id} to completed?`}
+                  buttonClassName="green-button"
+                  buttonText="Set Completed"
                 />
               )}
             </div>
@@ -226,6 +247,14 @@ const AdminDashboard = () => {
     });
   };
 
+  const setOrderCompleted = (
+    id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
+  ) => {
+    setOrderStatus({
+      variables: setOrderStatusVariables(id, OrderStatus.Completed),
+    });
+  };
+
   const { loading: currentUserLoading, data: currentUserData } =
     useCurrentUserQuery();
   const navigate = useNavigate();
@@ -260,11 +289,13 @@ const AdminDashboard = () => {
                 orders={ordersData.orders}
                 setOrderActive={setOrderActive}
                 setOrderInTransit={setOrderInTransit}
+                setOrderCompleted={setOrderCompleted}
               />
               <ResponsiveOrderTable
                 orders={ordersData.orders}
                 setOrderActive={setOrderActive}
                 setOrderInTransit={setOrderInTransit}
+                setOrderCompleted={setOrderCompleted}
               />
             </>
           )}
