@@ -11,7 +11,7 @@ import {
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-const FETCH_ORDER = gql`
+export const FETCH_ORDER = gql`
   query FetchOrder($id: ID!) {
     order(id: $id) {
       id
@@ -58,13 +58,11 @@ const AdminOrder = () => {
     }
   }, [currentUserData]);
 
-  if (!data?.order) return null;
-
   return (
     <div>
-      {loading ? (
+      {loading || currentUserLoading ? (
         <div className="grid justify-center">
-          <FontAwesomeIcon className="text-6xl mb-6" icon={faSpinner} />
+          <FontAwesomeIcon className="text-6xl mb-6" icon={faSpinner} spin />
           <p>Loading order...</p>
         </div>
       ) : (
@@ -83,7 +81,7 @@ const AdminOrder = () => {
                 : data?.order?.guestEmail}
             </p>
             <p className="justify-self-end font-bold text-right">Status</p>
-            <p>{data?.order?.status}</p>
+            <p data-testid="admin-order-status">{data?.order?.status}</p>
 
             <p className="justify-self-end font-bold text-right">
               Stripe Payment Intent Id
@@ -100,7 +98,7 @@ const AdminOrder = () => {
               ))}
             </div>
           </div>
-          {data.order.status === OrderStatus.Received && (
+          {data?.order?.status === OrderStatus.Received && (
             <ConfirmButton
               action={async () => {
                 await setOrderStatus({

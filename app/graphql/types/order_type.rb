@@ -23,7 +23,7 @@ module Types
       object.updated_at.strftime "%Y-%m-%d"
     end
 
-    field :stripe_checkout_session_line_items, [ Types::OrderLineItemType ], null: false
+    field :stripe_checkout_session_line_items, [ Types::OrderLineItemType, null: false ], null: false
     field :guest_email, String, null: true
     def guest_email
       return nil if object.guest_email.nil?
