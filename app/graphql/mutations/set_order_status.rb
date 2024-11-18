@@ -13,9 +13,13 @@ module Mutations
 
       raise GraphQL::ExecutionError, "The order does not exist." if order.nil?
 
-      # raise GraphQL::ExecutionError, "The order is not in the received status." if !order.received?
-
       order.update(status: set_order_status_input_type[:status])
+
+      case order.status.to_sym
+      when :active
+        OrderMailer.with(order: order).order_active.deliver_later
+      end
+
 
       order.reload
 

@@ -1,0 +1,11 @@
+Order #<%= @order.id %> is now being "prepared", aka it has been set to active.
+=======================================
+
+Items Ordered:
+    
+<% @line_items.map do |item| %>
+    <%= item["name"] %> x<%= item["quantity"] %>
+<% end %>
+=======================================
+
+Please note that this is only a demo, no food will actually be delivered to you. :)

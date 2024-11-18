@@ -1,0 +1,11 @@
+<p>Order #<%= @order.id %> is now being "prepared", aka it has been set to active.</p>
+
+<h4>Items Ordered:</h4>
+<ul>
+    <% @line_items.map do |item| %>
+        <li><%= item["name"] %> x<%= item["quantity"] %></li>
+    <% end %>
+</ul>
+<hr />
+
+<p style="font-size: .8em;">Please note that this is only a demo, no food will actually be delivered to you &#128513;</p>
