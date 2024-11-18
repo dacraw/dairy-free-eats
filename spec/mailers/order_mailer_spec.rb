@@ -42,11 +42,7 @@ RSpec.describe OrderMailer, type: :mailer do
     it "sends an email" do
       expect {
         OrderMailer
-          .with(
-            order: order,
-            line_items: order.stripe_checkout_session_line_items,
-            email_to: order.guest_email
-          )
+          .with(order: order)
           .order_active
           .deliver_now
       }.to change { ActionMailer::Base.deliveries.length }.from(0).to(1)

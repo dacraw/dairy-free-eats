@@ -17,9 +17,9 @@ class OrderMailer < ApplicationMailer
     end
 
     def order_active
-        @line_items = params[:line_items]
         @order = params[:order]
-        email = params[:email_to]
+        @line_items = @order.stripe_checkout_session_line_items
+        email = @order.user.present? ? @order.user.email_address : @order.guest_email
 
         if email.blank?
             puts "No stripe customer email found for the customer: Order##{@order.id}"
