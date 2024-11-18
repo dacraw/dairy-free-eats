@@ -7,13 +7,18 @@ import {
   CurrentUserQuery,
   FetchOrderQuery,
   FetchOrderQueryVariables,
+  FetchOrdersQuery,
   OrderStatus,
   SetOrderStatusMutation,
   SetOrderStatusMutationVariables,
 } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import Home from "components/Home";
-import { SET_ORDER_STATUS } from "components/admin/dashboard/AdminDashboard";
+import AdminDashboard, {
+  FETCH_ORDERS,
+  SET_ORDER_STATUS,
+} from "components/admin/dashboard/AdminDashboard";
+import userEvent from "@testing-library/user-event";
 
 const orderMockValues: FetchOrderQuery["order"] = {
   id: "orderId_123",
@@ -87,6 +92,35 @@ const validMocks: MockedResponse<
   },
 ];
 
+const fetchOrdersMocks: MockedResponse<FetchOrdersQuery>[] = [
+  {
+    request: {
+      query: FETCH_ORDERS,
+    },
+    result: {
+      data: {
+        orders: [
+          {
+            id: "123",
+            status: OrderStatus.Received,
+            stripeCheckoutSessionLineItems: [
+              {
+                name: "Some great item",
+                quantity: 4,
+              },
+            ],
+            user: {
+              id: "1234",
+              email: "useremail@test.com",
+            },
+            guestEmail: null,
+          },
+        ],
+      },
+    },
+  },
+];
+
 describe("<AdminOrder />", () => {
   it("renders without errors", async () => {
     render(
@@ -116,6 +150,32 @@ describe("<AdminOrder />", () => {
       orderMockValues.stripeCheckoutSessionLineItems![0]?.name
     } x${orderMockValues.stripeCheckoutSessionLineItems![0]?.quantity}`;
     expect(screen.getByText(lineItemText)).toBeInTheDocument();
+  });
+
+  it("lets the user return to the dashboard", async () => {
+    render(
+      <MockedProvider
+        mocks={[...validMocks, ...fetchOrdersMocks]}
+        addTypename={false}
+      >
+        <MemoryRouter
+          initialEntries={["/admin/orders/1"]}
+          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+        >
+          <Routes>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/orders/:orderId" element={<AdminOrder />} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>
+    );
+
+    const backButton = await screen.findByText(/Back to Dashboard/i);
+    expect(backButton).toBeInTheDocument();
+
+    await userEvent.click(backButton);
+
+    expect(await screen.findByText(/Admin Dashboard/i)).toBeInTheDocument();
   });
 
   describe("while loading", () => {
