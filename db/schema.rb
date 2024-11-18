@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_16_112328) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_18_225203) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "order_messages", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "user_id", null: false
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_order_messages_on_order_id"
+    t.index ["user_id"], name: "index_order_messages_on_user_id"
+  end
 
   create_table "orders", force: :cascade do |t|
     t.bigint "user_id"
@@ -44,6 +54,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_16_112328) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "order_messages", "orders"
+  add_foreign_key "order_messages", "users"
   add_foreign_key "orders", "users"
   add_foreign_key "sessions", "users"
 end

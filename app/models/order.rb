@@ -1,6 +1,8 @@
 class Order < ApplicationRecord
   belongs_to :user, optional: true
 
+  has_many :order_messages
+
   enum :status, [ :received, :active, :in_transit, :completed, :cancelled ]
 
   validates_presence_of :stripe_payment_intent_id
