@@ -1,0 +1,14 @@
+Order #<%= @order.id %> is now "In Transit"! 
+=======================================
+
+Unfortunately, it isn't coming anytime soon -- but if you're reading this, chances are you already know this. I really am planning on doing this one day for reals, though :)</p>
+
+Items Being "Delivered":
+
+<% @line_items.map do |item| %>
+    <%= item["name"] %> x<%= item["quantity"] %>
+<% end %>
+
+=======================================
+
+Finally, you may return to the Admin Dashboard to set the order to "Complete"!

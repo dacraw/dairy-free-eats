@@ -11,6 +11,7 @@ import {
   useFetchOrdersQuery,
   useSetOrderStatusMutation,
 } from "graphql/types";
+import { startCase } from "lodash";
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -48,11 +49,15 @@ type OrderTableArgs = {
   setOrderActive: (
     id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
   ) => void;
+  setOrderInTransit: (
+    id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
+  ) => void;
 };
 
 const DesktopOrderTable: React.FC<OrderTableArgs> = ({
   orders,
   setOrderActive,
+  setOrderInTransit,
 }) => {
   if (!orders) return null;
 
@@ -66,40 +71,47 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
         <p className="font-bold">Items</p>
         <p></p>
       </div>
-      {orders.map((order) => (
-        <div
-          key={order.id}
-          className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4"
-        >
-          <p>
-            <Link
-              to={`/admin/orders/${order.id}`}
-              className="text-blue-400 hover:underline"
-            >
-              {order.id}
-            </Link>
-          </p>
-          <p>{order.status}</p>
-          <p>{order.user?.email || order.guestEmail}</p>
-          <div>
-            {order.stripeCheckoutSessionLineItems.map((item, i) => (
-              <p key={i}>
-                {item.name} x{item.quantity}
-              </p>
-            ))}
-          </div>
-          <div className="justify-self-center">
-            {order.status === "received" && (
-              <ConfirmButton
-                action={() => setOrderActive(order.id)}
-                actionText={`Set order #${order.id} to active?`}
-                buttonClassName="green-button"
-                buttonText="Set Active"
-              />
-            )}
-          </div>
-        </div>
-      ))}
+      <div className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4 items-center">
+        {orders.map((order) => (
+          <React.Fragment key={order.id}>
+            <p>
+              <Link
+                to={`/admin/orders/${order.id}`}
+                className="text-blue-400 hover:underline"
+              >
+                {order.id}
+              </Link>
+            </p>
+            <p>{startCase(order.status)}</p>
+            <p>{order.user?.email || order.guestEmail}</p>
+            <div>
+              {order.stripeCheckoutSessionLineItems.map((item, i) => (
+                <p key={i}>
+                  {item.name} x{item.quantity}
+                </p>
+              ))}
+            </div>
+            <div className="justify-self-center">
+              {order.status === OrderStatus.Received && (
+                <ConfirmButton
+                  action={() => setOrderActive(order.id)}
+                  actionText={`Set order #${order.id} to active?`}
+                  buttonClassName="green-button"
+                  buttonText="Set Active"
+                />
+              )}
+              {order.status === OrderStatus.Active && (
+                <ConfirmButton
+                  action={() => setOrderInTransit(order.id)}
+                  actionText={`Set order #${order.id} to in-transit?`}
+                  buttonClassName="green-button"
+                  buttonText="Set In-Transit"
+                />
+              )}
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
     </div>
   );
 };
@@ -107,6 +119,7 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
 const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
   orders,
   setOrderActive,
+  setOrderInTransit,
 }) => {
   if (!orders) return null;
 
@@ -127,7 +140,7 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
             </div>
             <div className="mb-2">
               <p className="font-bold">Status</p>
-              <p>{order.status}</p>
+              <p>{startCase(order.status)}</p>
             </div>
             <div className="mb-2">
               <p className="font-bold">Email</p>
@@ -144,12 +157,20 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
               </div>
             </div>
             <div>
-              {order.status === "received" && (
+              {order.status === OrderStatus.Received && (
                 <ConfirmButton
                   action={() => setOrderActive(order.id)}
                   actionText={`Set order #${order.id} to active?`}
                   buttonClassName="green-button"
                   buttonText="Set Active"
+                />
+              )}
+              {order.status === OrderStatus.Active && (
+                <ConfirmButton
+                  action={() => setOrderInTransit(order.id)}
+                  actionText={`Set order #${order.id} to in-transit?`}
+                  buttonClassName="green-button"
+                  buttonText="Set In-Transit"
                 />
               )}
             </div>
@@ -160,7 +181,7 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
   );
 };
 
-const setOrderActiveVariables = (
+const setOrderStatusVariables = (
   id: SetOrderStatusMutationVariables["input"]["setOrderStatusInputType"]["id"],
   status: SetOrderStatusMutationVariables["input"]["setOrderStatusInputType"]["status"]
 ): SetOrderStatusMutationVariables => {
@@ -193,7 +214,15 @@ const AdminDashboard = () => {
     id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
   ) => {
     setOrderStatus({
-      variables: setOrderActiveVariables(id, OrderStatus.Active),
+      variables: setOrderStatusVariables(id, OrderStatus.Active),
+    });
+  };
+
+  const setOrderInTransit = (
+    id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
+  ) => {
+    setOrderStatus({
+      variables: setOrderStatusVariables(id, OrderStatus.InTransit),
     });
   };
 
@@ -230,10 +259,12 @@ const AdminDashboard = () => {
               <DesktopOrderTable
                 orders={ordersData.orders}
                 setOrderActive={setOrderActive}
+                setOrderInTransit={setOrderInTransit}
               />
               <ResponsiveOrderTable
                 orders={ordersData.orders}
                 setOrderActive={setOrderActive}
+                setOrderInTransit={setOrderInTransit}
               />
             </>
           )}

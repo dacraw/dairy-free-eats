@@ -18,6 +18,8 @@ module Mutations
       case order.status.to_sym
       when :active
         OrderMailer.with(order: order).order_active.deliver_later
+      when :in_transit
+        OrderMailer.with(order: order).order_in_transit.deliver_later
       end
 
 

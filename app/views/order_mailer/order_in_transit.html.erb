@@ -1,0 +1,13 @@
+<p>Order #<%= @order.id %> is now "In Transit"! &#129395; </p>
+
+<p style="font-size: 10px">Unfortunately, it isn't coming anytime soon -- but if you're reading this, chances are you already know this. I really am planning on doing this one day for reals, though  &#128513; </p>
+
+<h4>Items Being "Delivered":</h4>
+<ul>
+    <% @line_items.map do |item| %>
+        <li><%= item["name"] %> x<%= item["quantity"] %></li>
+    <% end %>
+</ul>
+<hr />
+
+<p>Finally, you may <%= link_to "return to the Admin Dashboard", admin_dashboard_index_url %> to set the order to "Completed"!
