@@ -6,10 +6,6 @@ Rails.application.routes.draw do
   post "demo_admin_login", to: "sessions#demo_admin_login"
   get "password_reset", to: "passwords#new"
 
-  resources :orders, only: [ :show ] do
-    resources :order_messages, only: [ :index ]
-  end
-
   resources :passwords, param: :token, except: [ :new ]
 
   if Rails.env.development?

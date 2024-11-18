@@ -11,9 +11,8 @@ module Mutations
       order_message = ::OrderMessage.new **create_order_message_input_type
 
       if order_message.save
-        return { order_message: order_message, errors: [] }
+        { order_message: order_message, errors: [] }
       end
-      
     end
   end
 end
