@@ -18,7 +18,10 @@ const ConfirmButton: React.FC<{
 
   return (
     <div className="text-center select-none">
-      <button className={buttonClassName} onClick={() => toggleShow(true)}>
+      <button
+        className={`${buttonClassName} whitespace-pre`}
+        onClick={() => toggleShow(true)}
+      >
         {buttonText}
       </button>
       <div
