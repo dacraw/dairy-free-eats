@@ -99,9 +99,13 @@ const OrderChat = ({
 }) => {
   const chatRef = useRef<HTMLDivElement>(null);
 
-  const { data, loading } = useFetchOrderMessagesQuery({
+  const { data, loading, refetch } = useFetchOrderMessagesQuery({
     variables: { orderId },
   });
+
+  useEffect(() => {
+    refetch();
+  }, [currentUserId]);
 
   useEffect(() => {
     if (!chatRef.current) return;
