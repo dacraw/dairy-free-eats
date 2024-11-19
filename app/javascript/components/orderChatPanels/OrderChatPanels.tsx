@@ -61,7 +61,13 @@ const OrderChatMessageForm = ({
     { data: createOrderMessageData, loading: createOrderMessageLoading },
   ] = useCreateOrderMessageMutation();
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, setFocus } = useForm<{
+    message: string;
+  }>();
+
+  useEffect(() => {
+    setFocus("message");
+  }, []);
 
   return (
     <form
@@ -83,6 +89,7 @@ const OrderChatMessageForm = ({
     >
       <input
         {...register("message")}
+        // ref={messageBoxRef}
         className="block w-full bg-gray-200 mb-4"
       />
       <button className="blue-button w-full">Submit Message</button>
