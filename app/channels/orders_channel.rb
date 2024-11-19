@@ -1,6 +1,6 @@
 class OrdersChannel < ApplicationCable::Channel
   def subscribed
-    order = Order.find_by(params[:id])
+    order = Order.find_by(id: params[:id])
 
     if order.nil?
       puts "Order ##{order.id} does not exist"
