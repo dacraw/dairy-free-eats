@@ -1,7 +1,7 @@
 class Order < ApplicationRecord
   belongs_to :user, optional: true
 
-  has_many :order_messages
+  has_many :order_messages, dependent: :destroy
 
   enum :status, [ :received, :active, :in_transit, :completed, :cancelled ]
 

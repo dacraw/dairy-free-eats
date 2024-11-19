@@ -5,6 +5,7 @@ import {
   OrderMessage,
   useCreateOrderMessageMutation,
   useCurrentUserQuery,
+  useFetchCurrentUserOrdersQuery,
   useFetchOrderMessagesQuery,
 } from "graphql/types";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -48,7 +49,13 @@ const OrderChatMessage = ({
   );
 };
 
-const OrderChatMessageForm = ({ currentUserId }: { currentUserId: number }) => {
+const OrderChatMessageForm = ({
+  currentUserId,
+  orderId,
+}: {
+  currentUserId: number;
+  orderId: number;
+}) => {
   const [
     createOrderMessage,
     { data: createOrderMessageData, loading: createOrderMessageLoading },
@@ -63,7 +70,7 @@ const OrderChatMessageForm = ({ currentUserId }: { currentUserId: number }) => {
           variables: {
             input: {
               createOrderMessageInputType: {
-                orderId: 54,
+                orderId,
                 userId: currentUserId,
                 body: data?.message,
               },
@@ -83,20 +90,20 @@ const OrderChatMessageForm = ({ currentUserId }: { currentUserId: number }) => {
   );
 };
 
-const OrderChat = () => {
+const OrderChat = ({ orderId }: { orderId: string }) => {
   const chatRef = useRef<HTMLDivElement>(null);
 
   const { data: currentUserData, loading: currentUserLoading } =
     useCurrentUserQuery();
 
   const { data, loading } = useFetchOrderMessagesQuery({
-    variables: { orderId: "54" },
+    variables: { orderId },
   });
 
   useEffect(() => {
     if (!chatRef.current) return;
 
-    connectToOrdersChannel(54, chatRef.current);
+    connectToOrdersChannel(parseInt(orderId), chatRef.current);
   }, []);
 
   useEffect(() => {
@@ -183,6 +190,7 @@ const OrderChat = () => {
         {visible && (
           <div className="p-4">
             <OrderChatMessageForm
+              orderId={parseInt(orderId)}
               currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
             />
           </div>
@@ -192,4 +200,32 @@ const OrderChat = () => {
   );
 };
 
-export default OrderChat;
+const FETCH_CURRENT_USER_ORDERS = gql`
+  query FetchCurrentUserOrders {
+    currentUserOrders {
+      id
+      status
+      stripeCheckoutSessionLineItems {
+        name
+        quantity
+      }
+      user {
+        id
+        email
+      }
+      guestEmail
+    }
+  }
+`;
+
+const OrderChatPanels = () => {
+  const { data: currentUserData, loading: currentUserLoading } =
+    useCurrentUserQuery();
+  const { data, loading } = useFetchCurrentUserOrdersQuery();
+  if (!currentUserData?.currentUser) return null;
+  return data?.currentUserOrders?.map((order) => (
+    <OrderChat key={order.id} orderId={order.id} />
+  ));
+};
+
+export default OrderChatPanels;

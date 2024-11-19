@@ -269,6 +269,7 @@ type ProductListObject {
 
 type Query {
   currentUser: User
+  currentUserOrders: [Order!]
   fetchCheckoutSession(id: ID!): CheckoutSession
   listProducts: ProductListObject!
   order(id: ID!): Order

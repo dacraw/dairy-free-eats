@@ -1,6 +1,6 @@
 import Footer from "components/footer/Footer";
 import HeaderNav from "components/headerNav/HeaderNav";
-import OrderChat from "components/orderChat/OrderChat";
+import OrderChatPanels from "components/orderChatPanels/OrderChatPanels";
 import React from "react";
 import { Outlet } from "react-router-dom";
 
@@ -15,7 +15,9 @@ const RootLayout = () => {
         </div>
       </div>
 
-      <OrderChat />
+      <div className="fixed right-0 bottom-0 z-50">
+        <OrderChatPanels />
+      </div>
 
       <Footer />
     </div>
