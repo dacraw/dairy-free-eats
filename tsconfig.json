@@ -7,7 +7,7 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "jsx": "react",
-    "lib": ["DOM", "ES2017"],
+    "lib": ["DOM", "ES2023"],
     "baseUrl": "./app/javascript/"
   }
 }
