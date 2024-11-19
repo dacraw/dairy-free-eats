@@ -167,7 +167,7 @@ const OrderChat = ({
           className="text-center bg-gray-800 rounded py-2 cursor-pointer "
           onClick={() => setVisible(!visible)}
         >
-          Order Chat
+          Order #{orderId} Chat
         </p>
         <div
           id="chat"
@@ -228,6 +228,7 @@ export const FETCH_CURRENT_USER_ORDERS = gql`
 const OrderChatPanels = () => {
   const { data: currentUserData, loading: currentUserLoading } =
     useCurrentUserQuery();
+
   const { data, loading, refetch } = useFetchCurrentUserOrdersQuery({
     variables: { completed: false },
   });
