@@ -123,10 +123,32 @@ const OrderChat = () => {
   }, []);
 
   const [visible, setVisible] = useState(false);
+  const toggleVisibilityRef = useRef<HTMLParagraphElement>(null);
+  const closeChat = (e: MouseEvent) => {
+    if (chatRef.current && toggleVisibilityRef.current) {
+      // check if the click is outside the component, but allow the panel to be opened initially
+      // this also allows the submit button and input element to be clicked w/o closing the chat panel
+      if (
+        !chatRef.current.contains(e.target as HTMLElement) &&
+        !toggleVisibilityRef.current.contains(e.target as HTMLElement)
+      ) {
+        setVisible(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", closeChat);
+
+    return () => document.removeEventListener("click", closeChat);
+  }, []);
 
   return (
-    <div className="fixed right-0 bottom-0">
-      <div className="bg-gray-900  text-gray-200 w-60 rounded">
+    <div>
+      <div
+        className="bg-gray-900  text-gray-200 w-60 rounded"
+        ref={toggleVisibilityRef}
+      >
         <p
           className="text-center bg-gray-800 rounded py-2 cursor-pointer "
           onClick={() => setVisible(!visible)}
