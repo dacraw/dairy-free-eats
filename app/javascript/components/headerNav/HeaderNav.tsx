@@ -37,7 +37,7 @@ const DesktopNav: React.FC<NavProps> = ({
         {currentUser?.admin && (
           <Link
             className="hover:bg-blue-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
-            to="/admin/dashboard/orders"
+            to="/admin/dashboard"
           >
             ADMIN DASHBOARD
           </Link>
@@ -156,7 +156,7 @@ const ResponsiveNav: React.FC<NavProps> = ({
                 Order
               </Link>
               {currentUser?.admin && (
-                <Link className="block py-1" to="/admin/dashboard/orders">
+                <Link className="block py-1" to="/admin/dashboard">
                   Admin Dashboard
                 </Link>
               )}
