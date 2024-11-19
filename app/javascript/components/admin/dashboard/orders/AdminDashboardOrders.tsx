@@ -67,7 +67,6 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
 
   return (
     <div className="hidden md:block">
-      <h5 className="text-lg mb-6 border-b-2 font-bold">ORDERS</h5>
       <div className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4">
         <p className="font-bold">Id</p>
         <p className="font-bold">Status</p>
@@ -138,7 +137,6 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
 
   return (
     <div className="md:hidden">
-      <h5 className="text-lg mb-2 border-b-2 font-bold">ORDERS</h5>
       <div className="">
         {orders.map((order) => (
           <div key={order.id} className="bg-blue-700 rounded mb-2 p-2">
@@ -268,10 +266,7 @@ const AdminDashboardOrders = ({ currentUserId }: { currentUserId: string }) => {
           <p>Loading...</p>
         </div>
       ) : (
-        <div className=" rounded p-2 md:p-6 ">
-          <h3 className="text-3xl font-bold text-center mb-6">
-            Admin Dashboard
-          </h3>
+        <div className="rounded p-2 md:p-6 ">
           {ordersData?.orders?.length && (
             <>
               <DesktopOrderTable

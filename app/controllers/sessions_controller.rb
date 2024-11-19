@@ -31,7 +31,7 @@ class SessionsController < ApplicationController
     if user = User.authenticate_by(email_address: User::DEMO_ADMIN_EMAIL, password: Rails.application.credentials.dig(:demo_admin_password))
       start_new_session_for user
 
-      render json: { message: "success", redirect_url: URI(admin_dashboard_index_url).path }, status: 200
+      render json: { message: "success", redirect_url: orders_admin_dashboard_path }, status: 200
     else
       render json: { error: "Invalid credentials" }, status: 500
     end
