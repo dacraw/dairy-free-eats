@@ -3,6 +3,10 @@ class NewOrderMessageJob < ApplicationJob
 
   def perform(order_message)
     # Do something later
-    OrdersChannel.broadcast_to order_message.order, body: order_message.body
+    OrdersChannel.broadcast_to(
+      order_message.order, 
+      body: order_message.body, 
+      created_at: order_message.created_at
+    )
   end
 end

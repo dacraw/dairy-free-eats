@@ -43,5 +43,7 @@ module Types
     field :orders, resolver: Resolvers::OrdersResolver, null: true
 
     field :order, resolver: Resolvers::OrderResolver, null: true
+
+    field :order_messages, resolver: Resolvers::OrderMessagesResolver, null: false
   end
 end
