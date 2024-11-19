@@ -266,6 +266,11 @@ export type Query = {
 };
 
 
+export type QueryCurrentUserOrdersArgs = {
+  completed: Scalars['Boolean']['input'];
+};
+
+
 export type QueryFetchCheckoutSessionArgs = {
   id: Scalars['ID']['input'];
 };
@@ -387,7 +392,9 @@ export type CreateOrderMessageMutationVariables = Exact<{
 
 export type CreateOrderMessageMutation = { __typename?: 'Mutation', createOrderMessage?: { __typename?: 'CreateOrderMessagePayload', orderMessage?: { __typename?: 'OrderMessage', id: string } | null } | null };
 
-export type FetchCurrentUserOrdersQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchCurrentUserOrdersQueryVariables = Exact<{
+  completed: Scalars['Boolean']['input'];
+}>;
 
 
 export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, status: OrderStatus, guestEmail?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
@@ -741,8 +748,8 @@ export type CreateOrderMessageMutationHookResult = ReturnType<typeof useCreateOr
 export type CreateOrderMessageMutationResult = Apollo.MutationResult<CreateOrderMessageMutation>;
 export type CreateOrderMessageMutationOptions = Apollo.BaseMutationOptions<CreateOrderMessageMutation, CreateOrderMessageMutationVariables>;
 export const FetchCurrentUserOrdersDocument = gql`
-    query FetchCurrentUserOrders {
-  currentUserOrders {
+    query FetchCurrentUserOrders($completed: Boolean!) {
+  currentUserOrders(completed: $completed) {
     id
     status
     stripeCheckoutSessionLineItems {
@@ -770,10 +777,11 @@ export const FetchCurrentUserOrdersDocument = gql`
  * @example
  * const { data, loading, error } = useFetchCurrentUserOrdersQuery({
  *   variables: {
+ *      completed: // value for 'completed'
  *   },
  * });
  */
-export function useFetchCurrentUserOrdersQuery(baseOptions?: Apollo.QueryHookOptions<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables>) {
+export function useFetchCurrentUserOrdersQuery(baseOptions: Apollo.QueryHookOptions<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables> & ({ variables: FetchCurrentUserOrdersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables>(FetchCurrentUserOrdersDocument, options);
       }

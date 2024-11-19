@@ -200,9 +200,9 @@ const OrderChat = ({ orderId }: { orderId: string }) => {
   );
 };
 
-const FETCH_CURRENT_USER_ORDERS = gql`
-  query FetchCurrentUserOrders {
-    currentUserOrders {
+export const FETCH_CURRENT_USER_ORDERS = gql`
+  query FetchCurrentUserOrders($completed: Boolean!) {
+    currentUserOrders(completed: $completed) {
       id
       status
       stripeCheckoutSessionLineItems {
@@ -221,7 +221,9 @@ const FETCH_CURRENT_USER_ORDERS = gql`
 const OrderChatPanels = () => {
   const { data: currentUserData, loading: currentUserLoading } =
     useCurrentUserQuery();
-  const { data, loading } = useFetchCurrentUserOrdersQuery();
+  const { data, loading } = useFetchCurrentUserOrdersQuery({
+    variables: { completed: false },
+  });
   if (!currentUserData?.currentUser) return null;
   return data?.currentUserOrders?.map((order) => (
     <OrderChat key={order.id} orderId={order.id} />

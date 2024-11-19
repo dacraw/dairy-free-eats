@@ -1,9 +1,23 @@
 class Resolvers::CurrentUserOrdersResolver < Resolvers::BaseResolver
     type [ Types::OrderType ], null: true
+    
+    argument :completed, Boolean, required: true
 
-    def resolve
-        return nil if !context[:current_user].present?
+    def resolve(completed:)
+        current_user = context[:current_user]
         
-        Order.where(user_id: context[:current_user].id).order(created_at: :desc)
+        return nil if !current_user.present?
+
+        if completed
+            Order
+                .where(user_id: current_user.id)
+                .completed
+                .order(created_at: :desc)
+        else
+            Order
+                .where(user_id: current_user.id)
+                .where.not(status: :completed)
+                .order(created_at: :desc)
+        end
     end
 end
