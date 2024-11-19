@@ -1,6 +1,7 @@
 import Home from "components/Home";
 import Order from "components/Order/Order";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
+import AdminDashboardIndex from "components/admin/dashboard/index/AdminDashboardIndex";
 import AdminDashboardOrders from "components/admin/dashboard/orders/AdminDashboardOrders";
 import AdminOrder from "components/admin/order/AdminOrder";
 import CreateNewPassword from "components/createNewPassword/CreateNewPassword";
@@ -32,6 +33,7 @@ const AppRoute = () => {
           <Route path="success" element={<OrderSuccess />} />
           <Route path="admin">
             <Route path="dashboard" element={<AdminDashboard />}>
+              <Route index element={<AdminDashboardIndex />} />
               <Route
                 path="orders"
                 element={

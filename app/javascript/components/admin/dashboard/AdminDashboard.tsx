@@ -14,7 +14,7 @@ const AdminDashboard = () => {
   }, [currentUserData]);
 
   return (
-    <>
+    <div className="md:w-[700px] lg:w-[1000px]">
       <h3 className="text-3xl font-bold text-center mb-6">Admin Dashboard</h3>
       <div className="flex gap-4 border-b-2 pb-2 mb-2">
         <NavLink
@@ -28,8 +28,9 @@ const AdminDashboard = () => {
           ORDERS
         </NavLink>
       </div>
+
       <Outlet />
-    </>
+    </div>
   );
 };
 export default AdminDashboard;
