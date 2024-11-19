@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { connectToOrdersChannel } from "channels";
 import { gql } from "@apollo/client";
 import {
@@ -42,25 +42,55 @@ const OrderChat = () => {
     createOrderMessage,
     { data: createOrderMessageData, loading: createOrderMessageLoading },
   ] = useCreateOrderMessageMutation();
-  const { register, handleSubmit } = useForm();
+
+  const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
     if (!chatRef.current) return;
 
     connectToOrdersChannel(54, chatRef.current);
   }, []);
-  console.log(chatRef);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [chatRef.current]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!chatRef.current) return;
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    };
+
+    const observer = new MutationObserver(handleScroll);
+
+    if (chatRef.current) {
+      observer.observe(chatRef.current, { childList: true });
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   return (
     <div>
       <div className="bg-gray-900 p-4 text-gray-200 w-60 rounded">
-        <div ref={chatRef}>
+        <div id="chat" ref={chatRef} className="overflow-auto h-96">
           <p className="">Hey this is an order chat.</p>
-          {data?.orderMessages?.map((message) => (
-            <div key={message.id} className="mb-4">
-              <p>{message.body}</p>
-              <p className="text-sm">{message.createdAt}</p>
-            </div>
-          ))}
+          {data?.orderMessages?.map((message) => {
+            const utcDate = new Date(message.createdAt);
+            const offset = utcDate.getTimezoneOffset();
+            const localTime = new Date(utcDate.getTime() - offset);
+
+            return (
+              <div key={message.id} className="mb-4">
+                <p>{message.body}</p>
+                <p className="text-sm">{localTime.toLocaleString()}</p>
+              </div>
+            );
+          })}
         </div>
         <form
           onSubmit={handleSubmit(async (data) => {
@@ -68,7 +98,7 @@ const OrderChat = () => {
             // const currentUserId = currentUserData?.currentUser?.id;
             if (!currentUserId) return;
 
-            createOrderMessage({
+            await createOrderMessage({
               variables: {
                 input: {
                   createOrderMessageInputType: {
@@ -79,6 +109,8 @@ const OrderChat = () => {
                 },
               },
             });
+
+            reset();
           })}
         >
           <input

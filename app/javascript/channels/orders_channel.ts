@@ -34,10 +34,14 @@ const connectToOrdersChannel = (orderId: number, chatElement: HTMLDivElement) =>
         body: string;
         createdAt: string;
       }) {
+        const utcDate = new Date(createdAt);
+        const offset = utcDate.getTimezoneOffset();
+        const localTime = new Date(utcDate.getTime() - offset);
+
         return `
           <div style="margin-bottom: 1rem;">
             <p>${body}</p>
-            <p style="font-size: .875rem">${createdAt}</p>
+            <p style="font-size: .875rem">${localTime.toLocaleString()}</p>
           </div>
         `;
       },
