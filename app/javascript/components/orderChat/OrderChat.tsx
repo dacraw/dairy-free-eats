@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { connectToOrdersChannel } from "channels";
 import { gql } from "@apollo/client";
 import {
@@ -122,10 +122,29 @@ const OrderChat = () => {
     };
   }, []);
 
+  const [visible, setVisible] = useState(false);
+
   return (
     <div className="fixed right-0 bottom-0">
-      <div className="bg-gray-900 p-4 text-gray-200 w-60 rounded">
-        <div id="chat" ref={chatRef} className="overflow-auto h-96">
+      <div className="bg-gray-900  text-gray-200 w-60 rounded">
+        <p
+          className="text-center bg-gray-800 rounded py-2 cursor-pointer "
+          onClick={() => setVisible(!visible)}
+        >
+          Order Chat
+        </p>
+        <div
+          id="chat"
+          ref={chatRef}
+          onAnimationStart={() => {
+            if (chatRef.current) {
+              chatRef.current.scrollTop = chatRef.current.scrollHeight;
+            }
+          }}
+          className={`overflow-auto h-96 hidden ${
+            visible ? "animate-slide-up" : ""
+          }`}
+        >
           {loading || currentUserLoading ? (
             <>
               <FontAwesomeIcon icon={faSpinner} />
@@ -133,16 +152,19 @@ const OrderChat = () => {
             </>
           ) : (
             <>
-              <p className="mb-4">Hey this is an order chat.</p>
               {data?.orderMessages?.map((message) => {
                 return <OrderChatMessage key={message.id} message={message} />;
               })}
             </>
           )}
         </div>
-        <OrderChatMessageForm
-          currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
-        />
+        {visible && (
+          <div className="p-4">
+            <OrderChatMessageForm
+              currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

@@ -24,3 +24,20 @@
     @apply bg-red-700 rounded text-gray-100 font-bold py-2 px-4 cursor-pointer hover:bg-red-500 transition-colors duration-300;
   }
 }
+
+.animate-slide-up {
+  display: block;
+  animation: slide-up 1s;
+  padding: 1em;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
