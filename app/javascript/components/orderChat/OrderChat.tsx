@@ -2,6 +2,7 @@ import React, { useEffect, useLayoutEffect, useRef } from "react";
 import { connectToOrdersChannel } from "channels";
 import { gql } from "@apollo/client";
 import {
+  OrderMessage,
   useCreateOrderMessageMutation,
   useCurrentUserQuery,
   useFetchOrderMessagesQuery,
@@ -30,20 +31,67 @@ export const CREATE_ORDER_MESSAGE = gql`
   }
 `;
 
-const OrderChat = () => {
-  const chatRef = useRef<HTMLDivElement>(null);
+const OrderChatMessage = ({
+  message,
+}: {
+  message: Pick<OrderMessage, "createdAt" | "body">;
+}) => {
+  const utcDate = new Date(message.createdAt);
+  const offset = utcDate.getTimezoneOffset();
+  const localTime = new Date(utcDate.getTime() - offset);
 
-  // const { data: currentUserData, loading: currentUserLoading } =
-  //   useCurrentUserQuery();
-  const { data, loading } = useFetchOrderMessagesQuery({
-    variables: { orderId: "54" },
-  });
+  return (
+    <div className="mb-4">
+      <p>{message.body}</p>
+      <p className="text-sm">{localTime.toLocaleString()}</p>
+    </div>
+  );
+};
+
+const OrderChatMessageForm = ({ currentUserId }: { currentUserId: number }) => {
   const [
     createOrderMessage,
     { data: createOrderMessageData, loading: createOrderMessageLoading },
   ] = useCreateOrderMessageMutation();
 
   const { register, handleSubmit, reset } = useForm();
+
+  return (
+    <form
+      onSubmit={handleSubmit(async (data) => {
+        await createOrderMessage({
+          variables: {
+            input: {
+              createOrderMessageInputType: {
+                orderId: 54,
+                userId: currentUserId,
+                body: data?.message,
+              },
+            },
+          },
+        });
+
+        reset();
+      })}
+    >
+      <input
+        {...register("message")}
+        className="block w-full bg-gray-200 mb-4"
+      />
+      <button className="blue-button w-full">Submit Message</button>
+    </form>
+  );
+};
+
+const OrderChat = () => {
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  const { data: currentUserData, loading: currentUserLoading } =
+    useCurrentUserQuery();
+
+  const { data, loading } = useFetchOrderMessagesQuery({
+    variables: { orderId: "54" },
+  });
 
   useEffect(() => {
     if (!chatRef.current) return;
@@ -75,50 +123,26 @@ const OrderChat = () => {
   }, []);
 
   return (
-    <div>
+    <div className="fixed right-0 bottom-0">
       <div className="bg-gray-900 p-4 text-gray-200 w-60 rounded">
         <div id="chat" ref={chatRef} className="overflow-auto h-96">
-          <p className="">Hey this is an order chat.</p>
-          {data?.orderMessages?.map((message) => {
-            const utcDate = new Date(message.createdAt);
-            const offset = utcDate.getTimezoneOffset();
-            const localTime = new Date(utcDate.getTime() - offset);
-
-            return (
-              <div key={message.id} className="mb-4">
-                <p>{message.body}</p>
-                <p className="text-sm">{localTime.toLocaleString()}</p>
-              </div>
-            );
-          })}
+          {loading || currentUserLoading ? (
+            <>
+              <FontAwesomeIcon icon={faSpinner} />
+              <p>Loading messages...</p>
+            </>
+          ) : (
+            <>
+              <p className="mb-4">Hey this is an order chat.</p>
+              {data?.orderMessages?.map((message) => {
+                return <OrderChatMessage key={message.id} message={message} />;
+              })}
+            </>
+          )}
         </div>
-        <form
-          onSubmit={handleSubmit(async (data) => {
-            const currentUserId = "7";
-            // const currentUserId = currentUserData?.currentUser?.id;
-            if (!currentUserId) return;
-
-            await createOrderMessage({
-              variables: {
-                input: {
-                  createOrderMessageInputType: {
-                    orderId: 54,
-                    userId: parseInt(currentUserId),
-                    body: data?.message,
-                  },
-                },
-              },
-            });
-
-            reset();
-          })}
-        >
-          <input
-            {...register("message")}
-            className="block w-full bg-gray-200 mb-4"
-          />
-          <button className="blue-button w-full">Submit Message</button>
-        </form>
+        <OrderChatMessageForm
+          currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+        />
       </div>
     </div>
   );
