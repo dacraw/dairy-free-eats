@@ -90,11 +90,14 @@ const OrderChatMessageForm = ({
   );
 };
 
-const OrderChat = ({ orderId }: { orderId: string }) => {
+const OrderChat = ({
+  orderId,
+  currentUserId,
+}: {
+  orderId: string;
+  currentUserId: number;
+}) => {
   const chatRef = useRef<HTMLDivElement>(null);
-
-  const { data: currentUserData, loading: currentUserLoading } =
-    useCurrentUserQuery();
 
   const { data, loading } = useFetchOrderMessagesQuery({
     variables: { orderId },
@@ -174,7 +177,7 @@ const OrderChat = ({ orderId }: { orderId: string }) => {
             visible ? "animate-slide-up" : ""
           }`}
         >
-          {loading || currentUserLoading ? (
+          {loading ? (
             <>
               <FontAwesomeIcon icon={faSpinner} />
               <p>Loading messages...</p>
@@ -191,7 +194,7 @@ const OrderChat = ({ orderId }: { orderId: string }) => {
           <div className="p-4">
             <OrderChatMessageForm
               orderId={parseInt(orderId)}
-              currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+              currentUserId={currentUserId}
             />
           </div>
         )}
@@ -221,12 +224,22 @@ export const FETCH_CURRENT_USER_ORDERS = gql`
 const OrderChatPanels = () => {
   const { data: currentUserData, loading: currentUserLoading } =
     useCurrentUserQuery();
-  const { data, loading } = useFetchCurrentUserOrdersQuery({
+  const { data, loading, refetch } = useFetchCurrentUserOrdersQuery({
     variables: { completed: false },
   });
-  if (!currentUserData?.currentUser) return null;
+
+  useEffect(() => {
+    refetch();
+  }, [currentUserData]);
+
+  if (!currentUserData?.currentUser || !data) return null;
+
   return data?.currentUserOrders?.map((order) => (
-    <OrderChat key={order.id} orderId={order.id} />
+    <OrderChat
+      key={order.id}
+      orderId={order.id}
+      currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+    />
   ));
 };
 
