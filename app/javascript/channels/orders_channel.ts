@@ -8,6 +8,7 @@ const connectToOrdersChannel = (orderId: number, chatElement: HTMLDivElement) =>
     },
     {
       connected() {
+        console.log("connected");
         // Called when the subscription is ready for use on the server
         // this.chatElement = chatElement;
       },
@@ -26,11 +27,18 @@ const connectToOrdersChannel = (orderId: number, chatElement: HTMLDivElement) =>
         );
       },
 
-      generateElementString(data: { body: string }) {
+      generateElementString({
+        body,
+        createdAt,
+      }: {
+        body: string;
+        createdAt: string;
+      }) {
         return `
-          <p>
-            ${data["body"]}
-          </p>
+          <div style="margin-bottom: 1rem;">
+            <p>${body}</p>
+            <p style="font-size: .875rem">${createdAt}</p>
+          </div>
         `;
       },
     }

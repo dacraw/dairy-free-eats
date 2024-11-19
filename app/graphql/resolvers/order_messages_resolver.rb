@@ -9,7 +9,7 @@ module Resolvers
 
             raise GraphQL::ExecutionError.new "Order not found for order id##{order_id}" if order.nil?
 
-            order.order_messages.order(created_at: :desc)
+            order.order_messages
         end
     end
 end
