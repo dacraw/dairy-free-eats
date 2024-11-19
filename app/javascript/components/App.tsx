@@ -23,7 +23,7 @@ const client = new ApolloClient({
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <AppRoute header={<HeaderNav />} footer={<Footer />} />
+      <AppRoute />
     </ApolloProvider>
   );
 };

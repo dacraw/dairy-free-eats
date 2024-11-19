@@ -1,5 +1,6 @@
 import Footer from "components/footer/Footer";
 import HeaderNav from "components/headerNav/HeaderNav";
+import OrderChat from "components/orderChat/OrderChat";
 import React from "react";
 import { Outlet } from "react-router-dom";
 
@@ -13,6 +14,8 @@ const RootLayout = () => {
           <Outlet />
         </div>
       </div>
+
+      <OrderChat />
 
       <Footer />
     </div>
