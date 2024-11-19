@@ -1,5 +1,5 @@
 import React from "react";
-import { screen, render, waitFor } from "@testing-library/react";
+import { screen, render } from "@testing-library/react";
 import AdminOrder, { FETCH_ORDER } from "components/admin/order/AdminOrder";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -14,11 +14,12 @@ import {
 } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import Home from "components/Home";
-import AdminDashboard, {
+import userEvent from "@testing-library/user-event";
+import {
   FETCH_ORDERS,
   SET_ORDER_STATUS,
-} from "components/admin/dashboard/AdminDashboard";
-import userEvent from "@testing-library/user-event";
+} from "components/admin/dashboard/orders/AdminDashboardOrders";
+import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 
 const orderMockValues: FetchOrderQuery["order"] = {
   id: "orderId_123",
