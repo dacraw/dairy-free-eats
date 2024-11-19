@@ -1,2 +1,2 @@
 // Import all the channels to be used by Action Cable
-import "./order_channel"
+import "./orders_channel";
