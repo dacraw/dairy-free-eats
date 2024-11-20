@@ -24,9 +24,9 @@ const OrderChatMessage = ({
   const localTime = new Date(utcDate.getTime() - offset);
 
   return (
-    <div className={`grid mb-4 `}>
+    <div className={`grid mb-4`}>
       <div
-        className={` p-2 rounded w-3/4 ${
+        className={`p-2 rounded w-3/4 ${
           currentUserId === message.userId ||
           (message.userIsAdmin && currentUserIsAdmin)
             ? "justify-self-end bg-gray-800"
@@ -123,7 +123,7 @@ const OrderChat = ({
   useEffect(() => {
     if (!chatRef.current) return;
 
-    connectToOrdersChannel(
+    const connection = connectToOrdersChannel(
       parseInt(orderId),
       chatRef.current,
       currentUserId,
@@ -131,14 +131,7 @@ const OrderChat = ({
     );
 
     return () => {
-      if (chatRef.current) {
-        connectToOrdersChannel(
-          parseInt(orderId),
-          chatRef.current,
-          currentUserId,
-          currentUserIsAdmin
-        ).unsubscribe();
-      }
+      connection.unsubscribe();
     };
   }, []);
 
