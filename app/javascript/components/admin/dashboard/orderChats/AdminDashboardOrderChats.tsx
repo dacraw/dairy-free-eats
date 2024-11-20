@@ -1,3 +1,5 @@
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OrderChat from "components/orderChatPanels/orderChat/OrderChat";
 import { useCurrentUserQuery, useFetchOrdersQuery } from "graphql/types";
 import React from "react";
@@ -6,18 +8,21 @@ const AdminDashboardOrderChats = () => {
   const { loading: currentUserLoading, data: currentUserData } =
     useCurrentUserQuery();
 
-  const { loading, data } = useFetchOrdersQuery();
+  const { data, loading } = useFetchOrdersQuery();
 
   return (
-    <div className="flex flex-wrap gap-4">
-      {data?.orders?.map((order) => (
-        <OrderChat
-          key={order.id}
-          hideChatsOnSelect={false}
-          currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
-          orderId={order.id}
-        />
-      ))}
+    <div className="flex flex-wrap gap-4 my-4">
+      {loading ? (
+        <FontAwesomeIcon className="text-xl" icon={faSpinner} />
+      ) : (
+        data?.orders?.map((order) => (
+          <OrderChat
+            key={order.id}
+            currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+            orderId={order.id}
+          />
+        ))
+      )}
     </div>
   );
 };

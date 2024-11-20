@@ -39,12 +39,18 @@ const OrderChatMessageForm = ({
     { data: createOrderMessageData, loading: createOrderMessageLoading },
   ] = useCreateOrderMessageMutation();
 
-  const { register, handleSubmit, reset, setFocus } = useForm<{
+  const messageRef = useRef<HTMLInputElement | null>(null);
+
+  const { register, handleSubmit, reset, setFocus, formState } = useForm<{
     message: string;
   }>();
 
+  const { ref, ...rest } = register("message");
+
   useEffect(() => {
-    setFocus("message");
+    if (messageRef.current) {
+      messageRef.current.focus({ preventScroll: true });
+    }
   }, []);
 
   return (
@@ -66,7 +72,12 @@ const OrderChatMessageForm = ({
       })}
     >
       <input
-        {...register("message")}
+        {...rest}
+        name="message"
+        ref={(e) => {
+          ref(e);
+          messageRef.current = e;
+        }}
         className="block w-full bg-gray-200 mb-4"
       />
       <button className="blue-button w-full">Submit Message</button>
@@ -98,12 +109,6 @@ const OrderChat = ({
 
     connectToOrdersChannel(parseInt(orderId), chatRef.current);
   }, []);
-
-  useEffect(() => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
-  }, [chatRef.current]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -173,7 +178,7 @@ const OrderChat = ({
             }
             if (toggleVisibilityRef.current) {
               toggleVisibilityRef.current.scrollIntoView({
-                behavior: "instant",
+                behavior: "smooth",
               });
             }
           }}
