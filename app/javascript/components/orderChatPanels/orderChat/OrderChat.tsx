@@ -212,6 +212,13 @@ const OrderChat = ({
             visible ? "animate-slide-up" : ""
           }`}
         >
+          <p className="text-center text-xs bg-gray-800 rounded p-2 mb-4">
+            This chat will be available after an order is received and until it
+            is completed. You can click "Admin Demo" from the navigation above
+            and find the order chat in the dashboard's order chats to send
+            messages. Using incognito mode in a new browser will make this
+            easier.
+          </p>
           {loading ? (
             <>
               <FontAwesomeIcon icon={faSpinner} />
