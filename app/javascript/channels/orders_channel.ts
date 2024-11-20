@@ -1,6 +1,11 @@
 import consumer from "./consumer";
 
-const connectToOrdersChannel = (orderId: number, chatElement: HTMLDivElement) =>
+const connectToOrdersChannel = (
+  orderId: number,
+  chatElement: HTMLDivElement,
+  currentUserId: number,
+  currentUserIsAdmin: boolean
+) =>
   consumer.subscriptions.create(
     {
       channel: "OrdersChannel",
@@ -10,7 +15,6 @@ const connectToOrdersChannel = (orderId: number, chatElement: HTMLDivElement) =>
       connected() {
         console.log("connected");
         // Called when the subscription is ready for use on the server
-        // this.chatElement = chatElement;
       },
 
       disconnected() {
@@ -30,18 +34,28 @@ const connectToOrdersChannel = (orderId: number, chatElement: HTMLDivElement) =>
       generateElementString({
         body,
         createdAt,
+        userId,
+        userIsAdmin,
       }: {
         body: string;
         createdAt: string;
+        userId: number;
+        userIsAdmin: boolean;
       }) {
         const utcDate = new Date(createdAt);
         const offset = utcDate.getTimezoneOffset();
         const localTime = new Date(utcDate.getTime() - offset);
 
         return `
-          <div style="margin-bottom: 1rem;">
-            <p>${body}</p>
-            <p style="font-size: .875rem">${localTime.toLocaleString()}</p>
+          <div style="display: grid; margin-bottom: 1rem;">
+              <div style="padding: .5rem; border-radius: .25rem; width: 75%; ${
+                currentUserId === userId || (userIsAdmin && currentUserIsAdmin)
+                  ? "justify-self: end; background-color: #1f2937;"
+                  : "justify-self: start; background-color: #1e40af;"
+              }">
+                <p>${body}</p>
+                <p style="font-size: .875rem">${localTime.toLocaleString()}</p>
+              </div>
           </div>
         `;
       },

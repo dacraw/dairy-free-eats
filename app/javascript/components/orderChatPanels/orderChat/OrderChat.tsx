@@ -123,7 +123,23 @@ const OrderChat = ({
   useEffect(() => {
     if (!chatRef.current) return;
 
-    connectToOrdersChannel(parseInt(orderId), chatRef.current);
+    connectToOrdersChannel(
+      parseInt(orderId),
+      chatRef.current,
+      currentUserId,
+      currentUserIsAdmin
+    );
+
+    return () => {
+      if (chatRef.current) {
+        connectToOrdersChannel(
+          parseInt(orderId),
+          chatRef.current,
+          currentUserId,
+          currentUserIsAdmin
+        ).unsubscribe();
+      }
+    };
   }, []);
 
   useEffect(() => {
