@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe OrderMessage, type: :model do
   context "when creating" do
+    before(:each) { ActiveJob::Base.queue_adapter.enqueued_jobs.clear }
+
     it "creates with valid params" do
       order = create :order, :with_line_items, :with_a_user
 
@@ -44,6 +46,12 @@ RSpec.describe OrderMessage, type: :model do
       }.not_to change { OrderMessage.count }
 
       expect(order_message.errors.full_messages).to include "Order must exist"
+    end
+
+    it "enqueues a new order message job" do
+      create :order_message, :valid_order_message, body: "heyo"
+
+      expect(NewOrderMessageJob).to have_been_enqueued.exactly(:once)
     end
   end
 end

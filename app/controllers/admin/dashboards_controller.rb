@@ -4,4 +4,7 @@ class Admin::DashboardsController < ApplicationController
 
     def orders
     end
+
+    def order_chats
+    end
 end

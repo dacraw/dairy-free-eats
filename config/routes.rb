@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resource :dashboard, only: [ :show ] do
       get "orders"
+      get "order_chats"
       resources :orders, only: [ :show ]
     end
   end
