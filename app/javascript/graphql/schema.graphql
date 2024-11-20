@@ -189,6 +189,7 @@ type OrderMessage {
   orderId: Int!
   updatedAt: ISO8601DateTime!
   userId: Int!
+  userIsAdmin: Boolean!
 }
 
 input OrderMessageInput {

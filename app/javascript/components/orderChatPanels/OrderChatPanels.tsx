@@ -12,6 +12,8 @@ export const FETCH_ORDER_MESSAGES = gql`
       id
       body
       createdAt
+      userId
+      userIsAdmin
     }
   }
 `;
@@ -68,6 +70,7 @@ const OrderChatPanels = () => {
       key={order.id}
       orderId={order.id}
       currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+      currentUserIsAdmin={Boolean(currentUserData?.currentUser?.admin)}
     />
   ));
 };

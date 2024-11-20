@@ -11,24 +11,38 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
 
 const OrderChatMessage = ({
+  currentUserId,
+  currentUserIsAdmin,
   message,
 }: {
-  message: Pick<OrderMessage, "createdAt" | "body">;
+  currentUserId: number;
+  message: Pick<OrderMessage, "createdAt" | "body" | "userId" | "userIsAdmin">;
+  currentUserIsAdmin: boolean;
 }) => {
   const utcDate = new Date(message.createdAt);
   const offset = utcDate.getTimezoneOffset();
   const localTime = new Date(utcDate.getTime() - offset);
 
   return (
-    <div className="mb-4">
-      <p>{message.body}</p>
-      <p className="text-sm">{localTime.toLocaleString()}</p>
+    <div className={`grid mb-4 `}>
+      <div
+        className={` p-2 rounded w-3/4 ${
+          currentUserId === message.userId ||
+          (message.userIsAdmin && currentUserIsAdmin)
+            ? "justify-self-end bg-gray-800"
+            : "justify-self-start bg-blue-800"
+        }`}
+      >
+        <p>{message.body}</p>
+        <p className="text-sm">{localTime.toLocaleString()}</p>
+      </div>
     </div>
   );
 };
 
 const OrderChatMessageForm = ({
   currentUserId,
+
   orderId,
 }: {
   currentUserId: number;
@@ -88,10 +102,12 @@ const OrderChatMessageForm = ({
 const OrderChat = ({
   orderId,
   currentUserId,
+  currentUserIsAdmin,
   hideChatsOnSelect = true,
 }: {
   orderId: string;
   currentUserId: number;
+  currentUserIsAdmin: boolean;
   hideChatsOnSelect?: boolean;
 }) => {
   const chatRef = useRef<HTMLDivElement>(null);
@@ -195,7 +211,14 @@ const OrderChat = ({
           ) : (
             <>
               {data?.orderMessages?.map((message) => {
-                return <OrderChatMessage key={message.id} message={message} />;
+                return (
+                  <OrderChatMessage
+                    currentUserIsAdmin={currentUserIsAdmin}
+                    key={message.id}
+                    message={message}
+                    currentUserId={currentUserId}
+                  />
+                );
               })}
             </>
           )}

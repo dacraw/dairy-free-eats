@@ -19,6 +19,7 @@ const AdminDashboardOrderChats = () => {
           <OrderChat
             key={order.id}
             currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+            currentUserIsAdmin={Boolean(currentUserData?.currentUser?.admin)}
             orderId={order.id}
           />
         ))
