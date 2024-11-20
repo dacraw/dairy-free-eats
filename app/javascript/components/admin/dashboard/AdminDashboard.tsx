@@ -27,6 +27,16 @@ const AdminDashboard = () => {
         >
           ORDERS
         </NavLink>
+        <NavLink
+          className={({ isActive }) => {
+            return `${
+              isActive ? "blue-button" : "hover:text-blue-400 transition-colors"
+            } py-2 px-4  text-lg font-bold`;
+          }}
+          to="order_chats"
+        >
+          ORDER CHATS
+        </NavLink>
       </div>
 
       <Outlet />

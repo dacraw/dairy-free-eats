@@ -14,6 +14,7 @@ import { useCurrentUserQuery } from "graphql/types";
 
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import AdminDashboardOrderChats from "components/admin/dashboard/orderChats/AdminDashboardOrderChats";
 
 const AppRoute = () => {
   const { data, loading } = useCurrentUserQuery();
@@ -45,6 +46,10 @@ const AppRoute = () => {
                 />
                 <Route path=":id" element={<AdminDashboardOrder />} />
               </Route>
+              <Route
+                path="order_chats"
+                element={<AdminDashboardOrderChats />}
+              />
             </Route>
           </Route>
           <Route path="password_reset" element={<PasswordReset />} />
