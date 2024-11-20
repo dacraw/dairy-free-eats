@@ -1,5 +1,4 @@
 import { gql } from "@apollo/client";
-import { faCircleLeft } from "@fortawesome/free-regular-svg-icons";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ConfirmButton from "components/confirmButton/ConfirmButton";
@@ -10,7 +9,7 @@ import {
   useSetOrderStatusMutation,
 } from "graphql/types";
 import React, { useEffect } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const FETCH_ORDER = gql`
   query FetchOrder($id: ID!) {
@@ -33,11 +32,11 @@ export const FETCH_ORDER = gql`
   }
 `;
 
-const AdminOrder = () => {
-  const { orderId } = useParams<{ orderId: string }>();
+const AdminDashboardOrder = () => {
+  const { id } = useParams<{ id: string }>();
 
   const { loading, data, error } = useFetchOrderQuery({
-    variables: { id: orderId || "" },
+    variables: { id: id || "" },
   });
 
   const [
@@ -68,18 +67,12 @@ const AdminOrder = () => {
         </div>
       ) : (
         <div>
-          <Link
-            className="flex items-center gap-2 mb-6 text-blue-500  hover:text-blue-300 transition-all underline md:no-underline"
-            to="/admin/dashboard"
-          >
-            <FontAwesomeIcon icon={faCircleLeft} /> Back to Dashboard
-          </Link>
           <div className=" border-2 rounded p-4 bg-blue-700">
             <h3 className="text-center text-lg font-bold border-b-2 mb-6 pb-2">
               Order Details
             </h3>
 
-            <div className="grid grid-cols-2 gap-4 grid-rows-1">
+            <div className="grid grid-cols-2 gap-4 grid-rows-1 mb-4">
               <p className="justify-self-end font-bold text-right">Id</p>
               <p>{data?.order?.id}</p>
               <p className="justify-self-end font-bold text-right">
@@ -138,4 +131,4 @@ const AdminOrder = () => {
   );
 };
 
-export default AdminOrder;
+export default AdminDashboardOrder;

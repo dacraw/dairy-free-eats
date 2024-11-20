@@ -41,7 +41,9 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    resources :orders, only: [ :show ]
-    resources :dashboard, only: [ :index ]
+    resource :dashboard, only: [ :show ] do
+      get "orders"
+      resources :orders, only: [ :show ]
+    end
   end
 end

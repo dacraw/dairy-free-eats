@@ -10,7 +10,7 @@ RSpec.describe "Admin Order Page" do
         end
 
         it "allows an admin to set the order status to active" do
-            visit admin_order_path(id: order.id)
+            visit admin_dashboard_order_path(id: order.id)
 
             expect(page).to have_content "Order Details"
 
