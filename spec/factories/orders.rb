@@ -22,6 +22,21 @@ FactoryBot.define do
       end
     end
 
+    trait :completed do
+      after(:create) do |order|
+        order.completed!
+      end
+    end
+
+    trait :with_order_messages do
+      after(:create) do |order|
+        order.order_messages.push create(:order_message, order: order, user: order.user)
+
+        order.save
+        order.reload
+      end
+    end
+
     trait :with_a_user do
       user { create :user, :valid_user }
     end

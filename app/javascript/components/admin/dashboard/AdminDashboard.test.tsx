@@ -70,6 +70,10 @@ describe("<AdminDashboard />", () => {
         "href",
         "/admin/dashboard/orders"
       );
+      expect(screen.getByRole("link", { name: "ORDER CHATS" })).toHaveAttribute(
+        "href",
+        "/admin/dashboard/order_chats"
+      );
     });
   });
 
