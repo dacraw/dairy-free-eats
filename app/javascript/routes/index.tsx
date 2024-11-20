@@ -3,7 +3,7 @@ import Order from "components/Order/Order";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 import AdminDashboardIndex from "components/admin/dashboard/index/AdminDashboardIndex";
 import AdminDashboardOrders from "components/admin/dashboard/orders/AdminDashboardOrders";
-import AdminOrder from "components/admin/order/AdminOrder";
+import AdminDashboardOrder from "components/admin/dashboard/order/AdminDashboardOrder";
 import CreateNewPassword from "components/createNewPassword/CreateNewPassword";
 import RootLayout from "components/layouts/RootLayout";
 import Login from "components/login/Login";
@@ -34,17 +34,19 @@ const AppRoute = () => {
           <Route path="admin">
             <Route path="dashboard" element={<AdminDashboard />}>
               <Route index element={<AdminDashboardIndex />} />
-              <Route
-                path="orders"
-                element={
-                  <AdminDashboardOrders
-                    currentUserId={data?.currentUser?.id || ""}
-                  />
-                }
-              />
+              <Route path="orders">
+                <Route
+                  index
+                  element={
+                    <AdminDashboardOrders
+                      currentUserId={data?.currentUser?.id || ""}
+                    />
+                  }
+                />
+                <Route path=":id" element={<AdminDashboardOrder />} />
+              </Route>
             </Route>
           </Route>
-          <Route path="admin/orders/:orderId" element={<AdminOrder />} />
           <Route path="password_reset" element={<PasswordReset />} />
           <Route
             path="/passwords/:token/edit"

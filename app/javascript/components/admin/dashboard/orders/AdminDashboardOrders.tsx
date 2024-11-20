@@ -79,7 +79,7 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
           <React.Fragment key={order.id}>
             <p>
               <Link
-                to={`/admin/orders/${order.id}`}
+                to={`${order.id}`}
                 className="text-blue-400 hover:underline"
               >
                 {order.id}
@@ -142,10 +142,7 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
           <div key={order.id} className="bg-blue-700 rounded mb-2 p-2">
             <div className="mb-2">
               <p className="font-bold">Id</p>
-              <Link
-                className="underline text-blue-300"
-                to={`/admin/orders/${order.id}`}
-              >
+              <Link className="underline text-blue-300" to={`${order.id}`}>
                 {order.id}
               </Link>
             </div>
