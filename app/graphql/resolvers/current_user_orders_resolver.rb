@@ -1,11 +1,11 @@
 class Resolvers::CurrentUserOrdersResolver < Resolvers::BaseResolver
     type [ Types::OrderType ], null: true
-    
+
     argument :completed, Boolean, required: true
 
     def resolve(completed:)
         current_user = context[:current_user]
-        
+
         return nil if !current_user.present?
 
         if completed

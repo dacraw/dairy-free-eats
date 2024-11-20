@@ -1,9 +1,9 @@
 module Resolvers
     class OrderMessagesResolver < Resolvers::BaseResolver
-        type [Types::OrderMessageType], null: false
+        type [ Types::OrderMessageType ], null: false
 
         argument :order_id, ID, required: true
-        
+
         def resolve(order_id:)
             order = ::Order.find_by(id: order_id)
 
