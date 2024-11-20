@@ -4,4 +4,9 @@ FactoryBot.define do
     user { nil }
     body { "MyText" }
   end
+
+  trait :valid_order_message do
+    order { create :order, :with_a_user, :with_line_items }
+    user { create :user, :valid_user }
+  end
 end

@@ -45,5 +45,11 @@ RSpec.describe OrderMessage, type: :model do
 
       expect(order_message.errors.full_messages).to include "Order must exist"
     end
+
+    it "enqueues a new order message job" do
+      order_message = create :order_message, :valid_order_message, body: "heyo"
+
+      expect(NewOrderMessageJob).to have_been_enqueued.exactly(:once)
+    end
   end
 end
