@@ -244,7 +244,12 @@ const OrderChatPanels = () => {
     refetch();
   }, [currentUserData]);
 
-  if (!currentUserData?.currentUser || !data) return null;
+  if (
+    !currentUserData?.currentUser ||
+    !data ||
+    currentUserData?.currentUser?.admin
+  )
+    return null;
 
   return data?.currentUserOrders?.map((order) => (
     <OrderChat
