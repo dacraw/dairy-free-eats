@@ -47,14 +47,14 @@ const connectToOrdersChannel = (
         const localTime = new Date(utcDate.getTime() - offset);
 
         return `
-          <div style="display: grid; margin-bottom: 1rem;">
-              <div style="padding: .5rem; border-radius: .25rem; width: 75%; ${
+          <div class="grid mb-4">
+              <div class="p-2 rounded w-3/4 ${
                 currentUserId === userId || (userIsAdmin && currentUserIsAdmin)
-                  ? "justify-self: end; background-color: #1f2937;"
-                  : "justify-self: start; background-color: #1e40af;"
+                  ? "justify-self-end bg-gray-800"
+                  : "justify-self-start bg-blue-800"
               }">
                 <p>${body}</p>
-                <p style="font-size: .875rem">${localTime.toLocaleString()}</p>
+                <p class="text-sm">${localTime.toLocaleString()}</p>
               </div>
           </div>
         `;
