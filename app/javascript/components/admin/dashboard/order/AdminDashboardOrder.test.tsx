@@ -1,6 +1,8 @@
 import React from "react";
-import { screen, render, waitFor } from "@testing-library/react";
-import AdminOrder, { FETCH_ORDER } from "components/admin/order/AdminOrder";
+import { screen, render } from "@testing-library/react";
+import AdminDashboardOrder, {
+  FETCH_ORDER,
+} from "components/admin/dashboard/order/AdminDashboardOrder";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import {
@@ -14,11 +16,11 @@ import {
 } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import Home from "components/Home";
-import AdminDashboard, {
+import {
   FETCH_ORDERS,
   SET_ORDER_STATUS,
-} from "components/admin/dashboard/AdminDashboard";
-import userEvent from "@testing-library/user-event";
+} from "components/admin/dashboard/orders/AdminDashboardOrders";
+import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 
 const orderMockValues: FetchOrderQuery["order"] = {
   id: "orderId_123",
@@ -121,16 +123,22 @@ const fetchOrdersMocks: MockedResponse<FetchOrdersQuery>[] = [
   },
 ];
 
-describe("<AdminOrder />", () => {
+describe("<AdminDashboardOrder />", () => {
   it("renders without errors", async () => {
     render(
       <MockedProvider mocks={validMocks} addTypename={false}>
         <MemoryRouter
-          initialEntries={["/admin/orders/1"]}
+          initialEntries={["/admin/dashboard/orders/1"]}
           future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
         >
           <Routes>
-            <Route path="/admin/orders/:orderId" element={<AdminOrder />} />
+            <Route path="admin">
+              <Route path="dashboard" element={<AdminDashboard />}>
+                <Route path="orders">
+                  <Route path=":id" element={<AdminDashboardOrder />} />
+                </Route>
+              </Route>
+            </Route>
           </Routes>
         </MemoryRouter>
       </MockedProvider>
@@ -152,32 +160,6 @@ describe("<AdminOrder />", () => {
     expect(screen.getByText(lineItemText)).toBeInTheDocument();
   });
 
-  it("lets the user return to the dashboard", async () => {
-    render(
-      <MockedProvider
-        mocks={[...validMocks, ...fetchOrdersMocks]}
-        addTypename={false}
-      >
-        <MemoryRouter
-          initialEntries={["/admin/orders/1"]}
-          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-        >
-          <Routes>
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/orders/:orderId" element={<AdminOrder />} />
-          </Routes>
-        </MemoryRouter>
-      </MockedProvider>
-    );
-
-    const backButton = await screen.findByText(/Back to Dashboard/i);
-    expect(backButton).toBeInTheDocument();
-
-    await userEvent.click(backButton);
-
-    expect(await screen.findByText(/Admin Dashboard/i)).toBeInTheDocument();
-  });
-
   describe("while loading", () => {
     it("shows the loading spinner", async () => {
       render(
@@ -186,11 +168,17 @@ describe("<AdminOrder />", () => {
           addTypename={false}
         >
           <MemoryRouter
-            initialEntries={["/admin/orders/1"]}
+            initialEntries={["/admin/dashboard/orders/1"]}
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
             <Routes>
-              <Route path="/admin/orders/:orderId" element={<AdminOrder />} />
+              <Route path="admin">
+                <Route path="dashboard" element={<AdminDashboard />}>
+                  <Route path="orders">
+                    <Route path=":id" element={<AdminDashboardOrder />} />
+                  </Route>
+                </Route>
+              </Route>
             </Routes>
           </MemoryRouter>
         </MockedProvider>
@@ -220,12 +208,18 @@ describe("<AdminOrder />", () => {
           addTypename={false}
         >
           <MemoryRouter
-            initialEntries={["/admin/orders/1"]}
+            initialEntries={["/admin/dashboard/orders/1"]}
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/admin/orders/:orderId" element={<AdminOrder />} />
+              <Route path="admin">
+                <Route path="dashboard" element={<AdminDashboard />}>
+                  <Route path="orders">
+                    <Route path=":id" element={<AdminDashboardOrder />} />
+                  </Route>
+                </Route>
+              </Route>
             </Routes>
           </MemoryRouter>
         </MockedProvider>

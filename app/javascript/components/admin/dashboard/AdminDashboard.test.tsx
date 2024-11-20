@@ -1,54 +1,15 @@
 import React from "react";
 import { screen, render } from "@testing-library/react";
-import AdminDashboard, {
-  FETCH_ORDERS,
-} from "components/admin/dashboard/AdminDashboard";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { CurrentUserQuery, FetchOrdersQuery, OrderStatus } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import Home from "components/Home";
+import { FETCH_ORDERS } from "components/admin/dashboard/orders/AdminDashboardOrders";
+import AdminDashboard from "components/admin/dashboard/AdminDashboard";
+import AdminDashboardIndex from "components/admin/dashboard/index/AdminDashboardIndex";
 
 const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
-  {
-    maxUsageCount: 2,
-    request: {
-      query: FETCH_ORDERS,
-    },
-    result: {
-      data: {
-        orders: [
-          {
-            id: "1",
-            status: OrderStatus.Received,
-            stripeCheckoutSessionLineItems: [
-              {
-                name: "Shake",
-                quantity: 1,
-              },
-            ],
-            user: {
-              id: "1",
-              email: "testuser@test.com",
-            },
-            guestEmail: null,
-          },
-          {
-            id: "2",
-            status: OrderStatus.Received,
-            stripeCheckoutSessionLineItems: [
-              {
-                name: "Shake",
-                quantity: 1,
-              },
-            ],
-            user: null,
-            guestEmail: "guestEmail@test.com",
-          },
-        ],
-      },
-    },
-  },
   {
     request: {
       query: CURRENT_USER,
@@ -63,77 +24,11 @@ const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
       },
     },
   },
-
-  {
-    request: {
-      query: FETCH_ORDERS,
-    },
-    result: {
-      data: {
-        orders: [
-          {
-            id: "1",
-            status: OrderStatus.Active,
-            stripeCheckoutSessionLineItems: [
-              {
-                name: "Shake",
-                quantity: 1,
-              },
-            ],
-            user: {
-              id: "1",
-              email: "testuser@test.com",
-            },
-            guestEmail: null,
-          },
-        ],
-      },
-    },
-  },
 ];
 
 const currentUserNotAdmin: MockedResponse<
   FetchOrdersQuery | CurrentUserQuery
 >[] = [
-  {
-    maxUsageCount: Infinity,
-    request: {
-      query: FETCH_ORDERS,
-    },
-    result: {
-      data: {
-        orders: [
-          {
-            id: "1",
-            status: OrderStatus.Received,
-            stripeCheckoutSessionLineItems: [
-              {
-                name: "Shake",
-                quantity: 1,
-              },
-            ],
-            user: {
-              id: "1",
-              email: "testuser@test.com",
-            },
-            guestEmail: null,
-          },
-          {
-            id: "2",
-            status: OrderStatus.Received,
-            stripeCheckoutSessionLineItems: [
-              {
-                name: "Shake",
-                quantity: 1,
-              },
-            ],
-            user: null,
-            guestEmail: "guest@test.com",
-          },
-        ],
-      },
-    },
-  },
   {
     request: {
       query: CURRENT_USER,
@@ -156,22 +51,25 @@ describe("<AdminDashboard />", () => {
       render(
         <MockedProvider mocks={validMocks} addTypename={false}>
           <MemoryRouter
-            initialEntries={["/admin/dashboard"]}
+            initialEntries={["/admin/dashboard/"]}
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
             <Routes>
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="admin">
+                <Route path="dashboard" element={<AdminDashboard />}>
+                  <Route index element={<AdminDashboardIndex />} />
+                </Route>
+              </Route>
             </Routes>
           </MemoryRouter>
         </MockedProvider>
       );
       expect(await screen.findByText("Admin Dashboard")).toBeInTheDocument();
-      expect(
-        (await screen.findAllByText("testuser@test.com")).length
-      ).toBeTruthy();
-      expect(
-        (await screen.findAllByText("guestEmail@test.com")).length
-      ).toBeTruthy();
+
+      expect(screen.getByRole("link", { name: "ORDERS" })).toHaveAttribute(
+        "href",
+        "/admin/dashboard/orders"
+      );
     });
   });
 
@@ -185,7 +83,11 @@ describe("<AdminDashboard />", () => {
           >
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
+              <Route path="admin">
+                <Route path="dashboard" element={<AdminDashboard />}>
+                  <Route index element={<AdminDashboardIndex />} />
+                </Route>
+              </Route>
             </Routes>
           </MemoryRouter>
         </MockedProvider>
