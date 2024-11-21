@@ -69,6 +69,7 @@ const OrderChatMessageForm = ({
 
   return (
     <form
+      autoComplete="off"
       onSubmit={handleSubmit(async (data) => {
         await createOrderMessage({
           variables: {
@@ -88,6 +89,7 @@ const OrderChatMessageForm = ({
       <input
         {...rest}
         name="message"
+        autoComplete="off"
         ref={(e) => {
           ref(e);
           messageRef.current = e;

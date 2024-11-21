@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { CurrentUserQuery, useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
@@ -22,25 +22,37 @@ const DesktopNav: React.FC<NavProps> = ({
   return (
     <nav className="hidden justify-between md:flex">
       <div className="gap-4 flex">
-        <Link
-          className="hover:bg-blue-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
+        <NavLink
+          className={({ isActive }) =>
+            `${
+              isActive ? "blue-button" : ""
+            } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+          }
           to="/"
         >
           HOME
-        </Link>
-        <Link
-          className="hover:bg-blue-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            `${
+              isActive ? "blue-button" : ""
+            } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+          }
           to="/order"
         >
           ORDER
-        </Link>
+        </NavLink>
         {currentUser?.admin && (
-          <Link
-            className="hover:bg-blue-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold "
+          <NavLink
+            className={({ isActive }) =>
+              `${
+                isActive ? "blue-button" : ""
+              } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+            }
             to="/admin/dashboard"
           >
             ADMIN DASHBOARD
-          </Link>
+          </NavLink>
         )}
       </div>
       <div className="gap-4 flex items-center">
@@ -52,18 +64,26 @@ const DesktopNav: React.FC<NavProps> = ({
             >
               Admin Demo
             </button>
-            <Link
-              className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
+            <NavLink
+              className={({ isActive }) =>
+                `${
+                  isActive ? "green-button" : ""
+                } hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors`
+              }
               to="/login"
             >
               Login
-            </Link>
-            <Link
-              className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                `${
+                  isActive ? "green-button" : ""
+                } hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors`
+              }
               to="/signup"
             >
               Signup
-            </Link>
+            </NavLink>
           </>
         ) : (
           <>
@@ -127,12 +147,12 @@ const ResponsiveNav: React.FC<NavProps> = ({
   return (
     <nav>
       <div className="flex justify-between items-center md:hidden">
-        <Link
+        <NavLink
           className="rounded py-2 px-4 bg-blue-700 text-gray-100 font-bold"
           to="/order"
         >
           Order Now
-        </Link>
+        </NavLink>
 
         <div className="text-right">
           <FontAwesomeIcon
@@ -149,16 +169,31 @@ const ResponsiveNav: React.FC<NavProps> = ({
                 showMenu ? "max-h-60" : "max-h-0"
               }`}
             >
-              <Link className="block py-1" to="/">
+              <NavLink
+                className={({ isActive }) =>
+                  `${isActive ? "blue-button" : ""} block py-1`
+                }
+                to="/"
+              >
                 Home
-              </Link>
-              <Link className="block py-1" to="/order">
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  `${isActive ? "blue-button" : ""} block py-1`
+                }
+                to="/order"
+              >
                 Order
-              </Link>
+              </NavLink>
               {currentUser?.admin && (
-                <Link className="block py-1" to="/admin/dashboard">
+                <NavLink
+                  className={({ isActive }) =>
+                    `${isActive ? "blue-button" : ""} block py-1`
+                  }
+                  to="/admin/dashboard"
+                >
                   Admin Dashboard
-                </Link>
+                </NavLink>
               )}
               {currentUser ? (
                 <>
@@ -182,16 +217,26 @@ const ResponsiveNav: React.FC<NavProps> = ({
                 <>
                   <button
                     onClick={async () => demoAdminLogin()}
-                    className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors "
+                    className=" rounded hover:text-gray-100 py-2 px-4 transition-colors "
                   >
                     Admin Demo
                   </button>
-                  <Link className="block py-1" to="/login">
+                  <NavLink
+                    className={({ isActive }) =>
+                      `${isActive ? "green-button" : ""} block py-1`
+                    }
+                    to="/login"
+                  >
                     Login
-                  </Link>
-                  <Link className="block py-1" to="/signup">
+                  </NavLink>
+                  <NavLink
+                    className={({ isActive }) =>
+                      `${isActive ? "green-button" : ""} block py-1`
+                    }
+                    to="/signup"
+                  >
                     Signup
-                  </Link>
+                  </NavLink>
                 </>
               )}
             </div>
