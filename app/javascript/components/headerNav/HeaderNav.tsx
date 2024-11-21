@@ -5,6 +5,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { CurrentUserQuery, useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
+import NotificationList from "components/headerNav/headerNotifications/HeaderNotifications";
 
 type NavProps = {
   currentUser: CurrentUserQuery["currentUser"];
@@ -87,6 +88,7 @@ const DesktopNav: React.FC<NavProps> = ({
           </>
         ) : (
           <>
+            <NotificationList currentUser={currentUser} />
             <p>
               {loggingOut ? (
                 <>Logging Out</>
@@ -97,6 +99,7 @@ const DesktopNav: React.FC<NavProps> = ({
                 </>
               )}
             </p>
+
             <button
               className="hover:bg-red-700 hover:text-gray-100 py-2 px-4 transition-colors rounded "
               onClick={() => logout()}
@@ -278,7 +281,7 @@ const HeaderNav = () => {
   }, [location.pathname]);
 
   return (
-    <header className="border-b-2 mb-4 p-2">
+    <header className="border-b-2 mb-4 p-2 select-none">
       {error && <span>{error.message}</span>}
       <DesktopNav
         currentUser={data?.currentUser}
