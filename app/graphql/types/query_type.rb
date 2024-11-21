@@ -47,5 +47,7 @@ module Types
     field :order, resolver: Resolvers::OrderResolver, null: true
 
     field :order_messages, resolver: Resolvers::OrderMessagesResolver, null: false
+
+    field :current_user_notifications, resolver: Resolvers::CurrentUserNotificationsResolver, null: true
   end
 end
