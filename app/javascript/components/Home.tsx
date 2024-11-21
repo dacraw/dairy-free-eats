@@ -1,9 +1,12 @@
+import { faCheck } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div className="grid place-content-center gap-6 md:w-80">
-      <div className="text-center bg-blue-700 rounded p-6">
+    <div className="grid lg:grid-cols-4 lg:grid-rows-[minmax(100px, 1fr)_1fr] place-content-center gap-6 ">
+      <div className="text-center bg-blue-700 rounded p-6 lg:col-start-2 lg:col-span-2 lg:row-span-1">
         <p className="mb-4 text-gray-200 font-bold">
           Order lactose-free food that is tasty and affordable.
         </p>
@@ -19,19 +22,62 @@ const Home = () => {
         </p>
       </div>
 
-      <div className="text-center bg-green-700 rounded p-6 text-lg">
+      <div className="bg-green-700 rounded p-6 lg:col-start-2 lg:row-start-2">
+        <h5 className="text-lg font-bold text-center mb-4">
+          How to Demo <FontAwesomeIcon icon={faCheck} />
+        </h5>
+        <ol className="list-decimal ml-2">
+          <li className="mb-4 text-gray-200">
+            <Link to="/signup" className="site-link">
+              Sign Up
+            </Link>{" "}
+            for an account using an email that you can receive messages to.
+          </li>
+          <li className="mb-4 text-gray-200">
+            <Link to="/order" className="site-link">
+              Place An Order
+            </Link>{" "}
+            using a Stripe test card number (4242 4242 4242 4242).
+          </li>
+          <li className="mb-4 text-gray-200">
+            Send an order message using the expandable "Order # Chat" panel that
+            will appear at the bottom right of the screen after your order is
+            placed.
+          </li>
+          <li className="mb-4 text-gray-200">
+            Logout of your user account and become a demo admin user by clicking
+            "Admin Demo" in the header navigation. You will be redirected to the{" "}
+            <Link className="site-link" to="admin/dashboard">
+              Admin Dashboard
+            </Link>
+            .
+          </li>
+          <li className="mb-4 text-gray-200">
+            Play around in the admin dashboard, where you can set order statuses
+            (an email is sent for each status change) and send messages to order
+            chats.
+          </li>
+        </ol>
+      </div>
+
+      <div className="text-center bg-blue-700 rounded p-6 lg:col-start-3 text-lg lg:row-start-2">
         <h3 className="font-bold mb-2 underline">
           Project Technical Information:
         </h3>
         <div>
           <div className="mb-4">
-            <p>Ruby on Rails 8 (es-build)</p>
+            <p>Ruby on Rails 8</p>
             <p>Postgresql</p>
             <p>ReactJS (v18.3)</p>
             <p>Tailwind CSS (v3.4)</p>
             <p>GraphQL</p>
             <p>Apollo Client (v3.11)</p>
             <p>Stripe gem (v13.1)</p>
+          </div>
+
+          <div>
+            <h5>Order Chat</h5>
+            <p>Powered by ActionCable and Solid Cable</p>
           </div>
 
           <div>
