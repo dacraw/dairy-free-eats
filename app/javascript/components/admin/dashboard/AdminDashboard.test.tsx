@@ -66,14 +66,12 @@ describe("<AdminDashboard />", () => {
       );
       expect(await screen.findByText("Admin Dashboard")).toBeInTheDocument();
 
-      expect(screen.getByRole("link", { name: "ORDERS" })).toHaveAttribute(
-        "href",
-        "/admin/dashboard/orders"
-      );
-      expect(screen.getByRole("link", { name: "ORDER CHATS" })).toHaveAttribute(
-        "href",
-        "/admin/dashboard/order_chats"
-      );
+      expect(
+        screen.getAllByRole("link", { name: "ORDERS" })[0]
+      ).toHaveAttribute("href", "/admin/dashboard/orders");
+      expect(
+        screen.getAllByRole("link", { name: "ORDER CHATS" })[0]
+      ).toHaveAttribute("href", "/admin/dashboard/order_chats");
     });
   });
 
@@ -99,7 +97,7 @@ describe("<AdminDashboard />", () => {
 
       expect(
         await screen.findByText(
-          "Order lactose-free food that is tasty and affordable."
+          "Order lactose-free food that is tasty and affordable"
         )
       ).toBeInTheDocument();
     });

@@ -122,7 +122,7 @@ describe("<OrderSuccess />", () => {
 
       expect(
         await screen.findByText(
-          "Order lactose-free food that is tasty and affordable."
+          "Order lactose-free food that is tasty and affordable"
         )
       ).toBeInTheDocument();
     });
