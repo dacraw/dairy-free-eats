@@ -5,7 +5,7 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { CurrentUserQuery, useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
-import NotificationList from "components/headerNav/headerNotifications/HeaderNotifications";
+import HeaderNotifications from "components/headerNav/headerNotifications/HeaderNotifications";
 
 type NavProps = {
   currentUser: CurrentUserQuery["currentUser"];
@@ -88,7 +88,7 @@ const DesktopNav: React.FC<NavProps> = ({
           </>
         ) : (
           <>
-            <NotificationList currentUser={currentUser} />
+            <HeaderNotifications currentUser={currentUser} />
             <p>
               {loggingOut ? (
                 <>Logging Out</>
@@ -157,91 +157,94 @@ const ResponsiveNav: React.FC<NavProps> = ({
           Order Now
         </NavLink>
 
-        <div className="text-right">
-          <FontAwesomeIcon
-            ref={hamburgerRef}
-            icon={faBars}
-            size="2xl"
-            onClick={() => {
-              toggleShowMenu(!showMenu);
-            }}
-          />
-          <div className="relative z-10" ref={menuRef}>
-            <div
-              className={`absolute overflow-hidden bg-gray-600 rounded shadow w-64 right-0 top-2 text-center transition-all duration-500 ease-in-out ${
-                showMenu ? "max-h-60" : "max-h-0"
-              }`}
-            >
-              <NavLink
-                className={({ isActive }) =>
-                  `${isActive ? "blue-button" : ""} block py-1`
-                }
-                to="/"
+        <div className="text-right flex gap-x-4 items-center">
+          {currentUser && <HeaderNotifications currentUser={currentUser} />}
+          <div>
+            <FontAwesomeIcon
+              ref={hamburgerRef}
+              icon={faBars}
+              size="2xl"
+              onClick={() => {
+                toggleShowMenu(!showMenu);
+              }}
+            />
+            <div className="relative z-10" ref={menuRef}>
+              <div
+                className={`absolute overflow-hidden bg-gray-600 rounded shadow w-64 right-0 top-2 text-center transition-all duration-500 ease-in-out ${
+                  showMenu ? "max-h-60" : "max-h-0"
+                }`}
               >
-                Home
-              </NavLink>
-              <NavLink
-                className={({ isActive }) =>
-                  `${isActive ? "blue-button" : ""} block py-1`
-                }
-                to="/order"
-              >
-                Order
-              </NavLink>
-              {currentUser?.admin && (
                 <NavLink
                   className={({ isActive }) =>
                     `${isActive ? "blue-button" : ""} block py-1`
                   }
-                  to="/admin/dashboard"
+                  to="/"
                 >
-                  Admin Dashboard
+                  Home
                 </NavLink>
-              )}
-              {currentUser ? (
-                <>
-                  <button className="mb-4" onClick={() => logout()}>
-                    Logout
-                  </button>
-                  <p>
-                    {loggingOut ? (
-                      <>Logging Out</>
-                    ) : (
-                      <>
-                        Logged in as:{" "}
-                        <strong className="font-bold">
-                          {currentUser?.email}
-                        </strong>
-                      </>
-                    )}
-                  </p>
-                </>
-              ) : (
-                <>
-                  <button
-                    onClick={async () => demoAdminLogin()}
-                    className=" rounded hover:text-gray-100 py-2 px-4 transition-colors "
-                  >
-                    Admin Demo
-                  </button>
+                <NavLink
+                  className={({ isActive }) =>
+                    `${isActive ? "blue-button" : ""} block py-1`
+                  }
+                  to="/order"
+                >
+                  Order
+                </NavLink>
+                {currentUser?.admin && (
                   <NavLink
                     className={({ isActive }) =>
-                      `${isActive ? "green-button" : ""} block py-1`
+                      `${isActive ? "blue-button" : ""} block py-1`
                     }
-                    to="/login"
+                    to="/admin/dashboard"
                   >
-                    Login
+                    Admin Dashboard
                   </NavLink>
-                  <NavLink
-                    className={({ isActive }) =>
-                      `${isActive ? "green-button" : ""} block py-1`
-                    }
-                    to="/signup"
-                  >
-                    Signup
-                  </NavLink>
-                </>
-              )}
+                )}
+                {currentUser ? (
+                  <>
+                    <button className="mb-4" onClick={() => logout()}>
+                      Logout
+                    </button>
+                    <p>
+                      {loggingOut ? (
+                        <>Logging Out</>
+                      ) : (
+                        <>
+                          Logged in as:{" "}
+                          <strong className="font-bold">
+                            {currentUser?.email}
+                          </strong>
+                        </>
+                      )}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={async () => demoAdminLogin()}
+                      className=" rounded hover:text-gray-100 py-2 px-4 transition-colors "
+                    >
+                      Admin Demo
+                    </button>
+                    <NavLink
+                      className={({ isActive }) =>
+                        `${isActive ? "green-button" : ""} block py-1`
+                      }
+                      to="/login"
+                    >
+                      Login
+                    </NavLink>
+                    <NavLink
+                      className={({ isActive }) =>
+                        `${isActive ? "green-button" : ""} block py-1`
+                      }
+                      to="/signup"
+                    >
+                      Signup
+                    </NavLink>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
