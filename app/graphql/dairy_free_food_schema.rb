@@ -3,7 +3,7 @@
 class DairyFreeFoodSchema < GraphQL::Schema
   mutation(Types::MutationType)
   query(Types::QueryType)
-  # subscription(Types::SubscriptionType)
+  subscription(Types::SubscriptionType)
   use GraphQL::Subscriptions::ActionCableSubscriptions
 
   # For batch-loading (see https://graphql-ruby.org/dataloader/overview.html)

@@ -2,10 +2,11 @@ class NewNotificationJob < ApplicationJob
   queue_as :default
 
   def perform(notification)
-    NotificationsChannel.broadcast_to(
-      notification.user,
-      message: notification.message,
-      path: notification.path
-    )
+    DairyFreeFoodSchema.subscriptions.trigger(
+      :current_user_notification_received,
+      {},
+      { notification: notification },
+      scope: notification.user
+    )  
   end
 end

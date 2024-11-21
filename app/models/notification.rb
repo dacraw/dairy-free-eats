@@ -3,5 +3,7 @@ class Notification < ApplicationRecord
 
     validates_presence_of :message
 
-    after_create_commit { NewNotificationJob.perform_later self }
+    after_create_commit {
+        NewNotificationJob.perform_later self 
+    }
 end

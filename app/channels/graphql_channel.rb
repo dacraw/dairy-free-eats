@@ -8,7 +8,7 @@ class GraphqlChannel < ApplicationCable::Channel
         variables = ensure_hash(data["variables"])
         operation_name = data["operationName"]
         context = {
-            current_user: current_user
+            current_user: current_user,
             channel: self
         }
 
