@@ -21,7 +21,7 @@ const DesktopNav: React.FC<NavProps> = ({
   loggingOut,
 }) => {
   return (
-    <nav className="hidden justify-between md:flex">
+    <nav className="hidden justify-between md:flex mx-4 ">
       <div className="gap-4 flex">
         <NavLink
           className={({ isActive }) =>
@@ -56,7 +56,7 @@ const DesktopNav: React.FC<NavProps> = ({
           </NavLink>
         )}
       </div>
-      <div className="gap-4 flex items-center">
+      <div className="gap-4 flex items-center ">
         {!currentUser ? (
           <>
             <button
@@ -88,7 +88,6 @@ const DesktopNav: React.FC<NavProps> = ({
           </>
         ) : (
           <>
-            <HeaderNotifications currentUser={currentUser} />
             <p>
               {loggingOut ? (
                 <>Logging Out</>
@@ -106,6 +105,7 @@ const DesktopNav: React.FC<NavProps> = ({
             >
               Logout
             </button>
+            <HeaderNotifications currentUser={currentUser} />
           </>
         )}
       </div>

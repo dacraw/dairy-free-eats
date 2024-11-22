@@ -23,13 +23,14 @@ const NotificationsList = () => {
 
   return (
     <div className="relative text-left">
-      <div className="absolute rounded h-96 overflow-auto bg-gray-700 p-4 md:w-[300px] right-0 top-2">
-        <h3 className="font-bold text-center border-b-2 mb-2 pb-2">
-          NOTIFICATIONS
-        </h3>
+      <div className="absolute rounded h-96 backdrop-blur overflow-auto bg-gradient-to-br from-gray-600/80 to-gray-700/80 p-4 md:w-[300px] right-0 top-2  shadow-lg">
+        <h3 className="font-bold text-center mb-2">NOTIFICATIONS</h3>
         <div>
           {data?.currentUserNotifications?.map((notification) => (
-            <p key={notification.id} className="border-b-2 mb-2 pb-2">
+            <p
+              key={notification.id}
+              className="rounded mb-2 p-2 bg-gradient-to-br from-blue-600 to-blue-700"
+            >
               {notification.message}
             </p>
           ))}
