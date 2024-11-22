@@ -23,7 +23,7 @@ const NotificationsList = () => {
 
   return (
     <div className="relative text-left">
-      <div className="absolute rounded h-96 backdrop-blur overflow-auto bg-gradient-to-br from-gray-600/80 to-gray-700/80 p-4 md:w-[300px] right-0 top-2  shadow-lg">
+      <div className="absolute rounded h-96 gray-background p-4 md:w-[300px] right-0 top-2  shadow-lg">
         <h3 className="font-bold text-center mb-2">NOTIFICATIONS</h3>
         <div>
           {data?.currentUserNotifications?.map((notification) => (
@@ -59,7 +59,7 @@ const NotificationPopup = ({
   notificationMessage: string;
 }) => {
   return (
-    <div className="fixed right-0 top-1/2 transform -translate-y-1/2 p-2 rounded bg-gray-700">
+    <div className="fixed right-0 top-1/2 transform -translate-y-1/2 p-2 rounded gray-background text-center">
       <p>{notificationMessage}</p>
     </div>
   );
