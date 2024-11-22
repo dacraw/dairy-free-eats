@@ -97,7 +97,7 @@ const HeaderNotifications = ({
 
               return [
                 newReference,
-                ...existingRefs.filter((ref) => {
+                ...existingRefs.filter((ref: { __ref: string }) => {
                   return readField("id", newReference) !== readField("id", ref);
                 }),
               ];

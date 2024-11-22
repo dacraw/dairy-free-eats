@@ -6,13 +6,12 @@ import {
   InMemoryCache,
   Operation,
 } from "@apollo/client";
-import Footer from "components/footer/Footer";
-import HeaderNav from "components/headerNav/HeaderNav";
 import React from "react";
 import AppRoute from "routes";
 import { getCsrfToken } from "util/formUtil";
 import { createConsumer } from "@rails/actioncable";
 import ActionCableLink from "graphql-ruby-client/subscriptions/ActionCableLink";
+import { OperationDefinitionNode } from "graphql";
 
 const cable = createConsumer();
 
@@ -28,8 +27,8 @@ const hasSubscriptionOperation = ({
   query: { definitions },
 }: Operation): boolean => {
   return definitions.some(
-    ({ kind, operation }) =>
-      kind === "OperationDefinition" && operation === "subscription"
+    (def) =>
+      def.kind === "OperationDefinition" && def.operation === "subscription"
   );
 };
 
