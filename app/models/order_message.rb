@@ -12,7 +12,7 @@ class OrderMessage < ApplicationRecord
       end
     else
       # the message is created by an admin user, so the order user should receive the notification
-      Notification.create user: order.user, message: "An order admin has just messaged you: \"#{self.body.truncate 20}\""
+      Notification.create user: order.user, message: "An order admin has just messaged you about Order ##{self.order_id}: \"#{self.body.truncate 20}\""
     end
   }
 end
