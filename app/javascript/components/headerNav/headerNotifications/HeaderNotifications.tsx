@@ -80,31 +80,23 @@ const HeaderNotifications = ({
       // do nothing if data is null, i.e. first render
       if (!newNotification) return;
 
-      // add the new notification to the existing query if it exists
-      // otherwise, the notifications will be up to date when the user clicks the notifications icon
-      const readQuery = client.readQuery({
-        query: FETCH_CURRENT_USER_NOTIFICATIONS,
-      });
+      client.cache.modify({
+        fields: {
+          currentUserNotifications: (
+            existingRefs,
+            { toReference, readField }
+          ) => {
+            const newReference = toReference(newNotification, true);
 
-      if (readQuery) {
-        client.cache.modify({
-          fields: {
-            currentUserNotifications: (
-              existingRefs,
-              { toReference, readField }
-            ) => {
-              const newReference = toReference(newNotification, true);
-
-              return [
-                newReference,
-                ...existingRefs.filter((ref: { __ref: string }) => {
-                  return readField("id", newReference) !== readField("id", ref);
-                }),
-              ];
-            },
+            return [
+              newReference,
+              ...existingRefs.filter((ref: { __ref: string }) => {
+                return readField("id", newReference) !== readField("id", ref);
+              }),
+            ];
           },
-        });
-      }
+        },
+      });
     },
   });
 

@@ -273,7 +273,7 @@ export type ProductListObject = {
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
-  currentUserNotifications?: Maybe<Array<Notification>>;
+  currentUserNotifications: Array<Notification>;
   currentUserOrders?: Maybe<Array<Order>>;
   fetchCheckoutSession?: Maybe<CheckoutSession>;
   listProducts: ProductListObject;
@@ -404,7 +404,7 @@ export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typenam
 export type FetchCurrentUserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchCurrentUserNotificationsQuery = { __typename?: 'Query', currentUserNotifications?: Array<{ __typename?: 'Notification', id: string, message: string, path?: string | null }> | null };
+export type FetchCurrentUserNotificationsQuery = { __typename?: 'Query', currentUserNotifications: Array<{ __typename?: 'Notification', id: string, message: string, path?: string | null }> };
 
 export type CurrentUserNotificationReceivedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 

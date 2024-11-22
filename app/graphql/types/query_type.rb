@@ -48,13 +48,9 @@ module Types
 
     field :order_messages, resolver: Resolvers::OrderMessagesResolver, null: false
 
-    field :current_user_notifications, [Types::NotificationType], null: true
+    field :current_user_notifications, [Types::NotificationType], null: false
     def current_user_notifications
-      notifications = context[:current_user].notifications.order(created_at: :desc)
-
-      return nil if notifications.empty?
-
-      notifications
+      context[:current_user].notifications.order(created_at: :desc)
     end
   end
 end

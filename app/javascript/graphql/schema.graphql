@@ -286,7 +286,7 @@ type ProductListObject {
 
 type Query {
   currentUser: User
-  currentUserNotifications: [Notification!]
+  currentUserNotifications: [Notification!]!
   currentUserOrders(completed: Boolean!): [Order!]
   fetchCheckoutSession(id: ID!): CheckoutSession
   listProducts: ProductListObject!
