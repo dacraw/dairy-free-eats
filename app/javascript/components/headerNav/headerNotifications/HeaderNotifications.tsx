@@ -1,17 +1,12 @@
-import {
-  faBell,
-  faCircle,
-  faDotCircle,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
-import consumer from "channels/consumer";
 import {
   CurrentUserQuery,
   useCurrentUserNotificationReceivedSubscription,
   useFetchCurrentUserNotificationsQuery,
 } from "graphql/types";
-import { gql, useSubscription } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
   query FetchCurrentUserNotifications {
@@ -51,6 +46,7 @@ const CURRENT_USER_NOTIFICATION_RECEIVED = gql`
         id
         message
         userId
+        path
       }
     }
   }
@@ -76,7 +72,41 @@ const HeaderNotifications = ({
   const [openList, toggleOpenList] = useState(false);
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
   const [showRedDot, setShowRedDot] = useState(false);
-  const { data, loading } = useCurrentUserNotificationReceivedSubscription();
+  const { data } = useCurrentUserNotificationReceivedSubscription({
+    onData: ({ data, client }) => {
+      const newNotification =
+        data.data?.currentUserNotificationReceived?.notification;
+
+      // do nothing if data is null, i.e. first render
+      if (!newNotification) return;
+
+      // add the new notification to the existing query if it exists
+      // otherwise, the notifications will be up to date when the user clicks the notifications icon
+      const readQuery = client.readQuery({
+        query: FETCH_CURRENT_USER_NOTIFICATIONS,
+      });
+
+      if (readQuery) {
+        client.cache.modify({
+          fields: {
+            currentUserNotifications: (
+              existingRefs,
+              { toReference, readField }
+            ) => {
+              const newReference = toReference(newNotification, true);
+
+              return [
+                newReference,
+                ...existingRefs.filter((ref) => {
+                  return readField("id", newReference) !== readField("id", ref);
+                }),
+              ];
+            },
+          },
+        });
+      }
+    },
+  });
 
   const notificationListContainer = useRef<HTMLDivElement>(null);
   const toggleNotificationListIcon = useRef<SVGSVGElement>(null);

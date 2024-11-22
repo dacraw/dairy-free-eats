@@ -409,7 +409,7 @@ export type FetchCurrentUserNotificationsQuery = { __typename?: 'Query', current
 export type CurrentUserNotificationReceivedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CurrentUserNotificationReceivedSubscription = { __typename?: 'Subscription', currentUserNotificationReceived?: { __typename?: 'CurrentUserNotificationReceivedPayload', notification?: { __typename?: 'Notification', id: string, message: string, userId: number } | null } | null };
+export type CurrentUserNotificationReceivedSubscription = { __typename?: 'Subscription', currentUserNotificationReceived?: { __typename?: 'CurrentUserNotificationReceivedPayload', notification?: { __typename?: 'Notification', id: string, message: string, userId: number, path?: string | null } | null } | null };
 
 export type FetchOrderMessagesQueryVariables = Exact<{
   orderId: Scalars['ID']['input'];
@@ -751,6 +751,7 @@ export const CurrentUserNotificationReceivedDocument = gql`
       id
       message
       userId
+      path
     }
   }
 }
