@@ -4,7 +4,7 @@ import {
   faDotCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import consumer from "channels/consumer";
 import {
   CurrentUserQuery,
@@ -78,6 +78,9 @@ const HeaderNotifications = ({
   const [showRedDot, setShowRedDot] = useState(false);
   const { data, loading } = useCurrentUserNotificationReceivedSubscription();
 
+  const notificationListContainer = useRef<HTMLDivElement>(null);
+  const toggleNotificationListIcon = useRef<SVGSVGElement>(null);
+
   useEffect(() => {
     if (data?.currentUserNotificationReceived && !openList) {
       setShowNotificationPopup(true);
@@ -94,6 +97,26 @@ const HeaderNotifications = ({
     }
   }, [data]);
 
+  const hideNotificationList = (e: MouseEvent) => {
+    if (
+      notificationListContainer.current &&
+      toggleNotificationListIcon.current
+    ) {
+      if (
+        !notificationListContainer.current.contains(e.target as HTMLElement) &&
+        !toggleNotificationListIcon.current.contains(e.target as HTMLElement)
+      ) {
+        toggleOpenList(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", hideNotificationList);
+
+    return () => document.removeEventListener("click", hideNotificationList);
+  }, []);
+
   return (
     <div className="relative">
       <FontAwesomeIcon
@@ -103,6 +126,7 @@ const HeaderNotifications = ({
           }
           toggleOpenList(!openList);
         }}
+        ref={toggleNotificationListIcon}
         className={`cursor-pointer hover:text-blue-200 text-xl`}
         icon={faBell}
       />
@@ -122,7 +146,9 @@ const HeaderNotifications = ({
         />
       )}
 
-      {openList && <NotificationsList />}
+      <div ref={notificationListContainer}>
+        {openList && <NotificationsList />}
+      </div>
     </div>
   );
 };
