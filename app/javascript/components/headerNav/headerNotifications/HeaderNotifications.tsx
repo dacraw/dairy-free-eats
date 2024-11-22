@@ -32,7 +32,7 @@ const NotificationsList = () => {
         <h3 className="font-bold text-center">NOTIFICATIONS</h3>
         <div>
           {data?.currentUserNotifications?.map((notification) => (
-            <p>{notification.message}</p>
+            <p key={notification.id}>{notification.message}</p>
           ))}
         </div>
       </div>
