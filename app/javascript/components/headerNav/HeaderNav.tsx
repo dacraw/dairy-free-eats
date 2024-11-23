@@ -6,10 +6,11 @@ import { gql } from "@apollo/client";
 import { CurrentUserQuery, useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
 import HeaderNotifications from "components/headerNav/headerNotifications/HeaderNotifications";
+import client from "apolloClient";
 
 type NavProps = {
   currentUser: CurrentUserQuery["currentUser"];
-  logout: () => Promise<void>;
+  logout: () => void;
   loggingOut: boolean;
   demoAdminLogin: () => Promise<void>;
 };
@@ -274,6 +275,14 @@ const HeaderNav = () => {
     logout,
     { loading: loggingOut, data: logoutData, error: logoutError },
   ] = useLogout();
+
+  const handleLogout = () => {
+    // Ideally, evicting the current user would clear out any fields related to it
+    // This is a TODO
+    client.cache.evict({ fieldName: "currentUserNotifications" });
+    logout();
+  };
+
   const [
     loginDemoAdmin,
     { loading: loginDemoAdminLoading, data: loginDemoAdminData },
@@ -288,14 +297,14 @@ const HeaderNav = () => {
       {error && <span>{error.message}</span>}
       <DesktopNav
         currentUser={data?.currentUser}
-        logout={logout}
+        logout={handleLogout}
         demoAdminLogin={loginDemoAdmin}
         loggingOut={loggingOut}
       />
       <ResponsiveNav
         currentUser={data?.currentUser}
         demoAdminLogin={loginDemoAdmin}
-        logout={logout}
+        logout={handleLogout}
         loggingOut={loggingOut}
       />
     </header>

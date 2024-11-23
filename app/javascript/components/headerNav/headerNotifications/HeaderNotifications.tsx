@@ -1,4 +1,4 @@
-import { faBell, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faCircle, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import {
@@ -26,10 +26,15 @@ export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
   }
 `;
 
-const NotificationsList = () => {
-  const { data, fetchMore } = useFetchCurrentUserNotificationsQuery({
-    variables: { first: 5 },
-  });
+const NotificationsList = ({ currentUserId }: { currentUserId: string }) => {
+  const { data, fetchMore, refetch, loading } =
+    useFetchCurrentUserNotificationsQuery({
+      variables: { first: 5 },
+    });
+
+  // useEffect(() => {
+  //   refetch();
+  // }, [currentUserId]);
 
   return (
     <div className="relative text-left">
@@ -213,7 +218,9 @@ const HeaderNotifications = ({
       )}
 
       <div ref={notificationListContainer}>
-        {openList && <NotificationsList />}
+        {openList && (
+          <NotificationsList currentUserId={currentUser?.id || ""} />
+        )}
       </div>
     </div>
   );
