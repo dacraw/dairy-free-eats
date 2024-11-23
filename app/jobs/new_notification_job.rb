@@ -7,6 +7,6 @@ class NewNotificationJob < ApplicationJob
       {},
       { notification: notification },
       scope: notification.user
-    )  
+    )
   end
 end

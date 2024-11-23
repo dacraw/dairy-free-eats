@@ -13,7 +13,7 @@ class GraphqlChannel < ApplicationCable::Channel
         }
 
         result = DairyFreeFoodSchema.execute(
-            query, 
+            query,
             context: context,
             variables: variables,
             operation_name: operation_name
@@ -27,7 +27,7 @@ class GraphqlChannel < ApplicationCable::Channel
         if result.context[:subscription_id]
             @subscription_ids << result.context[:subscription_id]
         end
-        
+
         transmit(payload)
     end
 
@@ -55,5 +55,4 @@ class GraphqlChannel < ApplicationCable::Channel
             raise ArgumentError, "Unexpected parameter: #{ambiguous_param}"
         end
     end
-
 end
