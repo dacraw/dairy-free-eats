@@ -179,6 +179,26 @@ export type Notification = {
   userId: Scalars['Int']['output'];
 };
 
+/** The connection type for Notification. */
+export type NotificationConnection = {
+  __typename?: 'NotificationConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<Maybe<NotificationEdge>>>;
+  /** A list of nodes. */
+  nodes?: Maybe<Array<Maybe<Notification>>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type NotificationEdge = {
+  __typename?: 'NotificationEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node?: Maybe<Notification>;
+};
+
 export type Order = {
   __typename?: 'Order';
   createdAt: Scalars['String']['output'];
@@ -238,6 +258,19 @@ export type OrderStatusInput = {
   status: OrderStatus;
 };
 
+/** Information about pagination in a connection. */
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  /** When paginating forwards, the cursor to continue. */
+  endCursor?: Maybe<Scalars['String']['output']>;
+  /** When paginating forwards, are there more items? */
+  hasNextPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, are there more items? */
+  hasPreviousPage: Scalars['Boolean']['output'];
+  /** When paginating backwards, the cursor to continue. */
+  startCursor?: Maybe<Scalars['String']['output']>;
+};
+
 export type Product = {
   __typename?: 'Product';
   active: Scalars['Boolean']['output'];
@@ -273,7 +306,7 @@ export type ProductListObject = {
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
-  currentUserNotifications: Array<Notification>;
+  currentUserNotifications: NotificationConnection;
   currentUserOrders?: Maybe<Array<Order>>;
   fetchCheckoutSession?: Maybe<CheckoutSession>;
   listProducts: ProductListObject;
@@ -281,6 +314,14 @@ export type Query = {
   orderMessages: Array<OrderMessage>;
   orders?: Maybe<Array<Order>>;
   retrieveProduct?: Maybe<Product>;
+};
+
+
+export type QueryCurrentUserNotificationsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -401,10 +442,12 @@ export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typename?: 'User', id: string, email: string, admin: boolean } | null };
 
-export type FetchCurrentUserNotificationsQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchCurrentUserNotificationsQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type FetchCurrentUserNotificationsQuery = { __typename?: 'Query', currentUserNotifications: Array<{ __typename?: 'Notification', id: string, message: string, path?: string | null }> };
+export type FetchCurrentUserNotificationsQuery = { __typename?: 'Query', currentUserNotifications: { __typename?: 'NotificationConnection', edges?: Array<{ __typename?: 'NotificationEdge', node?: { __typename?: 'Notification', id: string, message: string, path?: string | null } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
 
 export type CurrentUserNotificationReceivedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
@@ -704,11 +747,19 @@ export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLaz
 export type CurrentUserSuspenseQueryHookResult = ReturnType<typeof useCurrentUserSuspenseQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const FetchCurrentUserNotificationsDocument = gql`
-    query FetchCurrentUserNotifications {
-  currentUserNotifications {
-    id
-    message
-    path
+    query FetchCurrentUserNotifications($after: String) {
+  currentUserNotifications(after: $after) {
+    edges {
+      node {
+        id
+        message
+        path
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
   }
 }
     `;
@@ -725,6 +776,7 @@ export const FetchCurrentUserNotificationsDocument = gql`
  * @example
  * const { data, loading, error } = useFetchCurrentUserNotificationsQuery({
  *   variables: {
+ *      after: // value for 'after'
  *   },
  * });
  */

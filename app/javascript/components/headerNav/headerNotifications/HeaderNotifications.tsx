@@ -9,32 +9,56 @@ import {
 import { gql } from "@apollo/client";
 
 export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
-  query FetchCurrentUserNotifications {
-    currentUserNotifications {
-      id
-      message
-      path
+  query FetchCurrentUserNotifications($after: String) {
+    currentUserNotifications(after: $after) {
+      edges {
+        node {
+          id
+          message
+          path
+        }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 `;
 
 const NotificationsList = () => {
-  const { data, loading } = useFetchCurrentUserNotificationsQuery();
+  const { data, loading, fetchMore } = useFetchCurrentUserNotificationsQuery();
 
   return (
     <div className="relative text-left">
-      <div className="absolute rounded h-96 gray-background p-4 md:w-[300px] right-0 top-2  shadow-lg">
+      <div className="absolute rounded h-96 w-72 gray-background p-4 md:w-[300px] right-0 top-2  shadow-lg">
         <h3 className="font-bold text-center mb-2">NOTIFICATIONS</h3>
         <div>
-          {data?.currentUserNotifications?.map((notification) => (
+          {data?.currentUserNotifications?.edges?.map((node) => (
             <p
-              key={notification.id}
-              className="rounded mb-2 p-2 bg-gradient-to-br from-blue-600 to-blue-700"
+              key={node?.node?.id}
+              className="rounded mb-2 p-2 blue-background"
             >
-              {notification.message}
+              {node?.node?.message}
             </p>
           ))}
         </div>
+        {data?.currentUserNotifications?.pageInfo?.hasNextPage && (
+          <div className="text-center">
+            <button
+              className="green-button"
+              onClick={() =>
+                fetchMore({
+                  variables: {
+                    after: data?.currentUserNotifications?.pageInfo?.endCursor,
+                  },
+                })
+              }
+            >
+              Load More
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -89,12 +113,18 @@ const HeaderNotifications = ({
           ) => {
             const newReference = toReference(newNotification, true);
 
-            return [
-              newReference,
-              ...existingRefs.filter((ref: { __ref: string }) => {
-                return readField("id", newReference) !== readField("id", ref);
-              }),
-            ];
+            return {
+              edges: [
+                { __typename: "NotificationEdge", node: newReference },
+                ...existingRefs?.edges.filter(
+                  ({ node }: { node: { __ref: string } }) => {
+                    return (
+                      readField("id", newReference) !== readField("id", node)
+                    );
+                  }
+                ),
+              ],
+            };
           },
         },
       });
