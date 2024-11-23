@@ -444,6 +444,7 @@ export type CurrentUserQuery = { __typename?: 'Query', currentUser?: { __typenam
 
 export type FetchCurrentUserNotificationsQueryVariables = Exact<{
   after?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
@@ -747,8 +748,8 @@ export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLaz
 export type CurrentUserSuspenseQueryHookResult = ReturnType<typeof useCurrentUserSuspenseQuery>;
 export type CurrentUserQueryResult = Apollo.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const FetchCurrentUserNotificationsDocument = gql`
-    query FetchCurrentUserNotifications($after: String) {
-  currentUserNotifications(after: $after) {
+    query FetchCurrentUserNotifications($after: String, $first: Int) {
+  currentUserNotifications(after: $after, first: $first) {
     edges {
       node {
         id
@@ -777,6 +778,7 @@ export const FetchCurrentUserNotificationsDocument = gql`
  * const { data, loading, error } = useFetchCurrentUserNotificationsQuery({
  *   variables: {
  *      after: // value for 'after'
+ *      first: // value for 'first'
  *   },
  * });
  */

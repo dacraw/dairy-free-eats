@@ -9,8 +9,8 @@ import {
 import { gql } from "@apollo/client";
 
 export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
-  query FetchCurrentUserNotifications($after: String) {
-    currentUserNotifications(after: $after) {
+  query FetchCurrentUserNotifications($after: String, $first: Int) {
+    currentUserNotifications(after: $after, first: $first) {
       edges {
         node {
           id
@@ -27,7 +27,9 @@ export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
 `;
 
 const NotificationsList = () => {
-  const { data, loading, fetchMore } = useFetchCurrentUserNotificationsQuery();
+  const { data, fetchMore } = useFetchCurrentUserNotificationsQuery({
+    variables: { first: 5 },
+  });
 
   return (
     <div className="relative text-left">
@@ -112,18 +114,29 @@ const HeaderNotifications = ({
             { toReference, readField }
           ) => {
             const newReference = toReference(newNotification, true);
+            const newEdges = [
+              {
+                __typename: "NotificationEdge",
+                node: newReference,
+              },
+              ...existingRefs?.edges.filter(
+                ({ node }: { node: { __ref: string } }) => {
+                  return (
+                    readField("id", newReference) !== readField("id", node)
+                  );
+                }
+              ),
+            ];
+
+            const newPageInfo = {
+              ...existingRefs?.pageInfo,
+              endCursor: readField("cursor", newEdges[newEdges.length - 1]),
+            };
 
             return {
-              edges: [
-                { __typename: "NotificationEdge", node: newReference },
-                ...existingRefs?.edges.filter(
-                  ({ node }: { node: { __ref: string } }) => {
-                    return (
-                      readField("id", newReference) !== readField("id", node)
-                    );
-                  }
-                ),
-              ],
+              __typename: "NotificationConnection",
+              edges: newEdges,
+              pageInfo: newPageInfo,
             };
           },
         },
