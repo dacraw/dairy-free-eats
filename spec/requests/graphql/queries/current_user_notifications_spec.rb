@@ -18,7 +18,7 @@ RSpec.describe "Current User Notifications query spec", type: :request do
                         endCursor
                     }
                 }
-            }            
+            }#{'            '}
         GRAPHQL
     }
 
@@ -27,7 +27,7 @@ RSpec.describe "Current User Notifications query spec", type: :request do
 
         JSON.parse(response.body)['data']
     end
-    
+
     it "fetches the current user's notifications" do
         login_user user
 
