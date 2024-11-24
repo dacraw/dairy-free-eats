@@ -15,8 +15,8 @@ const cable = createConsumer();
 const csrfToken = getCsrfToken()!;
 
 const httpLink = new HttpLink({
-  uri: "/graphql",
-  credentials: "include",
+  // uri: "/graphql",
+  credentials: "same-origin",
   headers: { "X-CSRF-Token": csrfToken },
 });
 
@@ -35,17 +35,19 @@ const link = ApolloLink.split(
   httpLink
 );
 
-const client = new ApolloClient({
-  link,
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          currentUserNotifications: relayStylePagination(),
-        },
+export const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        currentUserNotifications: relayStylePagination(),
       },
     },
-  }),
+  },
+});
+
+const client = new ApolloClient({
+  link,
+  cache,
 });
 
 export default client;

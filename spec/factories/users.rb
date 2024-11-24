@@ -17,5 +17,14 @@ FactoryBot.define do
         user.reload
       end
     end
+
+    trait :with_notifications do
+      after(:create) do |user|
+        user.notifications = [create(:notification, message: "hey", user: user)]
+        user.save
+        user.reload
+        # user.notifications = [create(:notification, message: "hey")]
+      end
+    end
   end
 end

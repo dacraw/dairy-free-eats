@@ -53,5 +53,31 @@ RSpec.describe OrderMessage, type: :model do
 
       expect(NewOrderMessageJob).to have_been_enqueued.exactly(:once)
     end
+
+    context "when the user is not an admin" do
+      it "creates a new notification for admin users" do
+        order = create :order, :with_a_user, :with_line_items
+        admin_user = create :user, :valid_user, admin: true
+
+        expect {
+          order_message = create :order_message, body: "heyo", order: order, user: order.user
+          notification = Notification.last
+          expect(notification.message).to eq "#{order_message.user.email_address} has sent a message for order##{order_message.order_id}: \"#{order_message.body.truncate 20}\""
+        }.to change { Notification.count }.from(0).to(1)
+      end
+    end
+
+    context "when the user is an admin" do
+      it "creates a new notification for the user" do
+        order = create :order, :with_a_user, :with_line_items
+        admin_user = create :user, :valid_user, admin: true
+
+        expect {
+          order_message = create :order_message, body: "heyo", order: order, user: admin_user
+          notification = Notification.last
+          expect(notification.message).to eq "An order admin has just messaged you about Order ##{order_message.order_id}: \"#{order_message.body.truncate 20}\""
+        }.to change { Notification.count }.from(0).to(1)
+      end
+    end
   end
 end

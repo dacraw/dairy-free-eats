@@ -26,15 +26,11 @@ export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
   }
 `;
 
-const NotificationsList = ({ currentUserId }: { currentUserId: string }) => {
+export const NotificationsList = () => {
   const { data, fetchMore, refetch, loading } =
     useFetchCurrentUserNotificationsQuery({
       variables: { first: 5 },
     });
-
-  // useEffect(() => {
-  //   refetch();
-  // }, [currentUserId]);
 
   return (
     <div className="relative text-left">
@@ -71,7 +67,7 @@ const NotificationsList = ({ currentUserId }: { currentUserId: string }) => {
   );
 };
 
-const CURRENT_USER_NOTIFICATION_RECEIVED = gql`
+export const CURRENT_USER_NOTIFICATION_RECEIVED = gql`
   subscription CurrentUserNotificationReceived {
     currentUserNotificationReceived {
       notification {
@@ -99,11 +95,7 @@ const NotificationPopup = ({
   );
 };
 
-const HeaderNotifications = ({
-  currentUser,
-}: {
-  currentUser: CurrentUserQuery["currentUser"];
-}) => {
+const HeaderNotifications = () => {
   const [openList, toggleOpenList] = useState(false);
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
   const [showRedDot, setShowRedDot] = useState(false);
@@ -195,6 +187,7 @@ const HeaderNotifications = ({
     <div className="relative">
       <FontAwesomeIcon
         id="current-notifications-bell"
+        data-testid="current-notifications-bell"
         onClick={() => {
           if (!openList) {
             setShowRedDot(false);
@@ -209,6 +202,7 @@ const HeaderNotifications = ({
       {showRedDot && (
         <FontAwesomeIcon
           id="new-notifications-dot"
+          data-testid="new-notifications-dot"
           icon={faCircle}
           className="text-red-700 text-sm absolute left-[10px] -top-[5px]"
         />
@@ -223,9 +217,7 @@ const HeaderNotifications = ({
       )}
 
       <div ref={notificationListContainer}>
-        {openList && (
-          <NotificationsList currentUserId={currentUser?.id || ""} />
-        )}
+        {openList && <NotificationsList />}
       </div>
     </div>
   );

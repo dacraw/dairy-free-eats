@@ -106,7 +106,7 @@ const DesktopNav: React.FC<NavProps> = ({
             >
               Logout
             </button>
-            <HeaderNotifications currentUser={currentUser} />
+            <HeaderNotifications />
           </>
         )}
       </div>
@@ -159,7 +159,7 @@ const ResponsiveNav: React.FC<NavProps> = ({
         </NavLink>
 
         <div className="text-right flex gap-x-4 items-center">
-          {currentUser && <HeaderNotifications currentUser={currentUser} />}
+          {currentUser && <HeaderNotifications />}
           <div>
             <FontAwesomeIcon
               ref={hamburgerRef}
