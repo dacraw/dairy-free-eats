@@ -90,7 +90,10 @@ const NotificationPopup = ({
   notificationMessage: string;
 }) => {
   return (
-    <div className="fixed right-0 top-1/2 transform -translate-y-1/2 p-2 rounded gray-background text-center">
+    <div
+      id="notification-popup"
+      className="fixed right-0 top-1/2 transform -translate-y-1/2 p-2 rounded gray-background text-center"
+    >
       <p>{notificationMessage}</p>
     </div>
   );
@@ -191,6 +194,7 @@ const HeaderNotifications = ({
   return (
     <div className="relative">
       <FontAwesomeIcon
+        id="current-notifications-bell"
         onClick={() => {
           if (!openList) {
             setShowRedDot(false);
@@ -204,6 +208,7 @@ const HeaderNotifications = ({
 
       {showRedDot && (
         <FontAwesomeIcon
+          id="new-notifications-dot"
           icon={faCircle}
           className="text-red-700 text-sm absolute left-[10px] -top-[5px]"
         />
