@@ -99,7 +99,8 @@ const HeaderNotifications = () => {
   const [openList, toggleOpenList] = useState(false);
   const [showNotificationPopup, setShowNotificationPopup] = useState(false);
   const [showRedDot, setShowRedDot] = useState(false);
-  const { data } = useCurrentUserNotificationReceivedSubscription({
+  const { data, loading } = useCurrentUserNotificationReceivedSubscription({
+    fetchPolicy: "no-cache",
     onData: ({ data, client }) => {
       const newNotification =
         data.data?.currentUserNotificationReceived?.notification;
@@ -185,40 +186,49 @@ const HeaderNotifications = () => {
 
   return (
     <div className="relative">
-      <FontAwesomeIcon
-        id="current-notifications-bell"
-        data-testid="current-notifications-bell"
-        onClick={() => {
-          if (!openList) {
-            setShowRedDot(false);
-          }
-          toggleOpenList(!openList);
-        }}
-        ref={toggleNotificationListIcon}
-        className={`cursor-pointer hover:text-blue-200 text-xl`}
-        icon={faBell}
-      />
+      {loading ? (
+        <div>
+          <FontAwesomeIcon icon={faSpinner} spin />
+        </div>
+      ) : (
+        <div>
+          <FontAwesomeIcon
+            id="current-notifications-bell"
+            data-testid="current-notifications-bell"
+            onClick={() => {
+              if (!openList) {
+                setShowRedDot(false);
+              }
+              toggleOpenList(!openList);
+            }}
+            ref={toggleNotificationListIcon}
+            className={`cursor-pointer hover:text-blue-200 text-xl`}
+            icon={faBell}
+          />
 
-      {showRedDot && (
-        <FontAwesomeIcon
-          id="new-notifications-dot"
-          data-testid="new-notifications-dot"
-          icon={faCircle}
-          className="text-red-700 text-sm absolute left-[10px] -top-[5px]"
-        />
+          {showRedDot && (
+            <FontAwesomeIcon
+              id="new-notifications-dot"
+              data-testid="new-notifications-dot"
+              icon={faCircle}
+              className="text-red-700 text-sm absolute left-[10px] -top-[5px]"
+            />
+          )}
+
+          {showNotificationPopup && (
+            <NotificationPopup
+              notificationMessage={
+                data?.currentUserNotificationReceived?.notification?.message ||
+                ""
+              }
+            />
+          )}
+
+          <div ref={notificationListContainer}>
+            {openList && <NotificationsList />}
+          </div>
+        </div>
       )}
-
-      {showNotificationPopup && (
-        <NotificationPopup
-          notificationMessage={
-            data?.currentUserNotificationReceived?.notification?.message || ""
-          }
-        />
-      )}
-
-      <div ref={notificationListContainer}>
-        {openList && <NotificationsList />}
-      </div>
     </div>
   );
 };
