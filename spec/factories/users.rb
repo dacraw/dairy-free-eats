@@ -9,5 +9,21 @@ FactoryBot.define do
         user.password_confirmation = password
       end
     end
+
+    trait :with_orders do
+      after(:create) do |user|
+        user.orders = [ create(:order, :with_line_items) ]
+        user.save!
+        user.reload
+      end
+    end
+
+    trait :with_notifications do
+      after(:create) do |user|
+        user.notifications = [ create(:notification, message: "hey", user: user) ]
+        user.save
+        user.reload
+      end
+    end
   end
 end

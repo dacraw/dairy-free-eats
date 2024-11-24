@@ -69,4 +69,19 @@ RSpec.configure do |config|
   config.before(:each, type: :feature) do
     page.driver.browser.manage.window.resize_to(1280, 1024)
   end
+
+
+  # Perform enqueued jobs in specs
+  config.after(:each) do
+    ActiveJob::Base.queue_adapter.enqueued_jobs = []
+    ActiveJob::Base.queue_adapter.performed_jobs = []
+  end
+
+  config.around :each, perform_enqueued: true do |example|
+    @old_perform_enqueued_jobs = ActiveJob::Base.queue_adapter.perform_enqueued_jobs
+    ActiveJob::Base.queue_adapter.perform_enqueued_jobs = true
+    example.run
+    ActiveJob::Base.queue_adapter.perform_enqueued_jobs = @old_perform_enqueued_jobs
+  end
+  ###################
 end

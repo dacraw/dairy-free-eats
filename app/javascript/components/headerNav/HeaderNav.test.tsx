@@ -1,12 +1,23 @@
 import React from "react";
-import { screen, render, waitFor, queryByRole } from "@testing-library/react";
+import {
+  screen,
+  render,
+  waitFor,
+  queryByRole,
+  act,
+} from "@testing-library/react";
 import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import HeaderNav, { CURRENT_USER } from "components/headerNav/HeaderNav";
-import { CurrentUserQuery } from "graphql/types";
+import {
+  CurrentUserNotificationReceivedSubscription,
+  CurrentUserQuery,
+} from "graphql/types";
 import userEvent from "@testing-library/user-event";
 import Login from "components/login/Login";
 import Home from "components/Home";
+import { cache } from "apolloClient";
+import { CURRENT_USER_NOTIFICATION_RECEIVED } from "components/headerNav/headerNotifications/HeaderNotifications";
 
 global.fetch = jest.fn(() =>
   Promise.resolve({
@@ -15,7 +26,9 @@ global.fetch = jest.fn(() =>
 ) as jest.Mock;
 
 describe("<HeaderNav />", () => {
-  let currentUserPresentMocks: MockedResponse<CurrentUserQuery>[];
+  let currentUserPresentMocks: MockedResponse<
+    CurrentUserQuery | CurrentUserNotificationReceivedSubscription
+  >[];
 
   describe("when there is a current user", () => {
     beforeEach(() => {
@@ -40,12 +53,20 @@ describe("<HeaderNav />", () => {
             },
           },
         },
+        {
+          request: { query: CURRENT_USER_NOTIFICATION_RECEIVED },
+          result: {
+            data: {
+              currentUserNotificationReceived: null,
+            },
+          },
+        },
       ];
     });
 
     it("displays the current user's email", async () => {
       render(
-        <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
+        <MockedProvider cache={cache} mocks={currentUserPresentMocks}>
           <BrowserRouter
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
@@ -61,7 +82,7 @@ describe("<HeaderNav />", () => {
 
     it("does not display the admin dashboard link for non admin", async () => {
       render(
-        <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
+        <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
           <BrowserRouter
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
@@ -83,7 +104,7 @@ describe("<HeaderNav />", () => {
       currentUserPresentMocks[1].delay = Infinity;
 
       render(
-        <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
+        <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
           <BrowserRouter
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
@@ -106,7 +127,7 @@ describe("<HeaderNav />", () => {
 
     it("clicking logout invokes the session delete mutation and redirects to login page", async () => {
       render(
-        <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
+        <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
           <MemoryRouter
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >
@@ -153,10 +174,19 @@ describe("<HeaderNav />", () => {
               },
             },
           },
+          {
+            request: { query: CURRENT_USER_NOTIFICATION_RECEIVED },
+            result: {
+              data: {
+                currentUserNotificationReceived: null,
+              },
+            },
+            maxUsageCount: Infinity,
+          },
         ];
 
         render(
-          <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
+          <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
             <BrowserRouter
               future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             >
@@ -191,7 +221,7 @@ describe("<HeaderNav />", () => {
     });
     it("does not show the user email", async () => {
       render(
-        <MockedProvider mocks={currentUserPresentMocks} addTypename={false}>
+        <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
           <BrowserRouter
             future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
           >

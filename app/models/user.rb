@@ -12,6 +12,7 @@ class User < ApplicationRecord
 
     has_many :orders
     has_many :sessions, dependent: :destroy
+    has_many :notifications, dependent: :destroy
 
     def demo_admin?
         self.email_address === DEMO_ADMIN_EMAIL

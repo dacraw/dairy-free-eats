@@ -47,5 +47,12 @@ module Types
     field :order, resolver: Resolvers::OrderResolver, null: true
 
     field :order_messages, resolver: Resolvers::OrderMessagesResolver, null: false
+
+    field :current_user_notifications, Types::NotificationType.connection_type, null: false
+    def current_user_notifications
+      results = context[:current_user].notifications.order(created_at: :desc)
+
+      Connections::CurrentUserNotificationsConnection.new(results)
+    end
   end
 end
