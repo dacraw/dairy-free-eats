@@ -23,7 +23,6 @@ FactoryBot.define do
         user.notifications = [ create(:notification, message: "hey", user: user) ]
         user.save
         user.reload
-        # user.notifications = [create(:notification, message: "hey")]
       end
     end
   end
