@@ -4,12 +4,20 @@ class Subscriptions::OrderMessageReceived < Subscriptions::BaseSubscription
 
     # field :order_message, Types::OrderMessageType, null: true
     payload_type Types::OrderMessageType
-   
+
 
     def subscribe(order_id:)
         super
         context[:channel].stream_for Order.find(order_id)
 
         :no_response
+    end
+
+    def update(order_id:)
+        if object.user == context[:current_user]
+            NO_UPDATE
+        else
+            super
+        end
     end
 end

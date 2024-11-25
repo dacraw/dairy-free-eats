@@ -46,7 +46,17 @@ module Types
 
     field :order, resolver: Resolvers::OrderResolver, null: true
 
-    field :order_messages, resolver: Resolvers::OrderMessagesResolver, null: false
+    field :order_messages, [ Types::OrderMessageType ], null: false do
+      argument :order_id, ID, required: true
+    end
+
+    def order_messages(order_id:)
+      order = ::Order.find_by(id: order_id)
+
+      raise GraphQL::ExecutionError.new "Order not found for order id##{order_id}" if order.nil?
+
+      order.order_messages.order(created_at: :asc)
+    end
 
     field :current_user_notifications, Types::NotificationType.connection_type, null: false
     def current_user_notifications

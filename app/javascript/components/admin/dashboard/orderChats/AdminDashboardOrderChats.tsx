@@ -1,6 +1,6 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import OrderChat from "components/orderChatPanels/orderChat/OrderChat";
+import OrderChatPanel from "components/orderChatPanels/orderChatPanel/OrderChatPanel";
 import { useCurrentUserQuery, useFetchOrdersQuery } from "graphql/types";
 import React from "react";
 
@@ -16,9 +16,9 @@ const AdminDashboardOrderChats = () => {
         <FontAwesomeIcon className="text-xl" icon={faSpinner} />
       ) : (
         data?.orders?.map((order) => (
-          <OrderChat
+          <OrderChatPanel
             key={order.id}
-            currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+            currentUserId={currentUserData?.currentUser?.id || ""}
             currentUserIsAdmin={Boolean(currentUserData?.currentUser?.admin)}
             orderId={order.id}
           />

@@ -4,7 +4,7 @@ import {
   useCurrentUserQuery,
   useFetchCurrentUserOrdersQuery,
 } from "graphql/types";
-import OrderChat from "components/orderChatPanels/orderChat/OrderChat";
+import OrderChatPanel from "components/orderChatPanels/orderChatPanel/OrderChatPanel";
 
 export const FETCH_ORDER_MESSAGES = gql`
   query FetchOrderMessages($orderId: ID!) {
@@ -23,6 +23,10 @@ export const CREATE_ORDER_MESSAGE = gql`
     createOrderMessage(input: $input) {
       orderMessage {
         id
+        userIsAdmin
+        userId
+        createdAt
+        body
       }
     }
   }
@@ -66,10 +70,10 @@ const OrderChatPanels = () => {
     return null;
 
   return data?.currentUserOrders?.map((order) => (
-    <OrderChat
+    <OrderChatPanel
       key={order.id}
       orderId={order.id}
-      currentUserId={parseInt(currentUserData?.currentUser?.id || "")}
+      currentUserId={currentUserData?.currentUser?.id || ""}
       currentUserIsAdmin={Boolean(currentUserData?.currentUser?.admin)}
     />
   ));

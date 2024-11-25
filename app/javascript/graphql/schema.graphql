@@ -221,6 +221,7 @@ type Order {
   createdAt: String!
   guestEmail: String
   id: ID!
+  orderMessages: [OrderMessage!]!
   status: OrderStatus!
   stripeCheckoutSessionLineItems: [OrderLineItem!]!
   stripePaymentIntentId: String!
@@ -237,16 +238,16 @@ type OrderMessage {
   body: String
   createdAt: ISO8601DateTime!
   id: ID!
-  orderId: Int!
+  orderId: ID!
   updatedAt: ISO8601DateTime!
-  userId: Int!
+  userId: ID!
   userIsAdmin: Boolean!
 }
 
 input OrderMessageInput {
   body: String!
-  orderId: Int!
-  userId: Int!
+  orderId: ID!
+  userId: ID!
 }
 
 input OrderPageInput {

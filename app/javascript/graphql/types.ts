@@ -204,6 +204,7 @@ export type Order = {
   createdAt: Scalars['String']['output'];
   guestEmail?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  orderMessages: Array<OrderMessage>;
   status: OrderStatus;
   stripeCheckoutSessionLineItems: Array<OrderLineItem>;
   stripePaymentIntentId: Scalars['String']['output'];
@@ -222,16 +223,16 @@ export type OrderMessage = {
   body?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
-  orderId: Scalars['Int']['output'];
+  orderId: Scalars['ID']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
-  userId: Scalars['Int']['output'];
+  userId: Scalars['ID']['output'];
   userIsAdmin: Scalars['Boolean']['output'];
 };
 
 export type OrderMessageInput = {
   body: Scalars['String']['input'];
-  orderId: Scalars['Int']['input'];
-  userId: Scalars['Int']['input'];
+  orderId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 export type OrderPageInput = {
@@ -466,14 +467,14 @@ export type FetchOrderMessagesQueryVariables = Exact<{
 }>;
 
 
-export type FetchOrderMessagesQuery = { __typename?: 'Query', orderMessages: Array<{ __typename?: 'OrderMessage', id: string, body?: string | null, createdAt: any, userId: number, userIsAdmin: boolean }> };
+export type FetchOrderMessagesQuery = { __typename?: 'Query', orderMessages: Array<{ __typename?: 'OrderMessage', id: string, body?: string | null, createdAt: any, userId: string, userIsAdmin: boolean }> };
 
 export type CreateOrderMessageMutationVariables = Exact<{
   input: CreateOrderMessageInput;
 }>;
 
 
-export type CreateOrderMessageMutation = { __typename?: 'Mutation', createOrderMessage?: { __typename?: 'CreateOrderMessagePayload', orderMessage?: { __typename?: 'OrderMessage', id: string } | null } | null };
+export type CreateOrderMessageMutation = { __typename?: 'Mutation', createOrderMessage?: { __typename?: 'CreateOrderMessagePayload', orderMessage?: { __typename?: 'OrderMessage', id: string, userIsAdmin: boolean, userId: string, createdAt: any, body?: string | null } | null } | null };
 
 export type FetchCurrentUserOrdersQueryVariables = Exact<{
   completed: Scalars['Boolean']['input'];
@@ -487,7 +488,7 @@ export type OrderMessageReceivedSubscriptionVariables = Exact<{
 }>;
 
 
-export type OrderMessageReceivedSubscription = { __typename?: 'Subscription', orderMessageReceived?: { __typename?: 'OrderMessage', id: string, body?: string | null, createdAt: any, userId: number, userIsAdmin: boolean } | null };
+export type OrderMessageReceivedSubscription = { __typename?: 'Subscription', orderMessageReceived?: { __typename?: 'OrderMessage', id: string, body?: string | null, createdAt: any, userId: string, userIsAdmin: boolean } | null };
 
 export type FetchStripeCheckoutSessionQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -894,6 +895,10 @@ export const CreateOrderMessageDocument = gql`
   createOrderMessage(input: $input) {
     orderMessage {
       id
+      userIsAdmin
+      userId
+      createdAt
+      body
     }
   }
 }
