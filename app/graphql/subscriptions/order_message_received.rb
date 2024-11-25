@@ -8,7 +8,6 @@ class Subscriptions::OrderMessageReceived < Subscriptions::BaseSubscription
 
     def subscribe(order_id:)
         super
-        context[:channel].stream_for Order.find(order_id)
 
         :no_response
     end
