@@ -147,7 +147,7 @@ const HeaderNotifications = () => {
 
   // TODO: Discover why this is re-rendering so many times
   // one reason is when the timeout expires and the component dismounts
-  console.log("notification", data);
+  // console.log("notification", data);
 
   const notificationListContainer = useRef<HTMLDivElement>(null);
   const toggleNotificationListIcon = useRef<SVGSVGElement>(null);

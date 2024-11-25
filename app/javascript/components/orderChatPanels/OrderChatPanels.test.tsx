@@ -11,13 +11,19 @@ import {
   FetchCurrentUserOrdersQueryVariables,
   FetchOrderMessagesQuery,
   FetchOrderMessagesQueryVariables,
+  OrderMessageReceivedSubscription,
+  OrderMessageReceivedSubscriptionVariables,
   OrderStatus,
 } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
+import { ORDER_MESSAGE_RECEIVED } from "components/orderChatPanels/orderChat/OrderChat";
 
 const validMocks: MockedResponse<
-  CurrentUserQuery | FetchCurrentUserOrdersQuery | FetchOrderMessagesQuery,
-  FetchCurrentUserOrdersQueryVariables | FetchOrderMessagesQueryVariables
+  | CurrentUserQuery
+  | FetchCurrentUserOrdersQuery
+  | OrderMessageReceivedSubscription,
+  | FetchCurrentUserOrdersQueryVariables
+  | OrderMessageReceivedSubscriptionVariables
 >[] = [
   {
     request: { query: CURRENT_USER },
@@ -59,18 +65,19 @@ const validMocks: MockedResponse<
     },
   },
   {
-    request: { query: FETCH_ORDER_MESSAGES, variables: { orderId: "1" } },
+    request: {
+      query: ORDER_MESSAGE_RECEIVED,
+      variables: { orderId: "1" },
+    },
     result: {
       data: {
-        orderMessages: [
-          {
-            id: "1",
-            body: "message",
-            createdAt: "2024",
-            userId: 1,
-            userIsAdmin: false,
-          },
-        ],
+        orderMessageReceived: {
+          id: "1",
+          body: "heyo",
+          createdAt: "2024",
+          userId: "1",
+          userIsAdmin: false,
+        },
       },
     },
   },
