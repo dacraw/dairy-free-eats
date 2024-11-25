@@ -427,6 +427,7 @@ input StripeCheckoutSessionInput {
 
 type Subscription {
   currentUserNotificationReceived: CurrentUserNotificationReceivedPayload
+  orderMessageReceived(orderId: ID!): OrderMessage
 }
 
 type TotalDetails {

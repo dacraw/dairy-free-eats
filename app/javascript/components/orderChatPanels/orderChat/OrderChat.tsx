@@ -1,7 +1,8 @@
 import React from "react";
-import { connectToOrdersChannel } from "channels";
 import {
   OrderMessage,
+  OrderMessageReceivedSubscription,
+  OrderMessageReceivedSubscriptionVariables,
   useCreateOrderMessageMutation,
   useFetchOrderMessagesQuery,
 } from "graphql/types";
@@ -9,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { useForm } from "react-hook-form";
+import { gql } from "@apollo/client";
 
 const OrderChatMessage = ({
   currentUserId,
@@ -101,6 +103,18 @@ const OrderChatMessageForm = ({
   );
 };
 
+export const ORDER_MESSAGE_RECEIVED = gql`
+  subscription OrderMessageReceived($orderId: ID!) {
+    orderMessageReceived(orderId: $orderId) {
+      id
+      body
+      createdAt
+      userId
+      userIsAdmin
+    }
+  }
+`;
+
 const OrderChat = ({
   orderId,
   currentUserId,
@@ -114,27 +128,29 @@ const OrderChat = ({
 }) => {
   const chatRef = useRef<HTMLDivElement>(null);
 
-  const { data, loading, refetch } = useFetchOrderMessagesQuery({
-    variables: { orderId },
-  });
+  // TODO: clear the cache when user logs out
+  const { data, loading, refetch, subscribeToMore } =
+    useFetchOrderMessagesQuery({
+      variables: { orderId },
+    });
 
   useEffect(() => {
-    refetch();
-  }, [currentUserId]);
+    subscribeToMore<
+      OrderMessageReceivedSubscription,
+      OrderMessageReceivedSubscriptionVariables
+    >({
+      document: ORDER_MESSAGE_RECEIVED,
+      variables: { orderId },
+      updateQuery: (prev, { subscriptionData }) => {
+        if (!subscriptionData.data.orderMessageReceived) return prev;
 
-  useEffect(() => {
-    if (!chatRef.current) return;
+        const newOrderMessage = subscriptionData.data.orderMessageReceived;
 
-    const connection = connectToOrdersChannel(
-      parseInt(orderId),
-      chatRef.current,
-      currentUserId,
-      currentUserIsAdmin
-    );
-
-    return () => {
-      connection.unsubscribe();
-    };
+        return Object.assign({}, prev, {
+          orderMessages: [...prev.orderMessages, newOrderMessage],
+        });
+      },
+    });
   }, []);
 
   useEffect(() => {

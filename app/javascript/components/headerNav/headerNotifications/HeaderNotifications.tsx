@@ -145,6 +145,9 @@ const HeaderNotifications = () => {
     },
   });
 
+  // TODO: Discover why this is re-rendering so many times
+  console.log("notification", data);
+
   const notificationListContainer = useRef<HTMLDivElement>(null);
   const toggleNotificationListIcon = useRef<SVGSVGElement>(null);
 
