@@ -221,7 +221,6 @@ type Order {
   createdAt: String!
   guestEmail: String
   id: ID!
-  orderMessages: [OrderMessage!]!
   status: OrderStatus!
   stripeCheckoutSessionLineItems: [OrderLineItem!]!
   stripePaymentIntentId: String!

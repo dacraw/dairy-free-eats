@@ -56,8 +56,6 @@ const OrderChatPanel = ({
   useEffect(() => {
     const closeChat = (e: MouseEvent) => {
       if (toggleVisibilityRef.current) {
-        // check if the click is outside the component, but allow the panel to be opened initially
-        // this also allows the submit button and input element to be clicked w/o closing the chat panel
         if (!toggleVisibilityRef.current.contains(e.target as HTMLElement)) {
           setVisible(false);
         }

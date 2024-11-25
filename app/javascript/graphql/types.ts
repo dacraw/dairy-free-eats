@@ -204,7 +204,6 @@ export type Order = {
   createdAt: Scalars['String']['output'];
   guestEmail?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
-  orderMessages: Array<OrderMessage>;
   status: OrderStatus;
   stripeCheckoutSessionLineItems: Array<OrderLineItem>;
   stripePaymentIntentId: Scalars['String']['output'];
