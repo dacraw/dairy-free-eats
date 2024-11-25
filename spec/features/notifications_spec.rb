@@ -24,6 +24,9 @@ RSpec.describe "Notifications Features Spec", :perform_enqueued do
             chat_text = "Order ##{user.orders.first.id} Chat"
             expect(page).to have_content chat_text
 
+            # when the subscription is done loading, the chat messsage icon appears to enable opening chat
+            expect(page).to have_selector('svg[data-icon="message"]')
+
             find("p", text: chat_text).click
 
             expect {
@@ -63,8 +66,12 @@ RSpec.describe "Notifications Features Spec", :perform_enqueued do
 
             visit order_chats_admin_dashboard_path
 
+
             chat_text = "Order ##{user.orders.first.id} Chat"
             expect(page).to have_content chat_text
+
+            # when the subscription is done loading, the chat messsage icon appears to enable opening chat
+            expect(page).to have_selector('svg[data-icon="message"]')
 
             find("p", text: chat_text).click
 
@@ -121,6 +128,9 @@ RSpec.describe "Notifications Features Spec", :perform_enqueued do
 
             chat_text = "Order ##{user.orders.first.id} Chat"
             expect(page).to have_content chat_text
+
+            # when the subscription is done loading, the chat messsage icon appears to enable opening chat
+            expect(page).to have_selector('svg[data-icon="message"]')
 
             find("p", text: chat_text).click
 

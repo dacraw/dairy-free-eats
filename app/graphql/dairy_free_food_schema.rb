@@ -20,9 +20,8 @@ class DairyFreeFoodSchema < GraphQL::Schema
 
   # Union and Interface Resolution
   def self.resolve_type(abstract_type, obj, ctx)
-    # TODO: Implement this method
-    # to return the correct GraphQL object type for `obj`
-    raise(GraphQL::RequiredImplementationMissingError)
+    graphql_type_name = "Types::#{obj.class.name}Type"
+    graphql_type_name.constantize
   end
 
   # Limit the size of incoming queries:

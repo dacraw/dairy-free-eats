@@ -222,16 +222,16 @@ export type OrderMessage = {
   body?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['ISO8601DateTime']['output'];
   id: Scalars['ID']['output'];
-  orderId: Scalars['Int']['output'];
+  orderId: Scalars['ID']['output'];
   updatedAt: Scalars['ISO8601DateTime']['output'];
-  userId: Scalars['Int']['output'];
+  userId: Scalars['ID']['output'];
   userIsAdmin: Scalars['Boolean']['output'];
 };
 
 export type OrderMessageInput = {
   body: Scalars['String']['input'];
-  orderId: Scalars['Int']['input'];
-  userId: Scalars['Int']['input'];
+  orderId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 export type OrderPageInput = {
@@ -387,6 +387,12 @@ export type StripeCheckoutSessionInput = {
 export type Subscription = {
   __typename?: 'Subscription';
   currentUserNotificationReceived?: Maybe<CurrentUserNotificationReceivedPayload>;
+  orderMessageReceived?: Maybe<OrderMessage>;
+};
+
+
+export type SubscriptionOrderMessageReceivedArgs = {
+  orderId: Scalars['ID']['input'];
 };
 
 export type TotalDetails = {
@@ -460,14 +466,14 @@ export type FetchOrderMessagesQueryVariables = Exact<{
 }>;
 
 
-export type FetchOrderMessagesQuery = { __typename?: 'Query', orderMessages: Array<{ __typename?: 'OrderMessage', id: string, body?: string | null, createdAt: any, userId: number, userIsAdmin: boolean }> };
+export type FetchOrderMessagesQuery = { __typename?: 'Query', orderMessages: Array<{ __typename?: 'OrderMessage', id: string, body?: string | null, createdAt: any, userId: string, userIsAdmin: boolean }> };
 
 export type CreateOrderMessageMutationVariables = Exact<{
   input: CreateOrderMessageInput;
 }>;
 
 
-export type CreateOrderMessageMutation = { __typename?: 'Mutation', createOrderMessage?: { __typename?: 'CreateOrderMessagePayload', orderMessage?: { __typename?: 'OrderMessage', id: string } | null } | null };
+export type CreateOrderMessageMutation = { __typename?: 'Mutation', createOrderMessage?: { __typename?: 'CreateOrderMessagePayload', orderMessage?: { __typename?: 'OrderMessage', id: string, userIsAdmin: boolean, userId: string, createdAt: any, body?: string | null } | null } | null };
 
 export type FetchCurrentUserOrdersQueryVariables = Exact<{
   completed: Scalars['Boolean']['input'];
@@ -475,6 +481,13 @@ export type FetchCurrentUserOrdersQueryVariables = Exact<{
 
 
 export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, status: OrderStatus, guestEmail?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
+
+export type OrderMessageReceivedSubscriptionVariables = Exact<{
+  orderId: Scalars['ID']['input'];
+}>;
+
+
+export type OrderMessageReceivedSubscription = { __typename?: 'Subscription', orderMessageReceived?: { __typename?: 'OrderMessage', id: string, body?: string | null, createdAt: any, userId: string, userIsAdmin: boolean } | null };
 
 export type FetchStripeCheckoutSessionQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -881,6 +894,10 @@ export const CreateOrderMessageDocument = gql`
   createOrderMessage(input: $input) {
     orderMessage {
       id
+      userIsAdmin
+      userId
+      createdAt
+      body
     }
   }
 }
@@ -961,6 +978,40 @@ export type FetchCurrentUserOrdersQueryHookResult = ReturnType<typeof useFetchCu
 export type FetchCurrentUserOrdersLazyQueryHookResult = ReturnType<typeof useFetchCurrentUserOrdersLazyQuery>;
 export type FetchCurrentUserOrdersSuspenseQueryHookResult = ReturnType<typeof useFetchCurrentUserOrdersSuspenseQuery>;
 export type FetchCurrentUserOrdersQueryResult = Apollo.QueryResult<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables>;
+export const OrderMessageReceivedDocument = gql`
+    subscription OrderMessageReceived($orderId: ID!) {
+  orderMessageReceived(orderId: $orderId) {
+    id
+    body
+    createdAt
+    userId
+    userIsAdmin
+  }
+}
+    `;
+
+/**
+ * __useOrderMessageReceivedSubscription__
+ *
+ * To run a query within a React component, call `useOrderMessageReceivedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOrderMessageReceivedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOrderMessageReceivedSubscription({
+ *   variables: {
+ *      orderId: // value for 'orderId'
+ *   },
+ * });
+ */
+export function useOrderMessageReceivedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OrderMessageReceivedSubscription, OrderMessageReceivedSubscriptionVariables> & ({ variables: OrderMessageReceivedSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OrderMessageReceivedSubscription, OrderMessageReceivedSubscriptionVariables>(OrderMessageReceivedDocument, options);
+      }
+export type OrderMessageReceivedSubscriptionHookResult = ReturnType<typeof useOrderMessageReceivedSubscription>;
+export type OrderMessageReceivedSubscriptionResult = Apollo.SubscriptionResult<OrderMessageReceivedSubscription>;
 export const FetchStripeCheckoutSessionDocument = gql`
     query FetchStripeCheckoutSession($id: ID!) {
   fetchCheckoutSession(id: $id) {
