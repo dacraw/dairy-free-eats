@@ -6,6 +6,7 @@ import {
   OrderStatus,
   SetOrderStatusInput,
   SetOrderStatusMutationVariables,
+  useCurrentUserQuery,
   useFetchOrdersQuery,
   useSetOrderStatusMutation,
 } from "graphql/types";
@@ -211,7 +212,8 @@ const setOrderStatusVariables = (
   };
 };
 
-const AdminDashboardOrders = ({ currentUserId }: { currentUserId: string }) => {
+const AdminDashboardOrders = () => {
+  const { data: currentUserData } = useCurrentUserQuery();
   const [
     setOrderStatus,
     {
@@ -254,7 +256,7 @@ const AdminDashboardOrders = ({ currentUserId }: { currentUserId: string }) => {
     // for the demo admin, refetch orders when the current user changes
     // this avoids using stale cache data
     refetchOrders();
-  }, [currentUserId]);
+  }, [currentUserData?.currentUser?.id]);
   return (
     <div className=" grid place-content-center">
       {ordersLoading || setOrderActiveLoading ? (
