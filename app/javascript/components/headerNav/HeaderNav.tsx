@@ -124,7 +124,7 @@ const HeaderNavLinks = ({
         ref={menuRef}
         className={`${
           showMenu ? "" : "hidden"
-        } rounded absolute drop-shadow-lg border-2 border-gray-800 w-80 md:border-0 md:drop-shadow-none md:w-full md:static bg-gray-700 right-0 top-10  md:bg-inherit md:flex md:justify-between md:items-center `}
+        } rounded absolute shadow-lg border-2 border-gray-800 w-80 md:border-0 md:drop-shadow-none md:w-full md:static bg-gray-950/90 backdrop-blur right-0 top-10  md:bg-inherit md:flex md:justify-between md:items-center `}
       >
         <div className={`grid text-center md:flex md:col-start-1 md:static`}>
           <NavLink
