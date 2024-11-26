@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
-import { CurrentUserQuery, useCurrentUserLazyQuery } from "graphql/types";
+import { useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
 import HeaderNotifications from "components/headerNav/headerNotifications/HeaderNotifications";
 import client from "apolloClient";
@@ -18,32 +18,78 @@ export const CURRENT_USER = gql`
   }
 `;
 
-const HeaderNav = () => {
-  const location = useLocation();
-  const [showMenu, toggleShowMenu] = useState(false);
-
-  const hamburgerRef = useRef<SVGSVGElement | null>(null);
-  const menuRef = useRef<HTMLDivElement | null>(null);
-
-  const [getCurrentUser, { loading, data, error }] = useCurrentUserLazyQuery({
-    fetchPolicy: "network-only",
-  });
+const LogoutButton = () => {
   const [
     logout,
     { loading: loggingOut, data: logoutData, error: logoutError },
   ] = useLogout();
+
+  const handleLogout = () => {
+    // Ideally, evicting the current user would clear out any fields related to it
+    // This is a TODO
+    client.cache.evict({ fieldName: "currentUserNotifications" });
+    logout();
+  };
+  return (
+    <div>
+      {loggingOut ? (
+        <FontAwesomeIcon
+          data-testid="logging-out"
+          icon={faSpinner}
+          className="py-2"
+        />
+      ) : (
+        <button
+          className="hover:bg-red-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold"
+          onClick={handleLogout}
+        >
+          Logout
+        </button>
+      )}
+    </div>
+  );
+};
+
+const AdminDemoButton = () => {
   const [
     loginDemoAdmin,
     { loading: loginDemoAdminLoading, data: loginDemoAdminData },
   ] = useAdminLogin();
 
-  useEffect(() => {
-    getCurrentUser();
-  }, [location.pathname]);
+  return (
+    <div>
+      {loginDemoAdminLoading ? (
+        <FontAwesomeIcon
+          icon={faSpinner}
+          spin
+          className="w-full py-2 text-xl"
+        />
+      ) : (
+        <button
+          onClick={async () => loginDemoAdmin()}
+          className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold "
+        >
+          Admin Demo
+        </button>
+      )}
+    </div>
+  );
+};
 
+const HeaderNavLinks = ({
+  currentUserPresent,
+  currentUserAdmin,
+}: {
+  currentUserPresent: boolean;
+  currentUserAdmin: boolean;
+}) => {
+  const [showMenu, toggleShowMenu] = useState(false);
+  const location = useLocation();
   useEffect(() => {
     toggleShowMenu(false);
   }, [location.pathname]);
+  const hamburgerRef = useRef<SVGSVGElement | null>(null);
+  const menuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const checkCloseMenu = (e: MouseEvent) => {
@@ -63,13 +109,105 @@ const HeaderNav = () => {
 
     return () => document.removeEventListener("mousedown", checkCloseMenu);
   }, []);
+  return (
+    <div>
+      <FontAwesomeIcon
+        ref={hamburgerRef}
+        icon={faBars}
+        size="xl"
+        onClick={() => {
+          toggleShowMenu(!showMenu);
+        }}
+        className="md:hidden"
+      />
+      <div
+        ref={menuRef}
+        className={`${
+          showMenu ? "" : "hidden"
+        } rounded absolute drop-shadow-lg border-2 border-gray-800 w-80 md:border-0 md:drop-shadow-none md:w-full md:static bg-gray-700 right-0 top-10  md:bg-inherit md:flex md:justify-between md:items-center `}
+      >
+        <div className={`grid text-center md:flex md:col-start-1 md:static`}>
+          <NavLink
+            className={({ isActive }) =>
+              `${
+                isActive ? "blue-button" : ""
+              } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+            }
+            to="/"
+          >
+            Home
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              `${
+                isActive ? "blue-button" : ""
+              } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+            }
+            to="/order"
+          >
+            Order
+          </NavLink>
+          {currentUserAdmin && (
+            <NavLink
+              className={({ isActive }) =>
+                `${
+                  isActive ? "blue-button" : ""
+                } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+              }
+              to="/admin/dashboard"
+            >
+              Dashboard
+            </NavLink>
+          )}
+        </div>
+        <div
+          className={`grid text-center md:flex md:items-center md:gap-4 md:col-start-3 md:row-start-1 md:justify-self-end ${
+            showMenu ? "block" : "hidden"
+          }`}
+        >
+          {currentUserPresent ? (
+            <LogoutButton />
+          ) : (
+            <>
+              <AdminDemoButton />
+              <NavLink
+                className={({ isActive }) =>
+                  `${
+                    isActive ? "green-button" : ""
+                  } hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold`
+                }
+                to="/login"
+              >
+                Login
+              </NavLink>
+              <NavLink
+                className={({ isActive }) =>
+                  `${
+                    isActive ? "green-button" : ""
+                  } hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold`
+                }
+                to="/signup"
+              >
+                Signup
+              </NavLink>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-  const handleLogout = () => {
-    // Ideally, evicting the current user would clear out any fields related to it
-    // This is a TODO
-    client.cache.evict({ fieldName: "currentUserNotifications" });
-    logout();
-  };
+const HeaderNav = () => {
+  const location = useLocation();
+
+  const [getCurrentUser, { loading, data, error }] = useCurrentUserLazyQuery({
+    fetchPolicy: "network-only",
+  });
+
+  useEffect(() => {
+    getCurrentUser();
+  }, [location.pathname]);
 
   return (
     <header className="border-b-2 mb-4 p-2 select-none">
@@ -81,118 +219,10 @@ const HeaderNav = () => {
             <HeaderNotifications />
           </div>
         )}
-        <FontAwesomeIcon
-          ref={hamburgerRef}
-          icon={faBars}
-          size="xl"
-          onClick={() => {
-            toggleShowMenu(!showMenu);
-          }}
-          className="md:hidden"
+        <HeaderNavLinks
+          currentUserPresent={!!data?.currentUser}
+          currentUserAdmin={Boolean(data?.currentUser?.admin)}
         />
-        <div
-          ref={menuRef}
-          className={`${
-            showMenu ? "" : "hidden"
-          } rounded absolute drop-shadow-lg border-2 border-gray-800 w-80 md:border-0 md:drop-shadow-none md:w-full md:static bg-gray-700 right-0 top-10  md:bg-inherit md:flex md:justify-between md:items-center `}
-        >
-          <div className={`grid text-center md:flex md:col-start-1 md:static`}>
-            <NavLink
-              className={({ isActive }) =>
-                `${
-                  isActive ? "blue-button" : ""
-                } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
-              }
-              to="/"
-            >
-              Home
-            </NavLink>
-            <NavLink
-              className={({ isActive }) =>
-                `${
-                  isActive ? "blue-button" : ""
-                } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
-              }
-              to="/order"
-            >
-              Order
-            </NavLink>
-            {data?.currentUser?.admin && (
-              <NavLink
-                className={({ isActive }) =>
-                  `${
-                    isActive ? "blue-button" : ""
-                  } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
-                }
-                to="/admin/dashboard"
-              >
-                Dashboard
-              </NavLink>
-            )}
-          </div>
-          <div
-            className={`grid text-center md:flex md:items-center md:gap-4 md:col-start-3 md:row-start-1 md:justify-self-end ${
-              showMenu ? "block" : "hidden"
-            }`}
-          >
-            {!data?.currentUser ? (
-              <>
-                {loginDemoAdminLoading ? (
-                  <FontAwesomeIcon
-                    icon={faSpinner}
-                    spin
-                    className="w-full py-2 text-xl"
-                  />
-                ) : (
-                  <button
-                    onClick={async () => loginDemoAdmin()}
-                    className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold "
-                  >
-                    Admin Demo
-                  </button>
-                )}
-
-                <NavLink
-                  className={({ isActive }) =>
-                    `${
-                      isActive ? "green-button" : ""
-                    } hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold`
-                  }
-                  to="/login"
-                >
-                  Login
-                </NavLink>
-                <NavLink
-                  className={({ isActive }) =>
-                    `${
-                      isActive ? "green-button" : ""
-                    } hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold`
-                  }
-                  to="/signup"
-                >
-                  Signup
-                </NavLink>
-              </>
-            ) : (
-              <>
-                {loggingOut ? (
-                  <FontAwesomeIcon
-                    data-testid="logging-out"
-                    icon={faSpinner}
-                    className="py-2"
-                  />
-                ) : (
-                  <button
-                    className="hover:bg-red-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </button>
-                )}
-              </>
-            )}
-          </div>
-        </div>
       </nav>
     </header>
   );
