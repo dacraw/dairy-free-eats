@@ -17,7 +17,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminDashboardOrderChats from "components/admin/dashboard/orderChats/AdminDashboardOrderChats";
 
 const AppRoute = () => {
-  const { data, loading } = useCurrentUserQuery();
   return (
     <Router
       future={{
@@ -36,14 +35,7 @@ const AppRoute = () => {
             <Route path="dashboard" element={<AdminDashboard />}>
               <Route index element={<AdminDashboardIndex />} />
               <Route path="orders">
-                <Route
-                  index
-                  element={
-                    <AdminDashboardOrders
-                      currentUserId={data?.currentUser?.id || ""}
-                    />
-                  }
-                />
+                <Route index element={<AdminDashboardOrders />} />
                 <Route path=":id" element={<AdminDashboardOrder />} />
               </Route>
               <Route

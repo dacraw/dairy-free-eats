@@ -180,6 +180,11 @@ const OrderChat = ({
         id="chat"
         ref={chatRef}
         className={`p-4 overflow-auto h-96 animate-slide-up`}
+        onAnimationStart={() => {
+          if (chatRef.current) {
+            chatRef.current.scrollTop = chatRef.current.scrollHeight;
+          }
+        }}
       >
         <p className="text-center text-xs bg-gray-800 rounded p-2 mb-4">
           This chat will be available after an order is received and until it is
