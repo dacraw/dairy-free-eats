@@ -103,10 +103,7 @@ describe("<AdminDashboardOrders />", () => {
           <Routes>
             <Route path="admin">
               <Route path="dashboard" element={<AdminDashboard />}>
-                <Route
-                  path="orders"
-                  element={<AdminDashboardOrders currentUserId="1" />}
-                />
+                <Route path="orders" element={<AdminDashboardOrders />} />
               </Route>
             </Route>
           </Routes>
