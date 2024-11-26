@@ -130,8 +130,8 @@ const HeaderNavLinks = ({
           <NavLink
             className={({ isActive }) =>
               `${
-                isActive ? "blue-button" : ""
-              } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+                isActive ? "gray-button" : ""
+              } py-2 px-4 hover:gray-button-hover font-bold`
             }
             to="/"
           >
@@ -140,8 +140,8 @@ const HeaderNavLinks = ({
           <NavLink
             className={({ isActive }) =>
               `${
-                isActive ? "blue-button" : ""
-              } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+                isActive ? "gray-button" : ""
+              } py-2 px-4 hover:gray-button-hover font-bold`
             }
             to="/order"
           >
@@ -151,8 +151,8 @@ const HeaderNavLinks = ({
             <NavLink
               className={({ isActive }) =>
                 `${
-                  isActive ? "blue-button" : ""
-                } hover:bg-blue-700  hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold`
+                  isActive ? "gray-button" : ""
+                } py-2 px-4 hover:gray-button-hover font-bold`
               }
               to="/admin/dashboard"
             >
@@ -173,8 +173,8 @@ const HeaderNavLinks = ({
               <NavLink
                 className={({ isActive }) =>
                   `${
-                    isActive ? "green-button" : ""
-                  } hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold`
+                    isActive ? "gray-button" : ""
+                  } py-2 px-4 font-bold hover:gray-button-hover`
                 }
                 to="/login"
               >
@@ -183,8 +183,8 @@ const HeaderNavLinks = ({
               <NavLink
                 className={({ isActive }) =>
                   `${
-                    isActive ? "green-button" : ""
-                  } hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold`
+                    isActive ? "gray-button" : ""
+                  } py-2 px-4 font-bold hover:gray-button-hover`
                 }
                 to="/signup"
               >
@@ -210,7 +210,7 @@ const HeaderNav = () => {
   }, [location.pathname]);
 
   return (
-    <header className="border-b-2 mb-4 p-2 select-none">
+    <header className="shadow-md bg-gradient-to-b from-gray-900 to-gray-950 shadow-gray-950 fixed w-full p-2 select-none h-[50px]">
       {error && <span>{error.message}</span>}
 
       <nav className="relative flex justify-end gap-4 items-center md:static md:grid md:grid-cols-[1fr_auto_auto] md:grid-rows-1 md:justify-between">
