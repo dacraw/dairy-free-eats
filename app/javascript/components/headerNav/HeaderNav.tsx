@@ -71,8 +71,6 @@ const HeaderNav = () => {
     logout();
   };
 
-  console.log(logoutData);
-
   return (
     <header className="border-b-2 mb-4 p-2 select-none">
       {error && <span>{error.message}</span>}
@@ -178,7 +176,11 @@ const HeaderNav = () => {
             ) : (
               <>
                 {loggingOut ? (
-                  <FontAwesomeIcon icon={faSpinner} className="py-2" />
+                  <FontAwesomeIcon
+                    data-testid="logging-out"
+                    icon={faSpinner}
+                    className="py-2"
+                  />
                 ) : (
                   <button
                     className="hover:bg-red-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold"

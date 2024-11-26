@@ -20,7 +20,7 @@ module Helpers
             find("input[type='submit']").click
 
             expect(page).to have_content "Order lactose-free food that is tasty and affordable"
-            expect(page).to have_content "Logged in as: #{user.email_address}"
+            expect(page).to have_button "Logout"
         end
     end
 end

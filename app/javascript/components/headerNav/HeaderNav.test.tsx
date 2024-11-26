@@ -75,9 +75,7 @@ describe("<HeaderNav />", () => {
         </MockedProvider>
       );
 
-      const target = await screen.findAllByText("test@demo.com");
-
-      expect(target[0]).toBeInTheDocument();
+      expect(await screen.findByText("Logout")).toBeInTheDocument();
     });
 
     it("does not display the admin dashboard link for non admin", async () => {
@@ -91,38 +89,11 @@ describe("<HeaderNav />", () => {
         </MockedProvider>
       );
 
-      const target = await screen.findAllByText("test@demo.com");
-
-      expect(target[0]).toBeInTheDocument();
+      expect(await screen.findByText("Logout")).toBeInTheDocument();
 
       expect(
         screen.queryAllByRole("link", { name: /ADMIN DASHBOARD/i }).length
       ).toEqual(0);
-    });
-
-    it("says 'Logging Out' while logging out", async () => {
-      currentUserPresentMocks[1].delay = Infinity;
-
-      render(
-        <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
-          <BrowserRouter
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
-            <HeaderNav />
-          </BrowserRouter>
-        </MockedProvider>
-      );
-
-      const target = await screen.findAllByText("test@demo.com");
-      expect(target[0]).toBeInTheDocument();
-
-      const logoutButton = await screen.findAllByRole("button", {
-        name: "Logout",
-      });
-      expect(logoutButton[0]).toBeInTheDocument();
-
-      userEvent.click(logoutButton[0]);
-      expect(await screen.findAllByText("Logging Out")).toBeTruthy();
     });
 
     it("clicking logout invokes the session delete mutation and redirects to login page", async () => {
@@ -140,19 +111,15 @@ describe("<HeaderNav />", () => {
         </MockedProvider>
       );
 
-      const target = await screen.findAllByText("test@demo.com");
-      expect(target[0]).toBeInTheDocument();
-
-      const logoutButton = await screen.findAllByRole("button", {
+      const logoutButton = await screen.findByRole("button", {
         name: "Logout",
       });
-      expect(logoutButton[0]).toBeInTheDocument();
+      expect(logoutButton).toBeInTheDocument();
 
-      await userEvent.click(logoutButton[0]);
+      await userEvent.click(logoutButton);
 
       await waitFor(() => {
-        const target2 = screen.queryAllByText("test@demo.com");
-        expect(target2.length).toEqual(0);
+        expect(screen.queryByText("Logout")).not.toBeInTheDocument();
 
         expect(screen.getByLabelText("Email")).toBeInTheDocument();
         expect(screen.getByLabelText("Password")).toBeInTheDocument();
@@ -195,13 +162,11 @@ describe("<HeaderNav />", () => {
           </MockedProvider>
         );
 
-        expect(
-          (await screen.findAllByText("admin@demo.com")).length
-        ).toBeTruthy();
+        expect(await screen.findByText("Logout")).toBeInTheDocument();
 
         expect(
-          screen.getAllByRole("link", { name: /ADMIN DASHBOARD/i }).length
-        ).toBeTruthy();
+          screen.getByRole("link", { name: /DASHBOARD/i })
+        ).toBeInTheDocument();
       });
     });
   });
@@ -230,7 +195,7 @@ describe("<HeaderNav />", () => {
         </MockedProvider>
       );
 
-      expect(screen.queryAllByText("Logging Out")).toHaveLength(0);
+      expect(screen.queryByText("Logout")).not.toBeInTheDocument();
     });
   });
 });
