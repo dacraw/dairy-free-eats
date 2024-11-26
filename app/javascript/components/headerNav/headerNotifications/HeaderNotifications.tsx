@@ -195,7 +195,7 @@ const HeaderNotifications = () => {
           <FontAwesomeIcon icon={faSpinner} spin />
         </div>
       ) : (
-        <div>
+        <div className="flex items-center">
           <FontAwesomeIcon
             id="current-notifications-bell"
             data-testid="current-notifications-bell"

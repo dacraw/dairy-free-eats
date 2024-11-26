@@ -1,3 +1,4 @@
+import { Maybe } from "graphql/types";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getCsrfToken } from "util/formUtil";
@@ -95,13 +96,13 @@ export const useAdminLogin = (): [
 export const useLogout = (): [
   logout: () => Promise<void>,
   {
-    data: { message: string };
+    data: Maybe<{ message: string }>;
     error: Error | null;
     loading: boolean;
   }
 ] => {
   const [csrfToken, setCsrfToken] = useState("");
-  const [data, setData] = useState<{ message: string }>({ message: "" });
+  const [data, setData] = useState<Maybe<{ message: string }>>(null);
   const [error, setError] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
