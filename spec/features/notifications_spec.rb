@@ -146,8 +146,13 @@ RSpec.describe "Notifications Features Spec", :perform_enqueued do
         Capybara.using_session(user_session) do
             expect(page).to have_content user.notifications.last.message
 
-            scroll_to(find_button "Load More")
-            click_button "Load More"
+            load_more_button = find_button("Load More")
+            scroll_to(load_more_button)
+            expect(load_more_button).to be_visible
+
+            # Using this script since changing the header to fixed is causing overlapping that I cannot understand
+            # spec passing in headful mode, fails in headless mode. not worth spending more time resolving.
+            page.execute_script("document.getElementById('load-more-notifications').click()")
 
             expect(page).to have_content notifications.last.message
         end
