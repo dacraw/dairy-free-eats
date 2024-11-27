@@ -28,6 +28,10 @@
     @apply bg-gradient-to-br from-blue-600/90 to-blue-700/90 backdrop-blur;
   }
 
+  .dark-blue-background {
+    @apply bg-gradient-to-b to-gray-950/80 from-blue-950/80 backdrop-blur;
+  }
+
   .gray-button {
     @apply gray-background rounded text-gray-100 font-bold py-2 px-4 cursor-pointer  transition-colors duration-300;
   }
@@ -37,7 +41,7 @@
   }
 
   .gray-background {
-    @apply backdrop-blur overflow-auto bg-gradient-to-t from-gray-600/80 to-gray-700/80;
+    @apply backdrop-blur overflow-auto bg-gradient-to-b from-gray-600/80 to-gray-700/80;
   }
 
   .red-button {
@@ -53,6 +57,19 @@
   display: block;
   animation: slide-up 1s;
   padding: 1em;
+}
+
+.animate-home-title-pulse {
+  animation: color-pulse 3s infinite;
+}
+
+@keyframes color-pulse {
+  from {
+    color: #d1d5db;
+  }
+  to {
+    color: #9ca3af;
+  }
 }
 
 @keyframes slide-up {

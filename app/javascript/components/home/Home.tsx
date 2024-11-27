@@ -1,41 +1,20 @@
-import {
-  faCheck,
-  faCircleXmark,
-  faComputer,
-  faCow,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faComputer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 md:grid-rows-[minmax(100px, 1fr)_1fr] justify-center gap-6 ">
-      <div className="text-center blue-background rounded p-6 lg:col-start-2 md:col-span-2 lg:row-span-1">
-        <div className="mb-4 text-gray-200 font-bold">
-          <p>Order lactose-free food that is tasty and affordable</p>
-          <div>
-            <FontAwesomeIcon
-              className="ml-2 text-red-700"
-              icon={faCircleXmark}
-            />
-            <FontAwesomeIcon className="mx-2" icon={faCow} />
-            <FontAwesomeIcon className="text-red-700" icon={faCircleXmark} />
-          </div>
+    <div className="grid md:grid-cols-2 lg:grid-cols-4 md:grid-rows-[min-content_min-content] justify-center gap-6 max-w-screen-lg">
+      <div className="text-center rounded lg:col-start-2 md:col-span-2 lg:row-span-1">
+        <div className="text-2xl p-4">
+          <p className="animate-home-title-shimmer font-bold">
+            Order Dairy Free Food
+          </p>
         </div>
-        <p className="mb-4 text-sm">
-          This is a portfolio project, so anything ordered will not be delivered
-          to you. Please do not enter real card information as this website is
-          for <span className="underline">DEMONSTRATION PURPOSES ONLY.</span>
-        </p>
-        <p className="mb-4 text-sm">
-          But, the goal is to get this up and running one day and deliver
-          lactose-free food locally based on my current location...so stay tuned
-          ;)
-        </p>
       </div>
 
-      <div className="green-background rounded p-6 lg:col-start-1 lg:col-span-2 md:row-start-2">
+      <div className="dark-blue-background rounded p-6 lg:col-start-1 lg:col-span-2 md:row-start-2">
         <h5 className="text-lg font-bold text-center mb-4 border-b-2 pb-2">
           How to Demo <FontAwesomeIcon className="ml-2" icon={faCheck} />
         </h5>
@@ -73,7 +52,7 @@ const Home = () => {
         </ol>
       </div>
 
-      <div className="text-center blue-background rounded p-6 lg:col-start-3 lg:col-span-2 text-lg md:row-start-2 ">
+      <div className="text-center dark-blue-background rounded p-6 lg:col-start-3 lg:col-span-2 text-lg md:row-start-2 ">
         <h3 className="font-bold mb-2 border-b-2 pb-2">
           Project Technical Information{" "}
           <FontAwesomeIcon className="ml-2" icon={faComputer} />

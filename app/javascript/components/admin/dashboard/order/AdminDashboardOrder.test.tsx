@@ -15,7 +15,7 @@ import {
   SetOrderStatusMutationVariables,
 } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
-import Home from "components/Home";
+import Home from "components/home/Home";
 import {
   FETCH_ORDERS,
   SET_ORDER_STATUS,
@@ -89,35 +89,6 @@ const validMocks: MockedResponse<
             status: OrderStatus.Active,
           },
         },
-      },
-    },
-  },
-];
-
-const fetchOrdersMocks: MockedResponse<FetchOrdersQuery>[] = [
-  {
-    request: {
-      query: FETCH_ORDERS,
-    },
-    result: {
-      data: {
-        orders: [
-          {
-            id: "123",
-            status: OrderStatus.Received,
-            stripeCheckoutSessionLineItems: [
-              {
-                name: "Some great item",
-                quantity: 4,
-              },
-            ],
-            user: {
-              id: "1234",
-              email: "useremail@test.com",
-            },
-            guestEmail: null,
-          },
-        ],
       },
     },
   },
@@ -226,9 +197,7 @@ describe("<AdminDashboardOrder />", () => {
       );
 
       expect(
-        await screen.findByText(
-          "Order lactose-free food that is tasty and affordable"
-        )
+        await screen.findByText("Order Dairy Free Food")
       ).toBeInTheDocument();
     });
   });

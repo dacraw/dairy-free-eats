@@ -9,7 +9,7 @@ import {
   FetchStripeCheckoutSessionQuery,
   FetchStripeCheckoutSessionQueryVariables,
 } from "graphql/types";
-import Home from "components/Home";
+import Home from "components/home/Home";
 
 const validMocks: MockedResponse<
   FetchStripeCheckoutSessionQuery,
@@ -121,9 +121,7 @@ describe("<OrderSuccess />", () => {
       );
 
       expect(
-        await screen.findByText(
-          "Order lactose-free food that is tasty and affordable"
-        )
+        await screen.findByText("Order Dairy Free Food")
       ).toBeInTheDocument();
     });
   });

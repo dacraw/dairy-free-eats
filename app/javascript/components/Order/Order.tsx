@@ -64,7 +64,7 @@ const Order = () => {
         </>
       ) : (
         <>
-          <h5 className="font-bold md:px-6 text-center text-xl mb-6">
+          <h5 className="font-bold md:px-6 text-center text-xl mb-6 animate-home-title-shimmer">
             Welcome to the order page!
           </h5>
           <p className="mb-6 font-bold text-sm">
@@ -112,7 +112,7 @@ const Order = () => {
             })}
             className="grid justify-center"
           >
-            <div className="mb-6 p-2 border-2 md:m-2 md:p-6 md:w-96">
+            <div className="mb-6 p-2 md:m-2 md:p-6 md:w-96 dark-blue-background rounded">
               {stripeCheckoutSessionCreateError &&
                 stripeCheckoutSessionCreateError.map((error, i) => {
                   return (
@@ -122,7 +122,7 @@ const Order = () => {
                   );
                 })}
               <div className="">
-                <h6 className="mb-8 pb-2 border-b-2 text-center text-lg font-bold">
+                <h6 className="mb-8 pb-2 border-b-2 text-center text-lg font-bold ">
                   ORDER FORM
                 </h6>
                 <div className="grid grid-cols-[1fr_50px] gap-2">

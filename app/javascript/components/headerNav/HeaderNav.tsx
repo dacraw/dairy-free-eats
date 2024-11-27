@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
@@ -118,7 +118,7 @@ const HeaderNavLinks = ({
         onClick={() => {
           toggleShowMenu(!showMenu);
         }}
-        className="md:hidden"
+        className="md:hidden hover:cursor-pointer hover:text-blue-200"
       />
       <div
         ref={menuRef}
@@ -211,11 +211,13 @@ const HeaderNav = () => {
 
   return (
     <header className="shadow-md bg-gradient-to-b from-gray-900 to-gray-950 shadow-gray-950 fixed w-full p-2 select-none h-[50px] z-50">
-      {error && <span>{error.message}</span>}
-
-      <nav className="relative flex justify-end gap-4 items-center md:static md:grid md:grid-cols-[1fr_auto_auto] md:grid-rows-1 md:justify-between">
+      <nav className="relative gap-4 items-center my-2 mx-4 md:static grid grid-cols-[1fr_auto_auto] md:grid-rows-1 md:justify-between max-w-screen-lg md:mx-auto">
+        {error && <span>{error.message}</span>}
+        <Link to="/" className="md:hidden justify-self-start font-bold">
+          Dairy Free Eats
+        </Link>
         {data?.currentUser && (
-          <div className="md:col-start-2 md:row-start-1 md:justify-self-end">
+          <div className="md:col-start-2 md:row-start-1 justify-self-end">
             <HeaderNotifications />
           </div>
         )}

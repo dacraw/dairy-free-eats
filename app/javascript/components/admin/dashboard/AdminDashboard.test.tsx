@@ -4,7 +4,7 @@ import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { CurrentUserQuery, FetchOrdersQuery, OrderStatus } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
-import Home from "components/Home";
+import Home from "components/home/Home";
 import { FETCH_ORDERS } from "components/admin/dashboard/orders/AdminDashboardOrders";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 import AdminDashboardIndex from "components/admin/dashboard/index/AdminDashboardIndex";
@@ -96,9 +96,7 @@ describe("<AdminDashboard />", () => {
       );
 
       expect(
-        await screen.findByText(
-          "Order lactose-free food that is tasty and affordable"
-        )
+        await screen.findByText("Order Dairy Free Food")
       ).toBeInTheDocument();
     });
   });
