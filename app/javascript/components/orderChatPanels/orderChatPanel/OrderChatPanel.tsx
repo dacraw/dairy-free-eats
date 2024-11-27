@@ -68,14 +68,11 @@ const OrderChatPanel = ({
   }, []);
 
   return (
-    <div
-      className="bg-gray-900  text-gray-200 w-60 rounded"
-      ref={toggleVisibilityRef}
-    >
+    <div className="text-gray-200 w-60 rounded" ref={toggleVisibilityRef}>
       <div
         className={`${
           orderMessageReceivedLoading ? "text-gray-500" : "text-inherit"
-        } text-center bg-gray-800 rounded py-2 cursor-pointer flex gap-4 justify-center items-center`}
+        } gray-button hover:gray-button-hover text-center cursor-pointer flex gap-4 justify-center items-center`}
         onClick={() => {
           if (orderMessageReceivedLoading) return;
 

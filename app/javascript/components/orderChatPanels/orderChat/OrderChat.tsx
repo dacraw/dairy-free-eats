@@ -179,7 +179,7 @@ const OrderChat = ({
       <div
         id="chat"
         ref={chatRef}
-        className={`p-4 overflow-auto h-96 animate-slide-up`}
+        className={`p-4 overflow-auto h-96 animate-slide-up gray-background`}
         onAnimationStart={() => {
           if (chatRef.current) {
             chatRef.current.scrollTop = chatRef.current.scrollHeight;
@@ -210,7 +210,7 @@ const OrderChat = ({
           })
         )}
       </div>
-      <div className="p-4">
+      <div className="p-4 gray-background">
         <OrderChatMessageForm orderId={orderId} currentUserId={currentUserId} />
       </div>
     </div>
