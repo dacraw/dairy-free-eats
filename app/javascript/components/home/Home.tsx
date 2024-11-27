@@ -1,19 +1,16 @@
-import {
-  faCheck,
-  faCircleXmark,
-  faComputer,
-  faCow,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCheck, faComputer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 md:grid-rows-[minmax(100px, 1fr)_1fr] justify-center gap-6 ">
-      <div className="text-center blue-background-homepage rounded p-6 lg:col-start-2 md:col-span-2 lg:row-span-1">
-        <div className="text-lg font-bold">
-          <p>Order Dairy Free Food</p>
+    <div className="grid md:grid-cols-2 lg:grid-cols-4 md:grid-rows-[min-content_min-content] justify-center gap-6 ">
+      <div className="text-center rounded lg:col-start-2 md:col-span-2 lg:row-span-1">
+        <div className="text-2xl p-4">
+          <p className="animate-home-title-shimmer font-bold">
+            Order Dairy Free Food
+          </p>
         </div>
       </div>
 

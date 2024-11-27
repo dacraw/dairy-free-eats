@@ -1,4 +1,4 @@
-import Home from "components/Home";
+import Home from "components/home/Home";
 import Order from "components/Order/Order";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 import AdminDashboardIndex from "components/admin/dashboard/index/AdminDashboardIndex";

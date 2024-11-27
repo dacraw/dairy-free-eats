@@ -9,7 +9,7 @@ import {
   FetchStripeCheckoutSessionQuery,
   FetchStripeCheckoutSessionQueryVariables,
 } from "graphql/types";
-import Home from "components/Home";
+import Home from "components/home/Home";
 
 const validMocks: MockedResponse<
   FetchStripeCheckoutSessionQuery,

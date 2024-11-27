@@ -15,7 +15,7 @@ import {
 } from "graphql/types";
 import userEvent from "@testing-library/user-event";
 import Login from "components/login/Login";
-import Home from "components/Home";
+import Home from "components/home/Home";
 import { cache } from "apolloClient";
 import { CURRENT_USER_NOTIFICATION_RECEIVED } from "components/headerNav/headerNotifications/HeaderNotifications";
 

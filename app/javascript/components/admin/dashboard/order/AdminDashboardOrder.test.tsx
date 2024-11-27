@@ -15,7 +15,7 @@ import {
   SetOrderStatusMutationVariables,
 } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
-import Home from "components/Home";
+import Home from "components/home/Home";
 import {
   FETCH_ORDERS,
   SET_ORDER_STATUS,

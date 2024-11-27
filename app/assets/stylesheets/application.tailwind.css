@@ -59,6 +59,19 @@
   padding: 1em;
 }
 
+.animate-home-title-pulse {
+  animation: color-pulse 3s infinite;
+}
+
+@keyframes color-pulse {
+  from {
+    color: #d1d5db;
+  }
+  to {
+    color: #9ca3af;
+  }
+}
+
 @keyframes slide-up {
   from {
     opacity: 0;
