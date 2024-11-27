@@ -110,7 +110,7 @@ const HeaderNavLinks = ({
     return () => document.removeEventListener("mousedown", checkCloseMenu);
   }, []);
   return (
-    <div>
+    <div className="">
       <FontAwesomeIcon
         ref={hamburgerRef}
         icon={faBars}
@@ -118,7 +118,7 @@ const HeaderNavLinks = ({
         onClick={() => {
           toggleShowMenu(!showMenu);
         }}
-        className="md:hidden"
+        className="md:hidden hover:cursor-pointer hover:text-blue-200"
       />
       <div
         ref={menuRef}
