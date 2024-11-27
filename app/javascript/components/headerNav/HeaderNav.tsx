@@ -110,7 +110,7 @@ const HeaderNavLinks = ({
     return () => document.removeEventListener("mousedown", checkCloseMenu);
   }, []);
   return (
-    <div className="">
+    <div>
       <FontAwesomeIcon
         ref={hamburgerRef}
         icon={faBars}
@@ -211,9 +211,8 @@ const HeaderNav = () => {
 
   return (
     <header className="shadow-md bg-gradient-to-b from-gray-900 to-gray-950 shadow-gray-950 fixed w-full p-2 select-none h-[50px] z-50">
-      {error && <span>{error.message}</span>}
-
-      <nav className="relative flex justify-end gap-4 items-center md:static md:grid md:grid-cols-[1fr_auto_auto] md:grid-rows-1 md:justify-between">
+      <nav className="relative flex justify-end gap-4 items-center md:static md:grid md:grid-cols-[1fr_auto_auto] md:grid-rows-1 md:justify-between max-w-screen-lg mx-auto">
+        {error && <span>{error.message}</span>}
         {data?.currentUser && (
           <div className="md:col-start-2 md:row-start-1 md:justify-self-end">
             <HeaderNotifications />

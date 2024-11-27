@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 md:grid-rows-[min-content_min-content] justify-center gap-6 ">
+    <div className="grid md:grid-cols-2 lg:grid-cols-4 md:grid-rows-[min-content_min-content] justify-center gap-6 max-w-screen-lg">
       <div className="text-center rounded lg:col-start-2 md:col-span-2 lg:row-span-1">
         <div className="text-2xl p-4">
           <p className="animate-home-title-shimmer font-bold">
