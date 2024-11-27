@@ -33,8 +33,11 @@ export const NotificationsList = () => {
     });
 
   return (
-    <div className="relative text-left">
-      <div className="absolute rounded h-96 w-72 gray-background p-4 md:w-[300px] right-0 top-2  shadow-lg">
+    <div className="relative text-left z-50">
+      <div
+        id="header-notifications-list"
+        className="absolute rounded h-96 w-72 gray-background p-4 md:w-[300px] right-0 top-2  shadow-lg z-50"
+      >
         <h3 className="font-bold text-center mb-2">NOTIFICATIONS</h3>
         <div>
           {data?.currentUserNotifications?.edges?.map((node) => (
@@ -49,7 +52,8 @@ export const NotificationsList = () => {
         {data?.currentUserNotifications?.pageInfo?.hasNextPage && (
           <div className="text-center">
             <button
-              className="green-button"
+              id="load-more-notifications"
+              className="green-button z-50"
               onClick={() =>
                 fetchMore({
                   variables: {
@@ -185,7 +189,7 @@ const HeaderNotifications = () => {
   }, []);
 
   return (
-    <div className="relative">
+    <div className="relative z-50">
       {loading ? (
         <div>
           <FontAwesomeIcon icon={faSpinner} spin />
