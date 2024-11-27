@@ -29,7 +29,7 @@
   }
 
   .blue-background-homepage {
-    @apply bg-gradient-to-r from-gray-950/80 via-blue-700/80 to-gray-950/80 backdrop-blur;
+    @apply bg-gradient-to-b to-gray-950/80 from-blue-950/80 backdrop-blur;
   }
 
   .gray-button {
