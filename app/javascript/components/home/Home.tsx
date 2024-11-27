@@ -14,7 +14,7 @@ const Home = () => {
         </div>
       </div>
 
-      <div className="blue-background-homepage rounded p-6 lg:col-start-1 lg:col-span-2 md:row-start-2">
+      <div className="dark-blue-background rounded p-6 lg:col-start-1 lg:col-span-2 md:row-start-2">
         <h5 className="text-lg font-bold text-center mb-4 border-b-2 pb-2">
           How to Demo <FontAwesomeIcon className="ml-2" icon={faCheck} />
         </h5>
@@ -52,7 +52,7 @@ const Home = () => {
         </ol>
       </div>
 
-      <div className="text-center blue-background-homepage rounded p-6 lg:col-start-3 lg:col-span-2 text-lg md:row-start-2 ">
+      <div className="text-center dark-blue-background rounded p-6 lg:col-start-3 lg:col-span-2 text-lg md:row-start-2 ">
         <h3 className="font-bold mb-2 border-b-2 pb-2">
           Project Technical Information{" "}
           <FontAwesomeIcon className="ml-2" icon={faComputer} />

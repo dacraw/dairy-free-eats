@@ -28,7 +28,7 @@
     @apply bg-gradient-to-br from-blue-600/90 to-blue-700/90 backdrop-blur;
   }
 
-  .blue-background-homepage {
+  .dark-blue-background {
     @apply bg-gradient-to-b to-gray-950/80 from-blue-950/80 backdrop-blur;
   }
 
