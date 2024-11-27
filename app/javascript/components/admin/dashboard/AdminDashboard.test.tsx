@@ -96,9 +96,7 @@ describe("<AdminDashboard />", () => {
       );
 
       expect(
-        await screen.findByText(
-          "Order lactose-free food that is tasty and affordable"
-        )
+        await screen.findByText("Order Dairy Free Food")
       ).toBeInTheDocument();
     });
   });

@@ -94,35 +94,6 @@ const validMocks: MockedResponse<
   },
 ];
 
-const fetchOrdersMocks: MockedResponse<FetchOrdersQuery>[] = [
-  {
-    request: {
-      query: FETCH_ORDERS,
-    },
-    result: {
-      data: {
-        orders: [
-          {
-            id: "123",
-            status: OrderStatus.Received,
-            stripeCheckoutSessionLineItems: [
-              {
-                name: "Some great item",
-                quantity: 4,
-              },
-            ],
-            user: {
-              id: "1234",
-              email: "useremail@test.com",
-            },
-            guestEmail: null,
-          },
-        ],
-      },
-    },
-  },
-];
-
 describe("<AdminDashboardOrder />", () => {
   it("renders without errors", async () => {
     render(
@@ -226,9 +197,7 @@ describe("<AdminDashboardOrder />", () => {
       );
 
       expect(
-        await screen.findByText(
-          "Order lactose-free food that is tasty and affordable"
-        )
+        await screen.findByText("Order Dairy Free Food")
       ).toBeInTheDocument();
     });
   });
