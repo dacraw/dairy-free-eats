@@ -1,12 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
-import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faCartShopping,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
 import HeaderNotifications from "components/headerNav/headerNotifications/HeaderNotifications";
 import client from "apolloClient";
+import ShoppingCart from "components/shoppingCart/ShoppingCart";
+import HeaderModal from "components/headerModal/HeaderModal";
 
 export const CURRENT_USER = gql`
   query CurrentUser {
@@ -216,11 +222,19 @@ const HeaderNav = () => {
         <Link to="/" className="md:hidden justify-self-start font-bold">
           Dairy Free Eats
         </Link>
-        {data?.currentUser && (
-          <div className="md:col-start-2 md:row-start-1 justify-self-end">
-            <HeaderNotifications />
-          </div>
-        )}
+
+        <div className="md:col-start-2 md:row-start-1 justify-self-end grid gap-4 grid-cols-2">
+          {data?.currentUser && (
+            <div>
+              <HeaderNotifications />
+            </div>
+          )}
+          <HeaderModal
+            triggerElement={<FontAwesomeIcon icon={faCartShopping} />}
+            children={<ShoppingCart />}
+          />
+        </div>
+
         <HeaderNavLinks
           currentUserPresent={!!data?.currentUser}
           currentUserAdmin={Boolean(data?.currentUser?.admin)}

@@ -20,7 +20,7 @@ const HeaderModal = ({
         {triggerElement}
       </div>
       {visible && (
-        <div className="gray-background rounded p-4 fixed left-0 top-0 w-screen h-screen md:absolute md:right-0 md:w-96 md:h-96 md:top-auto md:left-auto">
+        <div className="gray-background rounded p-4 fixed left-0 top-0 w-screen h-screen md:absolute md:right-0 md:w-96 md:max-h-96 md:top-auto md:left-auto">
           <div className="flex justify-end md:hidden">
             <div
               className="inline-flex items-center gap-x-2 border-2 rounded-lg bg-white text-gray-950 font-bold text-sm px-2"
