@@ -18,7 +18,7 @@ const OrderItem: React.FC<{
           description,
           name,
           unitAmount,
-          quantity: data[stripePriceId],
+          quantity: parseInt(data[stripePriceId]),
         };
 
         const existingCartItems = JSON.parse(localStorage.getItem("cartItems"));
@@ -28,6 +28,13 @@ const OrderItem: React.FC<{
             "cartItems",
             JSON.stringify({ [stripePriceId]: cartProductInfo })
           );
+        } else if (existingCartItems[stripePriceId]) {
+          const existingQuantity = parseInt(
+            existingCartItems[stripePriceId].quantity
+          );
+          existingCartItems[stripePriceId].quantity =
+            cartProductInfo.quantity + existingQuantity;
+          localStorage.setItem("cartItems", JSON.stringify(existingCartItems));
         } else {
           existingCartItems[stripePriceId] = cartProductInfo;
           localStorage.setItem("cartItems", JSON.stringify(existingCartItems));
