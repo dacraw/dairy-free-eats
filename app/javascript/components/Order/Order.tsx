@@ -144,8 +144,6 @@ const Order = () => {
                   );
                 })}
               </div>
-              <div className="fixed">heyo</div>
-              <input type="submit" className="col-span-2 green-button mt-2" />
             </div>
           </div>
           <div className="md:p-6">

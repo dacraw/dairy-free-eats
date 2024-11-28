@@ -1,5 +1,6 @@
-import { Price, Product } from "graphql/types";
+import { OrderPageInput, Price, Product } from "graphql/types";
 import React from "react";
+import { useForm } from "react-hook-form";
 
 const OrderItem: React.FC<{
   description: Product["description"];
@@ -8,8 +9,31 @@ const OrderItem: React.FC<{
   stripePriceId: Price["id"];
   unitAmount: Price["unitAmount"];
 }> = ({ stripePriceId, name, description, unitAmount, imageUrl }) => {
+  const { register, handleSubmit } = useForm();
   return (
-    <div className={`w-56 grid justify-center text-center`}>
+    <form
+      className="w-56 grid justify-center text-center"
+      onSubmit={handleSubmit(async (data) => {
+        const cartProductInfo = {
+          description,
+          name,
+          unitAmount,
+          quantity: data[stripePriceId],
+        };
+
+        const existingCartItems = JSON.parse(localStorage.getItem("cartItems"));
+
+        if (!existingCartItems) {
+          localStorage.setItem(
+            "cartItems",
+            JSON.stringify({ [stripePriceId]: cartProductInfo })
+          );
+        } else {
+          existingCartItems[stripePriceId] = cartProductInfo;
+          localStorage.setItem("cartItems", JSON.stringify(existingCartItems));
+        }
+      })}
+    >
       <img src={imageUrl} className="cursor-pointer mb-2" />
       <p className="font-bold text-lg mb-2">{name}</p>
       <p className="mb-2">{description}</p>
@@ -28,11 +52,12 @@ const OrderItem: React.FC<{
           id={`qty-${stripePriceId}`}
           type="number"
           min={1}
+          {...register(stripePriceId)}
           className="text-center h-6 w-10"
         />
       </div>
       <button className="blue-button">Add To Cart</button>
-    </div>
+    </form>
   );
 };
 
