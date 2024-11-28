@@ -1,6 +1,6 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const HeaderModal = ({
   triggerElement,
@@ -10,9 +10,22 @@ const HeaderModal = ({
   children: React.ReactNode;
 }) => {
   const [visible, toggleVisible] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const closeModal = (e: MouseEvent) => {
+      if (modalRef.current) {
+        if (!modalRef.current.contains(e.target as Node)) toggleVisible(false);
+      }
+    };
+
+    document.addEventListener("click", closeModal);
+
+    return () => document.removeEventListener("click", closeModal);
+  }, []);
 
   return (
-    <div className="z-50 relative">
+    <div className="z-50 relative" ref={modalRef}>
       <div
         onClick={() => toggleVisible(!visible)}
         className="cursor-pointer z-100"
