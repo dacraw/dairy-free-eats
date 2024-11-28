@@ -10,7 +10,7 @@ class Types::Stripe::ProductType < Types::BaseObject
     field :active, Boolean, null: false
     field :attributes, [ String, null: true ], null: false
     field :created, GraphQL::Types::ISO8601DateTime, null: false
-    field :default_price, String, null: false
+    field :default_price, Types::Stripe::PriceType, null: false
     field :description, String, null: false
     field :images, [ String, null: true ], null: false
     field :livemode, Boolean, null: false

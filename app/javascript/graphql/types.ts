@@ -271,12 +271,19 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
+export type Price = {
+  __typename?: 'Price';
+  id: Scalars['String']['output'];
+  stripeObject: Scalars['String']['output'];
+  unitAmount: Scalars['Int']['output'];
+};
+
 export type Product = {
   __typename?: 'Product';
   active: Scalars['Boolean']['output'];
   attributes: Array<Maybe<Scalars['String']['output']>>;
   created: Scalars['ISO8601DateTime']['output'];
-  defaultPrice: Scalars['String']['output'];
+  defaultPrice: Price;
   description: Scalars['String']['output'];
   id: Scalars['String']['output'];
   images: Array<Maybe<Scalars['String']['output']>>;
@@ -415,7 +422,7 @@ export type User = {
 export type GetProductsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetProductsQuery = { __typename?: 'Query', listProducts: { __typename?: 'ProductListObject', stripeObject: string, hasMore: boolean, url: string, data?: Array<{ __typename?: 'Product', defaultPrice: string, description: string, name: string }> | null } };
+export type GetProductsQuery = { __typename?: 'Query', listProducts: { __typename?: 'ProductListObject', hasMore: boolean, stripeObject: string, url: string, data?: Array<{ __typename?: 'Product', description: string, images: Array<string | null>, name: string, defaultPrice: { __typename?: 'Price', id: string, unitAmount: number } }> | null } };
 
 export type StripeCheckoutSessionCreateMutationVariables = Exact<{
   input: StripeCheckoutSessionCreateInput;
@@ -500,12 +507,16 @@ export type FetchStripeCheckoutSessionQuery = { __typename?: 'Query', fetchCheck
 export const GetProductsDocument = gql`
     query GetProducts {
   listProducts {
-    stripeObject
     hasMore
+    stripeObject
     url
     data {
-      defaultPrice
+      defaultPrice {
+        id
+        unitAmount
+      }
       description
+      images
       name
     }
   }
