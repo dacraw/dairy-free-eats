@@ -13,10 +13,11 @@ const ShoppingCart = () => {
   return (
     <div>
       <h3 className="text-center font-bold mb-4">Your Cart</h3>
-      <div className="grid grid-cols-[1fr_auto_auto] gap-4 text-center">
+      <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 text-center">
         <h5 className="font-bold">Product</h5>
         <h5 className="font-bold">Qty</h5>
         <h5 className="font-bold">Price</h5>
+        <h5 className="font-bold justify-self-end">Item Total</h5>
 
         {Object.entries(items).map(([stripePrice, itemInfo]) => (
           <React.Fragment key={stripePrice}>
@@ -27,7 +28,18 @@ const ShoppingCart = () => {
                 style: "currency",
                 currency: "USD",
                 minimumFractionDigits: 2,
-              }).format(Number((itemInfo.itemPrice / 100).toFixed(2)))}
+              }).format(Number((itemInfo.unitAmount / 100).toFixed(2)))}
+            </p>
+            <p className="justify-self-end">
+              {new Intl.NumberFormat("en-EN", {
+                style: "currency",
+                currency: "USD",
+                minimumFractionDigits: 2,
+              }).format(
+                Number(
+                  (itemInfo.unitAmount / 100).toFixed(2) * itemInfo.quantity
+                )
+              )}
             </p>
           </React.Fragment>
         ))}
@@ -44,7 +56,8 @@ const ShoppingCart = () => {
               Number(
                 (
                   Object.keys(items).reduce(
-                    (acc, key) => items[key].itemPrice + acc,
+                    (acc, key) =>
+                      items[key].unitAmount * items[key].quantity + acc,
                     0
                   ) / 100
                 ).toFixed(2)
