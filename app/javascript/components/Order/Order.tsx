@@ -3,8 +3,8 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OrderItem from "components/Order/orderItem/OrderItem";
 import {
-  OrderPageInput,
   StripeCheckoutSessionCreatePayload,
+  useCurrentUserQuery,
   useGetProductsQuery,
   useStripeCheckoutSessionCreateMutation,
 } from "graphql/types";
@@ -55,6 +55,7 @@ const Order = () => {
     useGetProductsQuery();
   const [createStripeCheckoutSession, { data: stripeCheckoutSessionData }] =
     useStripeCheckoutSessionCreateMutation();
+  const { data: currentUserData } = useCurrentUserQuery();
 
   return (
     <>
@@ -78,45 +79,6 @@ const Order = () => {
             entered into the Stripe Checkout page in order to demo this process.
           </p>
 
-          {/* <form
-            onSubmit={handleSubmit(async (data) => {
-              const items: OrderPageInput[] = [];
-              Object.entries(data).map(([price, quantity]) => {
-                const quantityInt = parseInt(quantity) || 0;
-                if (quantityInt === 0) return;
-
-                items.push({ price, quantity: quantityInt });
-              });
-
-              const mutationData = await createStripeCheckoutSession({
-                variables: {
-                  input: {
-                    stripeCheckoutSessionInput: {
-                      lineItems: items,
-                    },
-                  },
-                },
-              });
-
-              if (
-                mutationData?.data?.stripeCheckoutSessionCreate?.errors?.length
-              ) {
-                setStripeCheckoutSessionCreateError(
-                  mutationData?.data?.stripeCheckoutSessionCreate?.errors
-                );
-                return;
-              }
-
-              const checkoutUrl =
-                mutationData?.data?.stripeCheckoutSessionCreate
-                  ?.stripeCheckoutSession?.url;
-
-              if (checkoutUrl) {
-                window.location.href = checkoutUrl;
-              }
-            })}
-            className="grid justify-center"
-          > */}
           <div className="mb-6 p-2 md:m-2 md:p-6 dark-blue-background rounded">
             {stripeCheckoutSessionCreateError &&
               stripeCheckoutSessionCreateError.map((error, i) => {
@@ -136,6 +98,7 @@ const Order = () => {
                     <OrderItem
                       key={product?.defaultPrice?.id}
                       description={product?.description}
+                      userEmail={currentUserData?.currentUser?.email || null}
                       imageUrl={product?.images[0] || ""}
                       name={product?.name}
                       stripePriceId={product?.defaultPrice?.id}

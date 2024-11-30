@@ -1,6 +1,6 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 const HeaderModal = ({
   triggerElement,
@@ -10,15 +10,19 @@ const HeaderModal = ({
   children: React.ReactNode;
 }) => {
   const [visible, toggleVisible] = useState(false);
+
   const modalRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const closeModal = (e: MouseEvent) => {
+  const closeModal = useCallback(
+    (e: MouseEvent) => {
       if (modalRef.current) {
         if (!modalRef.current.contains(e.target as Node)) toggleVisible(false);
       }
-    };
+    },
+    [visible]
+  );
 
+  useEffect(() => {
     document.addEventListener("click", closeModal);
 
     return () => document.removeEventListener("click", closeModal);

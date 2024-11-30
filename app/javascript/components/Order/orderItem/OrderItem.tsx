@@ -1,5 +1,6 @@
-import { OrderPageInput, Price, Product } from "graphql/types";
-import React from "react";
+import { CartContext } from "context/CartProvider";
+import { Maybe, Price, Product, User } from "graphql/types";
+import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 
 const OrderItem: React.FC<{
@@ -8,8 +9,11 @@ const OrderItem: React.FC<{
   name: Product["name"];
   stripePriceId: Price["id"];
   unitAmount: Price["unitAmount"];
+  userEmail: Maybe<User["email"]>;
 }> = ({ stripePriceId, name, description, unitAmount, imageUrl }) => {
   const { register, handleSubmit } = useForm();
+  const { addToCart } = useContext(CartContext);
+
   return (
     <form
       className="w-56 grid justify-center text-center"
@@ -19,26 +23,11 @@ const OrderItem: React.FC<{
           name,
           unitAmount,
           quantity: parseInt(data[stripePriceId]),
+          imageUrl,
+          stripePriceId,
         };
 
-        const existingCartItems = JSON.parse(localStorage.getItem("cartItems"));
-
-        if (!existingCartItems) {
-          localStorage.setItem(
-            "cartItems",
-            JSON.stringify({ [stripePriceId]: cartProductInfo })
-          );
-        } else if (existingCartItems[stripePriceId]) {
-          const existingQuantity = parseInt(
-            existingCartItems[stripePriceId].quantity
-          );
-          existingCartItems[stripePriceId].quantity =
-            cartProductInfo.quantity + existingQuantity;
-          localStorage.setItem("cartItems", JSON.stringify(existingCartItems));
-        } else {
-          existingCartItems[stripePriceId] = cartProductInfo;
-          localStorage.setItem("cartItems", JSON.stringify(existingCartItems));
-        }
+        addToCart(cartProductInfo);
       })}
     >
       <img src={imageUrl} className="cursor-pointer mb-2" />

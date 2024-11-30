@@ -1,36 +1,64 @@
-import React, { useEffect, useState } from "react";
+import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { CartContext } from "context/CartProvider";
+import { Maybe, User } from "graphql/types";
+import React, { useContext, useEffect, useState } from "react";
 
-const ShoppingCart = () => {
-  const [items, setItems] = useState(null);
+export const generateCartId = (userEmail?: string) => {
+  return userEmail ? `cart_${userEmail}` : `cart_guest`;
+};
 
-  useEffect(() => {
-    const cartItems = JSON.parse(localStorage.getItem("cartItems") || "");
-    setItems(cartItems);
-  }, []);
+const ShoppingCartItemQuantity: React.FC<{
+  cartId: string;
+  itemKey: string;
+  existingQuantity: number;
+}> = ({ cartId, existingQuantity, itemKey }) => {
+  const { removeFromCart } = useContext(CartContext);
+  const [quantity, setQuantity] = useState(existingQuantity);
 
-  if (!items) return null;
+  return (
+    <div className="blue-background rounded-lg p-2 flex gap-2 items-center">
+      {quantity > 1 ? (
+        <FontAwesomeIcon
+          icon={faMinus}
+          onClick={() => setQuantity(quantity - 1)}
+        />
+      ) : (
+        <FontAwesomeIcon
+          icon={faTrash}
+          onClick={(e) => {
+            // prevents triggering onClick modal closer in <HeaderNav />
+            // for some reason removing this item will close the modal otherwise
+            e.stopPropagation();
+
+            removeFromCart(itemKey);
+          }}
+        />
+      )}
+      <span>{quantity}</span>
+      <FontAwesomeIcon
+        icon={faPlus}
+        onClick={() => setQuantity(quantity + 1)}
+      />
+    </div>
+  );
+};
+
+const ShoppingCartItems = ({ cartId }: { cartId: string }) => {
+  const { cartItems } = useContext(CartContext);
 
   return (
     <div>
-      <h3 className="text-center font-bold mb-4">Your Cart</h3>
-      <div className="grid grid-cols-[1fr_auto_auto_auto] gap-4 text-center">
-        <h5 className="font-bold">Product</h5>
-        <h5 className="font-bold">Qty</h5>
-        <h5 className="font-bold">Price</h5>
-        <h5 className="font-bold justify-self-end">Item Total</h5>
-
-        {Object.entries(items).map(([stripePrice, itemInfo]) => (
-          <React.Fragment key={stripePrice}>
-            <p>{itemInfo.name}</p>
-            <p>{itemInfo.quantity}</p>
-            <p>
-              {new Intl.NumberFormat("en-EN", {
-                style: "currency",
-                currency: "USD",
-                minimumFractionDigits: 2,
-              }).format(Number((itemInfo.unitAmount / 100).toFixed(2)))}
-            </p>
-            <p className="justify-self-end">
+      {Object.entries(cartItems).map(([stripePrice, itemInfo]) => (
+        <div
+          key={stripePrice}
+          className="grid grid-cols-[auto_1fr_auto] gap-x-4 items-center"
+        >
+          <img className="w-16" src={itemInfo.imageUrl} />
+          <div>
+            <p className="font-bold">{itemInfo.name}</p>
+            <p className="text-sm">{itemInfo.description}</p>
+            <p className="tet-sm">
               {new Intl.NumberFormat("en-EN", {
                 style: "currency",
                 currency: "USD",
@@ -41,9 +69,14 @@ const ShoppingCart = () => {
                 )
               )}
             </p>
-          </React.Fragment>
-        ))}
-      </div>
+          </div>
+          <ShoppingCartItemQuantity
+            cartId={cartId}
+            itemKey={stripePrice}
+            existingQuantity={itemInfo.quantity}
+          />
+        </div>
+      ))}
       <div className="flex justify-end mt-6 border-t-2 pt-2">
         <div>
           <span className="font-bold">Total: </span>
@@ -55,9 +88,9 @@ const ShoppingCart = () => {
             }).format(
               Number(
                 (
-                  Object.keys(items).reduce(
+                  Object.keys(cartItems).reduce(
                     (acc, key) =>
-                      items[key].unitAmount * items[key].quantity + acc,
+                      cartItems[key].unitAmount * cartItems[key].quantity + acc,
                     0
                   ) / 100
                 ).toFixed(2)
@@ -66,6 +99,15 @@ const ShoppingCart = () => {
           </span>
         </div>
       </div>
+    </div>
+  );
+};
+
+const ShoppingCart: React.FC<{ cartId: string }> = ({ cartId }) => {
+  return (
+    <div>
+      <h3 className="text-center font-bold mb-4">Your Cart</h3>
+      <ShoppingCartItems cartId={cartId} />
     </div>
   );
 };

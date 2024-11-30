@@ -11,7 +11,9 @@ import { useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
 import HeaderNotifications from "components/headerNav/headerNotifications/HeaderNotifications";
 import client from "apolloClient";
-import ShoppingCart from "components/shoppingCart/ShoppingCart";
+import ShoppingCart, {
+  generateCartId,
+} from "components/shoppingCart/ShoppingCart";
 import HeaderModal from "components/headerModal/HeaderModal";
 
 export const CURRENT_USER = gql`
@@ -115,6 +117,7 @@ const HeaderNavLinks = ({
 
     return () => document.removeEventListener("mousedown", checkCloseMenu);
   }, []);
+
   return (
     <div>
       <FontAwesomeIcon
@@ -231,8 +234,9 @@ const HeaderNav = () => {
           )}
           <HeaderModal
             triggerElement={<FontAwesomeIcon icon={faCartShopping} />}
-            children={<ShoppingCart />}
-          />
+          >
+            <ShoppingCart cartId={generateCartId(data?.currentUser?.email)} />
+          </HeaderModal>
         </div>
 
         <HeaderNavLinks
