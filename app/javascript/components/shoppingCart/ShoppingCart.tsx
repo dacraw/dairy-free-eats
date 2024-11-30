@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CartContext } from "context/CartProvider";
 import { Maybe, User } from "graphql/types";
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const ShoppingCartItemQuantity: React.FC<{
   itemKey: string;
@@ -43,55 +44,71 @@ const ShoppingCartItems = () => {
 
   return (
     <div>
-      {Object.entries(cartItems).map(([stripePrice, itemInfo]) => (
-        <div
-          key={stripePrice}
-          className="grid grid-cols-[auto_1fr_auto] gap-x-4 items-center"
-        >
-          <img className="w-16" src={itemInfo.imageUrl} />
-          <div>
-            <p className="font-bold">{itemInfo.name}</p>
-            <p className="text-sm">{itemInfo.description}</p>
-            <p className="tet-sm">
-              {new Intl.NumberFormat("en-EN", {
-                style: "currency",
-                currency: "USD",
-                minimumFractionDigits: 2,
-              }).format(
-                Number(
-                  (itemInfo.unitAmount / 100).toFixed(2) * itemInfo.quantity
-                )
-              )}
-            </p>
-          </div>
-          <ShoppingCartItemQuantity
-            itemKey={stripePrice}
-            existingQuantity={itemInfo.quantity}
-          />
-        </div>
-      ))}
-      <div className="flex justify-end mt-6 border-t-2 pt-2">
+      {Object.keys(cartItems).length > 0 ? (
         <div>
-          <span className="font-bold">Total: </span>
-          <span className="font-bold">
-            {new Intl.NumberFormat("en-EN", {
-              style: "currency",
-              currency: "USD",
-              minimumFractionDigits: 2,
-            }).format(
-              Number(
-                (
-                  Object.keys(cartItems).reduce(
-                    (acc, key) =>
-                      cartItems[key].unitAmount * cartItems[key].quantity + acc,
-                    0
-                  ) / 100
-                ).toFixed(2)
-              )
-            )}
-          </span>
+          {Object.entries(cartItems).map(([stripePrice, itemInfo]) => (
+            <div
+              key={stripePrice}
+              className="grid grid-cols-[auto_1fr_auto] gap-x-4 items-center"
+            >
+              <img className="w-16" src={itemInfo.imageUrl} />
+              <div>
+                <p className="font-bold">{itemInfo.name}</p>
+                <p className="text-sm">{itemInfo.description}</p>
+                <p className="tet-sm">
+                  {new Intl.NumberFormat("en-EN", {
+                    style: "currency",
+                    currency: "USD",
+                    minimumFractionDigits: 2,
+                  }).format(
+                    Number(
+                      (itemInfo.unitAmount / 100).toFixed(2) * itemInfo.quantity
+                    )
+                  )}
+                </p>
+              </div>
+              <ShoppingCartItemQuantity
+                itemKey={stripePrice}
+                existingQuantity={itemInfo.quantity}
+              />
+            </div>
+          ))}
+          <div className="flex justify-end mt-6 border-t-2 pt-2">
+            <div>
+              <span className="font-bold">Total: </span>
+              <span className="font-bold">
+                {new Intl.NumberFormat("en-EN", {
+                  style: "currency",
+                  currency: "USD",
+                  minimumFractionDigits: 2,
+                }).format(
+                  Number(
+                    (
+                      Object.keys(cartItems).reduce(
+                        (acc, key) =>
+                          cartItems[key].unitAmount * cartItems[key].quantity +
+                          acc,
+                        0
+                      ) / 100
+                    ).toFixed(2)
+                  )
+                )}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="text-center">
+          <p>Your cart currently has no items.</p>
+          <p>
+            Visit the{" "}
+            <Link className="font-bold text-blue-400" to="/order">
+              Order Page
+            </Link>{" "}
+            to add items.
+          </p>
+        </div>
+      )}
     </div>
   );
 };
