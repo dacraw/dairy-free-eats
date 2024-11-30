@@ -11,7 +11,7 @@ const OrderItem: React.FC<{
   unitAmount: Price["unitAmount"];
   userEmail: Maybe<User["email"]>;
 }> = ({ stripePriceId, name, description, unitAmount, imageUrl }) => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { addToCart } = useContext(CartContext);
 
   return (
@@ -28,6 +28,7 @@ const OrderItem: React.FC<{
         };
 
         addToCart(cartProductInfo);
+        reset();
       })}
     >
       <img src={imageUrl} className="cursor-pointer mb-2" />
