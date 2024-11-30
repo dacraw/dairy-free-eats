@@ -4,15 +4,10 @@ import { CartContext } from "context/CartProvider";
 import { Maybe, User } from "graphql/types";
 import React, { useContext, useEffect, useState } from "react";
 
-export const generateCartId = (userEmail?: string) => {
-  return userEmail ? `cart_${userEmail}` : `cart_guest`;
-};
-
 const ShoppingCartItemQuantity: React.FC<{
-  cartId: string;
   itemKey: string;
   existingQuantity: number;
-}> = ({ cartId, existingQuantity, itemKey }) => {
+}> = ({ existingQuantity, itemKey }) => {
   const { removeFromCart, adjustItemQuantity } = useContext(CartContext);
 
   return (
@@ -43,7 +38,7 @@ const ShoppingCartItemQuantity: React.FC<{
   );
 };
 
-const ShoppingCartItems = ({ cartId }: { cartId: string }) => {
+const ShoppingCartItems = () => {
   const { cartItems } = useContext(CartContext);
 
   return (
@@ -70,7 +65,6 @@ const ShoppingCartItems = ({ cartId }: { cartId: string }) => {
             </p>
           </div>
           <ShoppingCartItemQuantity
-            cartId={cartId}
             itemKey={stripePrice}
             existingQuantity={itemInfo.quantity}
           />
@@ -102,11 +96,11 @@ const ShoppingCartItems = ({ cartId }: { cartId: string }) => {
   );
 };
 
-const ShoppingCart: React.FC<{ cartId: string }> = ({ cartId }) => {
+const ShoppingCart = () => {
   return (
     <div>
       <h3 className="text-center font-bold mb-4">Your Cart</h3>
-      <ShoppingCartItems cartId={cartId} />
+      <ShoppingCartItems />
     </div>
   );
 };

@@ -39,6 +39,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     const existingCartItems = localStorage.getItem(cartId);
     if (existingCartItems) {
       setCartItems(JSON.parse(existingCartItems));
+    } else {
+      setCartItems({});
     }
   }, [cartId]);
 
@@ -59,8 +61,6 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
         setCartItems(newCartItems);
         localStorage.setItem(cartId, JSON.stringify(newCartItems));
       }
-
-      console.log(localStorage.getItem(cartId));
     },
     [cartId, cartItems]
   );
@@ -92,8 +92,6 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     },
     [cartItems]
   );
-
-  console.log("cartItems", cartItems);
 
   return (
     <CartContext.Provider
