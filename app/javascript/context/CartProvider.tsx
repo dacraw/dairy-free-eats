@@ -62,7 +62,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
 
       console.log(localStorage.getItem(cartId));
     },
-    [cartId]
+    [cartId, cartItems]
   );
 
   const removeFromCart = useCallback(
@@ -74,7 +74,7 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
       setCartItems(newCartItems);
       localStorage.setItem(cartId, JSON.stringify(newCartItems));
     },
-    [cartId]
+    [cartId, cartItems]
   );
 
   const adjustItemQuantity = useCallback(
