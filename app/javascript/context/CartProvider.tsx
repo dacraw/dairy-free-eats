@@ -77,9 +77,28 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     [cartId]
   );
 
-  console.log("provider rendering");
+  const adjustItemQuantity = useCallback(
+    (itemKey: string, quantityDelta: number) => {
+      const updatedItems = { ...cartItems };
+      const updatedCartItem = { ...updatedItems[itemKey] };
+      const updatedQuantity = updatedCartItem.quantity + quantityDelta;
+      updatedCartItem.quantity = updatedQuantity;
+
+      updatedItems[itemKey] = updatedCartItem;
+
+      setCartItems(updatedItems);
+
+      localStorage.setItem(cartId, JSON.stringify(updatedItems));
+    },
+    [cartItems]
+  );
+
+  console.log("cartItems", cartItems);
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider
+      value={{ cartItems, addToCart, removeFromCart, adjustItemQuantity }}
+    >
       {children}
     </CartContext.Provider>
   );

@@ -13,15 +13,14 @@ const ShoppingCartItemQuantity: React.FC<{
   itemKey: string;
   existingQuantity: number;
 }> = ({ cartId, existingQuantity, itemKey }) => {
-  const { removeFromCart } = useContext(CartContext);
-  const [quantity, setQuantity] = useState(existingQuantity);
+  const { removeFromCart, adjustItemQuantity } = useContext(CartContext);
 
   return (
     <div className="blue-background rounded-lg p-2 flex gap-2 items-center">
-      {quantity > 1 ? (
+      {existingQuantity > 1 ? (
         <FontAwesomeIcon
           icon={faMinus}
-          onClick={() => setQuantity(quantity - 1)}
+          onClick={() => adjustItemQuantity(itemKey, -1)}
         />
       ) : (
         <FontAwesomeIcon
@@ -35,10 +34,10 @@ const ShoppingCartItemQuantity: React.FC<{
           }}
         />
       )}
-      <span>{quantity}</span>
+      <span>{existingQuantity}</span>
       <FontAwesomeIcon
         icon={faPlus}
-        onClick={() => setQuantity(quantity + 1)}
+        onClick={() => adjustItemQuantity(itemKey, 1)}
       />
     </div>
   );
