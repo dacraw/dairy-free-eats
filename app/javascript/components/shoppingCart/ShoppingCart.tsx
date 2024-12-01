@@ -1,7 +1,12 @@
-import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faMinus,
+  faPlus,
+  faSpinner,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CartContext } from "context/CartProvider";
-import { Maybe, User } from "graphql/types";
+import { useStripeCheckoutSessionCreateMutation } from "graphql/types";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -39,6 +44,70 @@ const ShoppingCartItemQuantity: React.FC<{
   );
 };
 
+const ShoppingCartCheckoutButton = () => {
+  const [createStripeCheckoutSession, { loading }] =
+    useStripeCheckoutSessionCreateMutation();
+  const [checkoutError, setStripeCheckoutSessionCreateError] = useState([]);
+
+  const { cartItems } = useContext(CartContext);
+
+  const handleSubmit = async () => {
+    const items = [];
+
+    Object.entries(cartItems).map(([price, { quantity }]) => {
+      // const quantityInt = parseInt(quantity) || 0;
+      if (quantity === 0) return;
+
+      items.push({ price, quantity });
+    });
+
+    const mutationData = await createStripeCheckoutSession({
+      variables: {
+        input: {
+          stripeCheckoutSessionInput: {
+            lineItems: items,
+          },
+        },
+      },
+    });
+
+    if (mutationData?.data?.stripeCheckoutSessionCreate?.errors?.length) {
+      setStripeCheckoutSessionCreateError(
+        mutationData?.data?.stripeCheckoutSessionCreate?.errors
+      );
+      return;
+    }
+
+    const checkoutUrl =
+      mutationData?.data?.stripeCheckoutSessionCreate?.stripeCheckoutSession
+        ?.url;
+
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
+    }
+  };
+
+  return (
+    <div className={`grid justify-end my-2`}>
+      {loading ? (
+        <div className="green-button">
+          <FontAwesomeIcon spin icon={faSpinner} />
+        </div>
+      ) : (
+        <button
+          className={`green-button`}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSubmit();
+          }}
+        >
+          Checkout
+        </button>
+      )}
+    </div>
+  );
+};
+
 const ShoppingCartItems = () => {
   const { cartItems } = useContext(CartContext);
 
@@ -49,7 +118,7 @@ const ShoppingCartItems = () => {
           {Object.entries(cartItems).map(([stripePrice, itemInfo]) => (
             <div
               key={stripePrice}
-              className="grid grid-cols-[auto_1fr_auto] gap-x-4 items-center"
+              className="grid grid-cols-[auto_1fr_auto] gap-x-4 items-center mb-6"
             >
               <img className="w-16" src={itemInfo.imageUrl} />
               <div>
@@ -96,6 +165,8 @@ const ShoppingCartItems = () => {
               </span>
             </div>
           </div>
+
+          <ShoppingCartCheckoutButton />
         </div>
       ) : (
         <div className="text-center">
