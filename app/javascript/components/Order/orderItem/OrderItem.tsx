@@ -1,4 +1,5 @@
 import { CartContext } from "context/CartProvider";
+import { NotificationsContext } from "context/NotificationsProvider";
 import { Maybe, Price, Product, User } from "graphql/types";
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
@@ -13,6 +14,7 @@ const OrderItem: React.FC<{
 }> = ({ stripePriceId, name, description, unitAmount, imageUrl }) => {
   const { register, handleSubmit, reset } = useForm();
   const { addToCart } = useContext(CartContext);
+  const { addNotification } = useContext(NotificationsContext);
 
   return (
     <form
@@ -28,6 +30,9 @@ const OrderItem: React.FC<{
         };
 
         addToCart(cartProductInfo);
+        addNotification(
+          `${name} x${data[stripePriceId]} has been added to the cart!`
+        );
         reset();
       })}
     >
