@@ -6,7 +6,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CartContext } from "context/CartProvider";
-import { useStripeCheckoutSessionCreateMutation } from "graphql/types";
+import {
+  Error,
+  OrderPageInput,
+  StripeCheckoutSessionCreateInput,
+  useStripeCheckoutSessionCreateMutation,
+} from "graphql/types";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -47,15 +52,16 @@ const ShoppingCartItemQuantity: React.FC<{
 const ShoppingCartCheckoutButton = () => {
   const [createStripeCheckoutSession, { loading }] =
     useStripeCheckoutSessionCreateMutation();
-  const [checkoutError, setStripeCheckoutSessionCreateError] = useState([]);
+  const [checkoutError, setStripeCheckoutSessionCreateError] = useState<
+    Error[]
+  >([]);
 
   const { cartItems } = useContext(CartContext);
 
   const handleSubmit = async () => {
-    const items = [];
+    const items: OrderPageInput[] = [];
 
     Object.entries(cartItems).map(([price, { quantity }]) => {
-      // const quantityInt = parseInt(quantity) || 0;
       if (quantity === 0) return;
 
       items.push({ price, quantity });
@@ -89,6 +95,8 @@ const ShoppingCartCheckoutButton = () => {
 
   return (
     <div className={`grid justify-end my-2`}>
+      {checkoutError.length > 0 &&
+        checkoutError.map((error) => <p>{error.message}</p>)}
       {loading ? (
         <div className="green-button">
           <FontAwesomeIcon spin icon={faSpinner} />
@@ -131,7 +139,9 @@ const ShoppingCartItems = () => {
                     minimumFractionDigits: 2,
                   }).format(
                     Number(
-                      (itemInfo.unitAmount / 100).toFixed(2) * itemInfo.quantity
+                      ((itemInfo.unitAmount / 100) * itemInfo.quantity).toFixed(
+                        2
+                      )
                     )
                   )}
                 </p>

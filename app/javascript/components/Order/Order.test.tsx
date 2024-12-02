@@ -7,16 +7,31 @@ import Order, {
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import {
+  CurrentUserQuery,
   GetProductsQuery,
   StripeCheckoutSessionCreateMutation,
   StripeCheckoutSessionCreateMutationVariables,
 } from "graphql/types";
 import userEvent from "@testing-library/user-event";
+import { CURRENT_USER } from "components/headerNav/HeaderNav";
+
+const currentUserMock = {
+  request: { query: CURRENT_USER },
+  result: {
+    data: {
+      currentUser: {
+        id: "1",
+        admin: false,
+        email: "someuser@test.com",
+      },
+    },
+  },
+};
 
 describe("<Order />", () => {
   describe("with successful GraphQL operations", () => {
     let successfulMocks: MockedResponse<
-      GetProductsQuery | StripeCheckoutSessionCreateMutation,
+      GetProductsQuery | CurrentUserQuery | StripeCheckoutSessionCreateMutation,
       StripeCheckoutSessionCreateMutationVariables
     >[];
     beforeEach(() => {
@@ -33,12 +48,14 @@ describe("<Order />", () => {
                 url: "/v1/products",
                 data: [
                   {
-                    defaultPrice: "price_12345",
+                    defaultPrice: { id: "price_12345", unitAmount: 300 },
+                    images: ["picture1"],
                     description: "Blended mixed berries, filtered water",
                     name: "Mixed Berry Smoothie (Water base)",
                   },
                   {
-                    defaultPrice: "price_54321",
+                    defaultPrice: { id: "price_54321", unitAmount: 400 },
+                    images: ["imageString"],
                     description:
                       "2 salted/peppered eggs, 2 strips of bacon, hummis",
                     name: "Breakfast Burrito",
@@ -70,6 +87,7 @@ describe("<Order />", () => {
             },
           },
         },
+        currentUserMock,
       ];
 
       Object.defineProperty(window, "location", {
@@ -104,217 +122,12 @@ describe("<Order />", () => {
       );
 
       expect(
-        await screen.findByLabelText("Mixed Berry Smoothie (Water base)")
+        await screen.findByText("Welcome to the order page!")
       ).toBeInTheDocument();
       expect(
-        await screen.findByLabelText("Breakfast Burrito")
+        screen.getByText("Mixed Berry Smoothie (Water base)")
       ).toBeInTheDocument();
-    });
-
-    it("allows the order to be submitted with input", async () => {
-      render(
-        <MockedProvider addTypename={false} mocks={successfulMocks}>
-          <MemoryRouter
-            initialEntries={["/order"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
-            <Routes>
-              <Route path="/order" element={<Order />} />
-            </Routes>
-          </MemoryRouter>
-        </MockedProvider>
-      );
-
-      const firstProductInput = await screen.findByLabelText(
-        "Mixed Berry Smoothie (Water base)"
-      );
-
-      expect(firstProductInput).toBeInTheDocument();
-      expect(
-        await screen.findByLabelText("Breakfast Burrito")
-      ).toBeInTheDocument();
-
-      await userEvent.type(firstProductInput, "1");
-      await userEvent.click(screen.getByRole("button", { name: /Submit/i }));
-
-      expect(window.location.href).toBe("http://www.mocked.com/");
-    });
-  });
-
-  describe("when there's an error", () => {
-    it("renders an error when at least one quantity must be entered", async () => {
-      const unsuccessfulMocks: MockedResponse<
-        GetProductsQuery | StripeCheckoutSessionCreateMutation,
-        StripeCheckoutSessionCreateMutationVariables
-      >[] = [
-        {
-          request: {
-            query: GET_PRODUCTS,
-          },
-          result: {
-            data: {
-              listProducts: {
-                stripeObject: "list",
-                hasMore: false,
-                url: "/v1/products",
-                data: [
-                  {
-                    defaultPrice: "price_12345",
-                    description: "Blended mixed berries, filtered water",
-                    name: "Mixed Berry Smoothie (Water base)",
-                  },
-                  {
-                    defaultPrice: "price_54321",
-                    description:
-                      "2 salted/peppered eggs, 2 strips of bacon, hummis",
-                    name: "Breakfast Burrito",
-                  },
-                ],
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: STRIPE_CHECKOUT_SESSION_CREATE,
-            variables: {
-              input: {
-                stripeCheckoutSessionInput: {
-                  lineItems: [],
-                },
-              },
-            },
-          },
-          result: {
-            data: {
-              stripeCheckoutSessionCreate: {
-                stripeCheckoutSession: null,
-                errors: [
-                  {
-                    message: "You must enter a quantity for at least one item.",
-                  },
-                ],
-              },
-            },
-          },
-        },
-      ];
-      render(
-        <MockedProvider addTypename={false} mocks={unsuccessfulMocks}>
-          <MemoryRouter
-            initialEntries={["/order"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
-            <Routes>
-              <Route path="/order" element={<Order />} />
-            </Routes>
-          </MemoryRouter>
-        </MockedProvider>
-      );
-
-      expect(
-        await screen.findByLabelText("Mixed Berry Smoothie (Water base)")
-      ).toBeInTheDocument();
-      expect(
-        await screen.findByLabelText("Breakfast Burrito")
-      ).toBeInTheDocument();
-
-      await userEvent.click(screen.getByRole("button", { name: /Submit/i }));
-
-      expect(
-        screen.getByText("You must enter a quantity for at least one item.")
-      ).toBeInTheDocument();
-    });
-
-    it("renders an error when there's an issue with creating the stripe checkout session", async () => {
-      const unsuccessfulMocks: MockedResponse<
-        GetProductsQuery | StripeCheckoutSessionCreateMutation,
-        StripeCheckoutSessionCreateMutationVariables
-      >[] = [
-        {
-          request: {
-            query: GET_PRODUCTS,
-          },
-          result: {
-            data: {
-              listProducts: {
-                stripeObject: "list",
-                hasMore: false,
-                url: "/v1/products",
-                data: [
-                  {
-                    defaultPrice: "price_12345",
-                    description: "Blended mixed berries, filtered water",
-                    name: "Mixed Berry Smoothie (Water base)",
-                  },
-                  {
-                    defaultPrice: "price_54321",
-                    description:
-                      "2 salted/peppered eggs, 2 strips of bacon, hummis",
-                    name: "Breakfast Burrito",
-                  },
-                ],
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: STRIPE_CHECKOUT_SESSION_CREATE,
-            variables: {
-              input: {
-                stripeCheckoutSessionInput: {
-                  lineItems: [{ price: "price_12345", quantity: 1 }],
-                },
-              },
-            },
-          },
-          result: {
-            data: {
-              stripeCheckoutSessionCreate: {
-                stripeCheckoutSession: null,
-                errors: [
-                  {
-                    message:
-                      "Unfortunately, there is an issue with the Stripe checkout at this time. Please try again later.",
-                  },
-                ],
-              },
-            },
-          },
-        },
-      ];
-
-      render(
-        <MockedProvider addTypename={false} mocks={unsuccessfulMocks}>
-          <MemoryRouter
-            initialEntries={["/order"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
-            <Routes>
-              <Route path="/order" element={<Order />} />
-            </Routes>
-          </MemoryRouter>
-        </MockedProvider>
-      );
-
-      const firstProductInput = await screen.findByLabelText(
-        "Mixed Berry Smoothie (Water base)"
-      );
-
-      expect(firstProductInput).toBeInTheDocument();
-      expect(
-        await screen.findByLabelText("Breakfast Burrito")
-      ).toBeInTheDocument();
-
-      await userEvent.type(firstProductInput, "1");
-      await userEvent.click(screen.getByRole("button", { name: /Submit/i }));
-
-      expect(
-        screen.getByText(
-          "Unfortunately, there is an issue with the Stripe checkout at this time. Please try again later."
-        )
-      ).toBeInTheDocument();
+      expect(screen.getByText("Breakfast Burrito")).toBeInTheDocument();
     });
   });
 });

@@ -46,15 +46,8 @@ export const STRIPE_CHECKOUT_SESSION_CREATE = gql`
 `;
 
 const Order = () => {
-  const { register, handleSubmit } = useForm();
-  const [
-    stripeCheckoutSessionCreateError,
-    setStripeCheckoutSessionCreateError,
-  ] = useState<StripeCheckoutSessionCreatePayload["errors"] | null>(null);
   const { data: getProductsData, loading: getProductsLoading } =
     useGetProductsQuery();
-  const [createStripeCheckoutSession, { data: stripeCheckoutSessionData }] =
-    useStripeCheckoutSessionCreateMutation();
   const { data: currentUserData } = useCurrentUserQuery();
 
   return (
@@ -80,33 +73,20 @@ const Order = () => {
           </p>
 
           <div className="mb-6 p-2 md:m-2 md:p-6 dark-blue-background rounded">
-            {stripeCheckoutSessionCreateError &&
-              stripeCheckoutSessionCreateError.map((error, i) => {
+            <div className="flex flex-wrap gap-10 w-full justify-between sm:justify-normal ">
+              {getProductsData?.listProducts?.data?.map((product) => {
                 return (
-                  <p key={i} className="text-red-700">
-                    {error.message}
-                  </p>
+                  <OrderItem
+                    key={product?.defaultPrice?.id}
+                    description={product?.description}
+                    userEmail={currentUserData?.currentUser?.email || null}
+                    imageUrl={product?.images[0] || ""}
+                    name={product?.name}
+                    stripePriceId={product?.defaultPrice?.id}
+                    unitAmount={product?.defaultPrice?.unitAmount}
+                  />
                 );
               })}
-            <div className="">
-              <h6 className="mb-8 pb-2 border-b-2 text-center text-lg font-bold ">
-                ORDER FORM
-              </h6>
-              <div className="flex flex-wrap gap-10 w-full justify-between sm:justify-normal ">
-                {getProductsData?.listProducts?.data?.map((product) => {
-                  return (
-                    <OrderItem
-                      key={product?.defaultPrice?.id}
-                      description={product?.description}
-                      userEmail={currentUserData?.currentUser?.email || null}
-                      imageUrl={product?.images[0] || ""}
-                      name={product?.name}
-                      stripePriceId={product?.defaultPrice?.id}
-                      unitAmount={product?.defaultPrice?.unitAmount}
-                    />
-                  );
-                })}
-              </div>
             </div>
           </div>
           <div className="md:p-6">

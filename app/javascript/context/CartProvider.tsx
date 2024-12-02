@@ -11,7 +11,19 @@ const generateCartId = (userEmail?: string) => {
   return userEmail ? `cart_${userEmail}` : `cart_guest`;
 };
 
-export const CartContext = createContext({});
+type CartContextType = {
+  cartItems: { [key: string]: CartItem };
+  addToCart: (item: CartItem) => void;
+  removeFromCart: (itemKey: string) => void;
+  adjustItemQuantity: (itemKey: string, quantityDelta: number) => void;
+};
+
+export const CartContext = createContext<CartContextType>({
+  cartItems: {},
+  addToCart: () => {},
+  removeFromCart: () => {},
+  adjustItemQuantity: () => {},
+});
 
 type CartItem = {
   description: string;
@@ -23,9 +35,7 @@ type CartItem = {
 };
 
 const CartProvider = ({ children }: { children: React.ReactNode }) => {
-  const [cartItems, setCartItems] = useState<{
-    [key: string]: CartItem;
-  }>({});
+  const [cartItems, setCartItems] = useState<CartContextType["cartItems"]>({});
 
   const { data: currentUserData, loading: currentUserLoading } =
     useCurrentUserQuery();
@@ -44,8 +54,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [cartId]);
 
-  const addToCart = useCallback(
-    (item: CartItem) => {
+  const addToCart: CartContextType["addToCart"] = useCallback(
+    (item) => {
       const { stripePriceId, quantity } = item;
       const newCartItems = { ...cartItems };
 
@@ -65,8 +75,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     [cartId, cartItems]
   );
 
-  const removeFromCart = useCallback(
-    (itemKey: string) => {
+  const removeFromCart: CartContextType["removeFromCart"] = useCallback(
+    (itemKey) => {
       const newCartItems = { ...cartItems };
 
       delete newCartItems[itemKey];
@@ -77,8 +87,8 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     [cartId, cartItems]
   );
 
-  const adjustItemQuantity = useCallback(
-    (itemKey: string, quantityDelta: number) => {
+  const adjustItemQuantity: CartContextType["adjustItemQuantity"] = useCallback(
+    (itemKey, quantityDelta) => {
       const updatedItems = { ...cartItems };
       const updatedCartItem = { ...updatedItems[itemKey] };
       const updatedQuantity = updatedCartItem.quantity + quantityDelta;
