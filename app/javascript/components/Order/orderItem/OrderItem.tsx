@@ -10,7 +10,6 @@ const OrderItem: React.FC<{
   name: Product["name"];
   stripePriceId: Price["id"];
   unitAmount: Price["unitAmount"];
-  userEmail: Maybe<User["email"]>;
 }> = ({ stripePriceId, name, description, unitAmount, imageUrl }) => {
   const { register, handleSubmit, reset } = useForm();
   const { addToCart } = useContext(CartContext);

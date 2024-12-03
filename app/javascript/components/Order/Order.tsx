@@ -79,7 +79,6 @@ const Order = () => {
                   <OrderItem
                     key={product?.defaultPrice?.id}
                     description={product?.description}
-                    userEmail={currentUserData?.currentUser?.email || null}
                     imageUrl={product?.images[0] || ""}
                     name={product?.name}
                     stripePriceId={product?.defaultPrice?.id}
