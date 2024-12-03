@@ -110,7 +110,7 @@ GEM
     dockerfile-rails (1.6.24)
       rails (>= 3.0.0)
     drb (2.2.1)
-    error_highlight (0.6.0)
+    error_highlight (0.7.0)
     erubi (1.13.0)
     et-orbi (1.2.11)
       tzinfo
