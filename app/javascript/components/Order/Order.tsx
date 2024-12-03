@@ -1,9 +1,10 @@
 import { gql } from "@apollo/client";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import OrderItem from "components/Order/orderItem/OrderItem";
 import {
-  OrderPageInput,
   StripeCheckoutSessionCreatePayload,
+  useCurrentUserQuery,
   useGetProductsQuery,
   useStripeCheckoutSessionCreateMutation,
 } from "graphql/types";
@@ -13,12 +14,16 @@ import { useForm } from "react-hook-form";
 export const GET_PRODUCTS = gql`
   query GetProducts {
     listProducts {
-      stripeObject
       hasMore
+      stripeObject
       url
       data {
-        defaultPrice
+        defaultPrice {
+          id
+          unitAmount
+        }
         description
+        images
         name
       }
     }
@@ -41,15 +46,9 @@ export const STRIPE_CHECKOUT_SESSION_CREATE = gql`
 `;
 
 const Order = () => {
-  const { register, handleSubmit } = useForm();
-  const [
-    stripeCheckoutSessionCreateError,
-    setStripeCheckoutSessionCreateError,
-  ] = useState<StripeCheckoutSessionCreatePayload["errors"] | null>(null);
   const { data: getProductsData, loading: getProductsLoading } =
     useGetProductsQuery();
-  const [createStripeCheckoutSession, { data: stripeCheckoutSessionData }] =
-    useStripeCheckoutSessionCreateMutation();
+  const { data: currentUserData } = useCurrentUserQuery();
 
   return (
     <>
@@ -73,86 +72,22 @@ const Order = () => {
             entered into the Stripe Checkout page in order to demo this process.
           </p>
 
-          <form
-            onSubmit={handleSubmit(async (data) => {
-              const items: OrderPageInput[] = [];
-              Object.entries(data).map(([price, quantity]) => {
-                const quantityInt = parseInt(quantity) || 0;
-                if (quantityInt === 0) return;
-
-                items.push({ price, quantity: quantityInt });
-              });
-
-              const mutationData = await createStripeCheckoutSession({
-                variables: {
-                  input: {
-                    stripeCheckoutSessionInput: {
-                      lineItems: items,
-                    },
-                  },
-                },
-              });
-
-              if (
-                mutationData?.data?.stripeCheckoutSessionCreate?.errors?.length
-              ) {
-                setStripeCheckoutSessionCreateError(
-                  mutationData?.data?.stripeCheckoutSessionCreate?.errors
-                );
-                return;
-              }
-
-              const checkoutUrl =
-                mutationData?.data?.stripeCheckoutSessionCreate
-                  ?.stripeCheckoutSession?.url;
-
-              if (checkoutUrl) {
-                window.location.href = checkoutUrl;
-              }
-            })}
-            className="grid justify-center"
-          >
-            <div className="mb-6 p-2 md:m-2 md:p-6 md:w-96 dark-blue-background rounded">
-              {stripeCheckoutSessionCreateError &&
-                stripeCheckoutSessionCreateError.map((error, i) => {
-                  return (
-                    <p key={i} className="text-red-700">
-                      {error.message}
-                    </p>
-                  );
-                })}
-              <div className="">
-                <h6 className="mb-8 pb-2 border-b-2 text-center text-lg font-bold ">
-                  ORDER FORM
-                </h6>
-                <div className="grid grid-cols-[1fr_50px] gap-2">
-                  {getProductsData?.listProducts?.data?.map((product) => {
-                    return (
-                      <React.Fragment key={product.defaultPrice}>
-                        <label htmlFor={product.defaultPrice}>
-                          {product.name}
-                        </label>
-                        <input
-                          className="border-2 self-center text-center"
-                          type="number"
-                          placeholder="0"
-                          key={product.defaultPrice}
-                          id={product.defaultPrice}
-                          step={1}
-                          min={1}
-                          {...register(product.defaultPrice)}
-                        />
-                      </React.Fragment>
-                    );
-                  })}
-                  <input
-                    type="submit"
-                    className="col-span-2 green-button mt-2"
+          <div className="mb-6 p-2 md:m-2 md:p-6 dark-blue-background rounded">
+            <div className="flex flex-wrap gap-10 w-full justify-between sm:justify-normal ">
+              {getProductsData?.listProducts?.data?.map((product) => {
+                return (
+                  <OrderItem
+                    key={product?.defaultPrice?.id}
+                    description={product?.description}
+                    imageUrl={product?.images[0] || ""}
+                    name={product?.name}
+                    stripePriceId={product?.defaultPrice?.id}
+                    unitAmount={product?.defaultPrice?.unitAmount}
                   />
-                </div>
-              </div>
+                );
+              })}
             </div>
-          </form>
+          </div>
           <div className="md:p-6">
             <h6 className="font-bold text-lg border-b-2 pb-2 mb-6 text-center">
               Stripe Checkout Page Instructions

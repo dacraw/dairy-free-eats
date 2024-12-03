@@ -2,7 +2,6 @@ import { faBell, faCircle, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import {
-  CurrentUserQuery,
   useCurrentUserNotificationReceivedSubscription,
   useFetchCurrentUserNotificationsQuery,
 } from "graphql/types";

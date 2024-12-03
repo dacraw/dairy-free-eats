@@ -314,11 +314,17 @@ type PageInfo {
   startCursor: String
 }
 
+type Price {
+  id: String!
+  stripeObject: String!
+  unitAmount: Int!
+}
+
 type Product {
   active: Boolean!
   attributes: [String]!
   created: ISO8601DateTime!
-  defaultPrice: String!
+  defaultPrice: Price!
   description: String!
   id: String!
   images: [String]!

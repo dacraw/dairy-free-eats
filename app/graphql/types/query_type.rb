@@ -35,7 +35,7 @@ module Types
 
     field :list_products, Types::Stripe::ProductListObjectType, null: false
     def list_products
-      ::Stripe::Product.list active: true
+      ::Stripe::Product.list active: true, expand: [ "data.default_price" ]
     end
 
     field :fetch_checkout_session, resolver: Resolvers::Stripe::CheckoutSessionResolver, null: true

@@ -1,12 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
-import { faBars, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faCartShopping,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { useCurrentUserLazyQuery } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
 import HeaderNotifications from "components/headerNav/headerNotifications/HeaderNotifications";
 import client from "apolloClient";
+import ShoppingCart from "components/shoppingCart/ShoppingCart";
+import HeaderModal from "components/headerModal/HeaderModal";
 
 export const CURRENT_USER = gql`
   query CurrentUser {
@@ -109,6 +115,7 @@ const HeaderNavLinks = ({
 
     return () => document.removeEventListener("mousedown", checkCloseMenu);
   }, []);
+
   return (
     <div>
       <FontAwesomeIcon
@@ -210,17 +217,26 @@ const HeaderNav = () => {
   }, [location.pathname]);
 
   return (
-    <header className="shadow-md bg-gradient-to-b from-gray-900 to-gray-950 shadow-gray-950 fixed w-full p-2 select-none h-[50px] z-50">
+    <header className="shadow-md bg-gradient-to-b from-gray-900 to-gray-950 shadow-gray-950 fixed w-full p-2 select-none h-[50px] z-[100]">
       <nav className="relative gap-4 items-center my-2 mx-4 md:static grid grid-cols-[1fr_auto_auto] md:grid-rows-1 md:justify-between max-w-screen-lg md:mx-auto">
         {error && <span>{error.message}</span>}
         <Link to="/" className="md:hidden justify-self-start font-bold">
           Dairy Free Eats
         </Link>
-        {data?.currentUser && (
-          <div className="md:col-start-2 md:row-start-1 justify-self-end">
-            <HeaderNotifications />
-          </div>
-        )}
+
+        <div className="md:col-start-2 md:row-start-1 justify-self-end grid gap-4 grid-cols-2">
+          {data?.currentUser && (
+            <div>
+              <HeaderNotifications />
+            </div>
+          )}
+          <HeaderModal
+            triggerElement={<FontAwesomeIcon icon={faCartShopping} />}
+          >
+            <ShoppingCart />
+          </HeaderModal>
+        </div>
+
         <HeaderNavLinks
           currentUserPresent={!!data?.currentUser}
           currentUserAdmin={Boolean(data?.currentUser?.admin)}
