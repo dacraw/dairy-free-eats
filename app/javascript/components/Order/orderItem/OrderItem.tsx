@@ -57,7 +57,9 @@ const OrderItem: React.FC<{
           className="text-center h-6 w-10"
         />
       </div>
-      <button className="blue-button">Add To Cart</button>
+      <button className="blue-button" id={`add-to-cart-${stripePriceId}`}>
+        Add To Cart
+      </button>
     </form>
   );
 };

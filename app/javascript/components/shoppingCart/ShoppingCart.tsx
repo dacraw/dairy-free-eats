@@ -196,7 +196,7 @@ const ShoppingCartItems = () => {
 
 const ShoppingCart = () => {
   return (
-    <div>
+    <div id="shopping-cart">
       <h3 className="text-center font-bold mb-4">Your Cart</h3>
       <ShoppingCartItems />
     </div>

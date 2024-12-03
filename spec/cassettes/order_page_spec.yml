@@ -1,0 +1,175 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.stripe.com/v1/products?active=true&expand%5B%5D=data.default_price
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Stripe/v1 RubyBindings/13.2.0
+      Authorization:
+      - "<BEARER_TOKEN>"
+      Stripe-Version:
+      - 2024-11-20.acacia
+      X-Stripe-Client-User-Agent:
+      - "<X_STRIPE_CLIENT_USER_AGENT>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Server:
+      - nginx
+      Date:
+      - Tue, 03 Dec 2024 02:17:19 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '2800'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, HEAD, PUT, PATCH, POST, DELETE
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, Stripe-Should-Retry, X-Stripe-External-Auth-Required,
+        X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Content-Security-Policy:
+      - report-uri https://q.stripe.com/csp-report?p=v1%2Fproducts; block-all-mixed-content;
+        default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="coop"
+      Report-To:
+      - '{"group":"coop","max_age":8640,"endpoints":[{"url":"https://q.stripe.com/coop-report"}],"include_subdomains":true}'
+      Reporting-Endpoints:
+      - coop="https://q.stripe.com/coop-report"
+      Request-Id:
+      - req_sMTPdtqV7W5Pju
+      Stripe-Version:
+      - 2024-11-20.acacia
+      Vary:
+      - Origin
+      X-Content-Type-Options:
+      - nosniff
+      X-Stripe-Priority-Routing-Enabled:
+      - 'true'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+      X-Wc:
+      - A
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+    body:
+      encoding: UTF-8
+      string: |-
+        {
+          "object": "list",
+          "data": [
+            {
+              "id": "prod_R8KkVOibvpRPlc",
+              "object": "product",
+              "active": true,
+              "attributes": [],
+              "created": 1730403020,
+              "default_price": {
+                "id": "price_1QG44XElA4InVgv8dOnqfhyu",
+                "object": "price",
+                "active": true,
+                "billing_scheme": "per_unit",
+                "created": 1730403021,
+                "currency": "usd",
+                "custom_unit_amount": null,
+                "livemode": false,
+                "lookup_key": null,
+                "metadata": {},
+                "nickname": null,
+                "product": "prod_R8KkVOibvpRPlc",
+                "recurring": null,
+                "tax_behavior": "unspecified",
+                "tiers_mode": null,
+                "transform_quantity": null,
+                "type": "one_time",
+                "unit_amount": 300,
+                "unit_amount_decimal": "300"
+              },
+              "description": "Blended mixed berries, filtered water",
+              "images": [
+                "https://files.stripe.com/links/MDB8YWNjdF8xUUczb3lFbEE0SW5WZ3Y4fGZsX3Rlc3RfUGczWDd3YkUzR1JBY2tOck14NEVnYXpp00CBDSqGR6"
+              ],
+              "livemode": false,
+              "marketing_features": [],
+              "metadata": {},
+              "name": "Mixed Berry Smoothie (Water base)",
+              "package_dimensions": null,
+              "shippable": null,
+              "statement_descriptor": null,
+              "tax_code": "txcd_20030000",
+              "type": "service",
+              "unit_label": null,
+              "updated": 1732761774,
+              "url": null
+            },
+            {
+              "id": "prod_R8KiBa0tljS7SV",
+              "object": "product",
+              "active": true,
+              "attributes": [],
+              "created": 1730402927,
+              "default_price": {
+                "id": "price_1QG432ElA4InVgv8Zy7PaGPY",
+                "object": "price",
+                "active": true,
+                "billing_scheme": "per_unit",
+                "created": 1730402928,
+                "currency": "usd",
+                "custom_unit_amount": null,
+                "livemode": false,
+                "lookup_key": null,
+                "metadata": {},
+                "nickname": null,
+                "product": "prod_R8KiBa0tljS7SV",
+                "recurring": null,
+                "tax_behavior": "unspecified",
+                "tiers_mode": null,
+                "transform_quantity": null,
+                "type": "one_time",
+                "unit_amount": 300,
+                "unit_amount_decimal": "300"
+              },
+              "description": "2 salted/peppered eggs, 2 strips of bacon, hummis",
+              "images": [
+                "https://files.stripe.com/links/MDB8YWNjdF8xUUczb3lFbEE0SW5WZ3Y4fGZsX3Rlc3RfbUNoWnRHazJyN3JGVDNMZTZjM1dua0xh008k0zo7yY"
+              ],
+              "livemode": false,
+              "marketing_features": [],
+              "metadata": {},
+              "name": "Breakfast Burrito",
+              "package_dimensions": null,
+              "shippable": null,
+              "statement_descriptor": null,
+              "tax_code": "txcd_20030000",
+              "type": "service",
+              "unit_label": null,
+              "updated": 1732756272,
+              "url": null
+            }
+          ],
+          "has_more": false,
+          "url": "/v1/products"
+        }
+  recorded_at: Tue, 03 Dec 2024 02:17:19 GMT
+recorded_with: VCR 6.3.1
