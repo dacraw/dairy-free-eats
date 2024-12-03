@@ -35,9 +35,9 @@ const OrderItem: React.FC<{
         reset();
       })}
     >
-      <img src={imageUrl} className="cursor-pointer mb-2" />
-      <p className="font-bold text-lg mb-2">{name}</p>
-      <p className="mb-2">{description}</p>
+      <img src={imageUrl} className="cursor-pointer mb-2 w-[224px] h-[224px]" />
+      <p className="font-bold text-lg mb-2 h-[60px]">{name}</p>
+      <p className="mb-2 h-[60px]">{description}</p>
       <p className="mb-6">
         {new Intl.NumberFormat("en-EN", {
           style: "currency",
@@ -57,7 +57,10 @@ const OrderItem: React.FC<{
           className="text-center h-6 w-10"
         />
       </div>
-      <button className="blue-button" id={`add-to-cart-${stripePriceId}`}>
+      <button
+        className="blue-button w-[224px] h-[45px]"
+        id={`add-to-cart-${stripePriceId}`}
+      >
         Add To Cart
       </button>
     </form>
