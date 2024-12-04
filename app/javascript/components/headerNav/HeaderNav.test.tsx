@@ -168,6 +168,47 @@ describe("<HeaderNav />", () => {
           screen.getByRole("link", { name: /DASHBOARD/i })
         ).toBeInTheDocument();
       });
+
+      it("does not render the shopping cart modal", async () => {
+        currentUserPresentMocks = [
+          {
+            request: { query: CURRENT_USER },
+            result: {
+              data: {
+                currentUser: {
+                  id: "1",
+                  email: "admin@demo.com",
+                  admin: true,
+                },
+              },
+            },
+          },
+          {
+            request: { query: CURRENT_USER_NOTIFICATION_RECEIVED },
+            result: {
+              data: {
+                currentUserNotificationReceived: null,
+              },
+            },
+            maxUsageCount: Infinity,
+          },
+        ];
+
+        render(
+          <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
+            <BrowserRouter
+              future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
+            >
+              <HeaderNav />
+            </BrowserRouter>
+          </MockedProvider>
+        );
+
+        expect(await screen.findByText("Logout")).toBeInTheDocument();
+        expect(
+          screen.queryByTestId("shopping-cart-icon")
+        ).not.toBeInTheDocument();
+      });
     });
   });
 

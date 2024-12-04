@@ -1,11 +1,6 @@
 import React from "react";
 import { screen, render } from "@testing-library/react";
 import OrderItem from "components/Order/orderItem/OrderItem";
-import CartProvider, { CartContext } from "context/CartProvider";
-import NotificationsProvider from "context/NotificationsProvider";
-import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { CurrentUserQuery } from "graphql/types";
-import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import MockCartProvider, { mockAddToCart } from "mockUtil/MockCartProvider";
 import userEvent from "@testing-library/user-event";
 import MockNotificationsProvider, {
@@ -26,6 +21,7 @@ describe("<OrderItem />", () => {
   it("renders without errors", async () => {
     render(
       <OrderItem
+        currentUserIsAdmin={false}
         stripePriceId={stripePriceId}
         name={itemName}
         description={description}
@@ -46,11 +42,31 @@ describe("<OrderItem />", () => {
     expect(screen.getByText(formattedUnitAmount)).toBeInTheDocument();
   });
 
+  it("doesn't render the quantity input nor 'Add To Cart' button", async () => {
+    render(
+      <OrderItem
+        currentUserIsAdmin={true}
+        stripePriceId={stripePriceId}
+        name={itemName}
+        description={description}
+        unitAmount={unitAmount}
+        imageUrl={imageUrl}
+      />
+    );
+
+    expect(await screen.findByText(itemName)).toBeInTheDocument();
+    expect(screen.queryByLabelText(/Quantity/)).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /Add To Cart/i })
+    ).not.toBeInTheDocument();
+  });
+
   describe("when an item is added to cart", () => {
     it("invokes `addToCart`", async () => {
       render(
         <MockCartProvider>
           <OrderItem
+            currentUserIsAdmin={false}
             stripePriceId={stripePriceId}
             name={itemName}
             description={description}
@@ -87,6 +103,7 @@ describe("<OrderItem />", () => {
       render(
         <MockNotificationsProvider>
           <OrderItem
+            currentUserIsAdmin={false}
             stripePriceId={stripePriceId}
             name={itemName}
             description={description}
@@ -120,6 +137,7 @@ describe("<OrderItem />", () => {
       render(
         <MockNotificationsProvider>
           <OrderItem
+            currentUserIsAdmin={false}
             stripePriceId={stripePriceId}
             name={itemName}
             description={description}
