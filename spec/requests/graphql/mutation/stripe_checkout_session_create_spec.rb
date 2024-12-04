@@ -96,6 +96,31 @@ RSpec.describe "StripeCheckoutSessionCreate", type: :request do
           expect(stripe_checkout_session[:saved_payment_method_options][:payment_method_save]).to eq "enabled"
         end
       end
+
+      context "when the current user is an admin" do
+        let(:user) { create :user, :valid_user, admin: true }
+
+        it "does not allow the checkout session to proceed" do
+          login_user(user)
+
+
+          params = {
+            query: query,
+            variables: {
+              input: {
+                stripeCheckoutSessionInput: {
+                  lineItems: []
+                }
+              }
+            }
+          }
+
+          post "/graphql", headers: { "Content-Type": "application/json" }, params: params.to_json
+
+          error_message = JSON.parse(response.body)["errors"].first["message"]
+          expect(error_message).to eq "Admins may not purchase items. Please login as a regular user."
+        end
+      end
     end
   end
 

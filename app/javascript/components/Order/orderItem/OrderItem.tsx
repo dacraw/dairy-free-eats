@@ -1,16 +1,24 @@
 import { CartContext } from "context/CartProvider";
 import { NotificationsContext } from "context/NotificationsProvider";
-import { Maybe, Price, Product, User } from "graphql/types";
+import { Price, Product, User } from "graphql/types";
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 
 const OrderItem: React.FC<{
+  currentUserIsAdmin: User["admin"];
   description: Product["description"];
   imageUrl: string;
   name: Product["name"];
   stripePriceId: Price["id"];
   unitAmount: Price["unitAmount"];
-}> = ({ stripePriceId, name, description, unitAmount, imageUrl }) => {
+}> = ({
+  stripePriceId,
+  name,
+  description,
+  unitAmount,
+  imageUrl,
+  currentUserIsAdmin,
+}) => {
   const { register, handleSubmit, reset } = useForm();
   const { addToCart } = useContext(CartContext);
   const { addNotification } = useContext(NotificationsContext);
@@ -45,24 +53,29 @@ const OrderItem: React.FC<{
           minimumFractionDigits: 2,
         }).format(Number((unitAmount / 100).toFixed(2)))}
       </p>
-      <div className=" mb-4">
-        <label htmlFor={`qty-${stripePriceId}`} className="mr-4">
-          Quantity:
-        </label>
-        <input
-          id={`qty-${stripePriceId}`}
-          type="number"
-          min={1}
-          {...register(stripePriceId)}
-          className="text-center h-6 w-10"
-        />
-      </div>
-      <button
-        className="blue-button w-[224px] h-[45px]"
-        id={`add-to-cart-${stripePriceId}`}
-      >
-        Add To Cart
-      </button>
+
+      {!currentUserIsAdmin && (
+        <>
+          <div className=" mb-4">
+            <label htmlFor={`qty-${stripePriceId}`} className="mr-4">
+              Quantity:
+            </label>
+            <input
+              id={`qty-${stripePriceId}`}
+              type="number"
+              min={1}
+              {...register(stripePriceId)}
+              className="text-center h-6 w-10"
+            />
+          </div>
+          <button
+            className="blue-button w-[224px] h-[45px]"
+            id={`add-to-cart-${stripePriceId}`}
+          >
+            Add To Cart
+          </button>
+        </>
+      )}
     </form>
   );
 };

@@ -230,11 +230,19 @@ const HeaderNav = () => {
               <HeaderNotifications />
             </div>
           )}
-          <HeaderModal
-            triggerElement={<FontAwesomeIcon icon={faCartShopping} />}
-          >
-            <ShoppingCart />
-          </HeaderModal>
+
+          {!Boolean(data?.currentUser?.admin) && (
+            <HeaderModal
+              triggerElement={
+                <FontAwesomeIcon
+                  data-testid="shopping-cart-icon"
+                  icon={faCartShopping}
+                />
+              }
+            >
+              <ShoppingCart />
+            </HeaderModal>
+          )}
         </div>
 
         <HeaderNavLinks

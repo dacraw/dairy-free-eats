@@ -77,6 +77,9 @@ const Order = () => {
               {getProductsData?.listProducts?.data?.map((product) => {
                 return (
                   <OrderItem
+                    currentUserIsAdmin={Boolean(
+                      currentUserData?.currentUser?.admin
+                    )}
                     key={product?.defaultPrice?.id}
                     description={product?.description}
                     imageUrl={product?.images[0] || ""}
