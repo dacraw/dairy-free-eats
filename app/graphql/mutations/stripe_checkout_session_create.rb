@@ -10,7 +10,7 @@ module Mutations
     argument :stripe_checkout_session_input, Types::StripeCheckoutSessionInputType, required: true
 
     def resolve(stripe_checkout_session_input:)
-      if context[:current_user].admin?
+      if context[:current_user]&.admin?
         raise GraphQL::ExecutionError, "Admins may not purchase items. Please login as a regular user."
       end
 
