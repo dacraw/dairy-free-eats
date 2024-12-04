@@ -26,32 +26,6 @@ export const CURRENT_USER = gql`
   }
 `;
 
-const AdminDemoButton = () => {
-  const [
-    loginDemoAdmin,
-    { loading: loginDemoAdminLoading, data: loginDemoAdminData },
-  ] = useAdminLogin();
-
-  return (
-    <div>
-      {loginDemoAdminLoading ? (
-        <FontAwesomeIcon
-          icon={faSpinner}
-          spin
-          className="w-full py-2 text-xl"
-        />
-      ) : (
-        <button
-          onClick={async () => loginDemoAdmin()}
-          className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold "
-        >
-          Admin Demo
-        </button>
-      )}
-    </div>
-  );
-};
-
 const HeaderNavLinks = ({
   currentUserPresent,
   currentUserAdmin,
@@ -141,33 +115,7 @@ const HeaderNavLinks = ({
           className={`grid text-center md:flex md:items-center md:gap-4 md:col-start-3 md:row-start-1 md:justify-self-end ${
             showMenu ? "block" : "hidden"
           }`}
-        >
-          {!currentUserPresent && (
-            <>
-              <AdminDemoButton />
-              <NavLink
-                className={({ isActive }) =>
-                  `${
-                    isActive ? "gray-button" : ""
-                  } py-2 px-4 font-bold hover:gray-button-hover`
-                }
-                to="/login"
-              >
-                Login
-              </NavLink>
-              <NavLink
-                className={({ isActive }) =>
-                  `${
-                    isActive ? "gray-button" : ""
-                  } py-2 px-4 font-bold hover:gray-button-hover`
-                }
-                to="/signup"
-              >
-                Signup
-              </NavLink>
-            </>
-          )}
-        </div>
+        ></div>
       </div>
     </div>
   );
@@ -213,20 +161,17 @@ const HeaderNav = () => {
             </HeaderModal>
           )}
 
-          {data?.currentUser && (
-            <HeaderModal
-              basic={true}
-              headerText="Account Options"
-              triggerElement={
-                <FontAwesomeIcon
-                  data-testid="user-account-icon"
-                  icon={faUser}
-                />
-              }
-            >
-              <UserAccountNav />
-            </HeaderModal>
-          )}
+          <HeaderModal
+            basic={true}
+            headerText="Account Options"
+            triggerElement={
+              <FontAwesomeIcon data-testid="user-account-icon" icon={faUser} />
+            }
+          >
+            <UserAccountNav
+              currentUserEmail={data?.currentUser?.email || null}
+            />
+          </HeaderModal>
         </div>
 
         <HeaderNavLinks

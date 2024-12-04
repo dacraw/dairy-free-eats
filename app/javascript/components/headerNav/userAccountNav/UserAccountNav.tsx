@@ -1,9 +1,33 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import client from "apolloClient";
-import { useLogout } from "hooks/auth";
+import {
+  CurrentUserQuery,
+  CurrentUserQueryResult,
+  Maybe,
+  User,
+} from "graphql/types";
+import { useAdminLogin, useLogout } from "hooks/auth";
 import React from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+const AdminDemoButton = () => {
+  const [
+    loginDemoAdmin,
+    { loading: loginDemoAdminLoading, data: loginDemoAdminData },
+  ] = useAdminLogin();
+
+  return loginDemoAdminLoading ? (
+    <FontAwesomeIcon icon={faSpinner} spin className="w-full py-2 text-xl" />
+  ) : (
+    <button
+      onClick={async () => loginDemoAdmin()}
+      className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold "
+    >
+      Admin Demo
+    </button>
+  );
+};
 
 const LogoutButton = () => {
   const [
@@ -17,37 +41,67 @@ const LogoutButton = () => {
     client.cache.evict({ fieldName: "currentUserNotifications" });
     logout();
   };
-  return (
-    <div>
-      {loggingOut ? (
-        <FontAwesomeIcon
-          data-testid="logging-out"
-          icon={faSpinner}
-          className="py-2"
-        />
-      ) : (
-        <button
-          className="
+  return loggingOut ? (
+    <FontAwesomeIcon
+      data-testid="logging-out"
+      icon={faSpinner}
+      className="py-2"
+    />
+  ) : (
+    <button
+      className="
             py-2 px-4 blue-button transition-colors rounded font-bold
             "
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      )}
-    </div>
+      onClick={handleLogout}
+    >
+      Logout
+    </button>
   );
 };
 
-const UserAccountNav = () => {
+const UserAccountNav: React.FC<{
+  currentUserEmail: Maybe<User["email"]>;
+}> = ({ currentUserEmail }) => {
   return (
     <div
       className="
-        grid justify-center 
+        grid gap-2
         md:w-52
     "
     >
-      <LogoutButton />
+      {currentUserEmail ? (
+        <>
+          <div className="text-sm mb-2 text-center">
+            <p>Logged in as:</p>
+            <p className="font-bold">{currentUserEmail}</p>
+          </div>
+          <LogoutButton />
+        </>
+      ) : (
+        <>
+          <NavLink
+            className={({ isActive }) =>
+              `${isActive ? "gray-button" : ""} 
+              py-2 px-4 font-bold block text-center 
+              hover:gray-button-hover`
+            }
+            to="/login"
+          >
+            Login
+          </NavLink>
+          <NavLink
+            className={({ isActive }) =>
+              `${isActive ? "gray-button" : ""} 
+              py-2 px-4 font-bold block text-center 
+              hover:gray-button-hover`
+            }
+            to="/signup"
+          >
+            Signup
+          </NavLink>
+          <AdminDemoButton />
+        </>
+      )}
     </div>
   );
 };
