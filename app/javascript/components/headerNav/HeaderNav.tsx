@@ -4,6 +4,7 @@ import {
   faBars,
   faCartShopping,
   faSpinner,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { gql } from "@apollo/client";
@@ -13,6 +14,7 @@ import HeaderNotifications from "components/headerNav/headerNotifications/Header
 import client from "apolloClient";
 import ShoppingCart from "components/shoppingCart/ShoppingCart";
 import HeaderModal from "components/headerModal/HeaderModal";
+import UserAccountNav from "components/headerNav/userAccountNav/UserAccountNav";
 
 export const CURRENT_USER = gql`
   query CurrentUser {
@@ -23,38 +25,6 @@ export const CURRENT_USER = gql`
     }
   }
 `;
-
-const LogoutButton = () => {
-  const [
-    logout,
-    { loading: loggingOut, data: logoutData, error: logoutError },
-  ] = useLogout();
-
-  const handleLogout = () => {
-    // Ideally, evicting the current user would clear out any fields related to it
-    // This is a TODO
-    client.cache.evict({ fieldName: "currentUserNotifications" });
-    logout();
-  };
-  return (
-    <div>
-      {loggingOut ? (
-        <FontAwesomeIcon
-          data-testid="logging-out"
-          icon={faSpinner}
-          className="py-2"
-        />
-      ) : (
-        <button
-          className="hover:bg-red-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      )}
-    </div>
-  );
-};
 
 const AdminDemoButton = () => {
   const [
@@ -172,9 +142,7 @@ const HeaderNavLinks = ({
             showMenu ? "block" : "hidden"
           }`}
         >
-          {currentUserPresent ? (
-            <LogoutButton />
-          ) : (
+          {!currentUserPresent && (
             <>
               <AdminDemoButton />
               <NavLink
@@ -224,7 +192,7 @@ const HeaderNav = () => {
           Dairy Free Eats
         </Link>
 
-        <div className="md:col-start-2 md:row-start-1 justify-self-end grid gap-4 grid-cols-2">
+        <div className="md:col-start-2 md:row-start-1 justify-self-end grid gap-4 grid-cols-3">
           {data?.currentUser && (
             <div>
               <HeaderNotifications />
@@ -233,6 +201,7 @@ const HeaderNav = () => {
 
           {!Boolean(data?.currentUser?.admin) && (
             <HeaderModal
+              headerText="Your Cart"
               triggerElement={
                 <FontAwesomeIcon
                   data-testid="shopping-cart-icon"
@@ -241,6 +210,21 @@ const HeaderNav = () => {
               }
             >
               <ShoppingCart />
+            </HeaderModal>
+          )}
+
+          {data?.currentUser && (
+            <HeaderModal
+              basic={true}
+              headerText="Account Options"
+              triggerElement={
+                <FontAwesomeIcon
+                  data-testid="user-account-icon"
+                  icon={faUser}
+                />
+              }
+            >
+              <UserAccountNav />
             </HeaderModal>
           )}
         </div>
