@@ -43,6 +43,14 @@ const HeaderModal = ({
     handleToggle(false);
   }, [location]);
 
+  useEffect(() => {
+    if (visible) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [visible]);
+
   return (
     <div className="relative" ref={modalRef}>
       <div onClick={() => handleToggle(!visible)} className="cursor-pointer">
@@ -59,7 +67,7 @@ const HeaderModal = ({
         >
           <div className="flex justify-end md:hidden">
             <div
-              className="inline-flex items-center gap-x-2 border-2 rounded-lg bg-white text-gray-950 font-bold text-sm px-2"
+              className="cursor-pointer inline-flex items-center gap-x-2 border-2 rounded-lg bg-white text-gray-950 font-bold text-sm px-2 overflow-y-auto"
               onClick={() => handleToggle(false)}
             >
               <p>Close</p>
