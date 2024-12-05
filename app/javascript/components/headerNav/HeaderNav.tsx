@@ -2,16 +2,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import {
   faBars,
+  faBell,
   faCartShopping,
-  faSpinner,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { useCurrentUserLazyQuery } from "graphql/types";
-import { useAdminLogin, useLogout } from "hooks/auth";
-import HeaderNotifications from "components/headerNav/headerNotifications/HeaderNotifications";
-import client from "apolloClient";
+import HeaderNotifications, {
+  NotificationsList,
+} from "components/headerNav/headerNotifications/HeaderNotifications";
 import ShoppingCart from "components/shoppingCart/ShoppingCart";
 import HeaderModal from "components/headerModal/HeaderModal";
 import UserAccountNav from "components/headerNav/userAccountNav/UserAccountNav";
@@ -142,20 +142,25 @@ const HeaderNav = () => {
 
         <div className="md:col-start-2 md:row-start-1 justify-self-end grid gap-4 grid-cols-3">
           {data?.currentUser && (
-            <div>
-              <HeaderNotifications />
-            </div>
+            <HeaderModal
+              headerText="Notifications"
+              TriggerElement={({ visible }) => (
+                <HeaderNotifications visible={visible} />
+              )}
+            >
+              <NotificationsList />
+            </HeaderModal>
           )}
 
           {!Boolean(data?.currentUser?.admin) && (
             <HeaderModal
               headerText="Your Cart"
-              triggerElement={
+              TriggerElement={() => (
                 <FontAwesomeIcon
                   data-testid="shopping-cart-icon"
                   icon={faCartShopping}
                 />
-              }
+              )}
             >
               <ShoppingCart />
             </HeaderModal>
@@ -164,9 +169,9 @@ const HeaderNav = () => {
           <HeaderModal
             basic={true}
             headerText="Account Options"
-            triggerElement={
+            TriggerElement={() => (
               <FontAwesomeIcon data-testid="user-account-icon" icon={faUser} />
-            }
+            )}
           >
             <UserAccountNav
               currentUserEmail={data?.currentUser?.email || null}

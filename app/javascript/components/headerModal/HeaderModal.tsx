@@ -7,12 +7,12 @@ const HeaderModal = ({
   basic = false,
   children,
   headerText,
-  triggerElement,
+  TriggerElement,
 }: {
   basic?: boolean;
   children: React.ReactNode;
   headerText?: string;
-  triggerElement: React.ReactNode;
+  TriggerElement: React.FC<{ visible: boolean }>;
 }) => {
   const [visible, toggleVisible] = useState(false);
   const location = useLocation();
@@ -41,7 +41,7 @@ const HeaderModal = ({
   return (
     <div className="relative" ref={modalRef}>
       <div onClick={() => toggleVisible(!visible)} className="cursor-pointer">
-        {triggerElement}
+        <TriggerElement visible={visible} />
       </div>
       {visible && (
         <div
