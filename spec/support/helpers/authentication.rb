@@ -20,6 +20,8 @@ module Helpers
             find("input[type='submit']").click
 
             expect(page).to have_content "Order Dairy Free Food"
+
+            find("svg[data-testid='user-account-icon']").click
             expect(page).to have_button "Logout"
         end
     end

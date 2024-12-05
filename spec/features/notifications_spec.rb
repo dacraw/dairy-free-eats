@@ -118,7 +118,8 @@ RSpec.describe "Notifications Features Spec", :perform_enqueued do
             feature_login_user user
 
             find("#current-notifications-bell").click
-            expect(page).to have_content "NOTIFICATIONS"
+
+            expect(page).to have_content /NOTIFICATIONS/i
         end
 
         Capybara.using_session(admin_session) do
