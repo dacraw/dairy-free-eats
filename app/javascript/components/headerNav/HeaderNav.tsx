@@ -143,10 +143,9 @@ const HeaderNav = () => {
         <div className="md:col-start-2 md:row-start-1 justify-self-end grid gap-4 grid-cols-3">
           {data?.currentUser && (
             <HeaderModal
+              modalName="notifications"
               headerText="Notifications"
-              TriggerElement={({ visible }) => (
-                <HeaderNotifications visible={visible} />
-              )}
+              triggerElement={<HeaderNotifications />}
             >
               <NotificationsList />
             </HeaderModal>
@@ -154,13 +153,14 @@ const HeaderNav = () => {
 
           {!Boolean(data?.currentUser?.admin) && (
             <HeaderModal
+              modalName="shoppingCart"
               headerText="Your Cart"
-              TriggerElement={() => (
+              triggerElement={
                 <FontAwesomeIcon
                   data-testid="shopping-cart-icon"
                   icon={faCartShopping}
                 />
-              )}
+              }
             >
               <ShoppingCart />
             </HeaderModal>
@@ -169,9 +169,10 @@ const HeaderNav = () => {
           <HeaderModal
             basic={true}
             headerText="Account Options"
-            TriggerElement={() => (
+            modalName="userAccount"
+            triggerElement={
               <FontAwesomeIcon data-testid="user-account-icon" icon={faUser} />
-            )}
+            }
           >
             <UserAccountNav
               currentUserEmail={data?.currentUser?.email || null}

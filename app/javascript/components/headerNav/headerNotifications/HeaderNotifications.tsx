@@ -7,6 +7,7 @@ import {
 } from "graphql/types";
 import { gql } from "@apollo/client";
 import { NotificationsContext } from "context/NotificationsProvider";
+import useModalStore from "stores/modalStore";
 
 export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
   query FetchCurrentUserNotifications($after: String, $first: Int) {
@@ -74,22 +75,10 @@ export const CURRENT_USER_NOTIFICATION_RECEIVED = gql`
   }
 `;
 
-const NotificationPopup = ({
-  notificationMessage,
-}: {
-  notificationMessage: string;
-}) => {
-  return (
-    <div
-      id="notification-popup"
-      className="fixed right-0 top-1/2 transform -translate-y-1/2 p-2 rounded gray-background text-center"
-    >
-      <p>{notificationMessage}</p>
-    </div>
-  );
-};
-
-const HeaderNotifications: React.FC<{ visible: boolean }> = ({ visible }) => {
+const HeaderNotifications = () => {
+  const {
+    modalVisibility: { notifications: visible },
+  } = useModalStore();
   const { addNotification } = useContext(NotificationsContext);
   const [showRedDot, setShowRedDot] = useState(false);
   const { data, loading } = useCurrentUserNotificationReceivedSubscription({

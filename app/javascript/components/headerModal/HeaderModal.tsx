@@ -2,19 +2,24 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import useModalStore, { ModalName, ModalState } from "stores/modalStore";
 
 const HeaderModal = ({
   basic = false,
   children,
   headerText,
-  TriggerElement,
+  triggerElement,
+  modalName,
 }: {
   basic?: boolean;
   children: React.ReactNode;
   headerText?: string;
-  TriggerElement: React.FC<{ visible: boolean }>;
+  modalName: string;
+  triggerElement: React.ReactNode;
 }) => {
-  const [visible, toggleVisible] = useState(false);
+  const { modalVisibility, toggleModal } = useModalStore();
+  const handleToggle = (value: boolean) => toggleModal(modalName, value);
+  const visible = modalVisibility[modalName as ModalName];
   const location = useLocation();
 
   const modalRef = useRef<HTMLDivElement>(null);
@@ -22,7 +27,7 @@ const HeaderModal = ({
   const closeModal = useCallback(
     (e: MouseEvent) => {
       if (modalRef.current) {
-        if (!modalRef.current.contains(e.target as Node)) toggleVisible(false);
+        if (!modalRef.current.contains(e.target as Node)) handleToggle(false);
       }
     },
     [visible]
@@ -35,13 +40,13 @@ const HeaderModal = ({
   }, []);
 
   useEffect(() => {
-    toggleVisible(false);
+    handleToggle(false);
   }, [location]);
 
   return (
     <div className="relative" ref={modalRef}>
-      <div onClick={() => toggleVisible(!visible)} className="cursor-pointer">
-        <TriggerElement visible={visible} />
+      <div onClick={() => handleToggle(!visible)} className="cursor-pointer">
+        {triggerElement}
       </div>
       {visible && (
         <div
@@ -55,7 +60,7 @@ const HeaderModal = ({
           <div className="flex justify-end md:hidden">
             <div
               className="inline-flex items-center gap-x-2 border-2 rounded-lg bg-white text-gray-950 font-bold text-sm px-2"
-              onClick={() => toggleVisible(false)}
+              onClick={() => handleToggle(false)}
             >
               <p>Close</p>
               <FontAwesomeIcon
