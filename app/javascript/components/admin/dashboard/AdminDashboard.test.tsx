@@ -8,6 +8,7 @@ import Home from "components/home/Home";
 import { FETCH_ORDERS } from "components/admin/dashboard/orders/AdminDashboardOrders";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 import AdminDashboardIndex from "components/admin/dashboard/index/AdminDashboardIndex";
+import AdminRoute from "components/protRoute/AdminRoute";
 
 const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
   {
@@ -79,7 +80,45 @@ describe("<AdminDashboard />", () => {
           <MemoryRouter initialEntries={["/admin/dashboard"]}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="admin">
+              <Route path="admin" element={<AdminRoute />}>
+                <Route path="dashboard" element={<AdminDashboard />}>
+                  <Route index element={<AdminDashboardIndex />} />
+                </Route>
+              </Route>
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>
+      );
+
+      expect(
+        await screen.findByText("Order Dairy Free Food")
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe("when there is no current user", () => {
+    const noCurrentUserMocks: MockedResponse<
+      FetchOrdersQuery | CurrentUserQuery
+    >[] = [
+      {
+        request: {
+          query: CURRENT_USER,
+        },
+        result: {
+          data: {
+            currentUser: null,
+          },
+        },
+      },
+    ];
+
+    it("redirects to the home page", async () => {
+      render(
+        <MockedProvider mocks={noCurrentUserMocks} addTypename={false}>
+          <MemoryRouter initialEntries={["/admin/dashboard"]}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="admin" element={<AdminRoute />}>
                 <Route path="dashboard" element={<AdminDashboard />}>
                   <Route index element={<AdminDashboardIndex />} />
                 </Route>

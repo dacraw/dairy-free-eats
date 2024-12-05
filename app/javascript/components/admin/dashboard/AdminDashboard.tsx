@@ -1,26 +1,7 @@
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useCurrentUserQuery } from "graphql/types";
-import React, { useEffect } from "react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import React from "react";
+import { NavLink, Outlet } from "react-router";
 
 const AdminDashboard = () => {
-  const {
-    loading: currentUserLoading,
-    data: currentUserData,
-    error,
-  } = useCurrentUserQuery({ fetchPolicy: "network-only" });
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (
-      (currentUserData?.currentUser && !currentUserData?.currentUser?.admin) ||
-      currentUserData?.currentUser === null
-    ) {
-      navigate("/");
-    }
-  }, [currentUserData]);
-
   return (
     <div className="md:w-[90vw]">
       <>
