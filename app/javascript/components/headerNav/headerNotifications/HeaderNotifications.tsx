@@ -143,7 +143,7 @@ const HeaderNotifications = () => {
   }, [data]);
 
   return (
-    <div className="relative z-50">
+    <div>
       {loading ? (
         <div>
           <FontAwesomeIcon icon={faSpinner} spin />
@@ -158,7 +158,7 @@ const HeaderNotifications = () => {
                 setShowRedDot(false);
               }
             }}
-            className={`cursor-pointer hover:text-blue-200 text-xl`}
+            className={`cursor-pointer text-xl`}
             icon={faBell}
           />
 

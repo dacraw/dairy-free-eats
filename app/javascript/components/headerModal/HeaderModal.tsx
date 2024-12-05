@@ -62,7 +62,7 @@ const HeaderModal = ({
             gray-background rounded p-4 fixed left-0 top-0 w-screen h-screen z-[100] 
             md:absolute md:right-0 ${
               basic ? "md:w-auto md:h-auto" : "md:w-96 md:max-h-96"
-            } md:top-auto md:left-auto 
+            } md:top-8 md:left-auto 
           `}
         >
           <div className="flex justify-end md:hidden">
