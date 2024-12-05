@@ -110,10 +110,7 @@ describe("<Order />", () => {
     it("renders", async () => {
       render(
         <MockedProvider addTypename={false} mocks={successfulMocks}>
-          <MemoryRouter
-            initialEntries={["/order"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <MemoryRouter initialEntries={["/order"]}>
             <Routes>
               <Route path="/order" element={<Order />} />
             </Routes>

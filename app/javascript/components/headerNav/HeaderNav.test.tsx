@@ -69,9 +69,7 @@ describe("<HeaderNav />", () => {
     it("displays the current user's email", async () => {
       render(
         <MockedProvider cache={cache} mocks={currentUserPresentMocks}>
-          <BrowserRouter
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <BrowserRouter>
             <HeaderNav />
           </BrowserRouter>
         </MockedProvider>
@@ -90,9 +88,7 @@ describe("<HeaderNav />", () => {
     it("does not display the admin dashboard link for non admin", async () => {
       render(
         <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
-          <BrowserRouter
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <BrowserRouter>
             <HeaderNav />
           </BrowserRouter>
         </MockedProvider>
@@ -114,9 +110,7 @@ describe("<HeaderNav />", () => {
     it("clicking logout invokes the session delete mutation and redirects to login page", async () => {
       render(
         <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
-          <MemoryRouter
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <MemoryRouter>
             <HeaderNav />
             <Routes>
               <Route path="/" element={<Home />} />
@@ -176,9 +170,7 @@ describe("<HeaderNav />", () => {
         ];
         render(
           <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
-            <BrowserRouter
-              future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-            >
+            <BrowserRouter>
               <HeaderNav />
             </BrowserRouter>
           </MockedProvider>
@@ -222,9 +214,7 @@ describe("<HeaderNav />", () => {
         ];
         render(
           <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
-            <BrowserRouter
-              future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-            >
+            <BrowserRouter>
               <HeaderNav />
             </BrowserRouter>
           </MockedProvider>
@@ -260,9 +250,7 @@ describe("<HeaderNav />", () => {
     it("does not show the user email", async () => {
       render(
         <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
-          <BrowserRouter
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <BrowserRouter>
             <HeaderNav />
           </BrowserRouter>
         </MockedProvider>

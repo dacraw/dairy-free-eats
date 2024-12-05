@@ -96,10 +96,7 @@ describe("<AdminDashboardOrders />", () => {
   it("renders without errors", async () => {
     render(
       <MockedProvider mocks={validMocks} addTypename={false}>
-        <MemoryRouter
-          initialEntries={["/admin/dashboard/orders"]}
-          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-        >
+        <MemoryRouter initialEntries={["/admin/dashboard/orders"]}>
           <Routes>
             <Route path="admin">
               <Route path="dashboard" element={<AdminDashboard />}>

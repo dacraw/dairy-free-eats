@@ -50,10 +50,7 @@ describe("<AdminDashboard />", () => {
     it("renders without errors", async () => {
       render(
         <MockedProvider mocks={validMocks} addTypename={false}>
-          <MemoryRouter
-            initialEntries={["/admin/dashboard/"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <MemoryRouter initialEntries={["/admin/dashboard/"]}>
             <Routes>
               <Route path="admin">
                 <Route path="dashboard" element={<AdminDashboard />}>
@@ -79,10 +76,7 @@ describe("<AdminDashboard />", () => {
     it("redirects to the home page", async () => {
       render(
         <MockedProvider mocks={currentUserNotAdmin} addTypename={false}>
-          <MemoryRouter
-            initialEntries={["/admin/dashboard"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <MemoryRouter initialEntries={["/admin/dashboard"]}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="admin">
