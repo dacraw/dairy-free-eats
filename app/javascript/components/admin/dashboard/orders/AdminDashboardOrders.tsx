@@ -10,7 +10,7 @@ import {
   useFetchOrdersQuery,
   useSetOrderStatusMutation,
 } from "graphql/types";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { startCase } from "lodash";
 import ConfirmButton from "components/confirmButton/ConfirmButton";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

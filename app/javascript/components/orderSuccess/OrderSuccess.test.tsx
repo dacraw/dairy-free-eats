@@ -4,7 +4,7 @@ import OrderSuccess, {
   FETCH_STRIPE_CHECKOUT_SESSION,
 } from "components/orderSuccess/OrderSuccess";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import {
   FetchStripeCheckoutSessionQuery,
   FetchStripeCheckoutSessionQueryVariables,
@@ -80,7 +80,6 @@ describe("<OrderSuccess />", () => {
       render(
         <MockedProvider mocks={validMocks}>
           <MemoryRouter
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             initialEntries={[
               {
                 pathname: "/success",
@@ -108,10 +107,7 @@ describe("<OrderSuccess />", () => {
     it("redirects to the home page", async () => {
       render(
         <MockedProvider mocks={checkoutIdParamMissingMocks}>
-          <MemoryRouter
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-            initialEntries={["/success"]}
-          >
+          <MemoryRouter initialEntries={["/success"]}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/success" element={<OrderSuccess />} />
@@ -131,7 +127,6 @@ describe("<OrderSuccess />", () => {
       render(
         <MockedProvider mocks={checkoutIdParamInvalidMocks}>
           <MemoryRouter
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
             initialEntries={[
               {
                 pathname: "/success",

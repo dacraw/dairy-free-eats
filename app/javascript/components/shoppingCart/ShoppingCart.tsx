@@ -13,7 +13,7 @@ import {
   useStripeCheckoutSessionCreateMutation,
 } from "graphql/types";
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const ShoppingCartItemQuantity: React.FC<{
   itemKey: string;

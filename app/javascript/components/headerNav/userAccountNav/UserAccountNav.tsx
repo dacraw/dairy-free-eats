@@ -9,7 +9,7 @@ import {
 } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router";
 
 const AdminDemoButton = () => {
   const [

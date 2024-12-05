@@ -4,7 +4,7 @@ import AdminDashboardOrder, {
   FETCH_ORDER,
 } from "components/admin/dashboard/order/AdminDashboardOrder";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import {
   CurrentUserQuery,
   FetchOrderQuery,
@@ -98,10 +98,7 @@ describe("<AdminDashboardOrder />", () => {
   it("renders without errors", async () => {
     render(
       <MockedProvider mocks={validMocks} addTypename={false}>
-        <MemoryRouter
-          initialEntries={["/admin/dashboard/orders/1"]}
-          future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-        >
+        <MemoryRouter initialEntries={["/admin/dashboard/orders/1"]}>
           <Routes>
             <Route path="admin">
               <Route path="dashboard" element={<AdminDashboard />}>
@@ -138,10 +135,7 @@ describe("<AdminDashboardOrder />", () => {
           mocks={[...validMocks, { ...validMocks[0], delay: Infinity }]}
           addTypename={false}
         >
-          <MemoryRouter
-            initialEntries={["/admin/dashboard/orders/1"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <MemoryRouter initialEntries={["/admin/dashboard/orders/1"]}>
             <Routes>
               <Route path="admin">
                 <Route path="dashboard" element={<AdminDashboard />}>
@@ -178,10 +172,7 @@ describe("<AdminDashboardOrder />", () => {
           ]}
           addTypename={false}
         >
-          <MemoryRouter
-            initialEntries={["/admin/dashboard/orders/1"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <MemoryRouter initialEntries={["/admin/dashboard/orders/1"]}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="admin">

@@ -9,7 +9,7 @@ import {
   useSetOrderStatusMutation,
 } from "graphql/types";
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router";
 
 export const FETCH_ORDER = gql`
   query FetchOrder($id: ID!) {

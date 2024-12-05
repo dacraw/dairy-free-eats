@@ -1,7 +1,7 @@
 import React from "react";
 import { screen, render } from "@testing-library/react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import { CurrentUserQuery, FetchOrdersQuery, OrderStatus } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import Home from "components/home/Home";
@@ -50,10 +50,7 @@ describe("<AdminDashboard />", () => {
     it("renders without errors", async () => {
       render(
         <MockedProvider mocks={validMocks} addTypename={false}>
-          <MemoryRouter
-            initialEntries={["/admin/dashboard/"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <MemoryRouter initialEntries={["/admin/dashboard/"]}>
             <Routes>
               <Route path="admin">
                 <Route path="dashboard" element={<AdminDashboard />}>
@@ -79,10 +76,7 @@ describe("<AdminDashboard />", () => {
     it("redirects to the home page", async () => {
       render(
         <MockedProvider mocks={currentUserNotAdmin} addTypename={false}>
-          <MemoryRouter
-            initialEntries={["/admin/dashboard"]}
-            future={{ v7_startTransition: true, v7_relativeSplatPath: true }}
-          >
+          <MemoryRouter initialEntries={["/admin/dashboard"]}>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="admin">

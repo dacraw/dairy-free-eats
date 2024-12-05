@@ -1,6 +1,6 @@
 import { Maybe } from "graphql/types";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { getCsrfToken } from "util/formUtil";
 
 export type LoginInput = {

@@ -6,7 +6,7 @@ import {
   faCartShopping,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router";
 import { gql } from "@apollo/client";
 import { useCurrentUserLazyQuery } from "graphql/types";
 import HeaderNotifications, {
