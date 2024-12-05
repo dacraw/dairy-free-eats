@@ -1,11 +1,13 @@
 import { faBell, faCircle, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   useCurrentUserNotificationReceivedSubscription,
   useFetchCurrentUserNotificationsQuery,
 } from "graphql/types";
 import { gql } from "@apollo/client";
+import { NotificationsContext } from "context/NotificationsProvider";
+import useModalStore from "stores/modalStore";
 
 export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
   query FetchCurrentUserNotifications($after: String, $first: Int) {
@@ -26,46 +28,36 @@ export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
 `;
 
 export const NotificationsList = () => {
-  const { data, fetchMore, refetch, loading } =
-    useFetchCurrentUserNotificationsQuery({
-      variables: { first: 5 },
-    });
+  const { data, fetchMore, loading } = useFetchCurrentUserNotificationsQuery({
+    variables: { first: 5 },
+  });
 
   return (
     <div className="relative text-left z-50">
-      <div
-        id="header-notifications-list"
-        className="absolute rounded h-96 w-72 gray-background p-4 md:w-[300px] right-0 top-2  shadow-lg z-50"
-      >
-        <h3 className="font-bold text-center mb-2">NOTIFICATIONS</h3>
-        <div>
-          {data?.currentUserNotifications?.edges?.map((node) => (
-            <p
-              key={node?.node?.id}
-              className="rounded mb-2 p-2 blue-background"
-            >
-              {node?.node?.message}
-            </p>
-          ))}
-        </div>
-        {data?.currentUserNotifications?.pageInfo?.hasNextPage && (
-          <div className="text-center">
-            <button
-              id="load-more-notifications"
-              className="green-button z-50"
-              onClick={() =>
-                fetchMore({
-                  variables: {
-                    after: data?.currentUserNotifications?.pageInfo?.endCursor,
-                  },
-                })
-              }
-            >
-              Load More
-            </button>
-          </div>
-        )}
+      <div>
+        {data?.currentUserNotifications?.edges?.map((node) => (
+          <p key={node?.node?.id} className="rounded mb-2 p-2 blue-background">
+            {node?.node?.message}
+          </p>
+        ))}
       </div>
+      {data?.currentUserNotifications?.pageInfo?.hasNextPage && (
+        <div className="text-center">
+          <button
+            id="load-more-notifications"
+            className="green-button z-50"
+            onClick={() =>
+              fetchMore({
+                variables: {
+                  after: data?.currentUserNotifications?.pageInfo?.endCursor,
+                },
+              })
+            }
+          >
+            Load More
+          </button>
+        </div>
+      )}
     </div>
   );
 };
@@ -83,24 +75,11 @@ export const CURRENT_USER_NOTIFICATION_RECEIVED = gql`
   }
 `;
 
-const NotificationPopup = ({
-  notificationMessage,
-}: {
-  notificationMessage: string;
-}) => {
-  return (
-    <div
-      id="notification-popup"
-      className="fixed right-0 top-1/2 transform -translate-y-1/2 p-2 rounded gray-background text-center"
-    >
-      <p>{notificationMessage}</p>
-    </div>
-  );
-};
-
 const HeaderNotifications = () => {
-  const [openList, toggleOpenList] = useState(false);
-  const [showNotificationPopup, setShowNotificationPopup] = useState(false);
+  const {
+    modalVisibility: { notifications: visible },
+  } = useModalStore();
+  const { addNotification } = useContext(NotificationsContext);
   const [showRedDot, setShowRedDot] = useState(false);
   const { data, loading } = useCurrentUserNotificationReceivedSubscription({
     fetchPolicy: "no-cache",
@@ -148,47 +127,23 @@ const HeaderNotifications = () => {
     },
   });
 
-  const notificationListContainer = useRef<HTMLDivElement>(null);
-  const toggleNotificationListIcon = useRef<SVGSVGElement>(null);
-
   useEffect(() => {
-    if (data?.currentUserNotificationReceived && !openList) {
-      setShowNotificationPopup(true);
+    const newNotification =
+      data?.currentUserNotificationReceived?.notification?.message;
 
-      if (!openList) {
+    if (!newNotification) return;
+
+    addNotification(newNotification);
+
+    if (data?.currentUserNotificationReceived && !visible) {
+      if (!visible) {
         setShowRedDot(true);
       }
-
-      const timeoutId = setTimeout(() => {
-        setShowNotificationPopup(false);
-      }, 3000);
-
-      return () => clearTimeout(timeoutId);
     }
   }, [data]);
 
-  const hideNotificationList = (e: MouseEvent) => {
-    if (
-      notificationListContainer.current &&
-      toggleNotificationListIcon.current
-    ) {
-      if (
-        !notificationListContainer.current.contains(e.target as HTMLElement) &&
-        !toggleNotificationListIcon.current.contains(e.target as HTMLElement)
-      ) {
-        toggleOpenList(false);
-      }
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("click", hideNotificationList);
-
-    return () => document.removeEventListener("click", hideNotificationList);
-  }, []);
-
   return (
-    <div className="relative z-50">
+    <div>
       {loading ? (
         <div>
           <FontAwesomeIcon icon={faSpinner} spin />
@@ -199,13 +154,11 @@ const HeaderNotifications = () => {
             id="current-notifications-bell"
             data-testid="current-notifications-bell"
             onClick={() => {
-              if (!openList) {
+              if (!visible) {
                 setShowRedDot(false);
               }
-              toggleOpenList(!openList);
             }}
-            ref={toggleNotificationListIcon}
-            className={`cursor-pointer hover:text-blue-200 text-xl`}
+            className={`cursor-pointer text-xl`}
             icon={faBell}
           />
 
@@ -217,19 +170,6 @@ const HeaderNotifications = () => {
               className="text-red-700 text-sm absolute left-[10px] -top-[5px]"
             />
           )}
-
-          {showNotificationPopup && (
-            <NotificationPopup
-              notificationMessage={
-                data?.currentUserNotificationReceived?.notification?.message ||
-                ""
-              }
-            />
-          )}
-
-          <div ref={notificationListContainer}>
-            {openList && <NotificationsList />}
-          </div>
         </div>
       )}
     </div>

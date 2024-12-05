@@ -90,8 +90,6 @@ const NotificationsProvider = ({ children }: { children: React.ReactNode }) => {
     );
   };
 
-  if (!addNotification) return;
-
   return (
     <NotificationsContext.Provider value={{ addNotification }}>
       <NotificationsPopupList notifications={notifications} />

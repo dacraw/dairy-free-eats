@@ -1,22 +1,33 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import useModalStore, { ModalName, ModalState } from "stores/modalStore";
 
 const HeaderModal = ({
-  triggerElement,
+  basic = false,
   children,
+  headerText,
+  triggerElement,
+  modalName,
 }: {
-  triggerElement: React.ReactNode;
+  basic?: boolean;
   children: React.ReactNode;
+  headerText?: string;
+  modalName: string;
+  triggerElement: React.ReactNode;
 }) => {
-  const [visible, toggleVisible] = useState(false);
+  const { modalVisibility, toggleModal } = useModalStore();
+  const handleToggle = (value: boolean) => toggleModal(modalName, value);
+  const visible = modalVisibility[modalName as ModalName];
+  const location = useLocation();
 
   const modalRef = useRef<HTMLDivElement>(null);
 
   const closeModal = useCallback(
     (e: MouseEvent) => {
       if (modalRef.current) {
-        if (!modalRef.current.contains(e.target as Node)) toggleVisible(false);
+        if (!modalRef.current.contains(e.target as Node)) handleToggle(false);
       }
     },
     [visible]
@@ -28,20 +39,36 @@ const HeaderModal = ({
     return () => document.removeEventListener("click", closeModal);
   }, []);
 
+  useEffect(() => {
+    handleToggle(false);
+  }, [location]);
+
+  useEffect(() => {
+    if (visible) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [visible]);
+
   return (
-    <div className="z-50 relative" ref={modalRef}>
-      <div
-        onClick={() => toggleVisible(!visible)}
-        className="cursor-pointer z-100"
-      >
+    <div className="relative" ref={modalRef}>
+      <div onClick={() => handleToggle(!visible)} className="cursor-pointer">
         {triggerElement}
       </div>
       {visible && (
-        <div className="gray-background rounded p-4 fixed left-0 top-0 w-screen h-screen md:absolute md:right-0 md:w-96 md:max-h-96 md:top-auto md:left-auto">
+        <div
+          className={`
+            gray-background rounded p-4 fixed left-0 top-0 w-screen h-screen z-[100] 
+            md:absolute md:right-0 ${
+              basic ? "md:w-auto md:h-auto" : "md:w-96 md:max-h-96"
+            } md:top-8 md:left-auto 
+          `}
+        >
           <div className="flex justify-end md:hidden">
             <div
-              className="inline-flex items-center gap-x-2 border-2 rounded-lg bg-white text-gray-950 font-bold text-sm px-2"
-              onClick={() => toggleVisible(false)}
+              className="cursor-pointer inline-flex items-center gap-x-2 border-2 rounded-lg bg-white text-gray-950 font-bold text-sm px-2 overflow-y-auto"
+              onClick={() => handleToggle(false)}
             >
               <p>Close</p>
               <FontAwesomeIcon
@@ -50,6 +77,11 @@ const HeaderModal = ({
               />
             </div>
           </div>
+          {headerText && (
+            <h3 className="text-center font-bold mb-4 border-b-2 pb-2">
+              {headerText}
+            </h3>
+          )}
           {children}
         </div>
       )}

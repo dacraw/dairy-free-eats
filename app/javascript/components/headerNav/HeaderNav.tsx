@@ -2,17 +2,19 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import {
   faBars,
+  faBell,
   faCartShopping,
-  faSpinner,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 import { gql } from "@apollo/client";
 import { useCurrentUserLazyQuery } from "graphql/types";
-import { useAdminLogin, useLogout } from "hooks/auth";
-import HeaderNotifications from "components/headerNav/headerNotifications/HeaderNotifications";
-import client from "apolloClient";
+import HeaderNotifications, {
+  NotificationsList,
+} from "components/headerNav/headerNotifications/HeaderNotifications";
 import ShoppingCart from "components/shoppingCart/ShoppingCart";
 import HeaderModal from "components/headerModal/HeaderModal";
+import UserAccountNav from "components/headerNav/userAccountNav/UserAccountNav";
 
 export const CURRENT_USER = gql`
   query CurrentUser {
@@ -24,69 +26,9 @@ export const CURRENT_USER = gql`
   }
 `;
 
-const LogoutButton = () => {
-  const [
-    logout,
-    { loading: loggingOut, data: logoutData, error: logoutError },
-  ] = useLogout();
-
-  const handleLogout = () => {
-    // Ideally, evicting the current user would clear out any fields related to it
-    // This is a TODO
-    client.cache.evict({ fieldName: "currentUserNotifications" });
-    logout();
-  };
-  return (
-    <div>
-      {loggingOut ? (
-        <FontAwesomeIcon
-          data-testid="logging-out"
-          icon={faSpinner}
-          className="py-2"
-        />
-      ) : (
-        <button
-          className="hover:bg-red-700 hover:text-gray-100 py-2 px-4 transition-colors rounded font-bold"
-          onClick={handleLogout}
-        >
-          Logout
-        </button>
-      )}
-    </div>
-  );
-};
-
-const AdminDemoButton = () => {
-  const [
-    loginDemoAdmin,
-    { loading: loginDemoAdminLoading, data: loginDemoAdminData },
-  ] = useAdminLogin();
-
-  return (
-    <div>
-      {loginDemoAdminLoading ? (
-        <FontAwesomeIcon
-          icon={faSpinner}
-          spin
-          className="w-full py-2 text-xl"
-        />
-      ) : (
-        <button
-          onClick={async () => loginDemoAdmin()}
-          className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold "
-        >
-          Admin Demo
-        </button>
-      )}
-    </div>
-  );
-};
-
 const HeaderNavLinks = ({
-  currentUserPresent,
   currentUserAdmin,
 }: {
-  currentUserPresent: boolean;
   currentUserAdmin: boolean;
 }) => {
   const [showMenu, toggleShowMenu] = useState(false);
@@ -133,7 +75,9 @@ const HeaderNavLinks = ({
           showMenu ? "" : "hidden"
         } rounded absolute shadow-lg border-2 border-gray-800 w-80 md:border-0 md:drop-shadow-none md:w-full md:static bg-gray-950/90 backdrop-blur right-0 top-10  md:bg-inherit md:flex md:justify-between md:items-center `}
       >
-        <div className={`grid text-center md:flex md:col-start-1 md:static`}>
+        <div
+          className={`grid text-center gap-x-2 md:flex md:col-start-1 md:static`}
+        >
           <NavLink
             className={({ isActive }) =>
               `${
@@ -171,35 +115,7 @@ const HeaderNavLinks = ({
           className={`grid text-center md:flex md:items-center md:gap-4 md:col-start-3 md:row-start-1 md:justify-self-end ${
             showMenu ? "block" : "hidden"
           }`}
-        >
-          {currentUserPresent ? (
-            <LogoutButton />
-          ) : (
-            <>
-              <AdminDemoButton />
-              <NavLink
-                className={({ isActive }) =>
-                  `${
-                    isActive ? "gray-button" : ""
-                  } py-2 px-4 font-bold hover:gray-button-hover`
-                }
-                to="/login"
-              >
-                Login
-              </NavLink>
-              <NavLink
-                className={({ isActive }) =>
-                  `${
-                    isActive ? "gray-button" : ""
-                  } py-2 px-4 font-bold hover:gray-button-hover`
-                }
-                to="/signup"
-              >
-                Signup
-              </NavLink>
-            </>
-          )}
-        </div>
+        ></div>
       </div>
     </div>
   );
@@ -217,22 +133,28 @@ const HeaderNav = () => {
   }, [location.pathname]);
 
   return (
-    <header className="shadow-md bg-gradient-to-b from-gray-900 to-gray-950 shadow-gray-950 fixed w-full p-2 select-none h-[50px] z-[100]">
+    <header className="bg-gradient-to-b from-gray-900 to-gray-950 shadow-md shadow-gray-950 sticky top-0 w-full p-2 select-none  z-[100]">
       <nav className="relative gap-4 items-center my-2 mx-4 md:static grid grid-cols-[1fr_auto_auto] md:grid-rows-1 md:justify-between max-w-screen-lg md:mx-auto">
         {error && <span>{error.message}</span>}
         <Link to="/" className="md:hidden justify-self-start font-bold">
           Dairy Free Eats
         </Link>
 
-        <div className="md:col-start-2 md:row-start-1 justify-self-end grid gap-4 grid-cols-2">
+        <div className="md:col-start-2 md:row-start-1 justify-self-end grid gap-4 grid-cols-3">
           {data?.currentUser && (
-            <div>
-              <HeaderNotifications />
-            </div>
+            <HeaderModal
+              modalName="notifications"
+              headerText="Notifications"
+              triggerElement={<HeaderNotifications />}
+            >
+              <NotificationsList />
+            </HeaderModal>
           )}
 
           {!Boolean(data?.currentUser?.admin) && (
             <HeaderModal
+              modalName="shoppingCart"
+              headerText="Your Cart"
               triggerElement={
                 <FontAwesomeIcon
                   data-testid="shopping-cart-icon"
@@ -243,12 +165,22 @@ const HeaderNav = () => {
               <ShoppingCart />
             </HeaderModal>
           )}
+
+          <HeaderModal
+            basic={true}
+            headerText="Account Options"
+            modalName="userAccount"
+            triggerElement={
+              <FontAwesomeIcon data-testid="user-account-icon" icon={faUser} />
+            }
+          >
+            <UserAccountNav
+              currentUserEmail={data?.currentUser?.email || null}
+            />
+          </HeaderModal>
         </div>
 
-        <HeaderNavLinks
-          currentUserPresent={!!data?.currentUser}
-          currentUserAdmin={Boolean(data?.currentUser?.admin)}
-        />
+        <HeaderNavLinks currentUserAdmin={Boolean(data?.currentUser?.admin)} />
       </nav>
     </header>
   );

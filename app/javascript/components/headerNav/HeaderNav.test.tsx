@@ -25,6 +25,8 @@ global.fetch = jest.fn(() =>
   })
 ) as jest.Mock;
 
+const currentUserEmail = "test@demo.com";
+
 describe("<HeaderNav />", () => {
   let currentUserPresentMocks: MockedResponse<
     CurrentUserQuery | CurrentUserNotificationReceivedSubscription
@@ -39,7 +41,7 @@ describe("<HeaderNav />", () => {
             data: {
               currentUser: {
                 id: "1",
-                email: "test@demo.com",
+                email: currentUserEmail,
                 admin: false,
               },
             },
@@ -75,7 +77,14 @@ describe("<HeaderNav />", () => {
         </MockedProvider>
       );
 
-      expect(await screen.findByText("Logout")).toBeInTheDocument();
+      const userAccountIcon = await screen.findByTestId("user-account-icon");
+      expect(userAccountIcon).toBeInTheDocument();
+
+      await userEvent.click(userAccountIcon);
+      expect(
+        screen.getByRole("button", { name: /Logout/i })
+      ).toBeInTheDocument();
+      expect(screen.getByText(currentUserEmail)).toBeInTheDocument();
     });
 
     it("does not display the admin dashboard link for non admin", async () => {
@@ -89,7 +98,13 @@ describe("<HeaderNav />", () => {
         </MockedProvider>
       );
 
-      expect(await screen.findByText("Logout")).toBeInTheDocument();
+      const userAccountIcon = await screen.findByTestId("user-account-icon");
+      expect(userAccountIcon).toBeInTheDocument();
+
+      await userEvent.click(userAccountIcon);
+      expect(
+        screen.getByRole("button", { name: /Logout/i })
+      ).toBeInTheDocument();
 
       expect(
         screen.queryAllByRole("link", { name: /ADMIN DASHBOARD/i }).length
@@ -110,6 +125,14 @@ describe("<HeaderNav />", () => {
           </MemoryRouter>
         </MockedProvider>
       );
+
+      const userAccountIcon = await screen.findByTestId("user-account-icon");
+      expect(userAccountIcon).toBeInTheDocument();
+
+      await userEvent.click(userAccountIcon);
+      expect(
+        screen.getByRole("button", { name: /Logout/i })
+      ).toBeInTheDocument();
 
       const logoutButton = await screen.findByRole("button", {
         name: "Logout",
@@ -151,7 +174,6 @@ describe("<HeaderNav />", () => {
             maxUsageCount: Infinity,
           },
         ];
-
         render(
           <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
             <BrowserRouter
@@ -162,13 +184,18 @@ describe("<HeaderNav />", () => {
           </MockedProvider>
         );
 
-        expect(await screen.findByText("Logout")).toBeInTheDocument();
+        const userAccountIcon = await screen.findByTestId("user-account-icon");
+        expect(userAccountIcon).toBeInTheDocument();
+
+        await userEvent.click(userAccountIcon);
+        expect(
+          screen.getByRole("button", { name: /Logout/i })
+        ).toBeInTheDocument();
 
         expect(
           screen.getByRole("link", { name: /DASHBOARD/i })
         ).toBeInTheDocument();
       });
-
       it("does not render the shopping cart modal", async () => {
         currentUserPresentMocks = [
           {
@@ -193,7 +220,6 @@ describe("<HeaderNav />", () => {
             maxUsageCount: Infinity,
           },
         ];
-
         render(
           <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
             <BrowserRouter
@@ -204,7 +230,13 @@ describe("<HeaderNav />", () => {
           </MockedProvider>
         );
 
-        expect(await screen.findByText("Logout")).toBeInTheDocument();
+        const userAccountIcon = await screen.findByTestId("user-account-icon");
+        expect(userAccountIcon).toBeInTheDocument();
+
+        await userEvent.click(userAccountIcon);
+        expect(
+          screen.getByRole("button", { name: /Logout/i })
+        ).toBeInTheDocument();
         expect(
           screen.queryByTestId("shopping-cart-icon")
         ).not.toBeInTheDocument();
@@ -236,7 +268,14 @@ describe("<HeaderNav />", () => {
         </MockedProvider>
       );
 
-      expect(screen.queryByText("Logout")).not.toBeInTheDocument();
+      const userAccountIcon = await screen.findByTestId("user-account-icon");
+      expect(userAccountIcon).toBeInTheDocument();
+
+      await userEvent.click(userAccountIcon);
+
+      expect(
+        screen.queryByRole("button", { name: /Logout/i })
+      ).not.toBeInTheDocument();
     });
   });
 });
