@@ -20,10 +20,7 @@ const AdminDemoButton = () => {
   return loginDemoAdminLoading ? (
     <FontAwesomeIcon icon={faSpinner} spin className="w-full py-2 text-xl" />
   ) : (
-    <button
-      onClick={async () => loginDemoAdmin()}
-      className="hover:bg-green-700 rounded hover:text-gray-100 py-2 px-4 transition-colors font-bold "
-    >
+    <button onClick={async () => loginDemoAdmin()} className="blue-button">
       Admin Demo
     </button>
   );
@@ -80,21 +77,17 @@ const UserAccountNav: React.FC<{
       ) : (
         <>
           <NavLink
-            className={({ isActive }) =>
-              `${isActive ? "gray-button" : ""} 
-              py-2 px-4 font-bold block text-center 
-              hover:gray-button-hover`
-            }
+            className={`
+              blue-button block text-center 
+              `}
             to="/login"
           >
             Login
           </NavLink>
           <NavLink
-            className={({ isActive }) =>
-              `${isActive ? "gray-button" : ""} 
-              py-2 px-4 font-bold block text-center 
-              hover:gray-button-hover`
-            }
+            className={`
+              blue-button block text-center 
+              `}
             to="/signup"
           >
             Signup
