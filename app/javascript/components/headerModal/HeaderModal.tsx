@@ -1,6 +1,7 @@
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const HeaderModal = ({
   basic = false,
@@ -14,6 +15,7 @@ const HeaderModal = ({
   triggerElement: React.ReactNode;
 }) => {
   const [visible, toggleVisible] = useState(false);
+  const location = useLocation();
 
   const modalRef = useRef<HTMLDivElement>(null);
 
@@ -31,6 +33,10 @@ const HeaderModal = ({
 
     return () => document.removeEventListener("click", closeModal);
   }, []);
+
+  useEffect(() => {
+    toggleVisible(false);
+  }, [location]);
 
   return (
     <div className="relative" ref={modalRef}>
