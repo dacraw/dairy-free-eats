@@ -27,10 +27,8 @@ export const CURRENT_USER = gql`
 `;
 
 const HeaderNavLinks = ({
-  currentUserPresent,
   currentUserAdmin,
 }: {
-  currentUserPresent: boolean;
   currentUserAdmin: boolean;
 }) => {
   const [showMenu, toggleShowMenu] = useState(false);
@@ -77,7 +75,9 @@ const HeaderNavLinks = ({
           showMenu ? "" : "hidden"
         } rounded absolute shadow-lg border-2 border-gray-800 w-80 md:border-0 md:drop-shadow-none md:w-full md:static bg-gray-950/90 backdrop-blur right-0 top-10  md:bg-inherit md:flex md:justify-between md:items-center `}
       >
-        <div className={`grid text-center md:flex md:col-start-1 md:static`}>
+        <div
+          className={`grid text-center gap-x-2 md:flex md:col-start-1 md:static`}
+        >
           <NavLink
             className={({ isActive }) =>
               `${
@@ -180,10 +180,7 @@ const HeaderNav = () => {
           </HeaderModal>
         </div>
 
-        <HeaderNavLinks
-          currentUserPresent={!!data?.currentUser}
-          currentUserAdmin={Boolean(data?.currentUser?.admin)}
-        />
+        <HeaderNavLinks currentUserAdmin={Boolean(data?.currentUser?.admin)} />
       </nav>
     </header>
   );
