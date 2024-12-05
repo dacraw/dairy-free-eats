@@ -10,23 +10,41 @@ import Login from "components/login/Login";
 import OrderSuccess from "components/orderSuccess/OrderSuccess";
 import PasswordReset from "components/passwordReset/PasswordReset";
 import Signup from "components/signup/Signup";
-import { useCurrentUserQuery } from "graphql/types";
 
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router";
 import AdminDashboardOrderChats from "components/admin/dashboard/orderChats/AdminDashboardOrderChats";
+import { ErrorBoundary } from "react-error-boundary";
+
+const DefaultError = () => {
+  return (
+    <p>
+      Sorry, something went wrong. Please contact{" "}
+      <a
+        href="mailto:doug.a.crawford@gmail.com"
+        className="font-bold text-blue-400"
+      >
+        doug.a.crawford@gmail.com
+      </a>{" "}
+      to report this issue.
+    </p>
+  );
+};
 
 const AppRoute = () => {
   return (
-    <Router
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
+    <BrowserRouter>
       <Routes>
         <Route path="/" element={<RootLayout />}>
-          <Route path="/" element={<Home />} />
+          <Route
+            index
+            element={
+              <ErrorBoundary fallback={<DefaultError />}>
+                <Home />
+              </ErrorBoundary>
+            }
+          />
+
           <Route path="order" element={<Order />} />
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
@@ -51,7 +69,7 @@ const AppRoute = () => {
           />
         </Route>
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 };
 

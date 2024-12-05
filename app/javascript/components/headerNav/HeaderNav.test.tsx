@@ -6,7 +6,7 @@ import {
   queryByRole,
   act,
 } from "@testing-library/react";
-import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import HeaderNav, { CURRENT_USER } from "components/headerNav/HeaderNav";
 import {

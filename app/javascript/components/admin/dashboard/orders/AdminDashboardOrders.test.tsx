@@ -6,7 +6,7 @@ import AdminDashboardOrders, {
 } from "components/admin/dashboard/orders/AdminDashboardOrders";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 
 const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [

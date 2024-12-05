@@ -4,7 +4,7 @@ import AdminDashboardOrder, {
   FETCH_ORDER,
 } from "components/admin/dashboard/order/AdminDashboardOrder";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import {
   CurrentUserQuery,
   FetchOrderQuery,

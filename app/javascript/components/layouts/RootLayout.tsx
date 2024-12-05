@@ -2,7 +2,7 @@ import Footer from "components/footer/Footer";
 import HeaderNav from "components/headerNav/HeaderNav";
 import OrderChatPanels from "components/orderChatPanels/OrderChatPanels";
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 
 const RootLayout = () => {
   return (

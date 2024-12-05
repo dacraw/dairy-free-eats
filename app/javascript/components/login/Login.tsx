@@ -3,7 +3,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { startCase } from "lodash";
 import { LoginInput, useLogin } from "hooks/auth";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const Login = () => {
   const { register, handleSubmit } = useForm<LoginInput>();

@@ -4,7 +4,7 @@ import OrderSuccess, {
   FETCH_STRIPE_CHECKOUT_SESSION,
 } from "components/orderSuccess/OrderSuccess";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import {
   FetchStripeCheckoutSessionQuery,
   FetchStripeCheckoutSessionQueryVariables,

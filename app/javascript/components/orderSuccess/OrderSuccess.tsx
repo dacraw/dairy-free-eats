@@ -7,7 +7,7 @@ import {
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFetchStripeCheckoutSessionQuery } from "graphql/types";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router";
 
 export const FETCH_STRIPE_CHECKOUT_SESSION = gql`
   query FetchStripeCheckoutSession($id: ID!) {

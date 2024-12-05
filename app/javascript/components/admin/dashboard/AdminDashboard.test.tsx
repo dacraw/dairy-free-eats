@@ -1,7 +1,7 @@
 import React from "react";
 import { screen, render } from "@testing-library/react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import { CurrentUserQuery, FetchOrdersQuery, OrderStatus } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import Home from "components/home/Home";

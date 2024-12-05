@@ -5,7 +5,7 @@ import Order, {
   STRIPE_CHECKOUT_SESSION_CREATE,
 } from "components/Order/Order";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router";
 import {
   CurrentUserQuery,
   GetProductsQuery,
