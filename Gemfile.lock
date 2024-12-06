@@ -292,7 +292,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    solid_cable (3.0.3)
+    solid_cable (3.0.4)
       actioncable (>= 7.2)
       activejob (>= 7.2)
       activerecord (>= 7.2)
@@ -374,8 +374,8 @@ DEPENDENCIES
   rspec-rails (~> 7.1.0)
   rubocop-rails-omakase
   selenium-webdriver
-  solid_cable (~> 3.0)
-  solid_queue (~> 1.0)
+  solid_cable (~> 3.0.4)
+  solid_queue (~> 1.1.0)
   sprockets-rails
   stimulus-rails
   stripe
