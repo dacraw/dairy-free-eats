@@ -28,6 +28,13 @@ FactoryBot.define do
       end
     end
 
+
+    trait :cancelled do
+      after(:create) do |order|
+        order.cancelled!
+      end
+    end
+
     trait :with_order_messages do
       after(:create) do |order|
         order.order_messages.push create(:order_message, order: order, user: order.user)

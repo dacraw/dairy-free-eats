@@ -1,22 +1,21 @@
 class Resolvers::CurrentUserOrdersResolver < Resolvers::BaseResolver
     type [ Types::OrderType ], null: true
 
-    argument :completed, Boolean, required: true
+    argument :incomplete, Boolean, required: false
 
-    def resolve(completed:)
+    def resolve(incomplete: false)
         current_user = context[:current_user]
 
-        return nil if !current_user.present?
+        raise GraphQL::ExecutionError, "A current user is not logged in." if !current_user.present?
 
-        if completed
+        if incomplete
             Order
                 .where(user_id: current_user.id)
-                .completed
+                .where.not(status: :complete)
                 .order(created_at: :desc)
         else
             Order
                 .where(user_id: current_user.id)
-                .where.not(status: :completed)
                 .order(created_at: :desc)
         end
     end
