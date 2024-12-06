@@ -50,9 +50,13 @@ class Stripe::EventsController < ApplicationController
             }, status: 500
         end
 
-        checkout_line_items = Stripe::Checkout::Session.list_line_items stripe_checkout_session.first.id
+        checkout_line_items = Stripe::Checkout::Session.list_line_items stripe_checkout_session.first.id, expand: [ "data.price.product" ]
 
-        stripe_checkout_session_line_items = checkout_line_items.map { |item| { name: item.description, quantity: item.quantity } }
+        stripe_checkout_session_line_items = checkout_line_items.map do |item|
+            { name: item.description,
+            quantity: item.quantity,
+            image_url: item.price.product.images.first }
+        end
 
         order = Order.new(
             user: user,

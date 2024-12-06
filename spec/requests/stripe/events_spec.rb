@@ -107,8 +107,9 @@ RSpec.describe "Stripe::EventsController", type: :request do
 
         expect(order.stripe_payment_intent_id).to eq event["data"]["object"]["id"]
         expect(event["data"]["object"]["customer"]).to be_present
-        expect(order.stripe_checkout_session_line_items)
-          .to eq(order.stripe_checkout_session_line_items)
+
+        expected_line_items = { name: response_checkout_line_items[:data].first[:description], quantity: response_checkout_line_items[:data].first[:quantity], image_url: response_checkout_line_items[:data].first[:price][:product][:images].first }
+        expect(order.stripe_checkout_session_line_items.first.symbolize_keys).to eq expected_line_items
         expect(order.guest_email).to eq(response_checkout_session["data"].first["customer_details"]["email"])
       end
 
@@ -127,8 +128,8 @@ RSpec.describe "Stripe::EventsController", type: :request do
 
         expect(order.stripe_payment_intent_id).to eq event["data"]["object"]["id"]
         expect(event["data"]["object"]["customer"]).to be_present
-        expect(order.stripe_checkout_session_line_items)
-          .to eq(order.stripe_checkout_session_line_items)
+        expected_line_items = { name: response_checkout_line_items[:data].first[:description], quantity: response_checkout_line_items[:data].first[:quantity], image_url: response_checkout_line_items[:data].first[:price][:product][:images].first }
+        expect(order.stripe_checkout_session_line_items.first.symbolize_keys).to eq expected_line_items
 
         # Technically, the user email should equal that in the Stripe checkout
         # Due to the order of the mocking, it makes sense to ensure the order points to the created user

@@ -213,6 +213,7 @@ export type Order = {
 
 export type OrderLineItem = {
   __typename?: 'OrderLineItem';
+  imageUrl?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   quantity: Scalars['Int']['output'];
 };
@@ -487,7 +488,7 @@ export type FetchCurrentUserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, status: OrderStatus, guestEmail?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
+export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, createdAt: string, guestEmail?: string | null, updatedAt: string, status: OrderStatus, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
 
 export type OrderMessageReceivedSubscriptionVariables = Exact<{
   orderId: Scalars['ID']['input'];
@@ -943,6 +944,9 @@ export const FetchCurrentUserOrdersDocument = gql`
     query FetchCurrentUserOrders($incomplete: Boolean) {
   currentUserOrders(incomplete: $incomplete) {
     id
+    createdAt
+    guestEmail
+    updatedAt
     status
     stripeCheckoutSessionLineItems {
       name
@@ -952,7 +956,6 @@ export const FetchCurrentUserOrdersDocument = gql`
       id
       email
     }
-    guestEmail
   }
 }
     `;

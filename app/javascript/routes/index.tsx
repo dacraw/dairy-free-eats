@@ -16,6 +16,7 @@ import { BrowserRouter, Routes, Route } from "react-router";
 import AdminDashboardOrderChats from "components/admin/dashboard/orderChats/AdminDashboardOrderChats";
 import { ErrorBoundary } from "react-error-boundary";
 import AdminRoute from "components/protRoute/AdminRoute";
+import MyOrders from "components/myOrders/MyOrders";
 
 const DefaultError = () => {
   return (
@@ -50,6 +51,7 @@ const AppRoute = () => {
           <Route path="signup" element={<Signup />} />
           <Route path="login" element={<Login />} />
           <Route path="success" element={<OrderSuccess />} />
+          <Route path="my_orders" element={<MyOrders />} />
           <Route path="admin" element={<AdminRoute />}>
             <Route path="dashboard" element={<AdminDashboard />}>
               <Route index element={<AdminDashboardIndex />} />

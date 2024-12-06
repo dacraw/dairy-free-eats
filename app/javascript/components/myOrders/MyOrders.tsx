@@ -16,6 +16,11 @@ const MyOrders = () => {
         <div>
           {data?.currentUserOrders?.map((order) => (
             <div key={order.id}>
+              {order.status !== "completed" ? (
+                <p>Time placed: {order.createdAt}</p>
+              ) : (
+                <p>Time completed: {order.updatedAt}</p>
+              )}
               <p>{order.status}</p>
               <div>
                 {order.stripeCheckoutSessionLineItems.map((item, i) => (

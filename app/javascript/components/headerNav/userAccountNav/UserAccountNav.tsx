@@ -68,6 +68,7 @@ const UserAccountNav: React.FC<{
     >
       {currentUserEmail ? (
         <>
+          <NavLink to="my_orders">My Orders</NavLink>
           <div className="text-sm mb-2 text-center">
             <p>Logged in as:</p>
             <p className="font-bold">{currentUserEmail}</p>
