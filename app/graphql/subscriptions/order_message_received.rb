@@ -5,8 +5,6 @@ class Subscriptions::OrderMessageReceived < Subscriptions::BaseSubscription
 
     def subscribe(order_id:)
         super
-
-        :no_response
     end
 
     def update(order_id:)
