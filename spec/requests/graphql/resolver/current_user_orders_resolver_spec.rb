@@ -48,6 +48,7 @@ RSpec.describe("Order Resolver Spec") do
 
         context "when the incomplete argument is set to true" do
             let!(:order) { create :order, :with_line_items, :active, user_id: user.id }
+            let!(:distractor) { create :order, :with_line_items, :completed, user_id: user }
 
             it "returns the orders" do
                 params = { query: query, variables: { incomplete: true } }
@@ -56,11 +57,15 @@ RSpec.describe("Order Resolver Spec") do
 
                 orders = data["currentUserOrders"]
 
+
                 expect(orders.first["id"].to_i).to eq order.id
                 expect(orders.first["status"]).to eq order.status
                 expect(orders.first["stripeCheckoutSessionLineItems"]).to eq order.stripe_checkout_session_line_items
                 expect(orders.first["user"]["id"].to_i).to eq order.user.id
                 expect(orders.first["user"]["email"]).to eq order.user.email_address
+
+
+                expect(orders.pluck(:id).map(&:to_i)).not_to include distractor.id
             end
         end
 

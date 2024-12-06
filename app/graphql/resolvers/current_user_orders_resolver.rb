@@ -11,7 +11,7 @@ class Resolvers::CurrentUserOrdersResolver < Resolvers::BaseResolver
         if incomplete
             Order
                 .where(user_id: current_user.id)
-                .where.not(status: :complete)
+                .where.not(status: :completed)
                 .order(created_at: :desc)
         else
             Order

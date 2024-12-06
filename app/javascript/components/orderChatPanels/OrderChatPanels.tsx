@@ -33,8 +33,8 @@ export const CREATE_ORDER_MESSAGE = gql`
 `;
 
 export const FETCH_CURRENT_USER_ORDERS = gql`
-  query FetchCurrentUserOrders($completed: Boolean!) {
-    currentUserOrders(completed: $completed) {
+  query FetchCurrentUserOrders($incomplete: Boolean) {
+    currentUserOrders(incomplete: $incomplete) {
       id
       status
       stripeCheckoutSessionLineItems {
@@ -55,7 +55,7 @@ const OrderChatPanels = () => {
     useCurrentUserQuery();
 
   const { data, loading, refetch } = useFetchCurrentUserOrdersQuery({
-    variables: { completed: false },
+    variables: { incomplete: true },
   });
 
   useEffect(() => {

@@ -333,7 +333,7 @@ export type QueryCurrentUserNotificationsArgs = {
 
 
 export type QueryCurrentUserOrdersArgs = {
-  completed: Scalars['Boolean']['input'];
+  incomplete?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -483,7 +483,7 @@ export type CreateOrderMessageMutationVariables = Exact<{
 export type CreateOrderMessageMutation = { __typename?: 'Mutation', createOrderMessage?: { __typename?: 'CreateOrderMessagePayload', orderMessage?: { __typename?: 'OrderMessage', id: string, userIsAdmin: boolean, userId: string, createdAt: any, body?: string | null } | null } | null };
 
 export type FetchCurrentUserOrdersQueryVariables = Exact<{
-  completed: Scalars['Boolean']['input'];
+  incomplete?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
@@ -940,8 +940,8 @@ export type CreateOrderMessageMutationHookResult = ReturnType<typeof useCreateOr
 export type CreateOrderMessageMutationResult = Apollo.MutationResult<CreateOrderMessageMutation>;
 export type CreateOrderMessageMutationOptions = Apollo.BaseMutationOptions<CreateOrderMessageMutation, CreateOrderMessageMutationVariables>;
 export const FetchCurrentUserOrdersDocument = gql`
-    query FetchCurrentUserOrders($completed: Boolean!) {
-  currentUserOrders(completed: $completed) {
+    query FetchCurrentUserOrders($incomplete: Boolean) {
+  currentUserOrders(incomplete: $incomplete) {
     id
     status
     stripeCheckoutSessionLineItems {
@@ -969,11 +969,11 @@ export const FetchCurrentUserOrdersDocument = gql`
  * @example
  * const { data, loading, error } = useFetchCurrentUserOrdersQuery({
  *   variables: {
- *      completed: // value for 'completed'
+ *      incomplete: // value for 'incomplete'
  *   },
  * });
  */
-export function useFetchCurrentUserOrdersQuery(baseOptions: Apollo.QueryHookOptions<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables> & ({ variables: FetchCurrentUserOrdersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useFetchCurrentUserOrdersQuery(baseOptions?: Apollo.QueryHookOptions<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables>(FetchCurrentUserOrdersDocument, options);
       }

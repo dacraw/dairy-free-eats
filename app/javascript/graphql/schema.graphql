@@ -373,7 +373,7 @@ type Query {
     """
     last: Int
   ): NotificationConnection!
-  currentUserOrders(completed: Boolean!): [Order!]
+  currentUserOrders(incomplete: Boolean): [Order!]
   fetchCheckoutSession(id: ID!): CheckoutSession
   listProducts: ProductListObject!
   order(id: ID!): Order
