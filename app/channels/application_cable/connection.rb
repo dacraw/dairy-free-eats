@@ -6,6 +6,10 @@ module ApplicationCable
       set_current_user || reject_unauthorized_connection
     end
 
+    def disconnect
+      self.current_user = nil
+    end
+
     private
       def set_current_user
         if session = Session.find_by(id: cookies.signed[:session_id])
