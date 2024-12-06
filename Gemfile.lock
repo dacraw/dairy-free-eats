@@ -363,7 +363,7 @@ DEPENDENCIES
   cssbundling-rails
   debug
   dockerfile-rails (>= 1.6)
-  error_highlight (>= 0.6.0)
+  error_highlight (= 0.7.0)
   factory_bot_rails
   faker
   graphiql-rails
