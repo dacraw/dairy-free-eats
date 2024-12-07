@@ -185,7 +185,7 @@ RSpec.describe "Set Order Status Mutation Spec" do
 
          it "sets the completed at column" do
             expect(order.completed_at).to be nil
-            
+
             perform_query order
 
             expect(order.completed_at).to be_present
