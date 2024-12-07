@@ -1,5 +1,6 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ImageLoader from "components/imageLoader/ImageLoader";
 import { useFetchCurrentUserOrdersQuery } from "graphql/types";
 import { startCase } from "lodash";
 import React from "react";
@@ -67,8 +68,9 @@ const MyOrders = () => {
                           zIndex: items.length - i,
                         }}
                       >
-                        <img
-                          className={`w-full h-full rounded-full `}
+                        <ImageLoader
+                          alt={item.name}
+                          additionalClassName={`w-full h-full rounded-full `}
                           src={item.imageUrl}
                         />
                       </div>

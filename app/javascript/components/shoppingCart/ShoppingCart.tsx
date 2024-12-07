@@ -5,11 +5,11 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ImageLoader from "components/imageLoader/ImageLoader";
 import { CartContext } from "context/CartProvider";
 import {
   Error,
   OrderPageInput,
-  StripeCheckoutSessionCreateInput,
   useStripeCheckoutSessionCreateMutation,
 } from "graphql/types";
 import React, { useContext, useEffect, useState } from "react";
@@ -128,7 +128,11 @@ const ShoppingCartItems = () => {
               key={stripePrice}
               className="grid grid-cols-[auto_1fr_auto] gap-x-4 items-center mb-6"
             >
-              <img className="w-16" src={itemInfo.imageUrl} />
+              <ImageLoader
+                alt={itemInfo.name}
+                additionalClassName="w-16"
+                src={itemInfo.imageUrl}
+              />
               <div>
                 <p className="font-bold">{itemInfo.name}</p>
                 <p className="text-sm">{itemInfo.description}</p>
