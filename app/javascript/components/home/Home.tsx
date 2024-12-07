@@ -14,8 +14,6 @@ const Home = () => {
         </div>
       </div>
 
-      <h3>heyo!</h3>
-
       <div className="dark-blue-background rounded p-6 lg:col-start-1 lg:col-span-2 md:row-start-2">
         <h5 className="text-lg font-bold text-center mb-4 border-b-2 pb-2">
           How to Demo <FontAwesomeIcon className="ml-2" icon={faCheck} />
