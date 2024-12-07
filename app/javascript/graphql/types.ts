@@ -201,6 +201,7 @@ export type NotificationEdge = {
 
 export type Order = {
   __typename?: 'Order';
+  completedAt?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['String']['output'];
   guestEmail?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -488,7 +489,7 @@ export type FetchCurrentUserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, createdAt: string, guestEmail?: string | null, updatedAt: string, status: OrderStatus, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number, imageUrl: string }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
+export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, createdAt: string, guestEmail?: string | null, updatedAt: string, status: OrderStatus, completedAt?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number, imageUrl: string }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
 
 export type OrderMessageReceivedSubscriptionVariables = Exact<{
   orderId: Scalars['ID']['input'];
@@ -948,6 +949,7 @@ export const FetchCurrentUserOrdersDocument = gql`
     guestEmail
     updatedAt
     status
+    completedAt
     stripeCheckoutSessionLineItems {
       name
       quantity

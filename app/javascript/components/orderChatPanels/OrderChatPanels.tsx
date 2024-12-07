@@ -40,6 +40,7 @@ export const FETCH_CURRENT_USER_ORDERS = gql`
       guestEmail
       updatedAt
       status
+      completedAt
       stripeCheckoutSessionLineItems {
         name
         quantity

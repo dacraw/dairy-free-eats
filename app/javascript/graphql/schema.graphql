@@ -218,6 +218,7 @@ type NotificationEdge {
 }
 
 type Order {
+  completedAt: String
   createdAt: String!
   guestEmail: String
   id: ID!
