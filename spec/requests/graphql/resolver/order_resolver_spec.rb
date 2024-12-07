@@ -12,10 +12,13 @@ RSpec.describe("Order Resolver Spec") do
                     status
                     stripePaymentIntentId
                     createdAt
+                    amountTotal
                     updatedAt
                     stripeCheckoutSessionLineItems {
                         name
                         quantity
+                        unitAmount
+                        imageUrl
                     }
                     guestEmail
                 }
@@ -39,7 +42,9 @@ RSpec.describe("Order Resolver Spec") do
             expect(gql_order["stripePaymentIntentId"]).to eq order.stripe_payment_intent_id
             expect(gql_order["createdAt"]).to eq order.created_at.strftime "%Y-%m-%d"
             expect(gql_order["updatedAt"]).to eq order.updated_at.strftime "%Y-%m-%d"
-            expect(gql_order["stripeCheckoutSessionLineItems"]).to match_array(order.stripe_checkout_session_line_items)
+            expect(
+                gql_order["stripeCheckoutSessionLineItems"].map { |item| item.transform_keys(&:underscore) }
+            ).to match_array(order.stripe_checkout_session_line_items)
             expect(gql_order["guestEmail"]).to eq order.guest_email
         end
     end

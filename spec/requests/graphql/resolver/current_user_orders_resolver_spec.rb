@@ -7,9 +7,12 @@ RSpec.describe("Order Resolver Spec") do
                 currentUserOrders(incomplete: $incomplete) {
                 id
                 status
+                amountTotal
                 stripeCheckoutSessionLineItems {
                     name
                     quantity
+                    unitAmount
+                    imageUrl
                 }
                 user {
                     id
@@ -60,7 +63,12 @@ RSpec.describe("Order Resolver Spec") do
 
                 expect(orders.first["id"].to_i).to eq order.id
                 expect(orders.first["status"]).to eq order.status
-                expect(orders.first["stripeCheckoutSessionLineItems"]).to eq order.stripe_checkout_session_line_items
+
+                expected_line_items = orders.first["stripeCheckoutSessionLineItems"].map do |item|
+                    item.transform_keys(&:underscore)
+                end
+
+                expect(expected_line_items).to eq order.stripe_checkout_session_line_items
                 expect(orders.first["user"]["id"].to_i).to eq order.user.id
                 expect(orders.first["user"]["email"]).to eq order.user.email_address
 

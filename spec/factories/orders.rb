@@ -1,11 +1,23 @@
 FactoryBot.define do
   factory :order do
     trait :with_line_items do
+      completed_at { nil }
+      amount_total { 600 }
       stripe_payment_intent_id  { "pi_12345" }
       stripe_checkout_session_line_items {
         [
-          { "name": "Mega Burrito", "quantity": 1 },
-          { "name": "Beeborito", "quantity": 2 }
+          {
+            "name": "Mega Burrito",
+            "quantity": 1,
+            "image_url": "www.someimage.com",
+            "unit_amount": 300
+          },
+          {
+            "name": "Beeborito",
+            "quantity": 2,
+            "image_url": "www.someimage.com",
+            "unit_amount": 300
+          }
         ]
       }
     end

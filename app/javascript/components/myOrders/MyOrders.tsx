@@ -7,10 +7,9 @@ import React from "react";
 const MyOrders = () => {
   const { data, loading, error } = useFetchCurrentUserOrdersQuery();
 
-  if (!data) return null;
-
   return (
     <div>
+      <h3>My Orders</h3>
       {loading ? (
         <FontAwesomeIcon icon={faSpinner} />
       ) : (

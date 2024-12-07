@@ -7,9 +7,12 @@ RSpec.describe "Orders Resolver Spec" do
                 orders {
                     id
                     status
+                    amountTotal
                     stripeCheckoutSessionLineItems {
                         name
                         quantity
+                        imageUrl
+                        unitAmount
                     }
                     user {
                         id
@@ -34,7 +37,13 @@ RSpec.describe "Orders Resolver Spec" do
             .to match_array(orders.pluck(:user_id))
         expect(graphql_orders_response.map { |order| order["user"]["email"] })
             .to match_array(orders.map { |order| order.user.email_address })
-        expect(graphql_orders_response.map { |order| order["stripeCheckoutSessionLineItems"] })
+        expect(
+            graphql_orders_response.map do |order|
+                order["stripeCheckoutSessionLineItems"].map do |item|
+                    item.transform_keys(&:underscore)
+                end
+            end
+        )
             .to match_array(orders.map { |order| order.stripe_checkout_session_line_items })
 
         expect(graphql_orders_response.pluck("id").map(&:to_i)).to match_array orders.reverse.pluck(:id)
