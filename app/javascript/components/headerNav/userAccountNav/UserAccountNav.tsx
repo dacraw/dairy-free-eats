@@ -1,15 +1,10 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import client from "apolloClient";
-import {
-  CurrentUserQuery,
-  CurrentUserQueryResult,
-  Maybe,
-  User,
-} from "graphql/types";
+import { Maybe, User } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
 import React from "react";
-import { NavLink } from "react-router";
+import { Link } from "react-router";
 
 const AdminDemoButton = () => {
   const [
@@ -47,7 +42,7 @@ const LogoutButton = () => {
   ) : (
     <button
       className="
-            py-2 px-4 blue-button transition-colors rounded font-bold
+            py-2 px-4 red-button transition-colors rounded font-bold
             "
       onClick={handleLogout}
     >
@@ -68,7 +63,9 @@ const UserAccountNav: React.FC<{
     >
       {currentUserEmail ? (
         <>
-          <NavLink to="my_orders">My Orders</NavLink>
+          <Link className="blue-button text-center" to="my_orders">
+            My Orders
+          </Link>
           <div className="text-sm mb-2 text-center">
             <p>Logged in as:</p>
             <p className="font-bold">{currentUserEmail}</p>
@@ -77,22 +74,22 @@ const UserAccountNav: React.FC<{
         </>
       ) : (
         <>
-          <NavLink
+          <Link
             className={`
               blue-button block text-center 
               `}
             to="/login"
           >
             Login
-          </NavLink>
-          <NavLink
+          </Link>
+          <Link
             className={`
               blue-button block text-center 
               `}
             to="/signup"
           >
             Signup
-          </NavLink>
+          </Link>
           <AdminDemoButton />
         </>
       )}
