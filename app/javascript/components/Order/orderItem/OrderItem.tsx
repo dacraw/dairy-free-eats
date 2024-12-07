@@ -1,3 +1,4 @@
+import ImageLoader from "components/imageLoader/ImageLoader";
 import { CartContext } from "context/CartProvider";
 import { NotificationsContext } from "context/NotificationsProvider";
 import { Price, Product, User } from "graphql/types";
@@ -43,7 +44,11 @@ const OrderItem: React.FC<{
         reset();
       })}
     >
-      <img src={imageUrl} className="cursor-pointer mb-2 w-[224px] h-[224px]" />
+      <ImageLoader
+        alt={name}
+        src={imageUrl}
+        additionalClassName="cursor-pointer mb-2 w-[224px] h-[224px]"
+      />
       <p className="font-bold text-lg mb-2 h-[60px]">{name}</p>
       <p className="mb-2 h-[60px]">{description}</p>
       <p className="mb-6">
