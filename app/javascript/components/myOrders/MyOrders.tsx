@@ -52,15 +52,16 @@ const MyOrders = () => {
                   ))}
                 </div>
                 <div className="text-sm">
+                  <p className="font-bold">Order #{order.id}</p>
                   <div className="grid md:block">
                     {order.status === "completed" ? (
                       <>
-                        <p className="font-bold">Completed on:</p>
+                        <p>Completed on:</p>
                         <p>{order.completedAt}</p>
                       </>
                     ) : (
                       <>
-                        <p className="font-bold">Placed on:</p>
+                        <p>Placed on:</p>
                         <p>{order.createdAt}</p>
                         <p className="italic">{startCase(order.status)}</p>
                       </>
