@@ -36,15 +36,17 @@ export const FETCH_CURRENT_USER_ORDERS = gql`
   query FetchCurrentUserOrders($incomplete: Boolean) {
     currentUserOrders(incomplete: $incomplete) {
       id
+      amountTotal
       createdAt
       guestEmail
       updatedAt
       status
       completedAt
       stripeCheckoutSessionLineItems {
+        imageUrl
         name
         quantity
-        imageUrl
+        unitAmount
       }
       user {
         id

@@ -42,5 +42,7 @@ module Types
         object.guest_email
       end
     end
+
+    field :amount_total, Integer, null: false
   end
 end

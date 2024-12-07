@@ -1401,6 +1401,22 @@
           "possibleTypes": null,
           "fields": [
             {
+              "name": "amountTotal",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "completedAt",
               "description": null,
               "type": {
@@ -1585,6 +1601,22 @@
             },
             {
               "name": "quantity",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "unitAmount",
               "description": null,
               "type": {
                 "kind": "NON_NULL",

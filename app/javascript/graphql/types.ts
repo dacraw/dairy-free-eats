@@ -201,6 +201,7 @@ export type NotificationEdge = {
 
 export type Order = {
   __typename?: 'Order';
+  amountTotal: Scalars['Int']['output'];
   completedAt?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['String']['output'];
   guestEmail?: Maybe<Scalars['String']['output']>;
@@ -217,6 +218,7 @@ export type OrderLineItem = {
   imageUrl: Scalars['String']['output'];
   name: Scalars['String']['output'];
   quantity: Scalars['Int']['output'];
+  unitAmount: Scalars['Int']['output'];
 };
 
 export type OrderMessage = {
@@ -489,7 +491,7 @@ export type FetchCurrentUserOrdersQueryVariables = Exact<{
 }>;
 
 
-export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, createdAt: string, guestEmail?: string | null, updatedAt: string, status: OrderStatus, completedAt?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number, imageUrl: string }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
+export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, amountTotal: number, createdAt: string, guestEmail?: string | null, updatedAt: string, status: OrderStatus, completedAt?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', imageUrl: string, name: string, quantity: number, unitAmount: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
 
 export type OrderMessageReceivedSubscriptionVariables = Exact<{
   orderId: Scalars['ID']['input'];
@@ -945,15 +947,17 @@ export const FetchCurrentUserOrdersDocument = gql`
     query FetchCurrentUserOrders($incomplete: Boolean) {
   currentUserOrders(incomplete: $incomplete) {
     id
+    amountTotal
     createdAt
     guestEmail
     updatedAt
     status
     completedAt
     stripeCheckoutSessionLineItems {
+      imageUrl
       name
       quantity
-      imageUrl
+      unitAmount
     }
     user {
       id
