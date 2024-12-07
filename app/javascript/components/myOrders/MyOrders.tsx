@@ -79,9 +79,6 @@ const MyOrders = () => {
                     }).format(Number((order.amountTotal / 100).toFixed(2)))}
                   </p>
                 </div>
-                <div>
-                  <button className="blue-button text-sm">View</button>
-                </div>
               </div>
             );
           })}
