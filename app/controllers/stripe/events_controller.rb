@@ -53,12 +53,16 @@ class Stripe::EventsController < ApplicationController
         checkout_line_items = Stripe::Checkout::Session.list_line_items stripe_checkout_session.first.id, expand: [ "data.price.product" ]
 
         stripe_checkout_session_line_items = checkout_line_items.map do |item|
-            { name: item.description,
-            quantity: item.quantity,
-            image_url: item.price.product.images.first }
+            {
+                name: item.description,
+                quantity: item.quantity,
+                image_url: item.price.product.images.first,
+                unit_amount: item.amount_total
+            }
         end
 
         order = Order.new(
+            amount_total: stripe_checkout_session.first.amount_total,
             user: user,
             stripe_checkout_session_line_items: stripe_checkout_session_line_items,
             stripe_payment_intent_id: event.data.object.id,
