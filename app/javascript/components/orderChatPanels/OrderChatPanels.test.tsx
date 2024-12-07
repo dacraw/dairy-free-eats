@@ -40,7 +40,7 @@ const validMocks: MockedResponse<
   {
     request: {
       query: FETCH_CURRENT_USER_ORDERS,
-      variables: { completed: false },
+      variables: { incomplete: true },
     },
     result: {
       data: {
@@ -48,12 +48,18 @@ const validMocks: MockedResponse<
           {
             id: "1",
             status: OrderStatus.InTransit,
+            createdAt: "2024-12-6",
+            updatedAt: "2024-12-7",
+            completedAt: null,
             stripeCheckoutSessionLineItems: [
               {
                 name: "product",
                 quantity: 1,
+                imageUrl: "www.someimage.com",
+                unitAmount: 300,
               },
             ],
+            amountTotal: 600,
             user: {
               id: "1",
               email: "test@demo.com",

@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Notifications Features Spec", :perform_enqueued do
-    let(:user) { create :user, :valid_user, :with_orders }
-    let(:admin_user) { create :user, :valid_user, admin: true }
+    let!(:user) { create :user, :valid_user, :with_orders }
+    let!(:admin_user) { create :user, :valid_user, admin: true }
 
     it "sends a live notification to the admin user from the order user" do
         admin_session = "Admin session"
@@ -15,6 +15,7 @@ RSpec.describe "Notifications Features Spec", :perform_enqueued do
             visit order_chats_admin_dashboard_path
 
             chat_text = "Order ##{user.orders.first.id} Chat"
+
             expect(page).to have_content chat_text
         end
 

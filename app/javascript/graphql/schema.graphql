@@ -218,6 +218,8 @@ type NotificationEdge {
 }
 
 type Order {
+  amountTotal: Int!
+  completedAt: String
   createdAt: String!
   guestEmail: String
   id: ID!
@@ -229,8 +231,10 @@ type Order {
 }
 
 type OrderLineItem {
+  imageUrl: String!
   name: String!
   quantity: Int!
+  unitAmount: Int!
 }
 
 type OrderMessage {
@@ -373,7 +377,7 @@ type Query {
     """
     last: Int
   ): NotificationConnection!
-  currentUserOrders(completed: Boolean!): [Order!]
+  currentUserOrders(incomplete: Boolean): [Order!]
   fetchCheckoutSession(id: ID!): CheckoutSession
   listProducts: ProductListObject!
   order(id: ID!): Order

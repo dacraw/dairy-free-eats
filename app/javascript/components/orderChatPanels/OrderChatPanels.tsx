@@ -33,19 +33,25 @@ export const CREATE_ORDER_MESSAGE = gql`
 `;
 
 export const FETCH_CURRENT_USER_ORDERS = gql`
-  query FetchCurrentUserOrders($completed: Boolean!) {
-    currentUserOrders(completed: $completed) {
+  query FetchCurrentUserOrders($incomplete: Boolean) {
+    currentUserOrders(incomplete: $incomplete) {
       id
+      amountTotal
+      createdAt
+      guestEmail
+      updatedAt
       status
+      completedAt
       stripeCheckoutSessionLineItems {
+        imageUrl
         name
         quantity
+        unitAmount
       }
       user {
         id
         email
       }
-      guestEmail
     }
   }
 `;
@@ -55,7 +61,7 @@ const OrderChatPanels = () => {
     useCurrentUserQuery();
 
   const { data, loading, refetch } = useFetchCurrentUserOrdersQuery({
-    variables: { completed: false },
+    variables: { incomplete: true },
   });
 
   useEffect(() => {

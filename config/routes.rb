@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   get "order", to: "order#index"
   get "success", to: "order#success"
 
+  get "my_orders", to: "orders#index"
+
   namespace :api do
     namespace :v1 do
       resource :session, only: [ :new ]

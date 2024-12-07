@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_21_065347) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_07_040021) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -41,6 +41,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_21_065347) do
     t.datetime "updated_at", null: false
     t.json "stripe_checkout_session_line_items"
     t.text "guest_email"
+    t.datetime "completed_at"
+    t.integer "amount_total"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 

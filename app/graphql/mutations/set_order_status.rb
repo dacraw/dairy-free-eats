@@ -21,6 +21,7 @@ module Mutations
       when :in_transit
         OrderMailer.with(order: order).order_in_transit.deliver_later
       when :completed
+        order.update(completed_at: Time.now)
         OrderMailer.with(order: order).order_completed.deliver_later
       end
 

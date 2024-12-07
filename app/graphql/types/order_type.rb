@@ -3,6 +3,14 @@
 module Types
   class OrderType < Types::BaseObject
     field :id, ID, null: false
+
+    field :completed_at, String, null: true
+    def completed_at
+      return nil if object.completed_at.nil?
+
+      object.completed_at.strftime "%Y-%m-%d"
+    end
+
     field :user, Types::UserType
 
     field :status, Types::OrderStatus, null: false
@@ -34,5 +42,7 @@ module Types
         object.guest_email
       end
     end
+
+    field :amount_total, Integer, null: false
   end
 end

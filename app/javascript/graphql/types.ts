@@ -201,6 +201,8 @@ export type NotificationEdge = {
 
 export type Order = {
   __typename?: 'Order';
+  amountTotal: Scalars['Int']['output'];
+  completedAt?: Maybe<Scalars['String']['output']>;
   createdAt: Scalars['String']['output'];
   guestEmail?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -213,8 +215,10 @@ export type Order = {
 
 export type OrderLineItem = {
   __typename?: 'OrderLineItem';
+  imageUrl: Scalars['String']['output'];
   name: Scalars['String']['output'];
   quantity: Scalars['Int']['output'];
+  unitAmount: Scalars['Int']['output'];
 };
 
 export type OrderMessage = {
@@ -333,7 +337,7 @@ export type QueryCurrentUserNotificationsArgs = {
 
 
 export type QueryCurrentUserOrdersArgs = {
-  completed: Scalars['Boolean']['input'];
+  incomplete?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -483,11 +487,11 @@ export type CreateOrderMessageMutationVariables = Exact<{
 export type CreateOrderMessageMutation = { __typename?: 'Mutation', createOrderMessage?: { __typename?: 'CreateOrderMessagePayload', orderMessage?: { __typename?: 'OrderMessage', id: string, userIsAdmin: boolean, userId: string, createdAt: any, body?: string | null } | null } | null };
 
 export type FetchCurrentUserOrdersQueryVariables = Exact<{
-  completed: Scalars['Boolean']['input'];
+  incomplete?: InputMaybe<Scalars['Boolean']['input']>;
 }>;
 
 
-export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, status: OrderStatus, guestEmail?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
+export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, amountTotal: number, createdAt: string, guestEmail?: string | null, updatedAt: string, status: OrderStatus, completedAt?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', imageUrl: string, name: string, quantity: number, unitAmount: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
 
 export type OrderMessageReceivedSubscriptionVariables = Exact<{
   orderId: Scalars['ID']['input'];
@@ -940,19 +944,25 @@ export type CreateOrderMessageMutationHookResult = ReturnType<typeof useCreateOr
 export type CreateOrderMessageMutationResult = Apollo.MutationResult<CreateOrderMessageMutation>;
 export type CreateOrderMessageMutationOptions = Apollo.BaseMutationOptions<CreateOrderMessageMutation, CreateOrderMessageMutationVariables>;
 export const FetchCurrentUserOrdersDocument = gql`
-    query FetchCurrentUserOrders($completed: Boolean!) {
-  currentUserOrders(completed: $completed) {
+    query FetchCurrentUserOrders($incomplete: Boolean) {
+  currentUserOrders(incomplete: $incomplete) {
     id
+    amountTotal
+    createdAt
+    guestEmail
+    updatedAt
     status
+    completedAt
     stripeCheckoutSessionLineItems {
+      imageUrl
       name
       quantity
+      unitAmount
     }
     user {
       id
       email
     }
-    guestEmail
   }
 }
     `;
@@ -969,11 +979,11 @@ export const FetchCurrentUserOrdersDocument = gql`
  * @example
  * const { data, loading, error } = useFetchCurrentUserOrdersQuery({
  *   variables: {
- *      completed: // value for 'completed'
+ *      incomplete: // value for 'incomplete'
  *   },
  * });
  */
-export function useFetchCurrentUserOrdersQuery(baseOptions: Apollo.QueryHookOptions<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables> & ({ variables: FetchCurrentUserOrdersQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useFetchCurrentUserOrdersQuery(baseOptions?: Apollo.QueryHookOptions<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables>(FetchCurrentUserOrdersDocument, options);
       }

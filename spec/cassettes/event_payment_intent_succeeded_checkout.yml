@@ -8,11 +8,11 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - Stripe/v1 RubyBindings/13.1.1
+      - Stripe/v1 RubyBindings/13.2.0
       Authorization:
       - "<BEARER_TOKEN>"
       Stripe-Version:
-      - 2024-10-28.acacia
+      - 2024-11-20.acacia
       X-Stripe-Client-User-Agent:
       - "<X_STRIPE_CLIENT_USER_AGENT>"
       Accept-Encoding:
@@ -27,7 +27,7 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Fri, 15 Nov 2024 04:03:15 GMT
+      - Fri, 06 Dec 2024 23:39:47 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -48,9 +48,9 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Content-Security-Policy:
-      - report-uri https://q.stripe.com/csp-report?p=v1%2Fcheckout%2Fsessions; block-all-mixed-content;
-        default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none';
-        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; upgrade-insecure-requests;
+        report-uri /csp-violation
       Cross-Origin-Opener-Policy-Report-Only:
       - same-origin; report-to="coop"
       Report-To:
@@ -58,9 +58,9 @@ http_interactions:
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_ywHTPPEp9bPlIr
+      - req_AA2nriDnCh4sgH
       Stripe-Version:
-      - 2024-10-28.acacia
+      - 2024-11-20.acacia
       Vary:
       - Origin
       X-Content-Type-Options:
@@ -70,7 +70,7 @@ http_interactions:
       X-Stripe-Routing-Context-Priority-Tier:
       - api-testmode
       X-Wc:
-      - A
+      - AB
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains; preload
     body:
@@ -197,22 +197,22 @@ http_interactions:
           "has_more": false,
           "url": "/v1/checkout/sessions"
         }
-  recorded_at: Fri, 15 Nov 2024 04:03:15 GMT
+  recorded_at: Fri, 06 Dec 2024 23:39:47 GMT
 - request:
     method: get
-    uri: https://api.stripe.com/v1/checkout/sessions/cs_test_a1BBn4RW1sExgdMOA3yk7xvFVn2XGfONbOZsy0h6Up4CROhQKSYxcLJ49U/line_items
+    uri: https://api.stripe.com/v1/checkout/sessions/cs_test_a1BBn4RW1sExgdMOA3yk7xvFVn2XGfONbOZsy0h6Up4CROhQKSYxcLJ49U/line_items?expand%5B%5D=data.price.product
     body:
       encoding: US-ASCII
       string: ''
     headers:
       User-Agent:
-      - Stripe/v1 RubyBindings/13.1.1
+      - Stripe/v1 RubyBindings/13.2.0
       Authorization:
       - "<BEARER_TOKEN>"
       X-Stripe-Client-Telemetry:
-      - '{"last_request_metrics":{"request_id":"req_ywHTPPEp9bPlIr","request_duration_ms":284}}'
+      - '{"last_request_metrics":{"request_id":"req_AA2nriDnCh4sgH","request_duration_ms":280}}'
       Stripe-Version:
-      - 2024-10-28.acacia
+      - 2024-11-20.acacia
       X-Stripe-Client-User-Agent:
       - "<X_STRIPE_CLIENT_USER_AGENT>"
       Accept-Encoding:
@@ -227,11 +227,11 @@ http_interactions:
       Server:
       - nginx
       Date:
-      - Fri, 15 Nov 2024 04:03:15 GMT
+      - Fri, 06 Dec 2024 23:39:47 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '1089'
+      - '1936'
       Connection:
       - keep-alive
       Access-Control-Allow-Credentials:
@@ -248,10 +248,9 @@ http_interactions:
       Cache-Control:
       - no-cache, no-store
       Content-Security-Policy:
-      - report-uri https://q.stripe.com/csp-report?p=v1%2Fcheckout%2Fsessions%2F%3Asession%2Fline_items;
-        block-all-mixed-content; default-src 'none'; base-uri 'none'; form-action
-        'none'; frame-ancestors 'none'; img-src 'self'; script-src 'self' 'report-sample';
-        style-src 'self'
+      - base-uri 'none'; default-src 'none'; form-action 'none'; frame-ancestors 'none';
+        img-src 'self'; script-src 'self' 'report-sample'; style-src 'self'; upgrade-insecure-requests;
+        report-uri /csp-violation
       Cross-Origin-Opener-Policy-Report-Only:
       - same-origin; report-to="coop"
       Report-To:
@@ -259,9 +258,9 @@ http_interactions:
       Reporting-Endpoints:
       - coop="https://q.stripe.com/coop-report"
       Request-Id:
-      - req_U2FRXKGgRgv1oT
+      - req_4LC6AtWQGA46yv
       Stripe-Version:
-      - 2024-10-28.acacia
+      - 2024-11-20.acacia
       Vary:
       - Origin
       X-Content-Type-Options:
@@ -271,7 +270,7 @@ http_interactions:
       X-Stripe-Routing-Context-Priority-Tier:
       - api-testmode
       X-Wc:
-      - A
+      - AB
       Strict-Transport-Security:
       - max-age=63072000; includeSubDomains; preload
     body:
@@ -301,7 +300,30 @@ http_interactions:
                 "lookup_key": null,
                 "metadata": {},
                 "nickname": null,
-                "product": "prod_R8KkVOibvpRPlc",
+                "product": {
+                  "id": "prod_R8KkVOibvpRPlc",
+                  "object": "product",
+                  "active": true,
+                  "attributes": [],
+                  "created": 1730403020,
+                  "default_price": "price_1QG44XElA4InVgv8dOnqfhyu",
+                  "description": "Blended mixed berries, filtered water",
+                  "images": [
+                    "https://files.stripe.com/links/MDB8YWNjdF8xUUczb3lFbEE0SW5WZ3Y4fGZsX3Rlc3Rfeml6NXpDODBvV2JFZUtvNFY2THVXdHpU00nQNlEhQt"
+                  ],
+                  "livemode": false,
+                  "marketing_features": [],
+                  "metadata": {},
+                  "name": "Mixed Berry Smoothie (Water base)",
+                  "package_dimensions": null,
+                  "shippable": null,
+                  "statement_descriptor": null,
+                  "tax_code": "txcd_20030000",
+                  "type": "service",
+                  "unit_label": null,
+                  "updated": 1733198430,
+                  "url": null
+                },
                 "recurring": null,
                 "tax_behavior": "unspecified",
                 "tiers_mode": null,
@@ -316,5 +338,5 @@ http_interactions:
           "has_more": false,
           "url": "/v1/checkout/sessions/cs_test_a1BBn4RW1sExgdMOA3yk7xvFVn2XGfONbOZsy0h6Up4CROhQKSYxcLJ49U/line_items"
         }
-  recorded_at: Fri, 15 Nov 2024 04:03:15 GMT
+  recorded_at: Fri, 06 Dec 2024 23:39:48 GMT
 recorded_with: VCR 6.3.1
