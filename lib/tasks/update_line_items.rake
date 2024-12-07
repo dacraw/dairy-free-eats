@@ -1,7 +1,7 @@
 require "rake/task"
 
 
-task :add_image_url_line_items do
+task :update_line_items do
     Rake::Task["environment"].invoke
     # image_url will be a part of an order stripe_checkout_session_line_items
 
@@ -16,12 +16,18 @@ task :add_image_url_line_items do
             checkout_line_items = Stripe::Checkout::Session.list_line_items stripe_checkout_session.first.id, expand: [ "data.price.product" ]
 
             stripe_checkout_session_line_items = checkout_line_items.map do |item|
-                { name: item.description,
-                quantity: item.quantity,
-                image_url: item.price.product.images.first }
+                {
+                    name: item.description,
+                    quantity: item.quantity,
+                    image_url: item.price.product.images.first,
+                    unit_amount: item.amount_total
+                }
             end
 
-            order.update(stripe_checkout_session_line_items: stripe_checkout_session_line_items)
+            order.update(
+                amount_total: stripe_checkout_session.first.amount_total,
+                stripe_checkout_session_line_items: stripe_checkout_session_line_items
+            )
         end
     end
 end
