@@ -229,7 +229,7 @@ type Order {
 }
 
 type OrderLineItem {
-  imageUrl: String
+  imageUrl: String!
   name: String!
   quantity: Int!
 }
