@@ -7,9 +7,14 @@ import React from "react";
 import { Link } from "react-router";
 
 const MyOrders = () => {
-  const { data, loading, error } = useFetchCurrentUserOrdersQuery();
+  const { data, loading, error } = useFetchCurrentUserOrdersQuery({
+    variables: { incomplete: false },
+    fetchPolicy: "cache-and-network",
+  });
 
   if (error) return <p>There was an error.</p>;
+
+  // console.log("render");
 
   return (
     <div>
@@ -104,6 +109,14 @@ const MyOrders = () => {
                         minimumFractionDigits: 2,
                       }).format(Number((order.amountTotal / 100).toFixed(2)))}
                     </p>
+                  </div>
+                  <div>
+                    <Link
+                      to={`/orders/${order.id}`}
+                      className="blue-button text-sm"
+                    >
+                      View
+                    </Link>
                   </div>
                 </div>
               );

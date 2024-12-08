@@ -1,6 +1,7 @@
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import client from "apolloClient";
+import { FETCH_CURRENT_USER_ORDERS } from "components/orderChatPanels/OrderChatPanels";
 import { Maybe, User } from "graphql/types";
 import { useAdminLogin, useLogout } from "hooks/auth";
 import React from "react";
@@ -27,10 +28,12 @@ const LogoutButton = () => {
     { loading: loggingOut, data: logoutData, error: logoutError },
   ] = useLogout();
 
-  const handleLogout = () => {
-    // Ideally, evicting the current user would clear out any fields related to it
-    // This is a TODO
-    client.cache.evict({ fieldName: "currentUserNotifications" });
+  const handleLogout = async () => {
+    // Remove every cached object on logout
+    client.cache.evict({});
+
+    client.cache.gc();
+
     logout();
   };
   return loggingOut ? (
@@ -44,7 +47,7 @@ const LogoutButton = () => {
       className="
             py-2 px-4 red-button transition-colors rounded font-bold
             "
-      onClick={handleLogout}
+      onClick={async () => await handleLogout()}
     >
       Logout
     </button>

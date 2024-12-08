@@ -23,9 +23,12 @@ export const FETCH_ORDER = gql`
       stripePaymentIntentId
       createdAt
       updatedAt
+      amountTotal
       stripeCheckoutSessionLineItems {
         name
         quantity
+        imageUrl
+        unitAmount
       }
       guestEmail
     }
