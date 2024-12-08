@@ -18,8 +18,8 @@ const PasswordReset = () => {
           </>
         ) : (
           <div>
-            <h3 className="text-3xl mb-2">Password Reset</h3>
-            <p className="mb-4">
+            <h3 className="page-title">Password Reset</h3>
+            <p className="mb-4 text-sm">
               If you've lost your password, you can reset it using the form
               below.
             </p>

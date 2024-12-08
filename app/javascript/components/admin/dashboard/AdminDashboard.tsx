@@ -5,9 +5,7 @@ const AdminDashboard = () => {
   return (
     <div className="md:w-[90vw]">
       <>
-        <h3 className="font-bold md:px-6 text-center text-xl mb-6 animate-home-title-shimmer">
-          Admin Dashboard
-        </h3>
+        <h3 className="page-title">Admin Dashboard</h3>
         <div className="flex gap-4 border-b-2 pb-2 mb-2">
           <NavLink
             className={({ isActive }) => {

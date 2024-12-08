@@ -16,7 +16,7 @@ const Signup = () => {
       {loading && <p>Loading</p>}
 
       <div className="md:max-w-[500px] md:mx-auto md:grid md:place-content-center">
-        <h1 className="text-2xl mb-6 text-center">Sign up for an account</h1>
+        <h1 className="page-title">Sign up for an account</h1>
 
         <form onSubmit={handleSubmit(signup)}>
           <div className="text-center my-2">

@@ -63,9 +63,7 @@ const Order = () => {
         </>
       ) : (
         <>
-          <h5 className="font-bold md:px-6 text-center text-xl mb-6 animate-home-title-shimmer">
-            Welcome to the order page!
-          </h5>
+          <h5 className="page-title">Welcome to the order page!</h5>
           <p className="mb-6 font-bold text-sm">
             Please read the information below this form before clicking
             "Submit", as it contains information regarding the information to be
