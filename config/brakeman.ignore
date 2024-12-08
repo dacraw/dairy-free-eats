@@ -1,0 +1,30 @@
+{
+  "ignored_warnings": [
+    {
+      "warning_type": "Dangerous Eval",
+      "warning_code": 13,
+      "fingerprint": "73a616096c72d626ce2c0706f3cdf5586dd84106496f4545bce5599dd16f8f41",
+      "check_name": "Evaluation",
+      "message": "User input in eval",
+      "file": "app/graphql/mutations/generate_gemini_order_message.rb",
+      "line": 47,
+      "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
+      "code": "NanoBot.new(:cartridge => (CARTRIDGE_CONFIG)).eval(format(\"          You are going to answer a user's question about their order. You should not answer any question that is not about their order. If they ask a question that has nothing to do with their order, you must reply with \\\"I'm sorry, but I can only answer questions about your order.\\\"\\n\\n          If they ask whether the food tastes good, you will assure them that it does.\\n\\n          If they complain that the food is too expensive, you will tell them that the food is home cooked and competitively priced compared to alternatives.\\n\\n          Provide a response to a user's question about their order. Here is the user's question:\\n\\n          User question: %{order_message_body}\\n\\n          Order information:\\n            - Order items: %{order_items}\\n            - Order total: $%{order_total}\\n            - Order status: %{order_status}\\n\", :order_message_body => OrderMessage.find_by_id(order_message_id).body, :order_items => Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).stripe_checkout_session_line_items, :order_total => Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).amount_total, :order_status => Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).status))",
+      "render_path": null,
+      "location": {
+        "type": "method",
+        "class": "Mutations::GenerateGeminiOrderMessage",
+        "method": "resolve"
+      },
+      "user_input": "Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).status",
+      "confidence": "High",
+      "cwe_id": [
+        913,
+        95
+      ],
+      "note": "I inspected Nanobot's eval instance method, and it doesn't appear malicious and instead if used to feed input into the chatbot. Furthermore, the prompt has been interpolated as a string, and the order message body is itself defined as a string type, so it appears that there is no need to worry about the eval warning in this case."
+    }
+  ],
+  "updated": "2024-12-08 03:26:05 -0800",
+  "brakeman_version": "6.2.2"
+}
