@@ -107,6 +107,24 @@ const withNoOrdersMocks: MockedResponse<
 ];
 
 describe("<MyOrders />", () => {
+  it("renders the order show link", async () => {
+    render(
+      <MockedProvider mocks={withIncompleteOrdersMocks}>
+        <MemoryRouter>
+          <MyOrders />
+        </MemoryRouter>
+      </MockedProvider>
+    );
+
+    expect(await screen.findByText(/My Orders/i)).toBeInTheDocument();
+    const showPageLink = screen.getByRole("link", { name: /View/i });
+    expect(showPageLink).toBeInTheDocument();
+    expect(showPageLink).toHaveAttribute(
+      "href",
+      `/orders/${incompleteOrder.id}`
+    );
+  });
+
   describe("when there are incomplete orders", () => {
     it("renders without errors", async () => {
       render(

@@ -10,6 +10,7 @@ import {
   FetchStripeCheckoutSessionQueryVariables,
 } from "graphql/types";
 import Home from "components/home/Home";
+import { formatIntegerToMoney } from "util/stringUtil";
 
 const validMocks: MockedResponse<
   FetchStripeCheckoutSessionQuery,
@@ -96,7 +97,9 @@ describe("<OrderSuccess />", () => {
 
       expect(await screen.findByText("Order Successful")).toBeInTheDocument();
 
-      expect(screen.getByText("$6,247.00")).toBeInTheDocument();
+      expect(
+        screen.getByText(formatIntegerToMoney(624700))
+      ).toBeInTheDocument();
       expect(
         screen.getByText("Mixed Berry Smoothie (Water base) x1")
       ).toBeInTheDocument();

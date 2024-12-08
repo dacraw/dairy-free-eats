@@ -36,4 +36,23 @@ describe("<UserAccountNav />", () => {
       expect(screen.getByRole("link", { name: /Signup/i })).toBeInTheDocument();
     });
   });
+
+  describe("when the current user is an admin", () => {
+    it("does not render the `My Orders` link", () => {
+      render(
+        <MemoryRouter>
+          <UserAccountNav
+            currentUserEmail="someadmin@test.com"
+            currentUserAdmin={true}
+          />
+        </MemoryRouter>
+      );
+
+      expect(screen.getByText(/Logged in as:/i)).toBeInTheDocument();
+
+      expect(
+        screen.queryByRole("link", { name: /MyOrders/i })
+      ).not.toBeInTheDocument();
+    });
+  });
 });

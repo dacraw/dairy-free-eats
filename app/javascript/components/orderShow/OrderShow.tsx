@@ -5,7 +5,6 @@ import { formatIntegerToMoney } from "util/stringUtil";
 
 const OrderShow = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const {
     data: currentUserData,
@@ -18,7 +17,7 @@ const OrderShow = () => {
     skip: !id,
   });
 
-  if (!data) return null;
+  if (!data || !currentUserData) return null;
   if (currentUserData?.currentUser?.id !== data?.order?.user?.id)
     return <Navigate to="/my_orders" />;
 
