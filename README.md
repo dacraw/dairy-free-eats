@@ -26,8 +26,6 @@ _Refer to the `database.yml` file with regards to configuring your development P
 
 Visit `localhost:3000` to view the app. Run `rails c` to view the Rails console.
 
-This app uses `solid_queue` and `solid_cable` to work around the need for `redis`, meaning jobs and websockets will be managed by the database.
-
 ## Configure Stripe
 
 ### Install Stripe CLI
@@ -62,3 +60,13 @@ stripe listen --forward-to localhost:3000/stripe/events
 ```
 
 This will forward any webhook events to the development environment (note the port number). Since the test api key is being used in the deployed site as well, there is metadata logic encoded that will determine whether the environment is development or production, and forward the webhook event properly.
+
+## Features
+
+This app uses `solid_queue` and `solid_cable` to work around the need for `redis`, meaning jobs and websockets will be managed by the database.
+
+ActiveJob leverages Solid Queue for several processes, such as sending emails when the admin changes an order status and creating notifications to be broadcasted to users
+
+ActionCable powered GraphQL subscriptions rely on Solid Cable to manage new order message broadcasts. When a user creates an order, they gain access to the order's chat, which allows them to communicate with admins on the status of their order. Once an order is `completed`, user access to the chat is lost. However, an admin may view the chat for any order ever created through the Admin Dashboard.
+
+You may demo admin functionality while logged out by clicking on the "User Account" icon in the header navigation, then selecting "Admin Demo". You will be redirected to the Admin Dashboard page, where you may set order statuses and view chat rooms for every order (regardless of its status).
