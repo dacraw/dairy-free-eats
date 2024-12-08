@@ -30,7 +30,7 @@ Rails.application.routes.draw do
 
   get "my_orders", to: "orders#index"
 
-  resources :orders, only: [:show]
+  resources :orders, only: [ :show ]
 
   namespace :api do
     namespace :v1 do
