@@ -139,17 +139,19 @@ const OrderChatMessageForm = ({
         className="block w-full bg-gray-200 mb-4"
       />
 
-      <div className="mb-4 flex gap-x-2 justify-center">
-        <input
-          id="receive-gemini-response"
-          type="checkbox"
-          checked={receiveGeminiResponse}
-          onChange={() => setReceiveGeminiResponse(!receiveGeminiResponse)}
-        />
-        <label className="text-sm" htmlFor="receive-gemini-response">
-          Enable Chatbot Responses
-        </label>
-      </div>
+      {!currentUserIsAdmin && (
+        <div className="mb-4 flex gap-x-2 justify-center">
+          <input
+            id="receive-gemini-response"
+            type="checkbox"
+            checked={receiveGeminiResponse}
+            onChange={() => setReceiveGeminiResponse(!receiveGeminiResponse)}
+          />
+          <label className="text-sm" htmlFor="receive-gemini-response">
+            Enable Chatbot Responses
+          </label>
+        </div>
+      )}
 
       <button className="blue-button w-full">
         {createOrderMessageLoading ? (
