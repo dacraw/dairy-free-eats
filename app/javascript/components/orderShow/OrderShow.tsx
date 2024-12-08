@@ -1,6 +1,6 @@
 import { useCurrentUserQuery, useFetchOrderQuery } from "graphql/types";
 import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 
 const OrderShow = () => {
   const { id } = useParams();
@@ -17,17 +17,9 @@ const OrderShow = () => {
     skip: !id,
   });
 
-  useEffect(() => {
-    if (
-      currentUserData &&
-      data &&
-      currentUserData?.currentUser?.id !== data?.order?.user?.id
-    ) {
-      navigate("/my_orders");
-    }
-  }, [currentUserData, data]);
-
   if (!data) return null;
+  if (currentUserData?.currentUser?.id !== data?.order?.user?.id)
+    return <Navigate to="/my_orders" />;
 
   return (
     <div>
