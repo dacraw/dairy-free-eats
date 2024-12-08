@@ -38,13 +38,13 @@ module Mutations
 
         formatted_prompt = format(
           prompt,
-          order_message_body: OrderMessage.find_by_id(order_message_id).body,
-          order_items: Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).stripe_checkout_session_line_items,
-          order_total: Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).amount_total,
-          order_status: Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).status
+          order_message_body: order_message_responding_to.body,
+          order_items: order.stripe_checkout_session_line_items,
+          order_total: order.amount_total,
+          order_status: order.status
         )
 
-        gemini_response = bot.eval formatted_prompt
+        gemini_response = bot.eval(formatted_prompt)
 
       rescue StandardError => e
         raise GraphQL::ExecutionError, "There was an issue creating a response. Please try again in a minute."
