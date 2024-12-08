@@ -10,7 +10,7 @@ RSpec.describe "Create Order Message Mutation" do
                       id
                     }
                 }
-            }#{'            '}
+            }
         GRAPHQL
      }
 
