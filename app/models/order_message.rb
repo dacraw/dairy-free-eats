@@ -2,6 +2,8 @@ class OrderMessage < ApplicationRecord
   belongs_to :order
   belongs_to :user
 
+  validates_presence_of :body
+
   after_create_commit {
     NewOrderMessageJob.perform_later self
 
