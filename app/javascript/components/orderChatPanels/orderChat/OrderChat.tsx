@@ -123,7 +123,7 @@ const OrderChatMessageForm = ({
     if (messageRef.current) {
       messageRef.current.focus({ preventScroll: true });
     }
-  }, []);
+  }, [createOrderMessageData]);
 
   return (
     <form
