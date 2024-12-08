@@ -28,17 +28,23 @@ module Mutations
 
           Provide a response to a user's question about their order. Here is the user's question:
 
-          - #{order_message_responding_to.body}
+          User question: %{order_message_body}
 
-          Here is the order information:
-          #{'    '}
-          - Order items: #{order.stripe_checkout_session_line_items}
-          - Order total dollar amount: #{order.amount_total}
-          - Order status: #{order.status}
+          Order information:
+            - Order items: %{order_items}
+            - Order total: $%{order_total}
+            - Order status: %{order_status}
         PROMPT
 
+        formatted_prompt = format(
+          prompt,
+          order_message_body: OrderMessage.find_by_id(order_message_id).body,
+          order_items: Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).stripe_checkout_session_line_items,
+          order_total: Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).amount_total,
+          order_status: Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).status
+        )
 
-        gemini_response = bot.eval prompt
+        gemini_response = bot.eval formatted_prompt
 
       rescue StandardError => e
         raise GraphQL::ExecutionError, "There was an issue creating a response. Please try again in a minute."
