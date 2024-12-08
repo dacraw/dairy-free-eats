@@ -1,5 +1,33 @@
 # README
 
+## Development
+
+### Clone the project locally
+
+`git clone git@github.com:dacraw/dairy-free-eats.git` (note, ssh needs to be enabled)
+
+### Install Ruby gems
+
+`bundle install`
+
+### Setup the Postgres DB
+
+`rails db:setup`
+
+_Refer to the `database.yml` file with regards to configuring your development Postgres database. Specifically, note the use of `host: localhost` if you have an issue creating the database._
+
+### Install frontend dependencies
+
+`yarn`
+
+### Start the app
+
+`bin/dev`
+
+Visit `localhost:3000` to view the app. Run `rails c` to view the Rails console.
+
+This app uses `solid_queue` and `solid_cable` to work around the need for `redis`, meaning jobs and websockets will be managed by the database.
+
 ## Configure Stripe
 
 ### Install Stripe CLI
@@ -25,34 +53,12 @@ In order to use the CLI, you must authenticate with: `stripe login` (note: this 
 
 The Stripe test API key will be stored in Rails credentials and used for both development and production environments, for the purpose of demo'ing the project. The key is set within `config/application.rb`. You will need the master key to decrypt credentials.
 
-### Setup ngrok for local endpoint testing
+### Testing Stripe Webhook Endpoint (Development)
 
-In order to test the local endpoint, set up `ngrok` for a unique url that can be added to the Stripe Dashboard Event Destination endpoint in order to test webhooks locally.
-
-#### Install `ngrok`
-
-##### Linux
-
-Instructions taken from [ngrok Linux setup](https://dashboard.ngrok.com/get-started/setup/linux)
-
-1. Install via `apt`:
+In a separate terminal window, run the command:
 
 ```
-curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
-	| sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
-	&& echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
-	| sudo tee /etc/apt/sources.list.d/ngrok.list \
-	&& sudo apt update \
-	&& sudo apt install ngrok
+stripe listen --forward-to localhost:3000/stripe/events
 ```
 
-2. Add auth token to `ngrok.yml` file: `ngrok config add-authtoken AUTH_TOKEN`
-
-3. Run the following command to start the forwarding: `ngrok http --url=glad-promoted-falcon.ngrok-free.app 3000`. Please note that this needs to be running in order to test whether Stripe is sending events when triggering the API.
-
-### Testing Stripe Webhooks
-
-With an `ngrok` tunnel setup to `localhost`, and `stripe-cli` installed locally, run the command `ngrok http --url=glad-promoted-falcon.ngrok-free.app 3000` and then `stripe trigger payment_intent.succeeded` to test the Stripe Event Destination endpoint. Other useful `stripe` commands:
-
-- `stripe listen` (monitor webhook events sent to the endpoint)
-- `stripe logs tail` (monitor network responses to the Stripe endpoint)
+This will forward any webhook events to the development environment (note the port number). Since the test api key is being used in the deployed site as well, there is metadata logic encoded that will determine whether the environment is development or production, and forward the webhook event properly.
