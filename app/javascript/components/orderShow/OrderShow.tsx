@@ -1,6 +1,7 @@
 import { useCurrentUserQuery, useFetchOrderQuery } from "graphql/types";
 import React, { useEffect } from "react";
-import { Navigate, useNavigate, useParams } from "react-router";
+import { Link, Navigate, useNavigate, useParams } from "react-router";
+import { formatIntegerToMoney } from "util/stringUtil";
 
 const OrderShow = () => {
   const { id } = useParams();
@@ -23,17 +24,35 @@ const OrderShow = () => {
 
   return (
     <div>
-      <h3>Your Order</h3>
-      <p>Order # {data?.order?.id}</p>
-      <div className="grid grid-cols-[auto_1fr">
-        {data?.order?.stripeCheckoutSessionLineItems?.map((item, i) => (
-          <React.Fragment key={i}>
-            <p>{item.quantity}</p>
-            <p>{item.name}</p>
-          </React.Fragment>
-        ))}
+      <h3 className="page-title">Your Order</h3>
+      <div className="dark-blue-background p-4 mb-4">
+        <p className="font-bold text-sm mb-4">Order # {data?.order?.id}</p>
+        <div className=" mb-4">
+          {data?.order?.stripeCheckoutSessionLineItems?.map((item, i) => (
+            <div
+              className="grid grid-cols-[50px_1fr] gap-x-2 grid-rows-[1fr_auto] items-center border-b-2 mb-4 pb-2"
+              key={i}
+            >
+              <p className="text-sm px-2 text-center gray-background">
+                {item.quantity}x
+              </p>
+              <p className="">{item.name}</p>
+              <p className="row-start-2 col-start-2 italic text-sm">
+                {formatIntegerToMoney(Number(item.unitAmount))}
+              </p>
+            </div>
+          ))}
+        </div>
+        <p>
+          <span className="font-bold text-sm">Total:</span>{" "}
+          {formatIntegerToMoney(Number(data?.order?.amountTotal))}
+        </p>
       </div>
-      <p>Total: {data?.order?.amountTotal}</p>
+      <div className="grid justify-center">
+        <Link to="/my_orders" className="site-link text-sm text-center">
+          Back to My Orders
+        </Link>
+      </div>
     </div>
   );
 };
