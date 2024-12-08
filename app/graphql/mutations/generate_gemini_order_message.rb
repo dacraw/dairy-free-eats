@@ -39,8 +39,15 @@ module Mutations
         formatted_prompt = format(
           prompt,
           order_message_body: order_message_responding_to.body,
-          order_items: order.stripe_checkout_session_line_items,
-          order_total: order.amount_total,
+          order_items: order.stripe_checkout_session_line_items.map do |item|
+            {
+              quantity: item["quantity"],
+              name: item["name"],
+              line_item_amount: sprintf("$%.2f", item["unit_amount"] / 100)
+            }
+          end,
+          # order_items: order.stripe_checkout_session_line_items,
+          order_total: sprintf("$%.2f", Order.last.amount_total / 100),
           order_status: order.status
         )
 
