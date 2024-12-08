@@ -63,9 +63,11 @@ export const GENERATE_GOOGLE_GEMINI_ORDER_MESSAGE = gql`
 
 const OrderChatMessageForm = ({
   currentUserId,
+  currentUserIsAdmin,
 
   orderId,
 }: {
+  currentUserIsAdmin: User["admin"];
   currentUserId: User["id"];
   orderId: OrderMessage["orderId"];
 }) => {
@@ -143,6 +145,7 @@ const OrderChatMessageForm = ({
           orderMessage?.data?.createOrderMessage?.orderMessage?.id;
 
         if (!newOrderMessageId) return;
+        if (currentUserIsAdmin) return;
 
         await generateGeminiOrderMessage({
           variables: {
@@ -157,13 +160,20 @@ const OrderChatMessageForm = ({
         {...rest}
         name="message"
         autoComplete="off"
+        disabled={createOrderMessageLoading || createOrderMessageLoading}
         ref={(e) => {
           ref(e);
           messageRef.current = e;
         }}
         className="block w-full bg-gray-200 mb-4"
       />
-      <button className="blue-button w-full">Submit Message</button>
+      <button className="blue-button w-full">
+        {createOrderMessageLoading ? (
+          <FontAwesomeIcon icon={faSpinner} />
+        ) : (
+          "Submit Message"
+        )}
+      </button>
     </form>
   );
 };
@@ -228,9 +238,7 @@ const OrderChat = ({
       >
         <p className="text-center text-xs bg-gray-800 rounded p-2 mb-4">
           This chat will be available after an order is received and until it is
-          completed. You can click "Admin Demo" from the navigation above and
-          find the order chat in the dashboard's order chats to send messages.
-          Using incognito mode in a new browser will make this easier.
+          completed.
         </p>
         {loading ? (
           <>
@@ -251,7 +259,11 @@ const OrderChat = ({
         )}
       </div>
       <div className="p-4 gray-background">
-        <OrderChatMessageForm orderId={orderId} currentUserId={currentUserId} />
+        <OrderChatMessageForm
+          orderId={orderId}
+          currentUserId={currentUserId}
+          currentUserIsAdmin={currentUserIsAdmin}
+        />
       </div>
     </div>
   );

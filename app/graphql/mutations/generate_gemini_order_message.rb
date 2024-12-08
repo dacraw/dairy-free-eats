@@ -20,11 +20,11 @@ module Mutations
         bot = NanoBot.new(cartridge: CARTRIDGE_CONFIG)
 
         prompt = <<-PROMPT
-          You are going to answer a user's question about their order. Only answer using the "Order information" provided in this prompt.
+          You are going to answer a user's question about their order. Only answer using the "Order information" provided in this prompt. Your response should be one sentence long.
 
           If they greet you, ask them what questions they have about their order.
 
-          If they ask a question that is not a greeting or has nothing to do with their order, you must reply with "I'm sorry, but I can only answer questions about your order."
+          If they ask a question that is not about their order, you must reply with "I'm sorry, but I can only answer questions about your order."
 
           Provide a response to a user's question about their order. Here is the user's question:
 
