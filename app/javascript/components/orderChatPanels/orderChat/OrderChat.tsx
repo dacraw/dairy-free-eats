@@ -4,6 +4,7 @@ import {
   OrderMessage,
   useCreateOrderMessageMutation,
   useFetchOrderMessagesQuery,
+  useGenerateGeminiOrderMessageMutation,
   User,
 } from "graphql/types";
 import { useEffect, useRef } from "react";
@@ -43,6 +44,23 @@ const OrderChatMessage = ({
   );
 };
 
+export const GENERATE_GOOGLE_GEMINI_ORDER_MESSAGE = gql`
+  mutation GenerateGeminiOrderMessage(
+    $input: GenerateGeminiOrderMessageInput!
+  ) {
+    generateGeminiOrderMessage(input: $input) {
+      orderMessage {
+        id
+        body
+      }
+      errors {
+        path
+        message
+      }
+    }
+  }
+`;
+
 const OrderChatMessageForm = ({
   currentUserId,
 
@@ -80,6 +98,15 @@ const OrderChatMessageForm = ({
     },
   });
 
+  const [
+    generateGeminiOrderMessage,
+    {
+      data: generateGeminiMessageData,
+      loading: generateGeminiMessageLoading,
+      error: generateGeminiMessageError,
+    },
+  ] = useGenerateGeminiOrderMessageMutation();
+
   const messageRef = useRef<HTMLInputElement | null>(null);
 
   const { register, handleSubmit, reset, setFocus, formState } = useForm<{
@@ -98,7 +125,7 @@ const OrderChatMessageForm = ({
     <form
       autoComplete="off"
       onSubmit={handleSubmit(async (data) => {
-        await createOrderMessage({
+        const orderMessage = await createOrderMessage({
           variables: {
             input: {
               createOrderMessageInputType: {
@@ -111,6 +138,19 @@ const OrderChatMessageForm = ({
         });
 
         reset();
+
+        const newOrderMessageId =
+          orderMessage?.data?.createOrderMessage?.orderMessage?.id;
+
+        if (!newOrderMessageId) return;
+
+        await generateGeminiOrderMessage({
+          variables: {
+            input: {
+              orderMessageId: newOrderMessageId,
+            },
+          },
+        });
       })}
     >
       <input

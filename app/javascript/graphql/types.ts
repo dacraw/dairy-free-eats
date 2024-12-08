@@ -516,6 +516,13 @@ export type FetchCurrentUserOrdersQueryVariables = Exact<{
 
 export type FetchCurrentUserOrdersQuery = { __typename?: 'Query', currentUserOrders?: Array<{ __typename?: 'Order', id: string, amountTotal: number, createdAt: string, guestEmail?: string | null, updatedAt: string, status: OrderStatus, completedAt?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', imageUrl: string, name: string, quantity: number, unitAmount: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
 
+export type GenerateGeminiOrderMessageMutationVariables = Exact<{
+  input: GenerateGeminiOrderMessageInput;
+}>;
+
+
+export type GenerateGeminiOrderMessageMutation = { __typename?: 'Mutation', generateGeminiOrderMessage?: { __typename?: 'GenerateGeminiOrderMessagePayload', orderMessage?: { __typename?: 'OrderMessage', id: string, body?: string | null } | null, errors: Array<{ __typename?: 'Error', path?: Array<string> | null, message: string }> } | null };
+
 export type OrderMessageReceivedSubscriptionVariables = Exact<{
   orderId: Scalars['ID']['input'];
 }>;
@@ -1025,6 +1032,46 @@ export type FetchCurrentUserOrdersQueryHookResult = ReturnType<typeof useFetchCu
 export type FetchCurrentUserOrdersLazyQueryHookResult = ReturnType<typeof useFetchCurrentUserOrdersLazyQuery>;
 export type FetchCurrentUserOrdersSuspenseQueryHookResult = ReturnType<typeof useFetchCurrentUserOrdersSuspenseQuery>;
 export type FetchCurrentUserOrdersQueryResult = Apollo.QueryResult<FetchCurrentUserOrdersQuery, FetchCurrentUserOrdersQueryVariables>;
+export const GenerateGeminiOrderMessageDocument = gql`
+    mutation GenerateGeminiOrderMessage($input: GenerateGeminiOrderMessageInput!) {
+  generateGeminiOrderMessage(input: $input) {
+    orderMessage {
+      id
+      body
+    }
+    errors {
+      path
+      message
+    }
+  }
+}
+    `;
+export type GenerateGeminiOrderMessageMutationFn = Apollo.MutationFunction<GenerateGeminiOrderMessageMutation, GenerateGeminiOrderMessageMutationVariables>;
+
+/**
+ * __useGenerateGeminiOrderMessageMutation__
+ *
+ * To run a mutation, you first call `useGenerateGeminiOrderMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGenerateGeminiOrderMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [generateGeminiOrderMessageMutation, { data, loading, error }] = useGenerateGeminiOrderMessageMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGenerateGeminiOrderMessageMutation(baseOptions?: Apollo.MutationHookOptions<GenerateGeminiOrderMessageMutation, GenerateGeminiOrderMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GenerateGeminiOrderMessageMutation, GenerateGeminiOrderMessageMutationVariables>(GenerateGeminiOrderMessageDocument, options);
+      }
+export type GenerateGeminiOrderMessageMutationHookResult = ReturnType<typeof useGenerateGeminiOrderMessageMutation>;
+export type GenerateGeminiOrderMessageMutationResult = Apollo.MutationResult<GenerateGeminiOrderMessageMutation>;
+export type GenerateGeminiOrderMessageMutationOptions = Apollo.BaseMutationOptions<GenerateGeminiOrderMessageMutation, GenerateGeminiOrderMessageMutationVariables>;
 export const OrderMessageReceivedDocument = gql`
     subscription OrderMessageReceived($orderId: ID!) {
   orderMessageReceived(orderId: $orderId) {
