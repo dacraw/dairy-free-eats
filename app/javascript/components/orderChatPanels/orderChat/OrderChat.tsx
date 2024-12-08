@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FetchOrderMessagesQuery,
   OrderMessage,
@@ -109,6 +109,8 @@ const OrderChatMessageForm = ({
     },
   ] = useGenerateGeminiOrderMessageMutation();
 
+  const [receiveGeminiResponse, setReceiveGeminiResponse] = useState(true);
+
   const messageRef = useRef<HTMLInputElement | null>(null);
 
   const { register, handleSubmit, reset, setFocus, formState } = useForm<{
@@ -146,6 +148,7 @@ const OrderChatMessageForm = ({
 
         if (!newOrderMessageId) return;
         if (currentUserIsAdmin) return;
+        if (!receiveGeminiResponse) return;
 
         await generateGeminiOrderMessage({
           variables: {
@@ -167,6 +170,19 @@ const OrderChatMessageForm = ({
         }}
         className="block w-full bg-gray-200 mb-4"
       />
+
+      <div className="mb-4 flex gap-x-2 justify-center">
+        <input
+          id="receive-gemini-response"
+          type="checkbox"
+          checked={receiveGeminiResponse}
+          onChange={() => setReceiveGeminiResponse(!receiveGeminiResponse)}
+        />
+        <label className="text-sm" htmlFor="receive-gemini-response">
+          Enable Chatbot Responses
+        </label>
+      </div>
+
       <button className="blue-button w-full">
         {createOrderMessageLoading ? (
           <FontAwesomeIcon icon={faSpinner} />
@@ -238,7 +254,9 @@ const OrderChat = ({
       >
         <p className="text-center text-xs bg-gray-800 rounded p-2 mb-4">
           This chat will be available after an order is received and until it is
-          completed.
+          completed. You may ask a chatbot questions about your order by
+          checking the "Enable Chatbot Responses" checkbox above the "Submit
+          Message" field.
         </p>
         {loading ? (
           <>

@@ -46,7 +46,6 @@ module Mutations
               line_item_amount: sprintf("$%.2f", item["unit_amount"] / 100)
             }
           end,
-          # order_items: order.stripe_checkout_session_line_items,
           order_total: sprintf("$%.2f", Order.last.amount_total / 100),
           order_status: order.status
         )
