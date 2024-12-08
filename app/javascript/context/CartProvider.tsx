@@ -16,6 +16,7 @@ type CartContextType = {
   addToCart: (item: CartItem) => void;
   removeFromCart: (itemKey: string) => void;
   adjustItemQuantity: (itemKey: string, quantityDelta: number) => void;
+  clearCart: () => void;
 };
 
 export const CartContext = createContext<CartContextType>({
@@ -23,6 +24,7 @@ export const CartContext = createContext<CartContextType>({
   addToCart: () => {},
   removeFromCart: () => {},
   adjustItemQuantity: () => {},
+  clearCart: () => {},
 });
 
 type CartItem = {
@@ -54,58 +56,66 @@ const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [cartId]);
 
-  const addToCart: CartContextType["addToCart"] = useCallback(
-    (item) => {
-      const { stripePriceId, quantity } = item;
-      const newCartItems = { ...cartItems };
+  if (!currentUserData) return null;
 
-      if (cartItems[stripePriceId]) {
-        const existingQuantity = cartItems[stripePriceId].quantity;
-        newCartItems[stripePriceId].quantity = quantity + existingQuantity;
+  const addToCart: CartContextType["addToCart"] = (item) => {
+    const { stripePriceId, quantity } = item;
+    const newCartItems = { ...cartItems };
 
-        setCartItems(newCartItems);
-        localStorage.setItem(cartId, JSON.stringify(newCartItems));
-      } else {
-        newCartItems[stripePriceId] = item;
-
-        setCartItems(newCartItems);
-        localStorage.setItem(cartId, JSON.stringify(newCartItems));
-      }
-    },
-    [cartId, cartItems]
-  );
-
-  const removeFromCart: CartContextType["removeFromCart"] = useCallback(
-    (itemKey) => {
-      const newCartItems = { ...cartItems };
-
-      delete newCartItems[itemKey];
+    if (cartItems[stripePriceId]) {
+      const existingQuantity = cartItems[stripePriceId].quantity;
+      newCartItems[stripePriceId].quantity = quantity + existingQuantity;
 
       setCartItems(newCartItems);
       localStorage.setItem(cartId, JSON.stringify(newCartItems));
-    },
-    [cartId, cartItems]
-  );
+    } else {
+      newCartItems[stripePriceId] = item;
 
-  const adjustItemQuantity: CartContextType["adjustItemQuantity"] = useCallback(
-    (itemKey, quantityDelta) => {
-      const updatedItems = { ...cartItems };
-      const updatedCartItem = { ...updatedItems[itemKey] };
-      const updatedQuantity = updatedCartItem.quantity + quantityDelta;
-      updatedCartItem.quantity = updatedQuantity;
+      setCartItems(newCartItems);
+      localStorage.setItem(cartId, JSON.stringify(newCartItems));
+    }
+  };
 
-      updatedItems[itemKey] = updatedCartItem;
+  const removeFromCart: CartContextType["removeFromCart"] = (itemKey) => {
+    const newCartItems = { ...cartItems };
 
-      setCartItems(updatedItems);
+    delete newCartItems[itemKey];
 
-      localStorage.setItem(cartId, JSON.stringify(updatedItems));
-    },
-    [cartItems]
-  );
+    setCartItems(newCartItems);
+    localStorage.setItem(cartId, JSON.stringify(newCartItems));
+  };
+
+  const adjustItemQuantity: CartContextType["adjustItemQuantity"] = (
+    itemKey,
+    quantityDelta
+  ) => {
+    const updatedItems = { ...cartItems };
+    const updatedCartItem = { ...updatedItems[itemKey] };
+    const updatedQuantity = updatedCartItem.quantity + quantityDelta;
+    updatedCartItem.quantity = updatedQuantity;
+
+    updatedItems[itemKey] = updatedCartItem;
+
+    setCartItems(updatedItems);
+
+    localStorage.setItem(cartId, JSON.stringify(updatedItems));
+  };
+
+  const clearCart: CartContextType["clearCart"] = () => {
+    setCartItems({});
+
+    localStorage.setItem(cartId, JSON.stringify({}));
+  };
 
   return (
     <CartContext.Provider
-      value={{ cartItems, addToCart, removeFromCart, adjustItemQuantity }}
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        adjustItemQuantity,
+        clearCart,
+      }}
     >
       {children}
     </CartContext.Provider>

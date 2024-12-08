@@ -120,7 +120,7 @@ const ShoppingCartItems = () => {
   const { cartItems } = useContext(CartContext);
 
   return (
-    <div>
+    <div id="shopping-cart-contents">
       {Object.keys(cartItems).length > 0 ? (
         <div>
           {Object.entries(cartItems).map(([stripePrice, itemInfo]) => (

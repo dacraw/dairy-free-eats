@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { gql } from "@apollo/client";
 import {
   faCircleCheck,
@@ -8,6 +8,7 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFetchStripeCheckoutSessionQuery } from "graphql/types";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
+import { CartContext } from "context/CartProvider";
 
 export const FETCH_STRIPE_CHECKOUT_SESSION = gql`
   query FetchStripeCheckoutSession($id: ID!) {
@@ -35,10 +36,13 @@ const OrderSuccess = () => {
   const { data, loading, error } = useFetchStripeCheckoutSessionQuery({
     variables: { id: checkoutId || "" },
   });
+  const { clearCart } = useContext(CartContext);
 
   useEffect(() => {
     if (!checkoutId) {
       navigate("/");
+    } else {
+      clearCart();
     }
   }, [checkoutId]);
 
