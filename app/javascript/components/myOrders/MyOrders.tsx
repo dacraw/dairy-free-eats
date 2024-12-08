@@ -76,8 +76,9 @@ const MyOrders = () => {
                       >
                         <ImageLoader
                           alt={item.name}
-                          additionalClassName={`w-full h-full rounded-full `}
+                          additionalClassName={`w-full h-full  `}
                           src={item.imageUrl}
+                          imageAdditionalClassName="rounded-full"
                         />
                       </div>
                     ))}

@@ -6,7 +6,8 @@ const ImageLoader: React.FC<{
   src: string;
   alt: string;
   additionalClassName?: string;
-}> = ({ src, additionalClassName, alt }) => {
+  imageAdditionalClassName?: string;
+}> = ({ src, additionalClassName, alt, imageAdditionalClassName }) => {
   const [loaded, setLoaded] = useState(false);
 
   return (
@@ -19,7 +20,7 @@ const ImageLoader: React.FC<{
         onLoad={() => setLoaded(true)}
         className={`opacity-0 transition-opacity duration-1000 ${
           loaded ? "opacity-100" : ""
-        } `}
+        } ${imageAdditionalClassName ? imageAdditionalClassName : ""} `}
       />
 
       <FontAwesomeIcon
