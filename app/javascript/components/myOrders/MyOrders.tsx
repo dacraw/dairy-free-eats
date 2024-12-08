@@ -5,6 +5,7 @@ import { useFetchCurrentUserOrdersQuery } from "graphql/types";
 import { startCase } from "lodash";
 import React from "react";
 import { Link } from "react-router";
+import { formatIntegerToMoney } from "util/stringUtil";
 
 const MyOrders = () => {
   const { data, loading, error } = useFetchCurrentUserOrdersQuery({
@@ -102,12 +103,7 @@ const MyOrders = () => {
                       {order.stripeCheckoutSessionLineItems.length > 1
                         ? "s"
                         : ""}{" "}
-                      -{" "}
-                      {new Intl.NumberFormat("en-EN", {
-                        style: "currency",
-                        currency: "USD",
-                        minimumFractionDigits: 2,
-                      }).format(Number((order.amountTotal / 100).toFixed(2)))}
+                      - {formatIntegerToMoney(Number(order.amountTotal))}
                     </p>
                   </div>
                   <div>

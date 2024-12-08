@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useFetchStripeCheckoutSessionQuery } from "graphql/types";
 import { useLocation, useNavigate, useSearchParams } from "react-router";
 import { CartContext } from "context/CartProvider";
+import { formatIntegerToMoney } from "util/stringUtil";
 
 export const FETCH_STRIPE_CHECKOUT_SESSION = gql`
   query FetchStripeCheckoutSession($id: ID!) {
@@ -98,16 +99,8 @@ const OrderSuccess = () => {
                     <p>
                       <strong className="font-bold">Total:</strong>{" "}
                       <span>
-                        {new Intl.NumberFormat("en-EN", {
-                          style: "currency",
-                          currency: "USD",
-                          minimumFractionDigits: 2,
-                        }).format(
-                          Number(
-                            (
-                              data?.fetchCheckoutSession?.amountTotal / 100
-                            ).toFixed(2)
-                          )
+                        {formatIntegerToMoney(
+                          Number(data?.fetchCheckoutSession?.amountTotal)
                         )}
                       </span>
                     </p>

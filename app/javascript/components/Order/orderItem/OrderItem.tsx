@@ -4,6 +4,7 @@ import { NotificationsContext } from "context/NotificationsProvider";
 import { Price, Product, User } from "graphql/types";
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { formatIntegerToMoney } from "util/stringUtil";
 
 const OrderItem: React.FC<{
   currentUserIsAdmin: User["admin"];
@@ -51,13 +52,7 @@ const OrderItem: React.FC<{
       />
       <p className="font-bold text-lg mb-2 h-[60px]">{name}</p>
       <p className="mb-2 h-[60px]">{description}</p>
-      <p className="mb-6">
-        {new Intl.NumberFormat("en-EN", {
-          style: "currency",
-          currency: "USD",
-          minimumFractionDigits: 2,
-        }).format(Number((unitAmount / 100).toFixed(2)))}
-      </p>
+      <p className="mb-6">{formatIntegerToMoney(unitAmount)}</p>
 
       {!currentUserIsAdmin && (
         <>
