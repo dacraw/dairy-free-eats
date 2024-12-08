@@ -3,13 +3,13 @@
     {
       "warning_type": "Dangerous Eval",
       "warning_code": 13,
-      "fingerprint": "73a616096c72d626ce2c0706f3cdf5586dd84106496f4545bce5599dd16f8f41",
+      "fingerprint": "60c89b6e7a7309d98003d78e126c1482514414e41e45aba37dd0b4f3523c160b",
       "check_name": "Evaluation",
       "message": "User input in eval",
       "file": "app/graphql/mutations/generate_gemini_order_message.rb",
-      "line": 47,
+      "line": 53,
       "link": "https://brakemanscanner.org/docs/warning_types/dangerous_eval/",
-      "code": "NanoBot.new(:cartridge => (CARTRIDGE_CONFIG)).eval(format(\"          You are going to answer a user's question about their order. You should not answer any question that is not about their order. If they ask a question that has nothing to do with their order, you must reply with \\\"I'm sorry, but I can only answer questions about your order.\\\"\\n\\n          If they ask whether the food tastes good, you will assure them that it does.\\n\\n          If they complain that the food is too expensive, you will tell them that the food is home cooked and competitively priced compared to alternatives.\\n\\n          Provide a response to a user's question about their order. Here is the user's question:\\n\\n          User question: %{order_message_body}\\n\\n          Order information:\\n            - Order items: %{order_items}\\n            - Order total: $%{order_total}\\n            - Order status: %{order_status}\\n\", :order_message_body => OrderMessage.find_by_id(order_message_id).body, :order_items => Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).stripe_checkout_session_line_items, :order_total => Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).amount_total, :order_status => Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).status))",
+      "code": "NanoBot.new(:cartridge => (CARTRIDGE_CONFIG)).eval(format(\"          You are going to answer a user's question about their order. Only answer using the \\\"Order information\\\" provided in this prompt. Your response should be one sentence long.\\n\\n          If they greet you, ask them what questions they have about their order.\\n\\n          If they ask a question that is not about their order, you must reply with \\\"I'm sorry, but I can only answer questions about your order.\\\"\\n\\n          Provide a response to a user's question about their order. Here is the user's question:\\n\\n          User question: %{order_message_body}\\n\\n          Order information:\\n            - Order items: %{order_items}\\n            - Order total: $%{order_total}\\n            - Order status: %{order_status}\\n\", :order_message_body => OrderMessage.find_by_id(order_message_id).body, :order_items => (Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).stripe_checkout_session_line_items.map do\n { :quantity => item[\"quantity\"], :name => item[\"name\"], :line_item_amount => sprintf(\"$%.2f\", (item[\"unit_amount\"] / 100)) }\n end), :order_total => sprintf(\"$%.2f\", (Order.last.amount_total / 100)), :order_status => Order.find_by_id(OrderMessage.find_by_id(order_message_id).order).status))",
       "render_path": null,
       "location": {
         "type": "method",
@@ -22,9 +22,9 @@
         913,
         95
       ],
-      "note": "I inspected Nanobot's eval instance method, and it doesn't appear malicious and instead if used to feed input into the chatbot. Furthermore, the prompt has been interpolated as a string, and the order message body is itself defined as a string type, so it appears that there is no need to worry about the eval warning in this case."
+      "note": "Ignoring this warning per previous note -- the input is sanitized and the `eval` method is being called on an instance of Nanobot. The method itself only feeds string input for a response, there will be no code executed."
     }
   ],
-  "updated": "2024-12-08 03:26:05 -0800",
+  "updated": "2024-12-08 13:18:22 -0800",
   "brakeman_version": "6.2.2"
 }
