@@ -2,7 +2,12 @@ import React from "react";
 import { screen, render } from "@testing-library/react";
 import MyOrders from "components/myOrders/MyOrders";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
-import { FetchCurrentUserOrdersQuery, OrderStatus } from "graphql/types";
+import {
+  FetchCurrentUserNotificationsQueryVariables,
+  FetchCurrentUserOrdersQuery,
+  FetchCurrentUserOrdersQueryVariables,
+  OrderStatus,
+} from "graphql/types";
 import { FETCH_CURRENT_USER_ORDERS } from "components/orderChatPanels/OrderChatPanels";
 import { MemoryRouter } from "react-router";
 
@@ -28,17 +33,22 @@ const incompleteOrder = {
   },
 };
 
-const withIncompleteOrdersMocks: MockedResponse<FetchCurrentUserOrdersQuery>[] =
-  [
-    {
-      request: { query: FETCH_CURRENT_USER_ORDERS },
-      result: {
-        data: {
-          currentUserOrders: [incompleteOrder],
-        },
+const withIncompleteOrdersMocks: MockedResponse<
+  FetchCurrentUserOrdersQuery,
+  FetchCurrentUserOrdersQueryVariables
+>[] = [
+  {
+    request: {
+      query: FETCH_CURRENT_USER_ORDERS,
+      variables: { incomplete: false },
+    },
+    result: {
+      data: {
+        currentUserOrders: [incompleteOrder],
       },
     },
-  ];
+  },
+];
 
 const completedOrder = {
   id: "1",
@@ -62,9 +72,15 @@ const completedOrder = {
   },
 };
 
-const withCompleteOrderMocks: MockedResponse<FetchCurrentUserOrdersQuery>[] = [
+const withCompleteOrderMocks: MockedResponse<
+  FetchCurrentUserOrdersQuery,
+  FetchCurrentUserOrdersQueryVariables
+>[] = [
   {
-    request: { query: FETCH_CURRENT_USER_ORDERS },
+    request: {
+      query: FETCH_CURRENT_USER_ORDERS,
+      variables: { incomplete: false },
+    },
     result: {
       data: {
         currentUserOrders: [completedOrder],
@@ -73,9 +89,15 @@ const withCompleteOrderMocks: MockedResponse<FetchCurrentUserOrdersQuery>[] = [
   },
 ];
 
-const withNoOrdersMocks: MockedResponse<FetchCurrentUserOrdersQuery>[] = [
+const withNoOrdersMocks: MockedResponse<
+  FetchCurrentUserOrdersQuery,
+  FetchCurrentUserOrdersQueryVariables
+>[] = [
   {
-    request: { query: FETCH_CURRENT_USER_ORDERS },
+    request: {
+      query: FETCH_CURRENT_USER_ORDERS,
+      variables: { incomplete: false },
+    },
     result: {
       data: {
         currentUserOrders: [],
@@ -89,7 +111,9 @@ describe("<MyOrders />", () => {
     it("renders without errors", async () => {
       render(
         <MockedProvider mocks={withIncompleteOrdersMocks}>
-          <MyOrders />
+          <MemoryRouter>
+            <MyOrders />
+          </MemoryRouter>
         </MockedProvider>
       );
 
@@ -111,7 +135,9 @@ describe("<MyOrders />", () => {
     it("renders without errors", async () => {
       render(
         <MockedProvider mocks={withCompleteOrderMocks}>
-          <MyOrders />
+          <MemoryRouter>
+            <MyOrders />
+          </MemoryRouter>
         </MockedProvider>
       );
 

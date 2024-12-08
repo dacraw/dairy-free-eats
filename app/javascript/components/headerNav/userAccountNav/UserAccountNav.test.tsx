@@ -10,7 +10,10 @@ describe("<UserAccountNav />", () => {
     it("renders without errors", () => {
       render(
         <MemoryRouter>
-          <UserAccountNav currentUserEmail={currentUserEmail} />
+          <UserAccountNav
+            currentUserEmail={currentUserEmail}
+            currentUserAdmin={false}
+          />
         </MemoryRouter>
       );
 
@@ -25,7 +28,7 @@ describe("<UserAccountNav />", () => {
     it("renders without errors", () => {
       render(
         <MemoryRouter>
-          <UserAccountNav currentUserEmail={null} />
+          <UserAccountNav currentUserEmail={null} currentUserAdmin={false} />
         </MemoryRouter>
       );
 

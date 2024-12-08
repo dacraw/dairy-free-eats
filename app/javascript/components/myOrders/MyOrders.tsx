@@ -15,8 +15,6 @@ const MyOrders = () => {
 
   if (error) return <p>There was an error.</p>;
 
-  // console.log("render");
-
   return (
     <div>
       <h3 className="animate-home-title-shimmer font-bold text-center mb-10 text-2xl">
