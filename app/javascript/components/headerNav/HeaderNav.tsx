@@ -175,6 +175,7 @@ const HeaderNav = () => {
             }
           >
             <UserAccountNav
+              currentUserAdmin={Boolean(data?.currentUser?.admin)}
               currentUserEmail={data?.currentUser?.email || null}
             />
           </HeaderModal>

@@ -55,8 +55,9 @@ const LogoutButton = () => {
 };
 
 const UserAccountNav: React.FC<{
+  currentUserAdmin: boolean;
   currentUserEmail: Maybe<User["email"]>;
-}> = ({ currentUserEmail }) => {
+}> = ({ currentUserAdmin, currentUserEmail }) => {
   return (
     <div
       className="
@@ -66,9 +67,11 @@ const UserAccountNav: React.FC<{
     >
       {currentUserEmail ? (
         <>
-          <Link className="blue-button text-center" to="my_orders">
-            My Orders
-          </Link>
+          {!currentUserAdmin && (
+            <Link className="blue-button text-center" to="my_orders">
+              My Orders
+            </Link>
+          )}
           <div className="text-sm mb-2 text-center">
             <p>Logged in as:</p>
             <p className="font-bold">{currentUserEmail}</p>
