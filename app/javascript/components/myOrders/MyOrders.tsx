@@ -5,9 +5,13 @@ import { useFetchCurrentUserOrdersQuery } from "graphql/types";
 import { startCase } from "lodash";
 import React from "react";
 import { Link } from "react-router";
+import { formatIntegerToMoney } from "util/stringUtil";
 
 const MyOrders = () => {
-  const { data, loading, error } = useFetchCurrentUserOrdersQuery();
+  const { data, loading, error } = useFetchCurrentUserOrdersQuery({
+    variables: { incomplete: false },
+    fetchPolicy: "cache-and-network",
+  });
 
   if (error) return <p>There was an error.</p>;
 
@@ -70,8 +74,9 @@ const MyOrders = () => {
                       >
                         <ImageLoader
                           alt={item.name}
-                          additionalClassName={`w-full h-full rounded-full `}
+                          additionalClassName={`w-full h-full  `}
                           src={item.imageUrl}
+                          imageAdditionalClassName="rounded-full"
                         />
                       </div>
                     ))}
@@ -97,13 +102,16 @@ const MyOrders = () => {
                       {order.stripeCheckoutSessionLineItems.length > 1
                         ? "s"
                         : ""}{" "}
-                      -{" "}
-                      {new Intl.NumberFormat("en-EN", {
-                        style: "currency",
-                        currency: "USD",
-                        minimumFractionDigits: 2,
-                      }).format(Number((order.amountTotal / 100).toFixed(2)))}
+                      - {formatIntegerToMoney(Number(order.amountTotal))}
                     </p>
+                  </div>
+                  <div>
+                    <Link
+                      to={`/orders/${order.id}`}
+                      className="blue-button text-sm"
+                    >
+                      View
+                    </Link>
                   </div>
                 </div>
               );

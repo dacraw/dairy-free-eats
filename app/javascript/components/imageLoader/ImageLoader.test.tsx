@@ -20,4 +20,21 @@ describe("<ImageLoader />", () => {
     expect(await screen.findByAltText(alt)).toHaveClass("opacity-100");
     expect(screen.getByTestId(spinnerTestId)).toHaveClass("hidden");
   });
+
+  it("adds the imageAdditionalClassName prop to the image", () => {
+    const alt = "a picture";
+    const imageAdditionalClassName = "some-class";
+
+    render(
+      <ImageLoader
+        alt={alt}
+        src="someImage.jpg"
+        imageAdditionalClassName={imageAdditionalClassName}
+      />
+    );
+
+    const image = screen.getByAltText(alt);
+
+    expect(image).toHaveClass(imageAdditionalClassName);
+  });
 });

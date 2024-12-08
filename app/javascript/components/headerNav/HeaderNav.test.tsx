@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  screen,
-  render,
-  waitFor,
-  queryByRole,
-  act,
-} from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import HeaderNav, { CURRENT_USER } from "components/headerNav/HeaderNav";
@@ -108,6 +102,8 @@ describe("<HeaderNav />", () => {
     });
 
     it("clicking logout invokes the session delete mutation and redirects to login page", async () => {
+      currentUserPresentMocks[0].maxUsageCount = 2;
+
       render(
         <MockedProvider mocks={currentUserPresentMocks} cache={cache}>
           <MemoryRouter>

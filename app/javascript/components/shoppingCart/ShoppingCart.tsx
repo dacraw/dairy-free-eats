@@ -14,6 +14,7 @@ import {
 } from "graphql/types";
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router";
+import { formatIntegerToMoney } from "util/stringUtil";
 
 const ShoppingCartItemQuantity: React.FC<{
   itemKey: string;
@@ -137,16 +138,8 @@ const ShoppingCartItems = () => {
                 <p className="font-bold">{itemInfo.name}</p>
                 <p className="text-sm">{itemInfo.description}</p>
                 <p className="tet-sm">
-                  {new Intl.NumberFormat("en-EN", {
-                    style: "currency",
-                    currency: "USD",
-                    minimumFractionDigits: 2,
-                  }).format(
-                    Number(
-                      ((itemInfo.unitAmount / 100) * itemInfo.quantity).toFixed(
-                        2
-                      )
-                    )
+                  {formatIntegerToMoney(
+                    Number(itemInfo.unitAmount * itemInfo.quantity)
                   )}
                 </p>
               </div>
@@ -160,20 +153,14 @@ const ShoppingCartItems = () => {
             <div>
               <span className="font-bold">Total: </span>
               <span className="font-bold">
-                {new Intl.NumberFormat("en-EN", {
-                  style: "currency",
-                  currency: "USD",
-                  minimumFractionDigits: 2,
-                }).format(
+                {formatIntegerToMoney(
                   Number(
-                    (
-                      Object.keys(cartItems).reduce(
-                        (acc, key) =>
-                          cartItems[key].unitAmount * cartItems[key].quantity +
-                          acc,
-                        0
-                      ) / 100
-                    ).toFixed(2)
+                    Object.keys(cartItems).reduce(
+                      (acc, key) =>
+                        cartItems[key].unitAmount * cartItems[key].quantity +
+                        acc,
+                      0
+                    )
                   )
                 )}
               </span>

@@ -51,6 +51,10 @@
   .site-link {
     @apply font-bold underline text-blue-200;
   }
+
+  .page-title {
+    @apply animate-home-title-shimmer font-bold text-2xl p-4 text-center mb-6;
+  }
 }
 
 .animate-slide-up {

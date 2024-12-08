@@ -32,10 +32,13 @@ const orderMockValues: FetchOrderQuery["order"] = {
   stripePaymentIntentId: "pi_12345",
   createdAt: "2024-11-17",
   updatedAt: "2024-11-19",
+  amountTotal: 900,
   stripeCheckoutSessionLineItems: [
     {
       name: "Super Burrito",
       quantity: 3,
+      imageUrl: "image.com",
+      unitAmount: 300,
     },
   ],
   guestEmail: null,

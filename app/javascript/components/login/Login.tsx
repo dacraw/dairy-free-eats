@@ -16,7 +16,7 @@ const Login = () => {
       <div>
         <form onSubmit={handleSubmit(login)} className="mb-12">
           {error && <p className="text-red-700">{startCase(error.message)}</p>}
-          <h3 className="mb-4 text-2xl">Login</h3>
+          <h3 className="page-title">Login</h3>
           <div>
             <label className="block" htmlFor="email">
               Email
