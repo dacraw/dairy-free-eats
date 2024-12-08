@@ -55,5 +55,14 @@ RSpec.feature "Order Page Spec", type: :feature do
         expect(shopping_cart_modal).to have_content "Your cart currently has no items."
         expect(shopping_cart_modal).not_to have_content products.first["name"]
         expect(shopping_cart_modal).to have_link "Order Page"
+
+        # ensure the shopping cart is cleared upon visiting the order success page
+        # the idea here is to skip checking out by using Stripe checkout
+        # We don't care if the session is retrieved or not, we only care here that the cart is empty.
+        visit success_path checkout_id: "12345"
+        expect(page).to have_content "There was an issue retrieving the Stripe order."
+
+        find("svg[data-icon='cart-shopping']").click
+        expect(shopping_cart_modal).to have_content "Your cart currently has no items."
     end
 end

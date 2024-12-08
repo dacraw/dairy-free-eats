@@ -13,6 +13,7 @@ const MockCartProvider = ({ children }: { children: React.ReactNode }) => {
         cartItems: {},
         removeFromCart: mockRemoveFromCart,
         adjustItemQuantity: adjustItemQuantity,
+        clearCart: () => {},
       }}
     >
       {children}
