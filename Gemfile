@@ -73,6 +73,8 @@ group :development do
   gem "graphiql-rails"
 
   gem "dockerfile-rails", ">= 1.6"
+
+  gem "bullet"
 end
 
 group :test do
