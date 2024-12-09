@@ -55,7 +55,7 @@ module Types
 
       raise GraphQL::ExecutionError.new "Order not found for order id##{order_id}" if order.nil?
 
-      order.order_messages.order(created_at: :asc)
+      order.order_messages.includes(:user).order(created_at: :asc)
     end
 
     field :current_user_notifications, Types::NotificationType.connection_type, null: false
