@@ -68,6 +68,12 @@ RUN rm -rf node_modules
 # Final stage for app image
 FROM base
 
+# Install packages needed for deployment
+# NOTE: This reinstalls dependencies for NanoBot, specifically the libsodium-dev package to solve an issue with changing from `build` to `base` ; ideally, copy contents of that install from `build` into `base` instead of reinstalling NanoBot dependencies below (similar to how the BUNDLE_PATH and `/rails` directories are copied after this step below)
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y curl postgresql-client build-essential libffi-dev libsodium-dev lua5.4-dev  && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
 COPY --from=build /rails /rails
