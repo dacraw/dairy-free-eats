@@ -15,6 +15,7 @@ const mockOrderMessages = [
     createdAt: "2024",
     userId: "1",
     userIsAdmin: false,
+    userIsGemini: false,
   },
 ];
 
