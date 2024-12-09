@@ -5,6 +5,7 @@ import {
   useFetchCurrentUserOrdersQuery,
 } from "graphql/types";
 import OrderChatPanel from "components/orderChatPanels/orderChatPanel/OrderChatPanel";
+import useOrderChatStore from "stores/orderChatsStore";
 
 export const FETCH_ORDER_MESSAGES = gql`
   query FetchOrderMessages($orderId: ID!) {
@@ -60,9 +61,21 @@ const OrderChatPanels = () => {
   const { data: currentUserData, loading: currentUserLoading } =
     useCurrentUserQuery();
 
+  const { setupChats, chatVisibility } = useOrderChatStore();
+
   const { data, loading, refetch } = useFetchCurrentUserOrdersQuery({
     variables: { incomplete: true },
   });
+
+  useEffect(() => {
+    const orderIds = data?.currentUserOrders?.map((order) =>
+      parseInt(order.id)
+    );
+
+    if (orderIds && orderIds?.length) {
+      setupChats(orderIds);
+    }
+  }, [data]);
 
   useEffect(() => {
     refetch();

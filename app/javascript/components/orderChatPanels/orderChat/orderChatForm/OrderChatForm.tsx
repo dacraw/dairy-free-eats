@@ -11,6 +11,7 @@ import {
 } from "graphql/types";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import useOrderChatStore from "stores/orderChatsStore";
 
 export const GENERATE_GOOGLE_GEMINI_ORDER_MESSAGE = gql`
   mutation GenerateGeminiOrderMessage(
@@ -39,6 +40,9 @@ const OrderChatMessageForm = ({
   currentUserId: User["id"];
   orderId: OrderMessage["orderId"];
 }) => {
+  const { chatVisibility } = useOrderChatStore();
+  const visibility = chatVisibility[parseInt(orderId)];
+
   const [
     createOrderMessage,
     { data: createOrderMessageData, loading: createOrderMessageLoading },
@@ -91,7 +95,7 @@ const OrderChatMessageForm = ({
     if (messageRef.current) {
       messageRef.current.focus({ preventScroll: true });
     }
-  }, [createOrderMessageData]);
+  }, [createOrderMessageData, visibility]);
 
   return (
     <form
@@ -131,7 +135,11 @@ const OrderChatMessageForm = ({
         {...rest}
         name="message"
         autoComplete="off"
-        disabled={createOrderMessageLoading || createOrderMessageLoading}
+        disabled={
+          createOrderMessageLoading ||
+          createOrderMessageLoading ||
+          visibility !== "opened"
+        }
         ref={(e) => {
           ref(e);
           messageRef.current = e;

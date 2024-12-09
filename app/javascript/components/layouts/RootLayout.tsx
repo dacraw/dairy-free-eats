@@ -15,7 +15,7 @@ const RootLayout = () => {
         </div>
       </div>
 
-      <div className="fixed right-0 bottom-0 z-50">
+      <div className="fixed right-0 bottom-0 z-[400]">
         <OrderChatPanels />
       </div>
 

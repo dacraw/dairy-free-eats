@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { gql } from "@apollo/client";
 import OrderChatMessageForm from "components/orderChatPanels/orderChat/orderChatForm/OrderChatForm";
+import useOrderChatStore, { OrderChatVisibility } from "stores/orderChatsStore";
 
 const OrderChatMessage = ({
   currentUserId,
@@ -65,6 +66,11 @@ const OrderChat = ({
     variables: { orderId },
   });
 
+  const { chatVisibility, setChatVisibility } = useOrderChatStore();
+  const visibility = chatVisibility[parseInt(orderId)];
+  const setVisibility = (visibility: OrderChatVisibility) =>
+    setChatVisibility(parseInt(orderId), visibility);
+
   useEffect(() => {
     const handleScroll = () => {
       if (!chatRef.current) return;
@@ -83,16 +89,29 @@ const OrderChat = ({
   }, []);
 
   return (
-    <div className="relative">
+    <div
+      className={`relative  ${
+        visibility === "opened" || visibility === "opening"
+          ? "animate-order-chat-slide-up max-h-[550px]"
+          : "animate-order-chat-slide-down max-h-0"
+      } transition-height`}
+      onAnimationStart={() => {
+        if (chatRef.current) {
+          chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+      }}
+      onAnimationEnd={() => {
+        if (visibility === "closing") {
+          setVisibility("closed");
+        } else if (visibility === "opening") {
+          setVisibility("opened");
+        }
+      }}
+    >
       <div
         id="chat"
         ref={chatRef}
-        className={`p-4 overflow-auto h-96 animate-slide-up gray-background`}
-        onAnimationStart={() => {
-          if (chatRef.current) {
-            chatRef.current.scrollTop = chatRef.current.scrollHeight;
-          }
-        }}
+        className={`p-4 overflow-auto h-96 gray-background`}
       >
         <p className="text-center text-xs bg-gray-800 rounded p-2 mb-4">
           This chat will be available after an order is received and until it is
