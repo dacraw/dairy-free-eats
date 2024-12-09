@@ -8,8 +8,6 @@ Rails.application.configure do
     Bullet.console       = true
     Bullet.rails_logger  = true
     Bullet.add_footer    = true
-    # Bullet.skip_html_injection = false
-    Bullet.always_append_html_body = true
   end
 
   # Settings specified here will take precedence over those in config/application.rb.

@@ -83,6 +83,7 @@ const validMocks: MockedResponse<
           createdAt: "2024",
           userId: "1",
           userIsAdmin: false,
+          userIsGemini: false,
         },
       },
     },

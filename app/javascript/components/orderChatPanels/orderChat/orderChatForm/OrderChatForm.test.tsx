@@ -19,6 +19,7 @@ const orderMessage = {
   userId: "1",
   createdAt: "2024-01-15",
   body: "Test Message",
+  userIsGemini: false,
 };
 
 const geminiOrderMessage = {
@@ -27,6 +28,7 @@ const geminiOrderMessage = {
   userId: "2",
   createdAt: "20204-01-5",
   body: "This is a Gemini Message",
+  userIsGemini: true,
 };
 
 const userNotAdminMocks: MockedResponse<
