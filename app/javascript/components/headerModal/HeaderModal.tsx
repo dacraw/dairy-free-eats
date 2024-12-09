@@ -59,8 +59,8 @@ const HeaderModal = ({
       {visible && (
         <div
           className={`
-            gray-background rounded p-4 fixed left-0 top-0 w-screen h-screen z-[100] 
-            md:absolute md:right-0 ${
+            gray-background rounded p-4 fixed left-0 top-0 w-screen h-screen 
+            md:absolute md:right-0 z-[340] ${
               basic ? "md:w-auto md:h-auto" : "md:w-96 md:max-h-96"
             } md:top-8 md:left-auto 
           `}

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { gql } from "@apollo/client";
 import OrderChatMessageForm from "components/orderChatPanels/orderChat/orderChatForm/OrderChatForm";
+import useOrderChatStore, { OrderChatVisibility } from "stores/orderChatsStore";
 
 const OrderChatMessage = ({
   currentUserId,
@@ -65,6 +66,11 @@ const OrderChat = ({
     variables: { orderId },
   });
 
+  const { chatVisibility, mode, setChatVisibility } = useOrderChatStore();
+  const visibility = chatVisibility[parseInt(orderId)];
+  const setVisibility = (visibility: OrderChatVisibility) =>
+    setChatVisibility(parseInt(orderId), visibility);
+
   useEffect(() => {
     const handleScroll = () => {
       if (!chatRef.current) return;
@@ -83,16 +89,44 @@ const OrderChat = ({
   }, []);
 
   return (
-    <div className="relative">
+    <div
+      className={`
+        ${
+          mode === "bottom_stacked"
+            ? visibility === "opened" || visibility === "opening"
+              ? "animate-order-chat-slide-up max-h-[550px]"
+              : "animate-order-chat-slide-down max-h-0"
+            : ""
+        }
+        ${
+          mode === "top_columns"
+            ? visibility === "opened" || visibility === "opening"
+              ? "animate-order-chat-admin-open max-h-[550px] \
+                md:animate-order-chat-admin-open-md md:absolute md:top-0 md:left-60 md:w-96 opacity-1"
+              : "animate-order-chat-admin-close max-h-0 \
+                md:animate-order-chat-admin-close-md md:absolute md:top-0 md:left-60 md:w-96 opacity-0"
+            : ""
+        }
+         transition-all z-[9999] overscroll-contain`}
+      onAnimationStart={() => {
+        if (chatRef.current) {
+          chatRef.current.scrollTop = chatRef.current.scrollHeight;
+        }
+      }}
+      onAnimationEnd={() => {
+        // if (mode === "bottom_stacked") {
+        if (visibility === "closing") {
+          setVisibility("closed");
+        } else if (visibility === "opening") {
+          setVisibility("opened");
+        }
+        // }
+      }}
+    >
       <div
         id="chat"
         ref={chatRef}
-        className={`p-4 overflow-auto h-96 animate-slide-up gray-background`}
-        onAnimationStart={() => {
-          if (chatRef.current) {
-            chatRef.current.scrollTop = chatRef.current.scrollHeight;
-          }
-        }}
+        className={`p-4 overflow-auto h-96 gray-background`}
       >
         <p className="text-center text-xs bg-gray-800 rounded p-2 mb-4">
           This chat will be available after an order is received and until it is

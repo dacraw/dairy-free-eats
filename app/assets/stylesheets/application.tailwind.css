@@ -56,13 +56,6 @@
     @apply animate-home-title-shimmer font-bold text-2xl p-4 text-center mb-6;
   }
 }
-
-.animate-slide-up {
-  display: block;
-  animation: slide-up 1s;
-  padding: 1em;
-}
-
 .animate-home-title-pulse {
   animation: color-pulse 3s infinite;
 }
@@ -73,16 +66,5 @@
   }
   to {
     color: #9ca3af;
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

@@ -1,4 +1,8 @@
-import { faMessage, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faMessage,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OrderChat from "components/orderChatPanels/orderChat/OrderChat";
 import { FETCH_ORDER_MESSAGES } from "components/orderChatPanels/OrderChatPanels";
@@ -8,7 +12,8 @@ import {
   User,
 } from "graphql/types";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
+import useOrderChatStore, { OrderChatVisibility } from "stores/orderChatsStore";
 
 const OrderChatPanel = ({
   orderId,
@@ -19,7 +24,11 @@ const OrderChatPanel = ({
   currentUserId: User["id"];
   currentUserIsAdmin: boolean;
 }) => {
-  const [visible, setVisible] = useState(false);
+  const { mode, chatVisibility, setChatVisibility } = useOrderChatStore();
+  const visibility = chatVisibility[parseInt(orderId)];
+  const setVisible = (visibility: OrderChatVisibility) =>
+    setChatVisibility(parseInt(orderId), visibility);
+
   const toggleVisibilityRef = useRef<HTMLParagraphElement>(null);
 
   const {
@@ -56,8 +65,11 @@ const OrderChatPanel = ({
   useEffect(() => {
     const closeChat = (e: MouseEvent) => {
       if (toggleVisibilityRef.current) {
-        if (!toggleVisibilityRef.current.contains(e.target as HTMLElement)) {
-          setVisible(false);
+        if (
+          !toggleVisibilityRef.current.contains(e.target as HTMLElement) &&
+          visibility === "opened"
+        ) {
+          setVisible("closing");
         }
       }
     };
@@ -65,18 +77,23 @@ const OrderChatPanel = ({
     document.addEventListener("click", closeChat);
 
     return () => document.removeEventListener("click", closeChat);
-  }, []);
+  }, [visibility]);
 
   return (
-    <div className="text-gray-200 w-60 rounded" ref={toggleVisibilityRef}>
+    <div className={`text-gray-200 w-60 rounded `} ref={toggleVisibilityRef}>
       <div
         className={`${
           orderMessageReceivedLoading ? "text-gray-500" : "text-inherit"
-        } gray-button hover:gray-button-hover text-center cursor-pointer flex gap-4 justify-center items-center`}
+        } gray-button hover:gray-button-hover text-center cursor-pointer flex gap-4 justify-center items-center
+        `}
         onClick={() => {
           if (orderMessageReceivedLoading) return;
 
-          setVisible(!visible);
+          if (visibility === "closed") {
+            setVisible("opening");
+          } else if (visibility === "opened") {
+            setVisible("closing");
+          }
         }}
       >
         {orderMessageReceivedError ? (
@@ -89,13 +106,25 @@ const OrderChatPanel = ({
               // look into using the react router API w/ createBrowserRouter
               <FontAwesomeIcon icon={faSpinner} spin />
             ) : (
-              <FontAwesomeIcon icon={faMessage} />
+              <>
+                {mode === "top_columns" ? null : (
+                  <FontAwesomeIcon icon={faMessage} />
+                )}
+
+                {mode === "top_columns" ? (
+                  visibility === "opened" ? (
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  ) : (
+                    <FontAwesomeIcon icon={faMessage} />
+                  )
+                ) : null}
+              </>
             )}
           </>
         )}
       </div>
 
-      {visible && (
+      {visibility !== "closed" && (
         <OrderChat
           orderId={orderId}
           currentUserId={currentUserId}
