@@ -12,10 +12,12 @@ class Resolvers::CurrentUserOrdersResolver < Resolvers::BaseResolver
             Order
                 .where(user_id: current_user.id)
                 .where.not(status: :completed)
+                .includes(:user)
                 .order(created_at: :desc)
         else
             Order
                 .where(user_id: current_user.id)
+                .includes(:user)
                 .order(created_at: :desc)
         end
     end
