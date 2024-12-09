@@ -1,5 +1,6 @@
 class User < ApplicationRecord
     DEMO_ADMIN_EMAIL = "demoadmin@dairytest.com"
+    GEMINI_USER_EMAIL = "dairyfreeeatsgemini@not_an_email.com"
 
     has_secure_password
 

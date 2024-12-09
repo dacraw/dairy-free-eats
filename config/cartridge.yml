@@ -1,0 +1,20 @@
+---
+meta:
+  symbol: 🤖
+  name: Dairy Free Eats Chatbot
+  author: Douglas Crawford
+  version: 1.0.0
+  license: CC0-1.0
+  description: Chatbot to help with website administrative work.
+
+behaviors:
+  interaction:
+    directive: You are a customer service professional who will answer questions that users have about their order.
+
+provider:
+  id: google
+  credentials:
+    service: generative-language-api
+    api-key: <%= Rails.application.credentials.dig(:google, :generative_ai_api_key) %>
+  options:
+    model: gemini-pro

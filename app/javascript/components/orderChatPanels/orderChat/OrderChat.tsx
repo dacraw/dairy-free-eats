@@ -1,17 +1,10 @@
 import React from "react";
-import {
-  FetchOrderMessagesQuery,
-  OrderMessage,
-  useCreateOrderMessageMutation,
-  useFetchOrderMessagesQuery,
-  User,
-} from "graphql/types";
+import { OrderMessage, useFetchOrderMessagesQuery, User } from "graphql/types";
 import { useEffect, useRef } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
-import { useForm } from "react-hook-form";
 import { gql } from "@apollo/client";
-import { FETCH_ORDER_MESSAGES } from "components/orderChatPanels/OrderChatPanels";
+import OrderChatMessageForm from "components/orderChatPanels/orderChat/orderChatForm/OrderChatForm";
 
 const OrderChatMessage = ({
   currentUserId,
@@ -40,91 +33,6 @@ const OrderChatMessage = ({
         <p className="text-sm">{localTime.toLocaleString()}</p>
       </div>
     </div>
-  );
-};
-
-const OrderChatMessageForm = ({
-  currentUserId,
-
-  orderId,
-}: {
-  currentUserId: User["id"];
-  orderId: OrderMessage["orderId"];
-}) => {
-  const [
-    createOrderMessage,
-    { data: createOrderMessageData, loading: createOrderMessageLoading },
-  ] = useCreateOrderMessageMutation({
-    update(cache, { data }) {
-      const newMessage = data?.createOrderMessage?.orderMessage;
-
-      const existingData = cache.readQuery<FetchOrderMessagesQuery>({
-        query: FETCH_ORDER_MESSAGES,
-        variables: { orderId },
-      });
-
-      if (!existingData) return null;
-
-      if (!newMessage) return existingData;
-
-      const updatedData = {
-        ...existingData,
-        orderMessages: [...existingData.orderMessages, newMessage],
-      };
-
-      cache.writeQuery({
-        query: FETCH_ORDER_MESSAGES,
-        variables: { orderId },
-        data: updatedData,
-      });
-    },
-  });
-
-  const messageRef = useRef<HTMLInputElement | null>(null);
-
-  const { register, handleSubmit, reset, setFocus, formState } = useForm<{
-    message: string;
-  }>();
-
-  const { ref, ...rest } = register("message");
-
-  useEffect(() => {
-    if (messageRef.current) {
-      messageRef.current.focus({ preventScroll: true });
-    }
-  }, []);
-
-  return (
-    <form
-      autoComplete="off"
-      onSubmit={handleSubmit(async (data) => {
-        await createOrderMessage({
-          variables: {
-            input: {
-              createOrderMessageInputType: {
-                orderId,
-                userId: currentUserId,
-                body: data?.message,
-              },
-            },
-          },
-        });
-
-        reset();
-      })}
-    >
-      <input
-        {...rest}
-        name="message"
-        autoComplete="off"
-        ref={(e) => {
-          ref(e);
-          messageRef.current = e;
-        }}
-        className="block w-full bg-gray-200 mb-4"
-      />
-      <button className="blue-button w-full">Submit Message</button>
-    </form>
   );
 };
 
@@ -188,9 +96,9 @@ const OrderChat = ({
       >
         <p className="text-center text-xs bg-gray-800 rounded p-2 mb-4">
           This chat will be available after an order is received and until it is
-          completed. You can click "Admin Demo" from the navigation above and
-          find the order chat in the dashboard's order chats to send messages.
-          Using incognito mode in a new browser will make this easier.
+          completed. You may ask a chatbot questions about your order by
+          checking the "Enable Chatbot Responses" checkbox above the "Submit
+          Message" field.
         </p>
         {loading ? (
           <>
@@ -211,7 +119,11 @@ const OrderChat = ({
         )}
       </div>
       <div className="p-4 gray-background">
-        <OrderChatMessageForm orderId={orderId} currentUserId={currentUserId} />
+        <OrderChatMessageForm
+          orderId={orderId}
+          currentUserId={currentUserId}
+          currentUserIsAdmin={currentUserIsAdmin}
+        />
       </div>
     </div>
   );

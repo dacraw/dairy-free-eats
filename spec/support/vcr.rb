@@ -7,7 +7,8 @@ VCR.configure do |config|
     config.configure_rspec_metadata!
     config.hook_into :webmock
     config.filter_sensitive_data("<BEARER_TOKEN>") do |interaction|
-        interaction.request.headers["Authorization"].first
+        target = interaction.request.headers["Authorization"]&.first
+        target if target.present?
     end
     config.filter_sensitive_data("<IDEMPOTENCY_KEY>") do |interaction|
         target = interaction.request.headers["Idempotency-Key"]&.first
@@ -22,7 +23,7 @@ VCR.configure do |config|
         target if target.present?
     end
     config.filter_sensitive_data("<CLIENT_SECRET>") do |interaction|
-        target = JSON.parse(interaction.response.body)["client_secret"]
+        target = JSON.parse(interaction.response.body)["client_secret"] if interaction.response.body.present?
         target if target.present?
     end
 end
