@@ -19,6 +19,10 @@ class User < ApplicationRecord
         self.email_address === DEMO_ADMIN_EMAIL
     end
 
+    def gemini_user?
+        self.email_address == GEMINI_USER_EMAIL
+    end
+
     private
 
     def stripe_customer_id_format

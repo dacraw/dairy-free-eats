@@ -12,5 +12,10 @@ module Types
     def user_is_admin
       object.user.admin?
     end
+
+    field :user_is_gemini, Boolean, null: false
+    def user_is_gemini
+      object.user.gemini_user?
+    end
   end
 end

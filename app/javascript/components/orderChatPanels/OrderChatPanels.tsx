@@ -15,6 +15,7 @@ export const FETCH_ORDER_MESSAGES = gql`
       createdAt
       userId
       userIsAdmin
+      userIsGemini
     }
   }
 `;
@@ -28,6 +29,7 @@ export const CREATE_ORDER_MESSAGE = gql`
         userId
         createdAt
         body
+        userIsGemini
       }
     }
   }

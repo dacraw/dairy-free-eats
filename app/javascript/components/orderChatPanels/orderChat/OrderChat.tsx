@@ -13,7 +13,10 @@ const OrderChatMessage = ({
   message,
 }: {
   currentUserId: User["id"];
-  message: Pick<OrderMessage, "createdAt" | "body" | "userId" | "userIsAdmin">;
+  message: Pick<
+    OrderMessage,
+    "createdAt" | "body" | "userId" | "userIsAdmin" | "userIsGemini"
+  >;
   currentUserIsAdmin: boolean;
 }) => {
   const utcDate = new Date(message.createdAt);
@@ -27,6 +30,8 @@ const OrderChatMessage = ({
           currentUserId === message.userId ||
           (message.userIsAdmin && currentUserIsAdmin)
             ? "justify-self-end bg-gray-800"
+            : message.userIsGemini
+            ? "justify-self-start bg-green-800"
             : "justify-self-start bg-blue-800"
         }`}
       >
@@ -45,6 +50,7 @@ export const ORDER_MESSAGE_RECEIVED = gql`
       createdAt
       userId
       userIsAdmin
+      userIsGemini
     }
   }
 `;
@@ -114,13 +120,11 @@ const OrderChat = ({
         }
       }}
       onAnimationEnd={() => {
-        // if (mode === "bottom_stacked") {
         if (visibility === "closing") {
           setVisibility("closed");
         } else if (visibility === "opening") {
           setVisibility("opened");
         }
-        // }
       }}
     >
       <div
