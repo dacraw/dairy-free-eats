@@ -30,6 +30,9 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libpq-dev node-gyp pkg-config python-is-python3 && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
+# Nanobot Gemini AI dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends build-essential libffi-dev libsodium-dev lua5.4-dev curl
+
 # Install JavaScript dependencies
 ARG NODE_VERSION=22.11.0
 ARG YARN_VERSION=1.22.22
