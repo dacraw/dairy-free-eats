@@ -66,7 +66,7 @@ const OrderChat = ({
     variables: { orderId },
   });
 
-  const { chatVisibility, setChatVisibility } = useOrderChatStore();
+  const { chatVisibility, mode, setChatVisibility } = useOrderChatStore();
   const visibility = chatVisibility[parseInt(orderId)];
   const setVisibility = (visibility: OrderChatVisibility) =>
     setChatVisibility(parseInt(orderId), visibility);
@@ -90,22 +90,37 @@ const OrderChat = ({
 
   return (
     <div
-      className={`relative  ${
-        visibility === "opened" || visibility === "opening"
-          ? "animate-order-chat-slide-up max-h-[550px]"
-          : "animate-order-chat-slide-down max-h-0"
-      } transition-height`}
+      className={`
+        ${
+          mode === "bottom_stacked"
+            ? visibility === "opened" || visibility === "opening"
+              ? "animate-order-chat-slide-up max-h-[550px]"
+              : "animate-order-chat-slide-down max-h-0"
+            : ""
+        }
+        ${
+          mode === "top_columns"
+            ? visibility === "opened" || visibility === "opening"
+              ? "animate-order-chat-admin-open max-h-[550px] \
+                md:animate-order-chat-admin-open-md md:absolute md:top-0 md:left-60 md:w-96 opacity-1"
+              : "animate-order-chat-admin-close max-h-0 \
+                md:animate-order-chat-admin-close-md md:absolute md:top-0 md:left-60 md:w-96 opacity-0"
+            : ""
+        }
+         transition-all z-[9999] overscroll-contain`}
       onAnimationStart={() => {
         if (chatRef.current) {
           chatRef.current.scrollTop = chatRef.current.scrollHeight;
         }
       }}
       onAnimationEnd={() => {
+        // if (mode === "bottom_stacked") {
         if (visibility === "closing") {
           setVisibility("closed");
         } else if (visibility === "opening") {
           setVisibility("opened");
         }
+        // }
       }}
     >
       <div

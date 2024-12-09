@@ -1,4 +1,8 @@
-import { faMessage, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faMessage,
+  faSpinner,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OrderChat from "components/orderChatPanels/orderChat/OrderChat";
 import { FETCH_ORDER_MESSAGES } from "components/orderChatPanels/OrderChatPanels";
@@ -20,7 +24,7 @@ const OrderChatPanel = ({
   currentUserId: User["id"];
   currentUserIsAdmin: boolean;
 }) => {
-  const { chatVisibility, setChatVisibility } = useOrderChatStore();
+  const { mode, chatVisibility, setChatVisibility } = useOrderChatStore();
   const visibility = chatVisibility[parseInt(orderId)];
   const setVisible = (visibility: OrderChatVisibility) =>
     setChatVisibility(parseInt(orderId), visibility);
@@ -76,11 +80,12 @@ const OrderChatPanel = ({
   }, [visibility]);
 
   return (
-    <div className="text-gray-200 w-60 rounded" ref={toggleVisibilityRef}>
+    <div className={`text-gray-200 w-60 rounded `} ref={toggleVisibilityRef}>
       <div
         className={`${
           orderMessageReceivedLoading ? "text-gray-500" : "text-inherit"
-        } gray-button hover:gray-button-hover text-center cursor-pointer flex gap-4 justify-center items-center`}
+        } gray-button hover:gray-button-hover text-center cursor-pointer flex gap-4 justify-center items-center
+        `}
         onClick={() => {
           if (orderMessageReceivedLoading) return;
 
@@ -101,7 +106,19 @@ const OrderChatPanel = ({
               // look into using the react router API w/ createBrowserRouter
               <FontAwesomeIcon icon={faSpinner} spin />
             ) : (
-              <FontAwesomeIcon icon={faMessage} />
+              <>
+                {mode === "top_columns" ? null : (
+                  <FontAwesomeIcon icon={faMessage} />
+                )}
+
+                {mode === "top_columns" ? (
+                  visibility === "opened" ? (
+                    <FontAwesomeIcon icon={faArrowRight} />
+                  ) : (
+                    <FontAwesomeIcon icon={faMessage} />
+                  )
+                ) : null}
+              </>
             )}
           </>
         )}

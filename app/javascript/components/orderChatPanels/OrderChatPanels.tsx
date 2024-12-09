@@ -73,7 +73,7 @@ const OrderChatPanels = () => {
     );
 
     if (orderIds && orderIds?.length) {
-      setupChats(orderIds);
+      setupChats(orderIds, "bottom_stacked");
     }
   }, [data]);
 
