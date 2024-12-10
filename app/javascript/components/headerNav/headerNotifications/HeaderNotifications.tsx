@@ -8,6 +8,7 @@ import {
 import { gql } from "@apollo/client";
 import { NotificationsContext } from "context/NotificationsProvider";
 import useModalStore from "stores/modalStore";
+import { Link } from "react-router";
 
 export const FETCH_CURRENT_USER_NOTIFICATIONS = gql`
   query FetchCurrentUserNotifications($after: String, $first: Int) {
@@ -35,11 +36,24 @@ export const NotificationsList = () => {
   return (
     <div className="relative text-left z-50">
       <div>
-        {data?.currentUserNotifications?.edges?.map((node) => (
-          <p key={node?.node?.id} className="rounded mb-2 p-2 blue-background">
-            {node?.node?.message}
-          </p>
-        ))}
+        {data?.currentUserNotifications?.edges?.map((node) =>
+          node?.node?.path ? (
+            <Link
+              to={node.node.path}
+              key={node?.node?.id}
+              className="block rounded mb-2 p-2 blue-button"
+            >
+              {node?.node?.message}
+            </Link>
+          ) : (
+            <p
+              key={node?.node?.id}
+              className="rounded mb-2 p-2 blue-background"
+            >
+              {node?.node?.message}
+            </p>
+          )
+        )}
       </div>
       {data?.currentUserNotifications?.pageInfo?.hasNextPage && (
         <div className="text-center">
