@@ -9,6 +9,7 @@ import {
   useCurrentUserQuery,
   useFetchOrdersQuery,
   useSetOrderStatusMutation,
+  useStripeRefundCreateMutation,
 } from "graphql/types";
 import { Link } from "react-router";
 import { startCase } from "lodash";
@@ -41,6 +42,7 @@ export const FETCH_ORDERS = gql`
         email
       }
       guestEmail
+      stripePaymentIntentId
     }
   }
 `;
@@ -56,6 +58,9 @@ type OrderTableArgs = {
   setOrderCompleted: (
     id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
   ) => void;
+  setOrderCancelled: (
+    id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
+  ) => void;
 };
 
 const DesktopOrderTable: React.FC<OrderTableArgs> = ({
@@ -63,6 +68,7 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
   setOrderActive,
   setOrderInTransit,
   setOrderCompleted,
+  setOrderCancelled,
 }) => {
   if (!orders) return null;
 
@@ -75,7 +81,7 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
         <p className="font-bold">Items</p>
         <p></p>
       </div>
-      <div className="grid grid-cols-[50px_100px_1fr_1fr_125px] gap-4 items-center">
+      <div className="grid grid-cols-[50px_100px_1fr_1fr_125px_auto] gap-4 items-center">
         {orders.map((order) => (
           <React.Fragment key={order.id}>
             <p>
@@ -121,6 +127,17 @@ const DesktopOrderTable: React.FC<OrderTableArgs> = ({
                 />
               )}
             </div>
+            <div>
+              {order.status !== OrderStatus.Completed &&
+                order.status !== OrderStatus.Cancelled && (
+                  <ConfirmButton
+                    action={() => setOrderCancelled(order.id)}
+                    actionText={`Set order #${order.id} to cancelled?`}
+                    buttonClassName="red-button"
+                    buttonText="Cancel"
+                  />
+                )}
+            </div>
           </React.Fragment>
         ))}
       </div>
@@ -133,6 +150,7 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
   setOrderActive,
   setOrderInTransit,
   setOrderCompleted,
+  setOrderCancelled,
 }) => {
   if (!orders) return null;
 
@@ -190,6 +208,15 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
                   buttonText="Set Completed"
                 />
               )}
+              {order.status !== OrderStatus.Completed &&
+                order.status !== OrderStatus.Cancelled && (
+                  <ConfirmButton
+                    action={() => setOrderCancelled(order.id)}
+                    actionText={`Set order #${order.id} to cancelled?`}
+                    buttonClassName="red-button"
+                    buttonText="Cancel"
+                  />
+                )}
             </div>
           </div>
         ))}
@@ -252,6 +279,14 @@ const AdminDashboardOrders = () => {
     });
   };
 
+  const setOrderCancelled = (
+    id: SetOrderStatusInput["setOrderStatusInputType"]["id"]
+  ) => {
+    setOrderStatus({
+      variables: setOrderStatusVariables(id, OrderStatus.Cancelled),
+    });
+  };
+
   useEffect(() => {
     // for the demo admin, refetch orders when the current user changes
     // this avoids using stale cache data
@@ -273,12 +308,14 @@ const AdminDashboardOrders = () => {
                 setOrderActive={setOrderActive}
                 setOrderInTransit={setOrderInTransit}
                 setOrderCompleted={setOrderCompleted}
+                setOrderCancelled={setOrderCancelled}
               />
               <ResponsiveOrderTable
                 orders={ordersData.orders}
                 setOrderActive={setOrderActive}
                 setOrderInTransit={setOrderInTransit}
                 setOrderCompleted={setOrderCompleted}
+                setOrderCancelled={setOrderCancelled}
               />
             </>
           )}

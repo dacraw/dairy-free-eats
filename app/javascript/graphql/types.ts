@@ -476,7 +476,7 @@ export type SetOrderStatusMutation = { __typename?: 'Mutation', setOrderStatus?:
 export type FetchOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type FetchOrdersQuery = { __typename?: 'Query', orders?: Array<{ __typename?: 'Order', id: string, status: OrderStatus, guestEmail?: string | null, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
+export type FetchOrdersQuery = { __typename?: 'Query', orders?: Array<{ __typename?: 'Order', id: string, status: OrderStatus, guestEmail?: string | null, stripePaymentIntentId: string, stripeCheckoutSessionLineItems: Array<{ __typename?: 'OrderLineItem', name: string, quantity: number }>, user?: { __typename?: 'User', id: string, email: string } | null }> | null };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -733,6 +733,7 @@ export const FetchOrdersDocument = gql`
       email
     }
     guestEmail
+    stripePaymentIntentId
   }
 }
     `;

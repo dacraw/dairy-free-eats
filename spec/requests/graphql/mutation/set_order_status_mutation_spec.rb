@@ -1,4 +1,5 @@
 require "rails_helper"
+require_relative "../../../support/vcr"
 
 RSpec.describe "Set Order Status Mutation Spec" do
    let(:query) {
@@ -218,6 +219,75 @@ RSpec.describe "Set Order Status Mutation Spec" do
             perform_query order
 
             expect(order.completed_at).to be_present
+         end
+      end
+
+      context "when changing the order status to cancelled" do
+         let(:order) { create :order, :with_line_items }
+         # let(:mailer_double) { double(OrderMailer) }
+
+         def perform_query(order)
+            post graphql_path, params: {
+               query: query,
+               variables: {
+                  input: {
+                     setOrderStatusInputType: {
+                        id: order.id,
+                        status: "cancelled"
+                     }
+                  }
+               }
+            }
+         end
+
+         it "sets the order status" do
+            expect {
+               perform_query order
+            }.to change { order.reload.status }.from("received").to("cancelled")
+
+            graphql_response = JSON.parse(response.body)
+
+            graphql_order = graphql_response["data"]["setOrderStatus"]["order"]
+            expect(graphql_order["id"].to_i).to eq order.id
+            expect(graphql_order["status"]).to eq order.status
+         end
+
+         # it "sends an email" do
+         #    expect(OrderMailer).to receive(:with).with(order: order) { mailer_double }
+         #    expect(mailer_double).to receive(:order_completed) { mailer_double }
+         #    expect(mailer_double).to receive(:deliver_later) { true }
+
+         #    perform_query order
+         # end
+
+         context "when there's an error creating the refund" do
+            let(:cassette_name) { "set_error_status" }
+
+            it "raises an error" do
+               VCR.use_cassette cassette_name do
+                  # expect(Stripe::Refund).to receive(:create) { Stripe::InvalidRequestError.new "Some issue with the request", ""}
+                  expect { Stripe::Refund.create }.to raise_error(Stripe::InvalidRequestError)
+
+                  expect {
+                     post graphql_path, params: {
+                        query: query,
+                        variables: {
+                           input: {
+                              setOrderStatusInputType: {
+                                 id: order.id,
+                                 status: "cancelled"
+                              }
+                           }
+                        }
+                     }
+                  }.not_to change { order.reload.status }
+
+                  graphql_response = JSON.parse(response.body)
+                  error_message = graphql_response["errors"].first["message"]
+
+                  expect(error_message).to eq "There was an error issuing the refund. Order status unchanged. No such payment_intent: '#{order.stripe_payment_intent_id}'"
+               end
+            end
          end
       end
    end
