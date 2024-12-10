@@ -43,9 +43,38 @@ RSpec.describe "Set Order Status Mutation Spec" do
 
    context "when the current user is an admin" do
       let(:user) { create :user, :valid_user, admin: true }
+      let(:order) { create :order, :with_a_user, :with_line_items }
 
       before(:each) do
          login_user user
+      end
+
+      def perform_query(order)
+         expect {
+            post graphql_path, params: {
+               query: query,
+               variables: {
+                  input: {
+                     setOrderStatusInputType: {
+                        id: order.id,
+                        status: "active"
+                     }
+                  }
+               }
+            }
+         }.to change { order.reload.status }.from("received").to("active")
+      end
+
+      it "creates a notification" do
+         notifications = order.user.notifications
+
+         expect {
+            perform_query order
+         }.to change { notifications.reload.count }.from(0).to(1)
+
+         notification = notifications.last
+         expect(notification.message).to eq "Your order ##{order.id} has been set to status: #{order.status.titleize}"
+         expect(notification.path).to eq "/orders/#{order.id}"
       end
 
       context "when the order does not exist" do
@@ -103,18 +132,6 @@ RSpec.describe "Set Order Status Mutation Spec" do
             expect(mailer_double).to receive(:deliver_later) { true }
 
             perform_query order
-         end
-
-         it "creates a notification" do
-            notifications = order.user.notifications
-            
-            expect {
-               perform_query order
-            }.to change { notifications.reload.count }.from(0).to(1)
-
-            notification = notifications.last
-            expect(notification.message).to eq "Your order ##{order.id} has been set to status: #{order.status.titleize}" 
-            expect(notification.path).to eq "/orders/#{order.id}"
          end
       end
 
