@@ -25,6 +25,12 @@ module Mutations
         OrderMailer.with(order: order).order_completed.deliver_later
       end
 
+      Notification.create(
+        user: order.user,
+        message: "Your order ##{order.id} has been set to status: #{order.status.titleize}",
+        path: "/orders/#{order.id}"
+      )
+
       order.reload
 
       { order: order, errors: [] }

@@ -16,6 +16,7 @@ import { FETCH_ORDER } from "components/admin/dashboard/order/AdminDashboardOrde
 import { formatIntegerToMoney } from "util/stringUtil";
 import MyOrders from "components/myOrders/MyOrders";
 import { FETCH_CURRENT_USER_ORDERS } from "components/orderChatPanels/OrderChatPanels";
+import { startCase } from "lodash";
 
 const currentUser = {
   currentUser: {
@@ -149,6 +150,10 @@ describe("<OrderShow />", () => {
         expect(await screen.findByText(/Your Order/i)).toBeInTheDocument();
         expect(
           screen.getByText(new RegExp(`Order # ${order.id}`, "i"))
+        ).toBeInTheDocument();
+
+        expect(
+          screen.getByText(`${startCase(order.status)}`)
         ).toBeInTheDocument();
 
         const orderLineItem = order.stripeCheckoutSessionLineItems[0];
