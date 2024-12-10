@@ -2,6 +2,7 @@
 
 module Types
   class MutationType < Types::BaseObject
+    field :stripe_refund_create, mutation: Mutations::StripeRefundCreate
     field :generate_gemini_order_message, mutation: Mutations::GenerateGeminiOrderMessage
     field :create_order_message, mutation: Mutations::CreateOrderMessage
     field :set_order_status, mutation: Mutations::SetOrderStatus
