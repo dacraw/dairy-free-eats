@@ -1,5 +1,6 @@
 import { useCurrentUserQuery, useFetchOrderQuery } from "graphql/types";
-import React, { useEffect } from "react";
+import { startCase } from "lodash";
+import React from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router";
 import { formatIntegerToMoney } from "util/stringUtil";
 
@@ -25,7 +26,13 @@ const OrderShow = () => {
     <div>
       <h3 className="page-title">Your Order</h3>
       <div className="dark-blue-background p-4 mb-4">
-        <p className="font-bold text-sm mb-4">Order # {data?.order?.id}</p>
+        <div className="text-sm mb-4">
+          <p className="font-bold text-sm">Order # {data?.order?.id}</p>
+          <p className="text-sm">
+            Status:{" "}
+            <span className="italic">{startCase(data?.order?.status)}</span>
+          </p>
+        </div>
         <div className=" mb-4">
           {data?.order?.stripeCheckoutSessionLineItems?.map((item, i) => (
             <div
