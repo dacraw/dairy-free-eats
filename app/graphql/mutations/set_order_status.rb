@@ -17,6 +17,11 @@ module Mutations
 
       case order.status.to_sym
       when :active
+        Notification.create(
+          user: order.user, 
+          message: "Your order ##{order.id} has been set to status: #{order.status.titleize}", 
+          path: "/orders/#{order.id}"
+        )
         OrderMailer.with(order: order).order_active.deliver_later
       when :in_transit
         OrderMailer.with(order: order).order_in_transit.deliver_later

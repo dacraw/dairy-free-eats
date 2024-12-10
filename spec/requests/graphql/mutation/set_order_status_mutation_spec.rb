@@ -104,6 +104,18 @@ RSpec.describe "Set Order Status Mutation Spec" do
 
             perform_query order
          end
+
+         it "creates a notification" do
+            notifications = order.user.notifications
+            
+            expect {
+               perform_query order
+            }.to change { notifications.reload.count }.from(0).to(1)
+
+            notification = notifications.last
+            expect(notification.message).to eq "Your order ##{order.id} has been set to status: #{order.status.titleize}" 
+            expect(notification.path).to eq "/orders/#{order.id}"
+         end
       end
 
       context "when changing the order status to in_transit" do
