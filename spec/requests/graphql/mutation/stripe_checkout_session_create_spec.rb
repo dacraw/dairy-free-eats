@@ -54,46 +54,83 @@ RSpec.describe "StripeCheckoutSessionCreate", type: :request do
     end
 
     context "when a current user is present" do
-      let(:user) { create :user, :valid_user }
       let(:cassette_name) { "stripe_checkout_session_create_customer_present" }
 
-      it "creates a stripe checkout session" do
-        VCR.use_cassette cassette_name do
-          customer = Stripe::Customer.create
+      context "when the user has two or less incomplete orders" do
+        let(:user) { create :user, :valid_user }
 
-          user.update(stripe_customer_id: customer.id)
+        it "creates a stripe checkout session" do
+          VCR.use_cassette cassette_name do
+            customer = Stripe::Customer.create
 
-          login_user(user)
+            user.update(stripe_customer_id: customer.id)
 
-          product_list = Stripe::Product.list
-          line_items = product_list.data.map { |product| { price: product.default_price, quantity: 1 } }
+            login_user(user)
 
-          params = {
-            query: query,
-            variables: {
-              input: {
-                stripeCheckoutSessionInput: {
-                  lineItems: line_items
+            product_list = Stripe::Product.list
+            line_items = product_list.data.map { |product| { price: product.default_price, quantity: 1 } }
+
+            params = {
+              query: query,
+              variables: {
+                input: {
+                  stripeCheckoutSessionInput: {
+                    lineItems: line_items
+                  }
                 }
               }
             }
-          }
-          # Must specify the params as json so that GraphQL can parse the intergers correctly
-          post "/graphql", headers: { "Content-Type": "application/json" }, params: params.to_json
+            # Must specify the params as json so that GraphQL can parse the intergers correctly
+            post "/graphql", headers: { "Content-Type": "application/json" }, params: params.to_json
 
-          data = JSON.parse(response.body)["data"]
-          graphql_response = data["stripeCheckoutSessionCreate"]["stripeCheckoutSession"]
+            data = JSON.parse(response.body)["data"]
+            graphql_response = data["stripeCheckoutSessionCreate"]["stripeCheckoutSession"]
 
-          expect(graphql_response["url"]).to be_present
+            expect(graphql_response["url"]).to be_present
 
-          stripe_checkout_session_json = YAML.load_file("./spec/cassettes/#{cassette_name}.yml")["http_interactions"].last["response"]["body"]["string"]
+            stripe_checkout_session_json = YAML.load_file("./spec/cassettes/#{cassette_name}.yml")["http_interactions"].last["response"]["body"]["string"]
 
-          stripe_checkout_session = JSON.parse(stripe_checkout_session_json, symbolize_names: true)
+            stripe_checkout_session = JSON.parse(stripe_checkout_session_json, symbolize_names: true)
 
-          expect(graphql_response["url"]).to eq stripe_checkout_session[:url]
-          expect(stripe_checkout_session[:customer]).to eq user.stripe_customer_id
-          # expect(stripe_checkout_session[:billing_address_collection]).to eq "auto"
-          expect(stripe_checkout_session[:saved_payment_method_options][:payment_method_save]).to eq "enabled"
+            expect(graphql_response["url"]).to eq stripe_checkout_session[:url]
+            expect(stripe_checkout_session[:customer]).to eq user.stripe_customer_id
+            # expect(stripe_checkout_session[:billing_address_collection]).to eq "auto"
+            expect(stripe_checkout_session[:saved_payment_method_options][:payment_method_save]).to eq "enabled"
+          end
+        end
+      end
+
+      context "when the current user has two incomplete orders" do
+        let!(:user) { create :user, :valid_user, :with_orders, num_orders: 2 }
+
+        it "prevents the checkout session from being executed" do
+          VCR.use_cassette cassette_name do
+            customer = Stripe::Customer.create
+
+            user.update(stripe_customer_id: customer.id)
+
+            login_user(user)
+
+            product_list = Stripe::Product.list
+            line_items = product_list.data.map { |product| { price: product.default_price, quantity: 1 } }
+
+            params = {
+              query: query,
+              variables: {
+                input: {
+                  stripeCheckoutSessionInput: {
+                    lineItems: line_items
+                  }
+                }
+              }
+            }
+
+            # Must specify the params as json so that GraphQL can parse the intergers correctly
+            post "/graphql", headers: { "Content-Type": "application/json" }, params: params.to_json
+
+            error = JSON.parse(response.body)["errors"].first
+            expect(error["message"]).to eq "Current user has at least 2 incomplete orders and may not place more."
+          end
         end
       end
 

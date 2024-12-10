@@ -8,12 +8,16 @@ import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router";
 import {
   CurrentUserQuery,
+  FetchCurrentUserOrdersQuery,
+  FetchCurrentUserOrdersQueryVariables,
   GetProductsQuery,
+  OrderStatus,
   StripeCheckoutSessionCreateMutation,
   StripeCheckoutSessionCreateMutationVariables,
 } from "graphql/types";
 import userEvent from "@testing-library/user-event";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
+import { FETCH_CURRENT_USER_ORDERS } from "components/orderChatPanels/OrderChatPanels";
 
 const currentUserMock = {
   request: { query: CURRENT_USER },
@@ -28,11 +32,104 @@ const currentUserMock = {
   },
 };
 
+const twoIncompleteOrderMocks: MockedResponse<
+  GetProductsQuery | CurrentUserQuery | FetchCurrentUserOrdersQuery,
+  FetchCurrentUserOrdersQueryVariables
+>[] = [
+  {
+    request: {
+      query: GET_PRODUCTS,
+    },
+    result: {
+      data: {
+        listProducts: {
+          stripeObject: "list",
+          hasMore: false,
+          url: "/v1/products",
+          data: [
+            {
+              defaultPrice: { id: "price_12345", unitAmount: 300 },
+              images: ["picture1"],
+              description: "Blended mixed berries, filtered water",
+              name: "Mixed Berry Smoothie (Water base)",
+            },
+            {
+              defaultPrice: { id: "price_54321", unitAmount: 400 },
+              images: ["imageString"],
+              description: "2 salted/peppered eggs, 2 strips of bacon, hummis",
+              name: "Breakfast Burrito",
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: FETCH_CURRENT_USER_ORDERS,
+      variables: { incomplete: true },
+    },
+    result: {
+      data: {
+        currentUserOrders: [
+          {
+            id: "1",
+            amountTotal: 600,
+            createdAt: "createdat",
+            guestEmail: null,
+            updatedAt: "updatedat",
+            status: OrderStatus.InTransit,
+            completedAt: null,
+            stripeCheckoutSessionLineItems: [
+              {
+                imageUrl: "image",
+                name: "name",
+                quantity: 1,
+                unitAmount: 600,
+              },
+            ],
+            user: {
+              id: "1",
+              email: "useremail",
+            },
+          },
+          {
+            id: "2",
+            amountTotal: 600,
+            createdAt: "createdat",
+            guestEmail: null,
+            updatedAt: "updatedat",
+            status: OrderStatus.InTransit,
+            completedAt: null,
+            stripeCheckoutSessionLineItems: [
+              {
+                imageUrl: "image",
+                name: "name",
+                quantity: 1,
+                unitAmount: 600,
+              },
+            ],
+            user: {
+              id: "1",
+              email: "useremail",
+            },
+          },
+        ],
+      },
+    },
+  },
+  currentUserMock,
+];
+
 describe("<Order />", () => {
   describe("with successful GraphQL operations", () => {
     let successfulMocks: MockedResponse<
-      GetProductsQuery | CurrentUserQuery | StripeCheckoutSessionCreateMutation,
-      StripeCheckoutSessionCreateMutationVariables
+      | GetProductsQuery
+      | CurrentUserQuery
+      | StripeCheckoutSessionCreateMutation
+      | FetchCurrentUserOrdersQuery,
+      | StripeCheckoutSessionCreateMutationVariables
+      | FetchCurrentUserOrdersQueryVariables
     >[];
     beforeEach(() => {
       successfulMocks = [
@@ -87,6 +184,60 @@ describe("<Order />", () => {
             },
           },
         },
+        {
+          request: {
+            query: FETCH_CURRENT_USER_ORDERS,
+            variables: { incomplete: true },
+          },
+          result: {
+            data: {
+              currentUserOrders: [
+                {
+                  id: "1",
+                  amountTotal: 600,
+                  createdAt: "createdat",
+                  guestEmail: null,
+                  updatedAt: "updatedat",
+                  status: OrderStatus.InTransit,
+                  completedAt: null,
+                  stripeCheckoutSessionLineItems: [
+                    {
+                      imageUrl: "image",
+                      name: "name",
+                      quantity: 1,
+                      unitAmount: 600,
+                    },
+                  ],
+                  user: {
+                    id: "1",
+                    email: "useremail",
+                  },
+                },
+                {
+                  id: "2",
+                  amountTotal: 600,
+                  createdAt: "createdat",
+                  guestEmail: null,
+                  updatedAt: "updatedat",
+                  status: OrderStatus.InTransit,
+                  completedAt: null,
+                  stripeCheckoutSessionLineItems: [
+                    {
+                      imageUrl: "image",
+                      name: "name",
+                      quantity: 1,
+                      unitAmount: 600,
+                    },
+                  ],
+                  user: {
+                    id: "1",
+                    email: "useremail",
+                  },
+                },
+              ],
+            },
+          },
+        },
         currentUserMock,
       ];
 
@@ -125,6 +276,26 @@ describe("<Order />", () => {
         screen.getByText("Mixed Berry Smoothie (Water base)")
       ).toBeInTheDocument();
       expect(screen.getByText("Breakfast Burrito")).toBeInTheDocument();
+    });
+  });
+
+  describe("when the current user has two incomplete orders", () => {
+    it("notifies the user of this on the page", async () => {
+      render(
+        <MockedProvider addTypename={false} mocks={twoIncompleteOrderMocks}>
+          <MemoryRouter initialEntries={["/order"]}>
+            <Routes>
+              <Route path="/order" element={<Order />} />
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>
+      );
+
+      expect(
+        await screen.findByText(
+          "Please note: You currently have 2 incomplete orders and cannot place any more until at least one of these is completed."
+        )
+      ).toBeInTheDocument();
     });
   });
 });

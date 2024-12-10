@@ -11,8 +11,12 @@ FactoryBot.define do
     end
 
     trait :with_orders do
-      after(:create) do |user|
-        user.orders = [ create(:order, :with_line_items) ]
+      transient do
+        num_orders { 1 }
+      end
+
+      after(:create) do |user, evaluator|
+        user.orders = create_list(:order, evaluator.num_orders, :with_line_items, user: user)
         user.save!
         user.reload
       end

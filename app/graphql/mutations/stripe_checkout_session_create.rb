@@ -14,6 +14,12 @@ module Mutations
         raise GraphQL::ExecutionError, "Admins may not purchase items. Please login as a regular user."
       end
 
+      incomplete_order_count = context[:current_user]&.orders&.incomplete&.size
+
+      if incomplete_order_count && incomplete_order_count >= 2
+        raise GraphQL::ExecutionError, "Current user has at least 2 incomplete orders and may not place more."
+      end
+
       items = stripe_checkout_session_input.line_items
 
       if items.any? { |item| !item.price.match /^price_.*$/ }
