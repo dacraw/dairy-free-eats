@@ -3,13 +3,11 @@ import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import OrderItem from "components/Order/orderItem/OrderItem";
 import {
-  StripeCheckoutSessionCreatePayload,
   useCurrentUserQuery,
+  useFetchCurrentUserOrdersQuery,
   useGetProductsQuery,
-  useStripeCheckoutSessionCreateMutation,
 } from "graphql/types";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React from "react";
 
 export const GET_PRODUCTS = gql`
   query GetProducts {
@@ -49,10 +47,12 @@ const Order = () => {
   const { data: getProductsData, loading: getProductsLoading } =
     useGetProductsQuery();
   const { data: currentUserData } = useCurrentUserQuery();
+  const { data: incompleteOrdersData, loading: ordersLoading } =
+    useFetchCurrentUserOrdersQuery({ variables: { incomplete: true } });
 
   return (
     <>
-      {getProductsLoading ? (
+      {getProductsLoading || ordersLoading ? (
         <>
           <FontAwesomeIcon
             className="block text-9xl mx-auto mb-6"
@@ -71,6 +71,12 @@ const Order = () => {
           </p>
 
           <div className="mb-6 p-2 md:m-2 md:p-6 dark-blue-background rounded">
+            {incompleteOrdersData?.currentUserOrders?.length === 2 && (
+              <p className="text-red-700 text-center font-bold mb-4">
+                Please note: You currently have 2 incomplete orders and cannot
+                place any more until at least one of these is completed.
+              </p>
+            )}
             <div className="flex flex-wrap gap-10 w-full justify-between sm:justify-normal ">
               {getProductsData?.listProducts?.data?.map((product) => {
                 return (
