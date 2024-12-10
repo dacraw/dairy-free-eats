@@ -5,7 +5,7 @@ class Order < ApplicationRecord
 
   enum :status, [ :received, :active, :in_transit, :completed, :cancelled ]
 
-  scope :incomplete, -> { where.not(status: :completed) }
+  scope :incomplete, -> { where.not(status: [ :completed, :cancelled ]) }
 
   validates_presence_of :stripe_payment_intent_id
 
