@@ -27,6 +27,7 @@ module Mutations
         begin
           Stripe::Refund.create payment_intent: order.stripe_payment_intent_id, expand: [ "payment_intent" ]
           order.cancelled!
+          OrderMailer.with(order: order).order_cancelled.deliver_later
         rescue Stripe::InvalidRequestError => e
           raise GraphQL::ExecutionError, "There was an error issuing the refund. Order status unchanged. #{e.message}"
         end

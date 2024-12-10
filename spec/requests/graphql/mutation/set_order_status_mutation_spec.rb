@@ -224,26 +224,66 @@ RSpec.describe "Set Order Status Mutation Spec" do
 
       context "when changing the order status to cancelled" do
          let(:order) { create :order, :with_line_items }
-         # let(:mailer_double) { double(OrderMailer) }
+         let(:mailer_double) { double(OrderMailer) }
 
          def perform_query(order)
-            post graphql_path, params: {
-               query: query,
-               variables: {
-                  input: {
-                     setOrderStatusInputType: {
-                        id: order.id,
-                        status: "cancelled"
+            expect {
+               post graphql_path, params: {
+                  query: query,
+                  variables: {
+                     input: {
+                        setOrderStatusInputType: {
+                           id: order.id,
+                           status: "cancelled"
+                        }
                      }
                   }
                }
-            }
+            }.to change { order.reload.status }.from("received").to("cancelled")
+         end
+
+         def mock_successful_refund
+            Stripe::Refund.construct_from(
+               {
+                  id: "re_3QUcBIElA4InVgv80IXokEJM",
+                  object: "refund",
+                  amount: 1200,
+                  balance_transaction: "txn_3QUcBIElA4InVgv801r2LO3A",
+                  charge: "ch_3QUcBIElA4InVgv80qzhLOwp",
+                  created: 1733870803,
+                  currency: "usd",
+                  destination_details: Stripe::StripeObject.construct_from(
+                     {
+                        card: Stripe::StripeObject.construct_from(
+                           {
+                              reference_status: "pending",
+                              reference_type: "acquirer_reference_number",
+                              type: "refund"
+                           }
+                        ),
+                        type: "card"
+                     }
+                  ),
+                  metadata: {},
+                  payment_intent: "pi_3QUcBIElA4InVgv80nFH9SD1",
+                  reason: nil,
+                  receipt_number: nil,
+                  source_transfer_reversal: nil,
+                  status: "succeeded",
+                  transfer_reversal: nil
+               }
+            )
          end
 
          it "sets the order status" do
-            expect {
-               perform_query order
-            }.to change { order.reload.status }.from("received").to("cancelled")
+            mock_refund = mock_successful_refund
+
+            expect(Stripe::Refund)
+               .to receive(:create)
+               .with(payment_intent: order.stripe_payment_intent_id, expand: [ "payment_intent" ])
+               .and_return(mock_refund)
+
+            perform_query order
 
             graphql_response = JSON.parse(response.body)
 
@@ -252,13 +292,20 @@ RSpec.describe "Set Order Status Mutation Spec" do
             expect(graphql_order["status"]).to eq order.status
          end
 
-         # it "sends an email" do
-         #    expect(OrderMailer).to receive(:with).with(order: order) { mailer_double }
-         #    expect(mailer_double).to receive(:order_completed) { mailer_double }
-         #    expect(mailer_double).to receive(:deliver_later) { true }
+         it "sends an email" do
+            mock_refund = mock_successful_refund
 
-         #    perform_query order
-         # end
+            expect(Stripe::Refund)
+               .to receive(:create)
+               .with(payment_intent: order.stripe_payment_intent_id, expand: [ "payment_intent" ])
+               .and_return(mock_refund)
+
+            expect(OrderMailer).to receive(:with).with(order: order) { mailer_double }
+            expect(mailer_double).to receive(:order_cancelled) { mailer_double }
+            expect(mailer_double).to receive(:deliver_later) { true }
+
+            perform_query order
+         end
 
          context "when there's an error creating the refund" do
             let(:cassette_name) { "set_error_status" }
