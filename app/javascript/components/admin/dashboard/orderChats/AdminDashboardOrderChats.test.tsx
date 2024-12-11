@@ -46,10 +46,15 @@ const validMocks: MockedResponse<
             id: "1",
             stripePaymentIntentId: "pi_123",
             status: OrderStatus.InTransit,
+            createdAt: "createdat",
+            updatedAt: "updatedat",
+            amountTotal: 600,
             stripeCheckoutSessionLineItems: [
               {
                 name: "some thing",
                 quantity: 3,
+                imageUrl: "image",
+                unitAmount: 300,
               },
             ],
             user: {
