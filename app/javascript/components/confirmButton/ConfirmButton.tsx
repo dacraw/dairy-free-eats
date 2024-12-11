@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 
 const ConfirmButton: React.FC<{
   actionText: string;
@@ -30,27 +31,30 @@ const ConfirmButton: React.FC<{
       >
         {buttonText}
       </button>
-      <div
-        data-testid="confirm-button-modal"
-        className={`${
-          show ? "fixed" : "hidden"
-        } bg-gray-400/50 top-0 left-0 border-gray-200  flex justify-center items-center w-full h-full`}
-      >
-        <div className="bg-gray-700 rounded border-4 p-4 z-50">
-          <p>Please confirm that you would like to continue this action:</p>
+      {createPortal(
+        <div
+          data-testid="confirm-button-modal"
+          className={`${
+            show ? "fixed" : "hidden"
+          } gray-background top-0 left-0  flex justify-center items-center w-screen h-screen z-[5000]`}
+        >
+          <div className="dark-gray-background rounded shadow m-4 p-4">
+            <p>Please confirm that you would like to continue this action:</p>
 
-          {actionText && <p className="font-bold my-4">{actionText}</p>}
+            {actionText && <p className="font-bold my-4">{actionText}</p>}
 
-          <div className="flex gap-4 justify-center">
-            <button className="green-button" onClick={action}>
-              Confirm
-            </button>
-            <button className="red-button" onClick={() => toggleShow(false)}>
-              Cancel
-            </button>
+            <div className="flex gap-4 justify-center">
+              <button className="green-button" onClick={action}>
+                Confirm
+              </button>
+              <button className="red-button" onClick={() => toggleShow(false)}>
+                Cancel
+              </button>
+            </div>
           </div>
-        </div>
-      </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 };

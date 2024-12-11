@@ -6,13 +6,11 @@ const AdminDashboard = () => {
     <div className="md:w-[90vw]">
       <>
         <h3 className="page-title">Admin Dashboard</h3>
-        <div className="flex gap-4 border-b-2 pb-2 mb-2">
+        <div className="flex gap-4 justify-center mb-2 dark-blue-background">
           <NavLink
             className={({ isActive }) => {
               return `${
-                isActive
-                  ? "blue-button"
-                  : "hover:text-blue-400 transition-colors"
+                isActive ? "gray-button" : "hover:gray-button-hover"
               } py-2 px-4  text-lg font-bold`;
             }}
             to="orders"
@@ -22,9 +20,7 @@ const AdminDashboard = () => {
           <NavLink
             className={({ isActive }) => {
               return `${
-                isActive
-                  ? "blue-button"
-                  : "hover:text-blue-400 transition-colors"
+                isActive ? "gray-button" : "hover:gray-button-hover"
               } py-2 px-4  text-lg font-bold`;
             }}
             to="order_chats"

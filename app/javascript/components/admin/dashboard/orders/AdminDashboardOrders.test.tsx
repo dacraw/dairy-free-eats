@@ -22,10 +22,15 @@ const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
             id: "1",
             status: OrderStatus.Received,
             stripePaymentIntentId: "pi_123",
+            createdAt: "createdat",
+            updatedAt: "updatedat",
+            amountTotal: 600,
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
                 quantity: 1,
+                imageUrl: "image",
+                unitAmount: 300,
               },
             ],
             user: {
@@ -38,10 +43,15 @@ const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
             id: "2",
             status: OrderStatus.Received,
             stripePaymentIntentId: "pi_321",
+            createdAt: "createdat",
+            updatedAt: "updatedat",
+            amountTotal: 600,
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
                 quantity: 1,
+                imageUrl: "image",
+                unitAmount: 300,
               },
             ],
             user: null,
@@ -77,10 +87,15 @@ const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
             id: "1",
             stripePaymentIntentId: "pi_123",
             status: OrderStatus.Active,
+            createdAt: "createdat",
+            updatedAt: "updatedat",
+            amountTotal: 600,
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
                 quantity: 1,
+                unitAmount: 600,
+                imageUrl: "image",
               },
             ],
             user: {
@@ -111,9 +126,7 @@ describe("<AdminDashboardOrders />", () => {
       </MockedProvider>
     );
 
-    expect((await screen.findAllByText("testuser@test.com")).length).toEqual(2);
-    expect((await screen.findAllByText("guestEmail@test.com")).length).toEqual(
-      2
-    );
+    expect(await screen.findByText("testuser@test.com")).toBeInTheDocument();
+    expect(await screen.findByText("guestEmail@test.com")).toBeInTheDocument();
   });
 });
