@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_11_212219) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_11_213644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -54,6 +54,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_11_212219) do
     t.string "stripe_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stripe_default_price_id", null: false
+    t.index ["stripe_default_price_id"], name: "index_products_on_stripe_default_price_id", unique: true
     t.index ["stripe_name"], name: "index_products_on_stripe_name", unique: true
     t.index ["stripe_product_id"], name: "index_products_on_stripe_product_id", unique: true
   end
