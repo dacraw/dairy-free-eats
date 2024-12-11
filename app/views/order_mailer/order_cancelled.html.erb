@@ -1,0 +1,11 @@
+<p>Order #<%= @order.id %> has been cancelled.</p>
+
+<h4>Cancelled Order Items:</h4>
+<ul>
+    <% @line_items.map do |item| %>
+        <li><%= item["name"] %> x<%= item["quantity"] %></li>
+    <% end %>
+</ul>
+<hr />
+
+<p>The order has been cancelled and a Stripe refund has been issued to the card on file.</p>

@@ -54,4 +54,18 @@ class OrderMailer < ApplicationMailer
 
         mail to: email, subject: "Order Completed!"
     end
+
+    def order_cancelled
+        @order = params[:order]
+        @line_items = @order.stripe_checkout_session_line_items
+        email = @order.user.present? ? @order.user.email_address : @order.guest_email
+
+        if email.blank?
+            puts "No stripe customer email found for the customer: Order##{@order.id}"
+
+            return
+        end
+
+        mail to: email, subject: "Order Cancelled!"
+    end
 end
