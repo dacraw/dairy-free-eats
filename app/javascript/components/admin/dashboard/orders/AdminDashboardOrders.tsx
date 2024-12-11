@@ -182,7 +182,7 @@ const ResponsiveOrderTable: React.FC<OrderTableArgs> = ({
                 ))}
               </div>
             </div>
-            <div>
+            <div className="flex gap-x-4 justify-center">
               {order.status === OrderStatus.Received && (
                 <ConfirmButton
                   action={() => setOrderActive(order.id)}
