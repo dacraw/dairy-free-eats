@@ -36,9 +36,9 @@ const ConfirmButton: React.FC<{
           data-testid="confirm-button-modal"
           className={`${
             show ? "fixed" : "hidden"
-          } bg-gray-400/50 top-0 left-0 border-gray-200  flex justify-center items-center w-screen h-screen z-5000`}
+          } gray-background top-0 left-0  flex justify-center items-center w-screen h-screen z-[5000]`}
         >
-          <div className="bg-gray-700 rounded border-4 p-4 z-6000">
+          <div className="dark-gray-background rounded shadow m-4 p-4">
             <p>Please confirm that you would like to continue this action:</p>
 
             {actionText && <p className="font-bold my-4">{actionText}</p>}
