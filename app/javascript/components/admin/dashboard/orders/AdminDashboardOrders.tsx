@@ -9,7 +9,6 @@ import {
   useCurrentUserQuery,
   useFetchOrdersQuery,
   useSetOrderStatusMutation,
-  useStripeRefundCreateMutation,
 } from "graphql/types";
 import { Link } from "react-router";
 import { startCase } from "lodash";

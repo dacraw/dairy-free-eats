@@ -14,10 +14,14 @@ import {
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
 import { FETCH_ORDERS } from "components/admin/dashboard/orders/AdminDashboardOrders";
 import { ORDER_MESSAGE_RECEIVED } from "components/orderChatPanels/orderChat/OrderChat";
+import { FETCH_ORDER_MESSAGES } from "components/orderChatPanels/OrderChatPanels";
 
 const validMocks: MockedResponse<
-  CurrentUserQuery | FetchOrdersQuery | OrderMessageReceivedSubscription,
-  OrderMessageReceivedSubscriptionVariables
+  | CurrentUserQuery
+  | FetchOrdersQuery
+  | OrderMessageReceivedSubscription
+  | FetchOrderMessagesQuery,
+  OrderMessageReceivedSubscriptionVariables | FetchOrderMessagesQueryVariables
 >[] = [
   {
     request: {
@@ -40,6 +44,7 @@ const validMocks: MockedResponse<
         orders: [
           {
             id: "1",
+            stripePaymentIntentId: "pi_123",
             status: OrderStatus.InTransit,
             stripeCheckoutSessionLineItems: [
               {
@@ -52,6 +57,23 @@ const validMocks: MockedResponse<
               email: "cooluser@test.com",
             },
             guestEmail: null,
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: { query: FETCH_ORDER_MESSAGES, variables: { orderId: "1" } },
+    result: {
+      data: {
+        orderMessages: [
+          {
+            id: "1",
+            body: "heyo",
+            createdAt: "2024",
+            userId: "1",
+            userIsAdmin: true,
+            userIsGemini: false,
           },
         ],
       },

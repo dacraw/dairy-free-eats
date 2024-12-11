@@ -21,9 +21,11 @@ import { ORDER_MESSAGE_RECEIVED } from "components/orderChatPanels/orderChat/Ord
 const validMocks: MockedResponse<
   | CurrentUserQuery
   | FetchCurrentUserOrdersQuery
-  | OrderMessageReceivedSubscription,
+  | OrderMessageReceivedSubscription
+  | FetchOrderMessagesQuery,
   | FetchCurrentUserOrdersQueryVariables
   | OrderMessageReceivedSubscriptionVariables
+  | FetchOrderMessagesQuery
 >[] = [
   {
     request: { query: CURRENT_USER },
@@ -85,6 +87,23 @@ const validMocks: MockedResponse<
           userIsAdmin: false,
           userIsGemini: false,
         },
+      },
+    },
+  },
+  {
+    request: { query: FETCH_ORDER_MESSAGES, variables: { orderId: "1" } },
+    result: {
+      data: {
+        orderMessages: [
+          {
+            id: "1",
+            body: "heyo",
+            createdAt: "2024",
+            userId: "1",
+            userIsAdmin: true,
+            userIsGemini: false,
+          },
+        ],
       },
     },
   },

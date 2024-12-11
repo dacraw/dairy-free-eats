@@ -21,6 +21,7 @@ const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
           {
             id: "1",
             status: OrderStatus.Received,
+            stripePaymentIntentId: "pi_123",
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
@@ -36,6 +37,7 @@ const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
           {
             id: "2",
             status: OrderStatus.Received,
+            stripePaymentIntentId: "pi_321",
             stripeCheckoutSessionLineItems: [
               {
                 name: "Shake",
@@ -73,6 +75,7 @@ const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
         orders: [
           {
             id: "1",
+            stripePaymentIntentId: "pi_123",
             status: OrderStatus.Active,
             stripeCheckoutSessionLineItems: [
               {
