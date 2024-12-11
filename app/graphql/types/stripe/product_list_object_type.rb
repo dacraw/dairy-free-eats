@@ -4,7 +4,7 @@ class Types::Stripe::ProductListObjectType < Types::BaseObject
         object.object
     end
 
-    field :data, [ Types::Stripe::ProductType ], null: true
+    field :data, [ Types::Stripe::StripeProductType ], null: true
     field :has_more, Boolean, null: false
     field :url, String, null: false
 end

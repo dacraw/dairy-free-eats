@@ -359,30 +359,19 @@ type Price {
 }
 
 type Product {
-  active: Boolean!
-  attributes: [String]!
-  created: ISO8601DateTime!
-  defaultPrice: Price!
-  description: String!
-  id: String!
-  images: [String]!
-  livemode: Boolean!
-  marketingFeatures: JSON!
-  metadata: JSON!
-  name: String!
-  packageDimensions: JSON
-  shippable: Boolean
-  statementDescriptor: String
-  stripeObject: String!
-  taxCode: String!
-  type: String!
-  unitLabel: String
-  updated: ISO8601DateTime!
-  url: String
+  createdAt: ISO8601DateTime!
+  id: ID!
+  stripeDefaultPriceId: String!
+  stripeDescription: String!
+  stripeImages: [String!]!
+  stripeName: String!
+  stripePriceUnitAmount: Int!
+  stripeProductId: String!
+  updatedAt: ISO8601DateTime!
 }
 
 type ProductListObject {
-  data: [Product!]
+  data: [StripeProduct!]
   hasMore: Boolean!
   stripeObject: String!
   url: String!
@@ -417,7 +406,7 @@ type Query {
   order(id: ID!): Order
   orderMessages(orderId: ID!): [OrderMessage!]!
   orders: [Order!]
-  retrieveProduct(productId: String!): Product
+  products: [Product!]!
 }
 
 """
@@ -467,6 +456,29 @@ type StripeCheckoutSessionCreatePayload {
 
 input StripeCheckoutSessionInput {
   lineItems: [OrderPageInput!]!
+}
+
+type StripeProduct {
+  active: Boolean!
+  attributes: [String]!
+  created: ISO8601DateTime!
+  defaultPrice: Price!
+  description: String!
+  id: String!
+  images: [String]!
+  livemode: Boolean!
+  marketingFeatures: JSON!
+  metadata: JSON!
+  name: String!
+  packageDimensions: JSON
+  shippable: Boolean
+  statementDescriptor: String
+  stripeObject: String!
+  taxCode: String!
+  type: String!
+  unitLabel: String
+  updated: ISO8601DateTime!
+  url: String
 }
 
 type Subscription {

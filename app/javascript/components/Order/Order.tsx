@@ -11,19 +11,12 @@ import React from "react";
 
 export const GET_PRODUCTS = gql`
   query GetProducts {
-    listProducts {
-      hasMore
-      stripeObject
-      url
-      data {
-        defaultPrice {
-          id
-          unitAmount
-        }
-        description
-        images
-        name
-      }
+    products {
+      stripeDefaultPriceId
+      stripePriceUnitAmount
+      stripeDescription
+      stripeImages
+      stripeName
     }
   }
 `;
@@ -78,18 +71,19 @@ const Order = () => {
               </p>
             )}
             <div className="flex flex-wrap gap-10 w-full justify-between sm:justify-normal ">
-              {getProductsData?.listProducts?.data?.map((product) => {
+              {getProductsData?.products?.map((product) => {
                 return (
                   <OrderItem
                     currentUserIsAdmin={Boolean(
                       currentUserData?.currentUser?.admin
                     )}
-                    key={product?.defaultPrice?.id}
-                    description={product?.description}
-                    imageUrl={product?.images[0] || ""}
-                    name={product?.name}
-                    stripePriceId={product?.defaultPrice?.id}
-                    unitAmount={product?.defaultPrice?.unitAmount}
+                    currentUserPresent={Boolean(currentUserData?.currentUser)}
+                    key={product?.stripeDefaultPriceId}
+                    description={product?.stripeDescription}
+                    imageUrl={product?.stripeImages[0] || ""}
+                    name={product?.stripeName}
+                    stripePriceId={product?.stripeDefaultPriceId}
+                    unitAmount={product?.stripePriceUnitAmount}
                   />
                 );
               })}

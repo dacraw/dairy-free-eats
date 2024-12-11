@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Types::Stripe::ProductType < Types::BaseObject
+class Types::Stripe::StripeProductType < Types::BaseObject
     field :id, String, null: false
     field :stripe_object, String, null: false
     def stripe_object
