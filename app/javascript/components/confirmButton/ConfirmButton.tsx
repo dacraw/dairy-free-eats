@@ -14,6 +14,12 @@ const ConfirmButton: React.FC<{
     } else {
       document.body.classList.remove("overflow-hidden");
     }
+
+    return () => {
+      if (document.body.classList.contains("overflow-hidden")) {
+        document.body.classList.remove("overflow-hidden");
+      }
+    };
   }, [show]);
 
   return (
