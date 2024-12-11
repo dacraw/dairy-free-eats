@@ -15,11 +15,12 @@ import { formatIntegerToMoney } from "util/stringUtil";
 
 const OrderItem: React.FC<{
   currentUserIsAdmin: User["admin"];
-  description: Product["description"];
+  currentUserPresent: Boolean;
+  description: Product["stripeDescription"];
   imageUrl: string;
-  name: Product["name"];
-  stripePriceId: Price["id"];
-  unitAmount: Price["unitAmount"];
+  name: Product["stripeName"];
+  stripePriceId: Product["stripeDefaultPriceId"];
+  unitAmount: Product["stripePriceUnitAmount"];
 }> = ({
   stripePriceId,
   name,
@@ -27,6 +28,7 @@ const OrderItem: React.FC<{
   unitAmount,
   imageUrl,
   currentUserIsAdmin,
+  currentUserPresent,
 }) => {
   const { register, handleSubmit, reset } = useForm();
   const { addToCart } = useContext(CartContext);
@@ -67,29 +69,30 @@ const OrderItem: React.FC<{
       <p className="mb-2 h-[60px]">{description}</p>
       <p className="mb-6">{formatIntegerToMoney(unitAmount)}</p>
 
-      {!currentUserIsAdmin &&
-        Number(incompleteOrdersData?.currentUserOrders?.length) < 2 && (
-          <>
-            <div className=" mb-4">
-              <label htmlFor={`qty-${stripePriceId}`} className="mr-4">
-                Quantity:
-              </label>
-              <input
-                id={`qty-${stripePriceId}`}
-                type="number"
-                min={1}
-                {...register(stripePriceId)}
-                className="text-center h-6 w-10"
-              />
-            </div>
-            <button
-              className="blue-button w-[224px] h-[45px]"
-              id={`add-to-cart-${stripePriceId}`}
-            >
-              Add To Cart
-            </button>
-          </>
-        )}
+      {((!currentUserIsAdmin &&
+        Number(incompleteOrdersData?.currentUserOrders?.length) < 2) ||
+        !currentUserPresent) && (
+        <>
+          <div className=" mb-4">
+            <label htmlFor={`qty-${stripePriceId}`} className="mr-4">
+              Quantity:
+            </label>
+            <input
+              id={`qty-${stripePriceId}`}
+              type="number"
+              min={1}
+              {...register(stripePriceId)}
+              className="text-center h-6 w-10"
+            />
+          </div>
+          <button
+            className="blue-button w-[224px] h-[45px]"
+            id={`add-to-cart-${stripePriceId}`}
+          >
+            Add To Cart
+          </button>
+        </>
+      )}
     </form>
   );
 };

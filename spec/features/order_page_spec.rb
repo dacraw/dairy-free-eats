@@ -3,43 +3,44 @@ require "./spec/support/vcr"
 
 RSpec.feature "Order Page Spec", type: :feature do
     let(:user) { create :user, :valid_user }
+    let!(:products) { create_list(:product, 2, :valid_product) }
 
     before(:each) do
         feature_login_user user
     end
 
     it "allows all cart manipulations to take place" do
-        VCR.use_cassette "order_page_spec" do
-            visit order_path
+        visit order_path
 
-            expect(page).to have_content "Welcome to the order page!"
+        expect(page).to have_content "Welcome to the order page!"
+
+        products.each do |product|
+            expect(page).to have_content product.stripe_name
         end
 
-        cassette = YAML.load_file "spec/cassettes/order_page_spec.yml"
-        products = JSON.parse(cassette["http_interactions"].first["response"]["body"]["string"])["data"]
-        fill_in(products.first["default_price"]["id"], with: 1)
+        fill_in(products.first.stripe_default_price_id, with: 1)
 
-        click_button("add-to-cart-" + products.first["default_price"]["id"])
+        click_button("add-to-cart-" + products.first.stripe_default_price_id)
 
         # expect page to have a notification
-        expect(page).to have_content "#{products.first["name"]} x1 has been added to the cart!"
+        expect(page).to have_content "#{products.first["stripe_name"]} x1 has been added to the cart!"
 
         shopping_cart_icon = find("svg[data-icon='cart-shopping']")
         shopping_cart_icon.click
 
         # ensure the item is in the cart with correct values
         shopping_cart_modal = find("#shopping-cart")
-        expect(shopping_cart_modal).to have_content products.first["name"]
-        expect(shopping_cart_modal).to have_content products.first["description"]
+        expect(shopping_cart_modal).to have_content products.first["stripe_name"]
+        expect(shopping_cart_modal).to have_content products.first["stripe_description"]
 
-        formatted_amount = sprintf("$%.2f", products.first["default_price"]["unit_amount"] / 100.00)
+        formatted_amount = sprintf("$%.2f", products.first.stripe_price_unit_amount / 100.00)
         expect(shopping_cart_modal).to have_content formatted_amount
         expect(shopping_cart_modal).to have_content "Total: #{formatted_amount}"
 
         # ensure the cart item quantity can be increased
         plus_button = shopping_cart_modal.find("svg[data-icon='plus']")
         plus_button.click
-        new_formatted_amount = sprintf("$%.2f", products.first["default_price"]["unit_amount"] / 100.00 * 2)
+        new_formatted_amount = sprintf("$%.2f", products.first.stripe_price_unit_amount / 100.00 * 2)
         expect(shopping_cart_modal).to have_content new_formatted_amount
         expect(shopping_cart_modal).to have_content "Total: #{new_formatted_amount}"
 
@@ -53,7 +54,7 @@ RSpec.feature "Order Page Spec", type: :feature do
         trash_can_button = shopping_cart_modal.find("svg[data-icon='trash']")
         trash_can_button.click
         expect(shopping_cart_modal).to have_content "Your cart currently has no items."
-        expect(shopping_cart_modal).not_to have_content products.first["name"]
+        expect(shopping_cart_modal).not_to have_content products.first.stripe_name
         expect(shopping_cart_modal).to have_link "Order Page"
 
         VCR.use_cassette "dummy_order_page_success" do

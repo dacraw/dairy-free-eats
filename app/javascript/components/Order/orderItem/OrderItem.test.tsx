@@ -107,6 +107,7 @@ describe("<OrderItem />", () => {
       render(
         <MockedProvider mocks={noOrdersMocks}>
           <OrderItem
+            currentUserPresent={true}
             currentUserIsAdmin={false}
             stripePriceId={stripePriceId}
             name={itemName}
@@ -133,6 +134,7 @@ describe("<OrderItem />", () => {
       render(
         <MockedProvider mocks={noOrdersMocks}>
           <OrderItem
+            currentUserPresent={true}
             currentUserIsAdmin={true}
             stripePriceId={stripePriceId}
             name={itemName}
@@ -156,6 +158,7 @@ describe("<OrderItem />", () => {
           <MockedProvider mocks={noOrdersMocks}>
             <MockCartProvider>
               <OrderItem
+                currentUserPresent={true}
                 currentUserIsAdmin={false}
                 stripePriceId={stripePriceId}
                 name={itemName}
@@ -195,6 +198,7 @@ describe("<OrderItem />", () => {
           <MockedProvider mocks={noOrdersMocks}>
             <MockNotificationsProvider>
               <OrderItem
+                currentUserPresent={true}
                 currentUserIsAdmin={false}
                 stripePriceId={stripePriceId}
                 name={itemName}
@@ -231,6 +235,7 @@ describe("<OrderItem />", () => {
           <MockedProvider mocks={noOrdersMocks}>
             <MockNotificationsProvider>
               <OrderItem
+                currentUserPresent={true}
                 currentUserIsAdmin={false}
                 stripePriceId={stripePriceId}
                 name={itemName}
@@ -270,6 +275,7 @@ describe("<OrderItem />", () => {
         <MockedProvider mocks={twoOrdersMocks}>
           <MockNotificationsProvider>
             <OrderItem
+              currentUserPresent={true}
               currentUserIsAdmin={false}
               stripePriceId={stripePriceId}
               name={itemName}

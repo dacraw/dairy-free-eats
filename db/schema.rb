@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_07_040021) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_11_213644) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -44,6 +44,20 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_07_040021) do
     t.datetime "completed_at"
     t.integer "amount_total"
     t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "products", force: :cascade do |t|
+    t.string "stripe_product_id", null: false
+    t.integer "stripe_price_unit_amount", null: false
+    t.string "stripe_description", null: false
+    t.string "stripe_images", default: [], array: true
+    t.string "stripe_name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "stripe_default_price_id", null: false
+    t.index ["stripe_default_price_id"], name: "index_products_on_stripe_default_price_id", unique: true
+    t.index ["stripe_name"], name: "index_products_on_stripe_name", unique: true
+    t.index ["stripe_product_id"], name: "index_products_on_stripe_product_id", unique: true
   end
 
   create_table "sessions", force: :cascade do |t|

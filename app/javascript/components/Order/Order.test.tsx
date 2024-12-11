@@ -32,6 +32,23 @@ const currentUserMock = {
   },
 };
 
+const products = [
+  {
+    stripeDefaultPriceId: "price_12345",
+    stripePriceUnitAmount: 300,
+    stripeImages: ["picture1"],
+    stripeDescription: "Blended mixed berries, filtered water",
+    stripeName: "Mixed Berry Smoothie (Water base)",
+  },
+  {
+    stripeDefaultPriceId: "price_54321",
+    stripePriceUnitAmount: 400,
+    stripeImages: ["imageString"],
+    stripeDescription: "2 salted/peppered eggs, 2 strips of bacon, hummis",
+    stripeName: "Breakfast Burrito",
+  },
+];
+
 const twoIncompleteOrderMocks: MockedResponse<
   GetProductsQuery | CurrentUserQuery | FetchCurrentUserOrdersQuery,
   FetchCurrentUserOrdersQueryVariables
@@ -42,25 +59,7 @@ const twoIncompleteOrderMocks: MockedResponse<
     },
     result: {
       data: {
-        listProducts: {
-          stripeObject: "list",
-          hasMore: false,
-          url: "/v1/products",
-          data: [
-            {
-              defaultPrice: { id: "price_12345", unitAmount: 300 },
-              images: ["picture1"],
-              description: "Blended mixed berries, filtered water",
-              name: "Mixed Berry Smoothie (Water base)",
-            },
-            {
-              defaultPrice: { id: "price_54321", unitAmount: 400 },
-              images: ["imageString"],
-              description: "2 salted/peppered eggs, 2 strips of bacon, hummis",
-              name: "Breakfast Burrito",
-            },
-          ],
-        },
+        products,
       },
     },
   },
@@ -139,26 +138,7 @@ describe("<Order />", () => {
           },
           result: {
             data: {
-              listProducts: {
-                stripeObject: "list",
-                hasMore: false,
-                url: "/v1/products",
-                data: [
-                  {
-                    defaultPrice: { id: "price_12345", unitAmount: 300 },
-                    images: ["picture1"],
-                    description: "Blended mixed berries, filtered water",
-                    name: "Mixed Berry Smoothie (Water base)",
-                  },
-                  {
-                    defaultPrice: { id: "price_54321", unitAmount: 400 },
-                    images: ["imageString"],
-                    description:
-                      "2 salted/peppered eggs, 2 strips of bacon, hummis",
-                    name: "Breakfast Burrito",
-                  },
-                ],
-              },
+              products,
             },
           },
         },
