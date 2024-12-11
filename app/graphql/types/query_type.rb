@@ -18,24 +18,9 @@ module Types
       ids.map { |id| context.schema.object_from_id(id, context) }
     end
 
-    # Add root-level fields here.
-    # They will be entry points for queries on your schema.
-
     field :current_user, Types::UserType, null: true
     def current_user
       context[:current_user]
-    end
-
-    # field :retrieve_product, Types::Stripe::ProductType, null: true do
-    #   argument :product_id, String, required: true
-    # end
-    # def retrieve_product(product_id:)
-    #   ::Stripe::Product.retrieve product_id
-    # end
-
-    field :list_products, Types::Stripe::ProductListObjectType, null: false
-    def list_products
-      ::Stripe::Product.list active: true, expand: [ "data.default_price" ]
     end
 
     field :products, [ Types::ProductType ], null: false
