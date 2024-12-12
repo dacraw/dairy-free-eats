@@ -67,7 +67,7 @@ module Types
       s3_presigner = Aws::S3::Presigner.new(client: s3)
       s3_presigner.presigned_url(
         :get_object,
-        bucket: "dairy-free-eats-development",
+        bucket: Rails.env.production? ? "dairy-free-eats-production" : "dairy-free-eats-development",
         key: "dairy-free-eats-demo.mp4"
       )
     end
