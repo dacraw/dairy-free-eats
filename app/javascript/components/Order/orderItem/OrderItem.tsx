@@ -3,12 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ImageLoader from "components/imageLoader/ImageLoader";
 import { CartContext } from "context/CartProvider";
 import { NotificationsContext } from "context/NotificationsProvider";
-import {
-  Price,
-  Product,
-  useFetchCurrentUserOrdersQuery,
-  User,
-} from "graphql/types";
+import { Product, useFetchCurrentUserOrdersQuery, User } from "graphql/types";
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { formatIntegerToMoney } from "util/stringUtil";

@@ -2,9 +2,14 @@ import React from "react";
 import { screen, render } from "@testing-library/react";
 import { MockedProvider, MockedResponse } from "@apollo/client/testing";
 import { MemoryRouter, Route, Routes } from "react-router";
-import { CurrentUserQuery, FetchOrdersQuery, OrderStatus } from "graphql/types";
+import {
+  CurrentUserQuery,
+  FetchOrdersQuery,
+  GetHomePageDemoVideoUrlQuery,
+  OrderStatus,
+} from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
-import Home from "components/home/Home";
+import Home, { HOME_PAGE_DEMO_VIDEO_URL } from "components/home/Home";
 import { FETCH_ORDERS } from "components/admin/dashboard/orders/AdminDashboardOrders";
 import AdminDashboard from "components/admin/dashboard/AdminDashboard";
 import AdminDashboardIndex from "components/admin/dashboard/index/AdminDashboardIndex";
@@ -28,7 +33,7 @@ const validMocks: MockedResponse<FetchOrdersQuery | CurrentUserQuery>[] = [
 ];
 
 const currentUserNotAdmin: MockedResponse<
-  FetchOrdersQuery | CurrentUserQuery
+  FetchOrdersQuery | CurrentUserQuery | GetHomePageDemoVideoUrlQuery
 >[] = [
   {
     request: {
@@ -43,6 +48,15 @@ const currentUserNotAdmin: MockedResponse<
         },
       },
     },
+  },
+  {
+    request: { query: HOME_PAGE_DEMO_VIDEO_URL },
+    result: {
+      data: {
+        demoVideoPresignedUrl: "",
+      },
+    },
+    maxUsageCount: 2,
   },
 ];
 
@@ -98,7 +112,7 @@ describe("<AdminDashboard />", () => {
 
   describe("when there is no current user", () => {
     const noCurrentUserMocks: MockedResponse<
-      FetchOrdersQuery | CurrentUserQuery
+      FetchOrdersQuery | CurrentUserQuery | GetHomePageDemoVideoUrlQuery
     >[] = [
       {
         request: {
@@ -109,6 +123,15 @@ describe("<AdminDashboard />", () => {
             currentUser: null,
           },
         },
+      },
+      {
+        request: { query: HOME_PAGE_DEMO_VIDEO_URL },
+        result: {
+          data: {
+            demoVideoPresignedUrl: "",
+          },
+        },
+        maxUsageCount: 2,
       },
     ];
 

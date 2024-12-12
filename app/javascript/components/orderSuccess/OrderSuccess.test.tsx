@@ -8,8 +8,9 @@ import { MemoryRouter, Route, Routes } from "react-router";
 import {
   FetchStripeCheckoutSessionQuery,
   FetchStripeCheckoutSessionQueryVariables,
+  GetHomePageDemoVideoUrlQuery,
 } from "graphql/types";
-import Home from "components/home/Home";
+import Home, { HOME_PAGE_DEMO_VIDEO_URL } from "components/home/Home";
 import { formatIntegerToMoney } from "util/stringUtil";
 
 const validMocks: MockedResponse<
@@ -46,7 +47,7 @@ const validMocks: MockedResponse<
 ];
 
 const checkoutIdParamMissingMocks: MockedResponse<
-  FetchStripeCheckoutSessionQuery,
+  FetchStripeCheckoutSessionQuery | GetHomePageDemoVideoUrlQuery,
   FetchStripeCheckoutSessionQueryVariables
 >[] = [
   {
@@ -59,6 +60,15 @@ const checkoutIdParamMissingMocks: MockedResponse<
         fetchCheckoutSession: null,
       },
     },
+  },
+  {
+    request: { query: HOME_PAGE_DEMO_VIDEO_URL },
+    result: {
+      data: {
+        demoVideoPresignedUrl: "",
+      },
+    },
+    maxUsageCount: 2,
   },
 ];
 

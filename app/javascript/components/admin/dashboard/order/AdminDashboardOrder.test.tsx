@@ -10,12 +10,13 @@ import {
   FetchOrderQuery,
   FetchOrderQueryVariables,
   FetchOrdersQuery,
+  GetHomePageDemoVideoUrlQuery,
   OrderStatus,
   SetOrderStatusMutation,
   SetOrderStatusMutationVariables,
 } from "graphql/types";
 import { CURRENT_USER } from "components/headerNav/HeaderNav";
-import Home from "components/home/Home";
+import Home, { HOME_PAGE_DEMO_VIDEO_URL } from "components/home/Home";
 import {
   FETCH_ORDERS,
   SET_ORDER_STATUS,
@@ -51,7 +52,10 @@ const currentUserMockValues = {
 };
 
 const validMocks: MockedResponse<
-  FetchOrderQuery | CurrentUserQuery | SetOrderStatusMutation,
+  | FetchOrderQuery
+  | CurrentUserQuery
+  | SetOrderStatusMutation
+  | GetHomePageDemoVideoUrlQuery,
   FetchOrderQueryVariables | SetOrderStatusMutationVariables
 >[] = [
   {
@@ -171,6 +175,15 @@ describe("<AdminDashboardOrder />", () => {
             {
               ...validMocks[1],
               result: { data: { currentUser: currentUserNotAdmin } },
+            },
+            {
+              request: { query: HOME_PAGE_DEMO_VIDEO_URL },
+              result: {
+                data: {
+                  demoVideoPresignedUrl: "",
+                },
+              },
+              maxUsageCount: Infinity,
             },
           ]}
           addTypename={false}
