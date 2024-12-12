@@ -1,3 +1,5 @@
+require "aws-sdk-s3"
+
 module Helpers
     module Authentication
         def login_user(user)
@@ -10,6 +12,13 @@ module Helpers
         end
 
         def feature_login_user(user)
+            s3_client_double = double(Aws::S3::Client)
+            allow(Aws::S3::Client).to receive(:new) { s3_client_double }
+
+            s3_presigner_double = double(Aws::S3::Presigner)
+            allow(Aws::S3::Presigner).to receive(:new).with(client: s3_client_double) { s3_presigner_double }
+            allow(s3_presigner_double).to receive(:presigned_url) { "" }
+
             visit login_path
 
             expect(page).to have_content "Email"

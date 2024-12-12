@@ -299,13 +299,6 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']['output']>;
 };
 
-export type Price = {
-  __typename?: 'Price';
-  id: Scalars['String']['output'];
-  stripeObject: Scalars['String']['output'];
-  unitAmount: Scalars['Int']['output'];
-};
-
 export type Product = {
   __typename?: 'Product';
   createdAt: Scalars['ISO8601DateTime']['output'];
@@ -319,21 +312,13 @@ export type Product = {
   updatedAt: Scalars['ISO8601DateTime']['output'];
 };
 
-export type ProductListObject = {
-  __typename?: 'ProductListObject';
-  data?: Maybe<Array<StripeProduct>>;
-  hasMore: Scalars['Boolean']['output'];
-  stripeObject: Scalars['String']['output'];
-  url: Scalars['String']['output'];
-};
-
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
   currentUserNotifications: NotificationConnection;
   currentUserOrders?: Maybe<Array<Order>>;
+  demoVideoPresignedUrl: Scalars['String']['output'];
   fetchCheckoutSession?: Maybe<CheckoutSession>;
-  listProducts: ProductListObject;
   order?: Maybe<Order>;
   orderMessages: Array<OrderMessage>;
   orders?: Maybe<Array<Order>>;
@@ -401,30 +386,6 @@ export type StripeCheckoutSessionCreatePayload = {
 
 export type StripeCheckoutSessionInput = {
   lineItems: Array<OrderPageInput>;
-};
-
-export type StripeProduct = {
-  __typename?: 'StripeProduct';
-  active: Scalars['Boolean']['output'];
-  attributes: Array<Maybe<Scalars['String']['output']>>;
-  created: Scalars['ISO8601DateTime']['output'];
-  defaultPrice: Price;
-  description: Scalars['String']['output'];
-  id: Scalars['String']['output'];
-  images: Array<Maybe<Scalars['String']['output']>>;
-  livemode: Scalars['Boolean']['output'];
-  marketingFeatures: Scalars['JSON']['output'];
-  metadata: Scalars['JSON']['output'];
-  name: Scalars['String']['output'];
-  packageDimensions?: Maybe<Scalars['JSON']['output']>;
-  shippable?: Maybe<Scalars['Boolean']['output']>;
-  statementDescriptor?: Maybe<Scalars['String']['output']>;
-  stripeObject: Scalars['String']['output'];
-  taxCode: Scalars['String']['output'];
-  type: Scalars['String']['output'];
-  unitLabel?: Maybe<Scalars['String']['output']>;
-  updated: Scalars['ISO8601DateTime']['output'];
-  url?: Maybe<Scalars['String']['output']>;
 };
 
 export type Subscription = {
@@ -503,6 +464,11 @@ export type CurrentUserNotificationReceivedSubscriptionVariables = Exact<{ [key:
 
 
 export type CurrentUserNotificationReceivedSubscription = { __typename?: 'Subscription', currentUserNotificationReceived?: { __typename?: 'CurrentUserNotificationReceivedPayload', notification?: { __typename?: 'Notification', id: string, message: string, userId: number, path?: string | null } | null } | null };
+
+export type GetHomePageDemoVideoUrlQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetHomePageDemoVideoUrlQuery = { __typename?: 'Query', demoVideoPresignedUrl: string };
 
 export type FetchOrderMessagesQueryVariables = Exact<{
   orderId: Scalars['ID']['input'];
@@ -901,6 +867,43 @@ export function useCurrentUserNotificationReceivedSubscription(baseOptions?: Apo
       }
 export type CurrentUserNotificationReceivedSubscriptionHookResult = ReturnType<typeof useCurrentUserNotificationReceivedSubscription>;
 export type CurrentUserNotificationReceivedSubscriptionResult = Apollo.SubscriptionResult<CurrentUserNotificationReceivedSubscription>;
+export const GetHomePageDemoVideoUrlDocument = gql`
+    query GetHomePageDemoVideoUrl {
+  demoVideoPresignedUrl
+}
+    `;
+
+/**
+ * __useGetHomePageDemoVideoUrlQuery__
+ *
+ * To run a query within a React component, call `useGetHomePageDemoVideoUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetHomePageDemoVideoUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetHomePageDemoVideoUrlQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetHomePageDemoVideoUrlQuery(baseOptions?: Apollo.QueryHookOptions<GetHomePageDemoVideoUrlQuery, GetHomePageDemoVideoUrlQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetHomePageDemoVideoUrlQuery, GetHomePageDemoVideoUrlQueryVariables>(GetHomePageDemoVideoUrlDocument, options);
+      }
+export function useGetHomePageDemoVideoUrlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetHomePageDemoVideoUrlQuery, GetHomePageDemoVideoUrlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetHomePageDemoVideoUrlQuery, GetHomePageDemoVideoUrlQueryVariables>(GetHomePageDemoVideoUrlDocument, options);
+        }
+export function useGetHomePageDemoVideoUrlSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetHomePageDemoVideoUrlQuery, GetHomePageDemoVideoUrlQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetHomePageDemoVideoUrlQuery, GetHomePageDemoVideoUrlQueryVariables>(GetHomePageDemoVideoUrlDocument, options);
+        }
+export type GetHomePageDemoVideoUrlQueryHookResult = ReturnType<typeof useGetHomePageDemoVideoUrlQuery>;
+export type GetHomePageDemoVideoUrlLazyQueryHookResult = ReturnType<typeof useGetHomePageDemoVideoUrlLazyQuery>;
+export type GetHomePageDemoVideoUrlSuspenseQueryHookResult = ReturnType<typeof useGetHomePageDemoVideoUrlSuspenseQuery>;
+export type GetHomePageDemoVideoUrlQueryResult = Apollo.QueryResult<GetHomePageDemoVideoUrlQuery, GetHomePageDemoVideoUrlQueryVariables>;
 export const FetchOrderMessagesDocument = gql`
     query FetchOrderMessages($orderId: ID!) {
   orderMessages(orderId: $orderId) {

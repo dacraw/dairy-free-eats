@@ -352,12 +352,6 @@ type PageInfo {
   startCursor: String
 }
 
-type Price {
-  id: String!
-  stripeObject: String!
-  unitAmount: Int!
-}
-
 type Product {
   createdAt: ISO8601DateTime!
   id: ID!
@@ -368,13 +362,6 @@ type Product {
   stripePriceUnitAmount: Int!
   stripeProductId: String!
   updatedAt: ISO8601DateTime!
-}
-
-type ProductListObject {
-  data: [StripeProduct!]
-  hasMore: Boolean!
-  stripeObject: String!
-  url: String!
 }
 
 type Query {
@@ -401,8 +388,8 @@ type Query {
     last: Int
   ): NotificationConnection!
   currentUserOrders(incomplete: Boolean): [Order!]
+  demoVideoPresignedUrl: String!
   fetchCheckoutSession(id: ID!): CheckoutSession
-  listProducts: ProductListObject!
   order(id: ID!): Order
   orderMessages(orderId: ID!): [OrderMessage!]!
   orders: [Order!]
@@ -456,29 +443,6 @@ type StripeCheckoutSessionCreatePayload {
 
 input StripeCheckoutSessionInput {
   lineItems: [OrderPageInput!]!
-}
-
-type StripeProduct {
-  active: Boolean!
-  attributes: [String]!
-  created: ISO8601DateTime!
-  defaultPrice: Price!
-  description: String!
-  id: String!
-  images: [String]!
-  livemode: Boolean!
-  marketingFeatures: JSON!
-  metadata: JSON!
-  name: String!
-  packageDimensions: JSON
-  shippable: Boolean
-  statementDescriptor: String
-  stripeObject: String!
-  taxCode: String!
-  type: String!
-  unitLabel: String
-  updated: ISO8601DateTime!
-  url: String
 }
 
 type Subscription {

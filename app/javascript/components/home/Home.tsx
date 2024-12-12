@@ -1,18 +1,58 @@
+import { gql } from "@apollo/client";
 import { faCheck, faComputer } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useGetHomePageDemoVideoUrlQuery } from "graphql/types";
 import React from "react";
 import { Link } from "react-router";
 
+export const HOME_PAGE_DEMO_VIDEO_URL = gql`
+  query GetHomePageDemoVideoUrl {
+    demoVideoPresignedUrl
+  }
+`;
+
 const Home = () => {
+  const { data, loading, error } = useGetHomePageDemoVideoUrlQuery();
+
   return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 md:grid-rows-[min-content_min-content] justify-center gap-6 max-w-screen-lg">
-      <div className="text-center rounded lg:col-start-2 md:col-span-2 lg:row-span-1">
+    <div
+      className="
+      grid justify-center gap-6 max-w-screen-lg
+      md:grid-cols-2 md:grid-rows-[min-content_min-content_min_content]
+      lg:grid-cols-4
+      "
+    >
+      <div
+        className="
+        text-center rounded 
+        md:col-span-2 
+        lg:row-start-1 lg:row-span-1 lg:col-span-4"
+      >
         <div>
           <h3 className="page-title">Order Dairy Free Food</h3>
         </div>
       </div>
 
-      <div className="dark-blue-background rounded p-6 lg:col-start-1 lg:col-span-2 md:row-start-2">
+      <div
+        className="
+        md:row-start-2 md:col-start-1 md:col-span-4
+        "
+      >
+        <video
+          src={data?.demoVideoPresignedUrl}
+          className="w-full [poster]:h-2"
+          controls
+          poster="/images/video-demo-thumbnail.png"
+        />
+      </div>
+
+      <div
+        className="
+        dark-blue-background rounded p-6 
+        md:row-start-3
+        lg:col-start-1 lg:col-span-2
+        "
+      >
         <h5 className="text-lg font-bold text-center mb-4 border-b-2 pb-2">
           How to Demo <FontAwesomeIcon className="ml-2" icon={faCheck} />
         </h5>
@@ -50,7 +90,12 @@ const Home = () => {
         </ol>
       </div>
 
-      <div className="text-center dark-blue-background rounded p-6 lg:col-start-3 lg:col-span-2 text-lg md:row-start-2 ">
+      <div
+        className="
+        text-center dark-blue-background rounded p-6 text-lg
+        md:row-start-3
+        lg:col-start-3 lg:col-span-2  "
+      >
         <h3 className="font-bold mb-2 border-b-2 pb-2">
           Project Technical Information{" "}
           <FontAwesomeIcon className="ml-2" icon={faComputer} />

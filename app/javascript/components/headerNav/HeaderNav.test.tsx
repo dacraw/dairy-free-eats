@@ -6,10 +6,11 @@ import HeaderNav, { CURRENT_USER } from "components/headerNav/HeaderNav";
 import {
   CurrentUserNotificationReceivedSubscription,
   CurrentUserQuery,
+  GetHomePageDemoVideoUrlQuery,
 } from "graphql/types";
 import userEvent from "@testing-library/user-event";
 import Login from "components/login/Login";
-import Home from "components/home/Home";
+import Home, { HOME_PAGE_DEMO_VIDEO_URL } from "components/home/Home";
 import { cache } from "apolloClient";
 import { CURRENT_USER_NOTIFICATION_RECEIVED } from "components/headerNav/headerNotifications/HeaderNotifications";
 
@@ -23,7 +24,9 @@ const currentUserEmail = "test@demo.com";
 
 describe("<HeaderNav />", () => {
   let currentUserPresentMocks: MockedResponse<
-    CurrentUserQuery | CurrentUserNotificationReceivedSubscription
+    | CurrentUserQuery
+    | CurrentUserNotificationReceivedSubscription
+    | GetHomePageDemoVideoUrlQuery
   >[];
 
   describe("when there is a current user", () => {
@@ -56,6 +59,15 @@ describe("<HeaderNav />", () => {
               currentUserNotificationReceived: null,
             },
           },
+        },
+        {
+          request: { query: HOME_PAGE_DEMO_VIDEO_URL },
+          result: {
+            data: {
+              demoVideoPresignedUrl: "",
+            },
+          },
+          maxUsageCount: 2,
         },
       ];
     });
