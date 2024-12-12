@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "aws-sdk-s3"
+
 module Types
   class QueryType < Types::BaseObject
     field :node, Types::NodeType, null: true, description: "Fetches an object given its ID." do
@@ -53,6 +55,21 @@ module Types
       results = context[:current_user].notifications.order(created_at: :desc)
 
       Connections::CurrentUserNotificationsConnection.new(results)
+    end
+
+    field :demo_video_presigned_url, String, null: false
+    def demo_video_presigned_url
+      s3 = Aws::S3::Client.new(
+        region: "us-east-1",
+        access_key_id: Rails.application.credentials.dig(:aws, :access_key_id),
+        secret_access_key: Rails.application.credentials.dig(:aws, :secret_access_key)
+      )
+      s3_presigner = Aws::S3::Presigner.new(client: s3)
+      s3_presigner.presigned_url(
+        :get_object,
+        bucket: "dairy-free-eats-development",
+        key: "dairy-free-eats-demo.mp4"
+      )
     end
   end
 end
