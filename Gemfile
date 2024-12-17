@@ -42,7 +42,7 @@ gem "bootsnap", require: false
 
 gem "solid_queue", "~> 1.1.0"
 
-gem "solid_cable", "~> 3.0.4"
+gem "solid_cable", "~> 3.0.5"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
